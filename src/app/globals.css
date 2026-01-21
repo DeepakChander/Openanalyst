@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+:root {
+  /* ===== Color Palette ===== */
+  --background: #ffffff;
+  --foreground: #000000;
+
+  /* Brand Colors */
+  --primary: #ff8552;
+  --secondary: #F3F4F6;
+  /* Light gray for secondary backgrounds */
+  --tertiary: #FFFFFF;
+  /* White for cards */
+
+  /* Accents */
+  --accent-teal: #576A6A;
+  --accent-blue: #3498db;
+
+  /* Status */
+  --success: #2ecc71;
+  --warning: #f39c12;
+  --error: #e74c3c;
+
+  /* Fonts */
+  --font-heading: "Lemon Milk", sans-serif;
+  --font-body: "PP Neue Montreal", sans-serif;
+  --font-accent: "PP Neue Montreal", sans-serif;
+  /* Fallback/Same */
+  --font-dm: "PP Neue Montreal", sans-serif;
+  /* Fallback/Same */
+}
+
+@font-face {
+  font-family: "Lemon Milk";
+  src: url("/fonts/LemonMilk-Bold.otf") format("opentype"),
+    url("/fonts/LemonMilk-Bold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("/fonts/PPNeueMontreal-Regular.otf") format("opentype"),
+    url("/fonts/PPNeueMontreal-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-brand-primary: var(--primary);
+  --color-brand-secondary: var(--secondary);
+  --color-brand-tertiary: var(--tertiary);
+
+  --color-accent-teal: var(--accent-teal);
+  --color-accent-blue: var(--accent-blue);
+
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
+  --font-accent: var(--font-accent);
+  --font-dm: var(--font-dm-sans);
+
+  /* Spacing extensions if needed */
+  --spacing-128: 32rem;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* Glassmorphism Utilities */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Text Gradients */
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent-blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #E5E7EB;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-teal);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-scroll {
+  animation: marquee 20s linear infinite;
+}
+
+.animate-marquee-scroll:hover {
+  animation-play-state: paused;
+}
+
+.mask-image-gradient {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
