@@ -2,14 +2,32 @@
 
 import React from 'react';
 
-const Integrations: React.FC = () => {
-    const tools = [
-        'Slack', 'Discord', 'Notion', 'GitHub', 'Linear', 'Jira', 'Figma', 'Zoom', 'Google Drive',
-        'Salesforce', 'HubSpot', 'Zendesk', 'Intercom', 'Shopify', 'Stripe', 'Asana', 'Trello', 'Teams'
-    ];
+const SI = 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons';
 
-    // Duplicate list 4 times to ensure it fills wide screens and loops seamlessly
-    const marqueeTools = [...tools, ...tools, ...tools, ...tools];
+const toolsData: { name: string; slug: string }[] = [
+    { name: 'Slack', slug: 'slack' },
+    { name: 'Discord', slug: 'discord' },
+    { name: 'Notion', slug: 'notion' },
+    { name: 'GitHub', slug: 'github' },
+    { name: 'Linear', slug: 'linear' },
+    { name: 'Jira', slug: 'jira' },
+    { name: 'Figma', slug: 'figma' },
+    { name: 'Zoom', slug: 'zoom' },
+    { name: 'Google Drive', slug: 'googledrive' },
+    { name: 'Salesforce', slug: 'salesforce' },
+    { name: 'HubSpot', slug: 'hubspot' },
+    { name: 'Zendesk', slug: 'zendesk' },
+    { name: 'Intercom', slug: 'intercom' },
+    { name: 'Shopify', slug: 'shopify' },
+    { name: 'Stripe', slug: 'stripe' },
+    { name: 'Asana', slug: 'asana' },
+    { name: 'Trello', slug: 'trello' },
+    { name: 'Teams', slug: 'microsoftteams' },
+];
+
+const Integrations: React.FC = () => {
+
+    const marqueeTools = [...toolsData, ...toolsData, ...toolsData, ...toolsData];
 
     return (
         <section className="py-20 bg-white overflow-hidden border-b border-black/5 relative items-center flex">
@@ -34,8 +52,9 @@ const Integrations: React.FC = () => {
                     <div className="flex gap-4 overflow-hidden mask-image-gradient">
                         <div className="flex gap-4 animate-marquee-scroll min-w-max">
                             {marqueeTools.map((tool, i) => (
-                                <div key={i} className="px-6 py-3 bg-white border border-black/10 rounded-full text-gray-700 font-medium whitespace-nowrap hover:border-brand-primary hover:text-brand-primary transition-colors shadow-sm">
-                                    {tool}
+                                <div key={i} className="px-5 py-3 bg-white border border-black/10 rounded-full text-gray-700 font-medium whitespace-nowrap hover:border-brand-primary hover:text-brand-primary transition-colors shadow-sm flex items-center gap-2.5">
+                                    <img src={`${SI}/${tool.slug}.svg`} alt={tool.name} width="20" height="20" />
+                                    {tool.name}
                                 </div>
                             ))}
                         </div>

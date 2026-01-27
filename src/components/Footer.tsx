@@ -68,8 +68,8 @@ const Footer: React.FC = () => {
                             {/* Mail */}
                             <div>
                                 <span className="text-brand-primary text-xs font-medium uppercase tracking-wider">MAIL</span>
-                                <a href="mailto:hello@openanalyst.com" className="block text-black text-sm mt-1 hover:text-brand-primary transition-colors">
-                                    HELLO@OPENANALYST.COM ↗
+                                <a href="mailto:team@openanalyst.com" className="block text-black text-sm mt-1 hover:text-brand-primary transition-colors">
+                                    TEAM@OPENANALYST.COM ↗
                                 </a>
                             </div>
 
@@ -137,7 +137,7 @@ const Footer: React.FC = () => {
 
                         {/* Copyright */}
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-8 text-xs text-gray-500">
-                            <p>© {new Date().getFullYear()} OpenAnalyst. All rights reserved.</p>
+                            <p>© {new Date().getFullYear()} OpenAnalyst Inc. All rights reserved.</p>
                             <p>Crafted with <span className="text-brand-primary">♦</span> clarity & creativity.</p>
                         </div>
                     </div>

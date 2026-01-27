@@ -6,7 +6,7 @@ import Button from './Button';
 const Pricing: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('annual');
-    const [activeModelTab, setActiveModelTab] = useState('openai');
+    const [activeModelTab, setActiveModelTab] = useState('openanalyst');
     const [showAllIntegrations, setShowAllIntegrations] = useState(false);
 
     const plans = [
@@ -175,40 +175,42 @@ const Pricing: React.FC = () => {
     };
 
     // API Integrations Data - Flat array for better display
-    const allIntegrations = [
-        { name: 'Gmail', category: 'Email', icon: '📧' },
-        { name: 'Outlook', category: 'Email', icon: '📬' },
-        { name: 'Slack', category: 'Communication', icon: '💬' },
-        { name: 'WhatsApp', category: 'Communication', icon: '📱' },
-        { name: 'Google Calendar', category: 'Google', icon: '📅' },
-        { name: 'Google Docs', category: 'Google', icon: '📄' },
-        { name: 'Google Sheets', category: 'Google', icon: '📊' },
-        { name: 'Google Drive', category: 'Google', icon: '☁️' },
-        { name: 'Google Meet', category: 'Google', icon: '🎥' },
-        { name: 'Google BigQuery', category: 'Google', icon: '🗄️' },
-        { name: 'Google Ads', category: 'Google', icon: '📢' },
-        { name: 'Google Maps', category: 'Google', icon: '🗺️' },
-        { name: 'Zoom', category: 'Video', icon: '📹' },
-        { name: 'YouTube', category: 'Video', icon: '▶️' },
-        { name: 'Notion', category: 'Productivity', icon: '📝' },
-        { name: 'Airtable', category: 'Productivity', icon: '📋' },
-        { name: 'Linear', category: 'Productivity', icon: '⚡' },
-        { name: 'Calendly', category: 'Productivity', icon: '🗓️' },
-        { name: 'LinkedIn', category: 'Social', icon: '💼' },
-        { name: 'Facebook', category: 'Social', icon: '👥' },
-        { name: 'HubSpot', category: 'Marketing', icon: '🎯' },
-        { name: 'Supabase', category: 'Database', icon: '🔷' },
-        { name: 'Stripe', category: 'Payment', icon: '💳' },
-        { name: 'Dropbox', category: 'Storage', icon: '📦' },
+    // API Integrations Data - Using img tags with brand logos from CDN
+    const SI = 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons';
+    const allIntegrations: { name: string; category: string; icon: React.ReactNode }[] = [
+        { name: 'Gmail', category: 'Email', icon: <img src={`${SI}/gmail.svg`} alt="Gmail" width="24" height="24" /> },
+        { name: 'Outlook', category: 'Email', icon: <img src={`${SI}/microsoftoutlook.svg`} alt="Outlook" width="24" height="24" /> },
+        { name: 'Slack', category: 'Communication', icon: <img src={`${SI}/slack.svg`} alt="Slack" width="24" height="24" /> },
+        { name: 'WhatsApp', category: 'Communication', icon: <img src={`${SI}/whatsapp.svg`} alt="WhatsApp" width="24" height="24" /> },
+        { name: 'Google Calendar', category: 'Google', icon: <img src={`${SI}/googlecalendar.svg`} alt="Google Calendar" width="24" height="24" /> },
+        { name: 'Google Docs', category: 'Google', icon: <img src={`${SI}/googledocs.svg`} alt="Google Docs" width="24" height="24" /> },
+        { name: 'Google Sheets', category: 'Google', icon: <img src={`${SI}/googlesheets.svg`} alt="Google Sheets" width="24" height="24" /> },
+        { name: 'Google Drive', category: 'Google', icon: <img src={`${SI}/googledrive.svg`} alt="Google Drive" width="24" height="24" /> },
+        { name: 'Google Meet', category: 'Google', icon: <img src={`${SI}/googlemeet.svg`} alt="Google Meet" width="24" height="24" /> },
+        { name: 'Google BigQuery', category: 'Google', icon: <img src={`${SI}/googlebigquery.svg`} alt="Google BigQuery" width="24" height="24" /> },
+        { name: 'Google Ads', category: 'Google', icon: <img src={`${SI}/googleads.svg`} alt="Google Ads" width="24" height="24" /> },
+        { name: 'Google Maps', category: 'Google', icon: <img src={`${SI}/googlemaps.svg`} alt="Google Maps" width="24" height="24" /> },
+        { name: 'Zoom', category: 'Video', icon: <img src={`${SI}/zoom.svg`} alt="Zoom" width="24" height="24" /> },
+        { name: 'YouTube', category: 'Video', icon: <img src={`${SI}/youtube.svg`} alt="YouTube" width="24" height="24" /> },
+        { name: 'Notion', category: 'Productivity', icon: <img src={`${SI}/notion.svg`} alt="Notion" width="24" height="24" /> },
+        { name: 'Airtable', category: 'Productivity', icon: <img src={`${SI}/airtable.svg`} alt="Airtable" width="24" height="24" /> },
+        { name: 'Linear', category: 'Productivity', icon: <img src={`${SI}/linear.svg`} alt="Linear" width="24" height="24" /> },
+        { name: 'Calendly', category: 'Productivity', icon: <img src={`${SI}/calendly.svg`} alt="Calendly" width="24" height="24" /> },
+        { name: 'LinkedIn', category: 'Social', icon: <img src={`${SI}/linkedin.svg`} alt="LinkedIn" width="24" height="24" /> },
+        { name: 'Facebook', category: 'Social', icon: <img src={`${SI}/facebook.svg`} alt="Facebook" width="24" height="24" /> },
+        { name: 'HubSpot', category: 'Marketing', icon: <img src={`${SI}/hubspot.svg`} alt="HubSpot" width="24" height="24" /> },
+        { name: 'Supabase', category: 'Database', icon: <img src={`${SI}/supabase.svg`} alt="Supabase" width="24" height="24" /> },
+        { name: 'Stripe', category: 'Payment', icon: <img src={`${SI}/stripe.svg`} alt="Stripe" width="24" height="24" /> },
+        { name: 'Dropbox', category: 'Storage', icon: <img src={`${SI}/dropbox.svg`} alt="Dropbox" width="24" height="24" /> },
     ];
 
     const modelTabs = [
+        { id: 'openanalyst', label: 'OpenAnalyst' },
         { id: 'openai', label: 'OpenAI' },
         { id: 'claude4', label: 'Claude 4' },
         { id: 'claude3', label: 'Claude 3' },
         { id: 'deepseek', label: 'DeepSeek' },
         { id: 'qwen', label: 'Qwen' },
-        { id: 'openanalyst', label: 'OpenAnalyst' },
     ];
 
     const displayedIntegrations = showAllIntegrations ? allIntegrations : allIntegrations.slice(0, 12);
@@ -522,7 +524,7 @@ const Pricing: React.FC = () => {
                             >
                                 <div className="flex flex-col items-center text-center">
                                     <div className="w-12 h-12 bg-gray-100 group-hover:bg-brand-primary/10 rounded-xl flex items-center justify-center mb-3 transition-colors">
-                                        <span className="text-2xl">{integration.icon}</span>
+                                        {integration.icon}
                                     </div>
                                     <h4 className="font-semibold text-black text-sm mb-1">{integration.name}</h4>
                                     <span className="text-xs text-gray-400 uppercase tracking-wider">{integration.category}</span>
