@@ -17,7 +17,7 @@ const benefits: Benefit[] = [
     },
     {
         title: 'CONTROL',
-        description: 'Lorem ipsum at the lower process. change copy to in the box go to the label, tabs, grids.',
+        description: 'Full control over your data and AI models. Deploy on-premise or in your private cloud with enterprise-grade security and compliance controls.',
     },
     {
         title: 'FLEXIBILITY',

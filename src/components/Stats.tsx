@@ -42,7 +42,7 @@ const Stats: React.FC = () => {
                         <span className="font-mono text-sm tracking-wider uppercase text-gray-500">/ WHO WE ARE</span>
                     </div>
                     <h2 className="text-3xl md:text-5xl lg:text-6xl font-medium leading-[1.1] max-w-5xl tracking-tight text-black">
-                        Empowering brands through intelligent design. We craft sleek, high-performance interfaces and digital experiences rooted in clarity and creative precision.
+                        Transforming raw data into actionable insights. We build AI-powered analytics tools that help businesses make smarter, faster decisions with confidence.
                     </h2>
                 </div>
 
@@ -56,36 +56,38 @@ const Stats: React.FC = () => {
                             {/* Card 1: 500+ Completed Projects (Light Theme) */}
                             <div className="reveal-element relative p-8 rounded-3xl overflow-hidden min-h-[240px] flex flex-col justify-end group bg-gray-50 border border-black/5">
                                 {/* Gradient Effect */}
-                                <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/5 to-purple-500/5 z-0"></div>
-                                <div className="absolute top-0 right-0 p-10 bg-brand-primary/10 blur-3xl rounded-full w-32 h-32"></div>
+                                {/* Gradient & Pattern Effect */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/10 to-purple-500/10 z-0"></div>
+                                <div className="absolute inset-0 z-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+                                <div className="absolute top-0 right-0 p-10 bg-brand-primary/20 blur-3xl rounded-full w-32 h-32"></div>
 
                                 <div className="relative z-10 text-black">
-                                    <h3 className="text-6xl font-bold mb-2">500+</h3>
-                                    <p className="text-lg text-gray-600">Completed Projects</p>
+                                    <h3 className="text-6xl font-bold mb-2">2K+</h3>
+                                    <p className="text-lg text-gray-600">Beta Users</p>
                                 </div>
                             </div>
 
-                            {/* Card 2: 10x Automation Efficiency (Light) */}
+                            {/* Card 2: Integrations */}
                             <div className="reveal-element relative p-8 bg-white border border-black/5 rounded-3xl min-h-[240px] flex flex-col justify-center">
-                                <h3 className="text-6xl font-bold mb-2 text-brand-primary">10x</h3>
-                                <p className="text-lg text-gray-600">Automation Efficiency</p>
+                                <h3 className="text-6xl font-bold mb-2 text-brand-primary">24+</h3>
+                                <p className="text-lg text-gray-600">Integrations</p>
                             </div>
 
                             {/* Card 3: 24 Trusted Partners (Light) */}
                             <div className="reveal-element relative p-8 bg-white border border-black/5 rounded-3xl min-h-[240px] flex flex-col justify-center">
-                                <h3 className="text-6xl font-bold mb-2 text-brand-primary">24</h3>
-                                <p className="text-lg text-gray-600">Trusted Partners</p>
+                                <h3 className="text-6xl font-bold mb-2 text-brand-primary">99.9%</h3>
+                                <p className="text-lg text-gray-600">System Uptime</p>
                             </div>
 
-                            {/* Card 4: 98% Real-Time Delivery (Light Theme) */}
+                            {/* Card 4: Time Saved */}
                             <div className="reveal-element relative p-8 rounded-3xl overflow-hidden min-h-[240px] flex flex-col justify-end bg-gray-50 border border-black/5">
-                                <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 to-transparent z-0"></div>
-                                {/* Abstract lines or texture */}
-                                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                                <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-transparent z-0"></div>
+                                {/* Diagonal lines texture */}
+                                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(45deg, #000 0, #000 1px, transparent 0, transparent 50%)', backgroundSize: '10px 10px' }}></div>
 
                                 <div className="relative z-10 text-black">
-                                    <h3 className="text-6xl font-bold mb-2">98%</h3>
-                                    <p className="text-lg text-gray-600">Real-Time Delivery</p>
+                                    <h3 className="text-6xl font-bold mb-2">10x</h3>
+                                    <p className="text-lg text-gray-600">Faster Insights</p>
                                 </div>
                             </div>
                         </div>
@@ -110,15 +112,6 @@ const Stats: React.FC = () => {
                                 className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700"
                             />
 
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-white/80 flex items-center justify-center backdrop-blur-md group-hover:scale-110 transition-transform duration-300 shadow-xl">
-                                    <div className="w-16 h-16 md:w-20 md:h-20 bg-white rounded-full flex items-center justify-center pl-1 shadow-inner">
-                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" className="text-brand-primary">
-                                            <path d="M5 3L19 12L5 21V3Z" fill="currentColor" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

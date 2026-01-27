@@ -29,7 +29,7 @@ const VolumeIcon = ({ muted = false }: { muted?: boolean }) => (
 );
 const ChartIcon = () => (<svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 20V10M12 20V4M6 20v-6" /></svg>);
 const DesktopIcon = () => (<svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" /></svg>);
-const BrowserIcon = () => (<svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" /></svg>);
+const BrowserIcon = () => (<svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 014-10z" /></svg>);
 const MobileIcon = () => (<svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="5" y="2" width="14" height="20" rx="2" /><path d="M12 18h.01" /></svg>);
 const MicIcon = () => (<svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" /></svg>);
 const SendIcon = () => (<svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" /></svg>);
@@ -193,7 +193,7 @@ Quick Wins:
                 clearInterval(interval);
                 setHasTyped(true);
             }
-        }, 8);
+        }, 30);
         return () => clearInterval(interval);
     }, [showResults, query, generateResponse, hasTyped]);
 
@@ -549,7 +549,7 @@ Quick Wins:
                 </div>
 
                 {/* CTA */}
-                <Link href="/waitlist" className="relative z-10 mb-8 group">
+                <Link href="/download" className="relative z-10 mb-8 group">
                     <div className="px-7 py-3 bg-white/70 backdrop-blur-xl border border-white/80 rounded-full text-gray-800 font-medium text-sm shadow-md hover:shadow-lg hover:border-brand-primary/30 transition-all flex items-center gap-2">
                         Get started <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                     </div>
@@ -571,10 +571,47 @@ Quick Wins:
                 {/* IDE Window */}
                 <div className="ide-window relative z-10 w-full max-w-6xl mx-auto px-4">
                     <div className="p-1 rounded-2xl bg-gradient-to-b from-white/80 to-white/40 backdrop-blur-xl shadow-[0_20px_80px_rgba(0,0,0,0.15)]">
-                        {activeTab === 'desktop' && <DesktopIDEView />}
-                        {activeTab === 'web' && <WebIDEView />}
-                        {activeTab === 'mobile' && <MobileAppView />}
+                        {activeTab === 'desktop' && DesktopIDEView()}
+                        {activeTab === 'web' && WebIDEView()}
+                        {activeTab === 'mobile' && MobileAppView()}
                     </div>
+                </div>
+
+                {/* Download Buttons */}
+                <div className="relative z-10 mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    {/* macOS Download Button */}
+                    <a
+                        href="https://openanalyst-releases.s3.amazonaws.com/latest/OpenAnalyst-mac-arm64.dmg.zip"
+                        className="group flex items-center gap-3 px-8 py-4 bg-gray-900 text-white font-semibold rounded-xl hover:bg-black transition-all duration-300 hover:scale-105 shadow-lg"
+                    >
+                        <svg className="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.21-1.96 1.07-3.11-1.05.05-2.31.71-3.06 1.58-.69.8-1.27 2.07-1.12 3.16 1.17.09 2.38-.79 3.11-1.63z" />
+                        </svg>
+                        <div className="text-left">
+                            <div className="text-xs text-gray-400 font-normal">Download for</div>
+                            <div className="text-lg">macOS</div>
+                        </div>
+                        <svg className="w-5 h-5 ml-2 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                    </a>
+
+                    {/* Windows Download Button */}
+                    <a
+                        href="https://openanalyst-releases.s3.amazonaws.com/latest/OpenAnalyst-win-x64.zip"
+                        className="group flex items-center gap-3 px-8 py-4 bg-white border-2 border-gray-200 text-gray-900 font-semibold rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all duration-300 hover:scale-105 shadow-lg"
+                    >
+                        <svg className="w-7 h-7 text-[#0078D4]" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M0 3.449L9.75 2.134v9.3L0 11.6V3.449zm10.649-1.6l13.353-1.854v11.3l-13.353.07V1.849zm0 20.306l13.353 1.849v-11.17l-13.353.054v9.267zM0 20.556l9.75 1.309v-9.155L0 12.56v7.996z" />
+                        </svg>
+                        <div className="text-left">
+                            <div className="text-xs text-gray-500 font-normal">Download for</div>
+                            <div className="text-lg">Windows</div>
+                        </div>
+                        <svg className="w-5 h-5 ml-2 opacity-0 group-hover:opacity-100 transition-opacity text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                    </a>
                 </div>
             </section>
 

@@ -15,19 +15,19 @@ const Testimonials: React.FC = () => {
             name: 'Sarah Jenks',
             role: 'Head of Data, TechCorp',
             comment: 'OpenAnalyst transformed how we process big data. The AI agents are incredibly accurate and intuitive.',
-            avatar: 1
+            image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
         },
         {
             name: 'Michael Chen',
             role: 'CTO, StartUp Inc',
             comment: 'The speed at which we can generate reports now is mind-blowing. Weeks of work compressed into minutes.',
-            avatar: 2
+            image: 'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
         },
         {
             name: 'Elena Rodriguez',
             role: 'Marketing Director, GrowthCo',
             comment: 'Finally, an analytics tool that doesn\'t require a PhD to use. I can ask simple questions and get deep insights.',
-            avatar: 3
+            image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
         }
     ];
 
@@ -75,8 +75,11 @@ const Testimonials: React.FC = () => {
                             <div className="flex items-center gap-4">
                                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-brand-secondary to-gray-300 p-[2px]">
                                     <div className="w-full h-full rounded-full overflow-hidden bg-gray-100">
-                                        {/* Avatar placeholder with colorful gradient */}
-                                        <div className={`w-full h-full bg-gradient-to-tr from-gray-200 to-gray-300`} />
+                                        <img
+                                            src={item.image}
+                                            alt={item.name}
+                                            className="w-full h-full object-cover"
+                                        />
                                     </div>
                                 </div>
                                 <div>

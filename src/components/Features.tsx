@@ -10,43 +10,90 @@ interface Service {
     id: number;
     title: string;
     description: string;
+    icon: React.ReactNode;
 }
 
 const services: Service[] = [
     {
         id: 1,
         title: 'REAL TIME DATA INSIGHTS',
-        description: 'Monitor your business performance with live dashboards that update as your data changes',
+        description: 'Instant visibility into your key performance indicators with milli-second latency updates and live trend tracking.',
+        icon: (
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+            </svg>
+        ),
     },
     {
         id: 2,
         title: 'PREDICTIVE ANALYTICS',
-        description: 'Anticipate market trends and customer behavior with our advanced forecasting models',
+        description: 'Leverage advanced machine learning models to forecast market shifts and customer behavior with up to 94% accuracy.',
+        icon: (
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                <circle cx="12" cy="12" r="3" />
+            </svg>
+        ),
     },
     {
         id: 3,
         title: 'AUTOMATE REPORTING',
-        description: 'Save hours each week with customizable reports that generate and distribute automatically.',
+        description: 'Eliminate manual data compilation. Schedule custom, pixel-perfect reports to be delivered to stakeholders automatically.',
+        icon: (
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+                <polyline points="10 9 9 9 8 9" />
+            </svg>
+        ),
     },
     {
         id: 4,
         title: 'DATA INTEGRATIONS',
-        description: 'Connect all your data sources in one place, from CRM systems to financial platforms.',
+        description: 'Seamlessly connect with 100+ platforms including Salesforce, HubSpot, and Google Analytics in just a few clicks.',
+        icon: (
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+            </svg>
+        ),
     },
     {
         id: 5,
         title: 'CUSTOMIZABLE VISUALIZATIONS',
-        description: 'Create stunning charts and graphs that tell the story your data holds',
+        description: 'Transform raw numbers into compelling stories with our drag-and-drop builder featuring 50+ chart types.',
+        icon: (
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+                <path d="M22 12A10 10 0 0 0 12 2v10z" />
+            </svg>
+        ),
     },
     {
         id: 6,
         title: 'COLLABORATIVE WORKSPACE',
-        description: 'Share insights and annotations with your team in real-time',
+        description: 'Built for teams. Annotate charts, share dashboards, and drive decisions together in a unified environment.',
+        icon: (
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+        ),
     },
     {
         id: 7,
         title: 'ENTERPRISE SECURITY',
-        description: 'Protect your sensitive data with bank-level encryption and compliance standards',
+        description: 'Bank-grade AES-256 encryption, SOC2 Type II compliance, and granular role-based access control for your peace of mind.',
+        icon: (
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+        ),
     },
 ];
 
@@ -121,9 +168,14 @@ const Features: React.FC = () => {
 
                                         {/* Content */}
                                         <div className="md:col-span-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                                            <h3 className="text-2xl font-bold uppercase tracking-wider text-black group-hover:text-brand-primary transition-colors duration-300">
-                                                {service.title}
-                                            </h3>
+                                            <div className="flex items-start gap-4">
+                                                <div className="text-brand-primary p-2 bg-brand-primary/5 rounded-lg">
+                                                    {service.icon}
+                                                </div>
+                                                <h3 className="text-2xl font-bold uppercase tracking-wider text-black group-hover:text-brand-primary transition-colors duration-300">
+                                                    {service.title}
+                                                </h3>
+                                            </div>
                                             <p className="text-gray-500 leading-relaxed text-base">
                                                 {service.description}
                                             </p>

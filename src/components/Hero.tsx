@@ -80,8 +80,11 @@ const Hero: React.FC = () => {
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center gap-4 justify-end w-full">
-                        <Button href="/waitlist" variant="fill">
+                        <Button href="/waitlist" variant="stroke">
                             Join Waitlist
+                        </Button>
+                        <Button href="/download" variant="fill">
+                            Download Now
                         </Button>
                     </div>
                 </div>

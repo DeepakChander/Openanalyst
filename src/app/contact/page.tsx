@@ -2,31 +2,121 @@ import { Header, Footer } from '@/components';
 
 export default function ContactPage() {
     return (
-        <div className="min-h-screen bg-black text-white flex flex-col text-center">
+        <div style={{ minHeight: '100vh', backgroundColor: '#000000', color: '#ffffff', display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
             <Header />
-            <main className="flex-1 pt-32 pb-20 container mx-auto px-4">
-                <h1 className="text-5xl font-heading font-bold mb-6">Contact Us</h1>
-                <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
-                    Have questions? We'd love to hear from you.
-                </p>
+            <main style={{ flex: 1, paddingTop: '128px', paddingBottom: '80px' }}>
+                <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 16px' }}>
+                    <h1 style={{
+                        fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+                        fontWeight: 700,
+                        marginBottom: '24px',
+                        color: '#ffffff'
+                    }}>
+                        Contact Us
+                    </h1>
+                    <p style={{
+                        fontSize: '1.25rem',
+                        color: '#9ca3af',
+                        marginBottom: '48px',
+                        maxWidth: '672px',
+                        margin: '0 auto 48px'
+                    }}>
+                        Have questions? We'd love to hear from you.
+                    </p>
 
-                <form className="max-w-lg mx-auto space-y-6 text-left">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-400 mb-2">Name</label>
-                        <input type="text" className="w-full px-4 py-3 bg-brand-secondary border border-white/10 rounded-lg focus:border-brand-primary outline-none text-white" />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-400 mb-2">Email</label>
-                        <input type="email" className="w-full px-4 py-3 bg-brand-secondary border border-white/10 rounded-lg focus:border-brand-primary outline-none text-white" />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-400 mb-2">Message</label>
-                        <textarea rows={4} className="w-full px-4 py-3 bg-brand-secondary border border-white/10 rounded-lg focus:border-brand-primary outline-none text-white" ></textarea>
-                    </div>
-                    <button type="submit" className="w-full py-4 bg-brand-primary text-white font-bold rounded-lg hover:bg-brand-primary/90 transition-all">
-                        Send Message
-                    </button>
-                </form>
+                    <form style={{ maxWidth: '512px', margin: '0 auto', textAlign: 'left' }}>
+                        <div style={{ marginBottom: '24px' }}>
+                            <label style={{
+                                display: 'block',
+                                fontSize: '0.875rem',
+                                fontWeight: 500,
+                                color: '#9ca3af',
+                                marginBottom: '8px'
+                            }}>
+                                Name
+                            </label>
+                            <input
+                                type="text"
+                                style={{
+                                    width: '100%',
+                                    padding: '12px 16px',
+                                    backgroundColor: '#18181b',
+                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                    borderRadius: '8px',
+                                    color: '#ffffff',
+                                    fontSize: '1rem',
+                                    outline: 'none'
+                                }}
+                            />
+                        </div>
+                        <div style={{ marginBottom: '24px' }}>
+                            <label style={{
+                                display: 'block',
+                                fontSize: '0.875rem',
+                                fontWeight: 500,
+                                color: '#9ca3af',
+                                marginBottom: '8px'
+                            }}>
+                                Email
+                            </label>
+                            <input
+                                type="email"
+                                style={{
+                                    width: '100%',
+                                    padding: '12px 16px',
+                                    backgroundColor: '#18181b',
+                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                    borderRadius: '8px',
+                                    color: '#ffffff',
+                                    fontSize: '1rem',
+                                    outline: 'none'
+                                }}
+                            />
+                        </div>
+                        <div style={{ marginBottom: '24px' }}>
+                            <label style={{
+                                display: 'block',
+                                fontSize: '0.875rem',
+                                fontWeight: 500,
+                                color: '#9ca3af',
+                                marginBottom: '8px'
+                            }}>
+                                Message
+                            </label>
+                            <textarea
+                                rows={4}
+                                style={{
+                                    width: '100%',
+                                    padding: '12px 16px',
+                                    backgroundColor: '#18181b',
+                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                    borderRadius: '8px',
+                                    color: '#ffffff',
+                                    fontSize: '1rem',
+                                    outline: 'none',
+                                    resize: 'vertical'
+                                }}
+                            />
+                        </div>
+                        <button
+                            type="submit"
+                            style={{
+                                width: '100%',
+                                padding: '16px',
+                                backgroundColor: '#ff8552',
+                                color: '#ffffff',
+                                fontWeight: 700,
+                                borderRadius: '8px',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: '1rem',
+                                transition: 'all 0.3s ease'
+                            }}
+                        >
+                            Send Message
+                        </button>
+                    </form>
+                </div>
             </main>
             <Footer />
         </div>

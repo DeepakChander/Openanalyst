@@ -2,14 +2,31 @@ import { Header, Footer, Integrations as IntegrationsSection } from '@/component
 
 export default function IntegrationsPage() {
     return (
-        <div className="min-h-screen bg-black text-white flex flex-col">
+        <div style={{ minHeight: '100vh', backgroundColor: '#000000', color: '#ffffff', display: 'flex', flexDirection: 'column' }}>
             <Header />
-            <main className="flex-1 pt-32 pb-20 container mx-auto px-4">
-                <h1 className="text-5xl font-heading font-bold mb-8 text-center">Integrations</h1>
-                <p className="text-xl text-gray-400 text-center mb-16 max-w-2xl mx-auto">
-                    Connect OpenAnalyst with your favorite tools and workflows.
-                </p>
-                <IntegrationsSection />
+            <main style={{ flex: 1, paddingTop: '128px', paddingBottom: '80px' }}>
+                <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 16px' }}>
+                    <h1 style={{
+                        fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+                        fontWeight: 700,
+                        marginBottom: '32px',
+                        textAlign: 'center',
+                        color: '#ffffff'
+                    }}>
+                        Integrations
+                    </h1>
+                    <p style={{
+                        fontSize: '1.25rem',
+                        color: '#9ca3af',
+                        textAlign: 'center',
+                        marginBottom: '64px',
+                        maxWidth: '672px',
+                        margin: '0 auto 64px'
+                    }}>
+                        Connect OpenAnalyst with your favorite tools and workflows.
+                    </p>
+                    <IntegrationsSection />
+                </div>
             </main>
             <Footer />
         </div>

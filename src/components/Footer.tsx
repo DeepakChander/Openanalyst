@@ -107,10 +107,9 @@ const Footer: React.FC = () => {
                         <div>
                             <span className="text-brand-primary text-xs font-medium uppercase tracking-wider mb-4 block">SOCIAL</span>
                             <ul className="space-y-3 text-sm text-gray-600">
-                                <li><a href="#" className="hover:text-black transition-colors">X/Twitter</a></li>
-                                <li><a href="#" className="hover:text-black transition-colors">Instagram</a></li>
-                                <li><a href="#" className="hover:text-black transition-colors">LinkedIn</a></li>
-                                <li><a href="#" className="hover:text-black transition-colors">Dribbble</a></li>
+                                <li><a href="https://x.com/OpenAnalystInc" target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">X/Twitter</a></li>
+                                <li><a href="https://www.instagram.com/openanalystinc/" target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">Instagram</a></li>
+                                <li><a href="https://www.linkedin.com/in/openanalyst-inc/" target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">LinkedIn</a></li>
                             </ul>
                         </div>
 

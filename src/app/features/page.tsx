@@ -2,9 +2,9 @@ import { Header, Footer, Features as FeaturesSection, WhatSetsApart, HowItWorks 
 
 export default function FeaturesPage() {
     return (
-        <div className="min-h-screen bg-black text-white flex flex-col">
+        <div style={{ minHeight: '100vh', backgroundColor: '#000000', color: '#ffffff', display: 'flex', flexDirection: 'column' }}>
             <Header />
-            <main className="flex-1 pt-20">
+            <main style={{ flex: 1, paddingTop: '80px' }}>
                 <FeaturesSection />
                 <WhatSetsApart />
                 <HowItWorks />

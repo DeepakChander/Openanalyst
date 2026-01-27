@@ -4,7 +4,8 @@ import React from 'react';
 
 const Integrations: React.FC = () => {
     const tools = [
-        'Slack', 'Discord', 'Notion', 'GitHub', 'Linear', 'Jira', 'Figma', 'Zoom', 'Google Drive'
+        'Slack', 'Discord', 'Notion', 'GitHub', 'Linear', 'Jira', 'Figma', 'Zoom', 'Google Drive',
+        'Salesforce', 'HubSpot', 'Zendesk', 'Intercom', 'Shopify', 'Stripe', 'Asana', 'Trello', 'Teams'
     ];
 
     // Duplicate list 4 times to ensure it fills wide screens and loops seamlessly
