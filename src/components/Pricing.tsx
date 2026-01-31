@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
+import Link from 'next/link';
 import Button from './Button';
 
 const Pricing: React.FC = () => {
@@ -577,13 +578,28 @@ const Pricing: React.FC = () => {
                             <p className="text-gray-400 mb-10 max-w-lg mx-auto text-base md:text-lg leading-relaxed">
                                 Join thousands of users already using OpenAnalyst to unlock deeper insights with AI.
                             </p>
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                                <Button href="/waitlist" variant="fill" className="!bg-brand-primary !border-brand-primary !px-8 !py-3.5 !text-sm !font-semibold !tracking-wider">
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
+                                {/* Join Waitlist Button */}
+                                <Link
+                                    href="/waitlist"
+                                    className="group relative inline-flex items-center gap-3 bg-brand-primary hover:bg-brand-primary/90 text-black px-10 py-4 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,160,100,0.3)] hover:scale-[1.02]"
+                                >
                                     JOIN WAITLIST
-                                </Button>
-                                <Button href="/contact" variant="stroke" className="!border-white/20 !text-white hover:!bg-white/10 !px-8 !py-3.5 !text-sm !font-semibold !tracking-wider backdrop-blur-sm">
+                                    <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M5 12h14M12 5l7 7-7 7" />
+                                    </svg>
+                                </Link>
+
+                                {/* Contact Sales Button */}
+                                <Link
+                                    href="/contact"
+                                    className="group relative inline-flex items-center gap-3 bg-transparent border border-white/20 hover:border-white/50 text-white px-10 py-4 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300 hover:bg-white/5 hover:scale-[1.02]"
+                                >
                                     CONTACT SALES
-                                </Button>
+                                    <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                                    </svg>
+                                </Link>
                             </div>
                         </div>
                     </div>
