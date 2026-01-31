@@ -272,12 +272,13 @@ const Pricing: React.FC = () => {
                 {/* Pricing Cards - All 5 in One Row */}
                 <div className="flex gap-4 mb-24 overflow-x-auto pb-4 px-4 -mx-4 lg:overflow-visible lg:px-0 lg:mx-0 lg:justify-center">
                     {plans.map((plan, index) => (
-                        <div
+                        <a
                             key={plan.name}
+                            href={plan.href}
                             style={plan.featured ? { backgroundColor: '#000000' } : undefined}
-                            className={`pricing-card relative rounded-2xl overflow-hidden transition-all duration-300 flex flex-col flex-shrink-0 w-[260px] lg:w-[220px] xl:w-[240px] ${plan.featured
-                                ? 'border-2 border-brand-primary shadow-2xl'
-                                : 'bg-white border border-gray-200 hover:border-gray-300 shadow-sm hover:shadow-lg'
+                            className={`pricing-card relative rounded-2xl overflow-hidden transition-all duration-300 flex flex-col flex-shrink-0 w-[260px] lg:w-[220px] xl:w-[240px] cursor-pointer no-underline ${plan.featured
+                                ? 'border-2 border-brand-primary shadow-2xl hover:shadow-[0_0_30px_rgba(255,133,82,0.3)]'
+                                : 'bg-white border border-gray-200 hover:border-brand-primary shadow-sm hover:shadow-lg'
                                 }`}
                         >
                             {/* Popular Badge */}
@@ -388,7 +389,7 @@ const Pricing: React.FC = () => {
                                     {plan.cta}
                                 </Button>
                             </div>
-                        </div>
+                        </a>
                     ))}
                 </div>
 
@@ -562,23 +563,25 @@ const Pricing: React.FC = () => {
 
                 {/* Bottom CTA */}
                 <div className="mt-24 text-center">
-                    <div className="bg-black rounded-3xl p-12 md:p-16 relative overflow-hidden">
-                        {/* Background decoration */}
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-brand-primary/20 rounded-full blur-3xl"></div>
-                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-brand-primary/10 rounded-full blur-3xl"></div>
+                    <div className="bg-gradient-to-br from-[#0a0a0a] via-[#111] to-[#1a1008] rounded-3xl p-12 md:p-20 relative overflow-hidden border border-white/[0.06]">
+                        {/* Background decorations */}
+                        <div className="absolute top-[-80px] right-[-80px] w-[300px] h-[300px] bg-brand-primary/15 rounded-full blur-[100px]"></div>
+                        <div className="absolute bottom-[-60px] left-[-60px] w-[250px] h-[250px] bg-brand-primary/10 rounded-full blur-[80px]"></div>
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-brand-primary/[0.04] rounded-full blur-[120px]"></div>
 
                         <div className="relative z-10">
-                            <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                            <span className="inline-block text-brand-primary text-[11px] font-semibold uppercase tracking-[0.25em] mb-5">Get Started Today</span>
+                            <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5 leading-[1.1]">
                                 Ready to get started?
                             </h3>
-                            <p className="text-gray-400 mb-8 max-w-xl mx-auto">
+                            <p className="text-gray-400 mb-10 max-w-lg mx-auto text-base md:text-lg leading-relaxed">
                                 Join thousands of users already using OpenAnalyst to unlock deeper insights with AI.
                             </p>
                             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                                <Button href="/waitlist" variant="fill" className="!bg-brand-primary !border-brand-primary">
+                                <Button href="/waitlist" variant="fill" className="!bg-brand-primary !border-brand-primary !px-8 !py-3.5 !text-sm !font-semibold !tracking-wider">
                                     JOIN WAITLIST
                                 </Button>
-                                <Button href="/contact" variant="stroke" className="!border-white/20 !text-white hover:!bg-white/10">
+                                <Button href="/contact" variant="stroke" className="!border-white/20 !text-white hover:!bg-white/10 !px-8 !py-3.5 !text-sm !font-semibold !tracking-wider backdrop-blur-sm">
                                     CONTACT SALES
                                 </Button>
                             </div>
