@@ -6,6 +6,8 @@ import { Header, Footer } from '@/components';
 export default function WaitlistPage() {
     const [email, setEmail] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState('');
     const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
     const [waitlistCount] = useState(2147);
     const [isVisible, setIsVisible] = useState(false);
@@ -25,10 +27,27 @@ export default function WaitlistPage() {
         return () => window.removeEventListener('mousemove', handleMouseMove);
     }, []);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (email) {
+        if (!email) return;
+
+        setIsSubmitting(true);
+        setError('');
+
+        try {
+            const response = await fetch('/api/webhook', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, source: 'waitlist' }),
+            });
+
+            if (!response.ok) throw new Error('Something went wrong. Please try again.');
+
             setIsSubmitted(true);
+        } catch {
+            setError('Something went wrong. Please try again.');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -88,15 +107,20 @@ export default function WaitlistPage() {
                                         required
                                         className="waitlist-input"
                                     />
-                                    <button type="submit" className="waitlist-submit">
-                                        Request Access
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M5 12h14" />
-                                            <path d="m12 5 7 7-7 7" />
-                                        </svg>
+                                    <button type="submit" className="waitlist-submit" disabled={isSubmitting}>
+                                        {isSubmitting ? 'Submitting...' : 'Request Access'}
+                                        {!isSubmitting && (
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M5 12h14" />
+                                                <path d="m12 5 7 7-7 7" />
+                                            </svg>
+                                        )}
                                     </button>
                                 </div>
                             </form>
+                            {error && (
+                                <p style={{ color: '#ef4444', fontSize: '0.85rem', marginTop: '12px', textAlign: 'center' }}>{error}</p>
+                            )}
                             <div className="waitlist-trust">
                                 <div className="waitlist-trust-item">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -487,6 +511,12 @@ export default function WaitlistPage() {
 
                 .waitlist-submit:active {
                     transform: translateY(0);
+                }
+
+                .waitlist-submit:disabled {
+                    opacity: 0.7;
+                    cursor: not-allowed;
+                    transform: none;
                 }
 
                 /* Trust */

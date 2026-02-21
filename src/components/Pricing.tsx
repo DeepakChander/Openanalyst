@@ -382,13 +382,14 @@ const Pricing: React.FC = () => {
                                 </ul>
 
                                 {/* CTA Button */}
-                                <Button
-                                    href={plan.href}
-                                    variant={plan.featured ? 'fill' : 'stroke'}
-                                    className={`w-full justify-center text-sm ${!plan.featured ? '!border-gray-300 !text-black hover:!bg-gray-50' : ''}`}
+                                <span
+                                    className={`w-full justify-center text-sm inline-flex items-center py-2.5 px-5 rounded-full font-semibold transition-all duration-300 text-center ${plan.featured
+                                        ? 'bg-brand-primary text-white'
+                                        : '!border-gray-300 !text-black border hover:!bg-gray-50'
+                                    }`}
                                 >
                                     {plan.cta}
-                                </Button>
+                                </span>
                             </div>
                         </a>
                     ))}
