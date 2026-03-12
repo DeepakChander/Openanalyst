@@ -9,7 +9,7 @@ import Magnetic from '@/components/Magnetic';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const SI = 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons';
+const SI = 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons';
 
 const integrations = [
     { name: 'Gmail', icon: 'gmail', color: '#EA4335' },
@@ -46,16 +46,19 @@ export default function FeaturesPage() {
     const [showAllIntegrations, setShowAllIntegrations] = useState(false);
 
     useGSAP(() => {
-        gsap.from('.features-hero', {
-            y: 40, opacity: 0, duration: 0.8, ease: 'power3.out',
-        });
+        gsap.fromTo('.features-hero',
+            { y: 40, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }
+        );
 
         const sections = gsap.utils.toArray<HTMLElement>('.feature-section');
         sections.forEach((section) => {
-            gsap.from(section, {
-                y: 50, opacity: 0, filter: 'blur(4px)', duration: 0.8, ease: 'power3.out',
-                scrollTrigger: { trigger: section, start: 'top 85%', toggleActions: 'play none none reverse' }
-            });
+            gsap.fromTo(section,
+                { y: 50, opacity: 0, filter: 'blur(4px)' },
+                { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out',
+                  scrollTrigger: { trigger: section, start: 'top 90%', once: true }
+                }
+            );
         });
 
         // Counter animations for dashboard metrics
@@ -68,7 +71,7 @@ export default function FeaturesPage() {
                 duration: 2,
                 ease: 'power2.out',
                 snap: isFloat ? {} : { innerText: 1 },
-                scrollTrigger: { trigger: counter, start: 'top 90%', toggleActions: 'play none none reverse' },
+                scrollTrigger: { trigger: counter, start: 'top 95%', once: true },
                 ...(isFloat ? {
                     onUpdate: function () {
                         const val = parseFloat(counter.innerText);
@@ -80,10 +83,12 @@ export default function FeaturesPage() {
 
         // Integration cards cascade
         const intCards = gsap.utils.toArray<HTMLElement>('.integration-card');
-        gsap.from(intCards, {
-            scale: 0.8, opacity: 0, stagger: 0.03, duration: 0.4, ease: 'back.out(1.2)',
-            scrollTrigger: { trigger: '.integrations-grid', start: 'top 85%', toggleActions: 'play none none reverse' }
-        });
+        gsap.fromTo(intCards,
+            { scale: 0.8, opacity: 0 },
+            { scale: 1, opacity: 1, stagger: 0.03, duration: 0.4, ease: 'back.out(1.2)',
+              scrollTrigger: { trigger: '.integrations-grid', start: 'top 95%', once: true }
+            }
+        );
     }, { scope: pageRef });
 
     const displayedIntegrations = showAllIntegrations ? integrations : integrations.slice(0, 15);
@@ -476,8 +481,21 @@ export default function FeaturesPage() {
                                         (e.currentTarget as HTMLElement).style.boxShadow = 'none';
                                     }}
                                 >
-                                    <div style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        <img src={`${SI}/${integration.icon}.svg`} alt={integration.name} width="24" height="24" style={{ filter: 'none' }} />
+                                    <div style={{
+                                        width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    }}>
+                                        <div style={{
+                                            width: '24px', height: '24px',
+                                            backgroundColor: integration.color,
+                                            WebkitMaskImage: `url(${SI}/${integration.icon}.svg)`,
+                                            WebkitMaskSize: 'contain',
+                                            WebkitMaskRepeat: 'no-repeat',
+                                            WebkitMaskPosition: 'center',
+                                            maskImage: `url(${SI}/${integration.icon}.svg)`,
+                                            maskSize: 'contain',
+                                            maskRepeat: 'no-repeat',
+                                            maskPosition: 'center',
+                                        }} />
                                     </div>
                                     <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--foreground)' }}>{integration.name}</span>
                                 </div>

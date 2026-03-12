@@ -5,7 +5,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 
-const SI = 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons';
+const SI = 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons';
 
 const integrations: { name: string; slug: string; color: string }[] = [
     { name: 'Gmail', slug: 'gmail', color: '#EA4335' },
@@ -44,18 +44,12 @@ const Integrations: React.FC = () => {
 
     useGSAP(() => {
         const cards = gsap.utils.toArray<HTMLElement>('.integration-card');
-        gsap.from(cards, {
-            y: 30,
-            opacity: 0,
-            duration: 0.5,
-            stagger: 0.03,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: containerRef.current,
-                start: 'top 80%',
-                toggleActions: 'play none none reverse'
+        gsap.fromTo(cards,
+            { y: 30, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.5, stagger: 0.03, ease: 'power3.out',
+              scrollTrigger: { trigger: containerRef.current, start: 'top 90%', once: true }
             }
-        });
+        );
     }, { scope: containerRef });
 
     return (
@@ -101,12 +95,18 @@ const Integrations: React.FC = () => {
                                     className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors"
                                     style={{ backgroundColor: `${integration.color}15` }}
                                 >
-                                    <img
-                                        src={`${SI}/${integration.slug}.svg`}
-                                        alt={integration.name}
-                                        width="20"
-                                        height="20"
-                                    />
+                                    <div style={{
+                                        width: '20px', height: '20px',
+                                        backgroundColor: integration.color,
+                                        WebkitMaskImage: `url(${SI}/${integration.slug}.svg)`,
+                                        WebkitMaskSize: 'contain',
+                                        WebkitMaskRepeat: 'no-repeat',
+                                        WebkitMaskPosition: 'center',
+                                        maskImage: `url(${SI}/${integration.slug}.svg)`,
+                                        maskSize: 'contain',
+                                        maskRepeat: 'no-repeat',
+                                        maskPosition: 'center',
+                                    }} />
                                 </div>
                                 <span className="text-xs font-medium text-gray-700 leading-tight">{integration.name}</span>
                             </div>
