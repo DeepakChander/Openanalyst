@@ -35,7 +35,7 @@ export default function AboutPage() {
         reveals.forEach((el) => {
             gsap.from(el, {
                 y: 40, opacity: 0, duration: 0.7, ease: 'power3.out',
-                scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none reverse' }
+                scrollTrigger: { trigger: el, start: 'top 90%', once: true }
             });
         });
 
@@ -43,7 +43,7 @@ export default function AboutPage() {
         const milestoneEls = gsap.utils.toArray<HTMLElement>('.timeline-milestone');
         gsap.from(milestoneEls, {
             x: -40, opacity: 0, stagger: 0.15, duration: 0.7, ease: 'power3.out',
-            scrollTrigger: { trigger: '.timeline-section', start: 'top 80%', toggleActions: 'play none none reverse' }
+            scrollTrigger: { trigger: '.timeline-section', start: 'top 85%', once: true }
         });
 
         // Timeline line draw
@@ -64,7 +64,7 @@ export default function AboutPage() {
         const valueCards = gsap.utils.toArray<HTMLElement>('.value-card');
         gsap.from(valueCards, {
             y: 30, opacity: 0, scale: 0.95, stagger: 0.1, duration: 0.5, ease: 'back.out(1.2)',
-            scrollTrigger: { trigger: '.values-grid', start: 'top 85%', toggleActions: 'play none none reverse' }
+            scrollTrigger: { trigger: '.values-grid', start: 'top 90%', once: true }
         });
     }, { scope: pageRef });
 
