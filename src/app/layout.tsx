@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google";
+import { Inter, Poppins, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
+import AgentationProvider from "@/components/AgentationProvider";
+import SmoothScroll from "@/components/SmoothScroll";
+import GrainOverlay from "@/components/GrainOverlay";
 import "./globals.css";
 
 const inter = Inter({
@@ -16,9 +19,16 @@ const poppins = Poppins({
   display: "swap",
 });
 
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-jetbrains",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "OpenAnalyst | AI-Powered Analytics Platform",
-  description: "Transform your data into actionable intelligence with our cutting-edge AI agents.",
+  title: "OpenAnalyst | AI Marketing Agent",
+  description: "Your AI marketing agent that plans, creates, and optimizes campaigns across every channel.",
 };
 
 export default function RootLayout({
@@ -27,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
+    <html lang="en" className={`${inter.variable} ${poppins.variable} ${jetbrainsMono.variable}`}>
       <head>
         <Script id="google-tag-manager" strategy="beforeInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -37,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PLDWLN54');`}
         </Script>
       </head>
-      <body className="antialiased bg-white text-black selection:bg-brand-primary selection:text-white font-sans">
+      <body className="antialiased selection:bg-brand-primary selection:text-white font-mono" style={{ backgroundColor: 'var(--background)', color: 'var(--foreground)' }}>
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-PLDWLN54"
@@ -46,7 +56,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
-        {children}
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
+        <GrainOverlay />
+        <AgentationProvider />
       </body>
     </html>
   );

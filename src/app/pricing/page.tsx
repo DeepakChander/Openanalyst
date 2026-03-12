@@ -2,9 +2,9 @@ import { Header, Footer, Pricing as PricingSection } from '@/components';
 
 export default function PricingPage() {
     return (
-        <div className="min-h-screen bg-white text-black flex flex-col">
+        <div style={{ minHeight: '100vh', backgroundColor: 'var(--background)', color: 'var(--foreground)', display: 'flex', flexDirection: 'column' }}>
             <Header />
-            <main className="flex-1 pt-20">
+            <main style={{ flex: 1, paddingTop: '80px' }}>
                 <PricingSection />
             </main>
             <Footer />

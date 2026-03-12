@@ -3,25 +3,22 @@ import {
   Hero,
   Stats,
   Features,
-  WhatSetsApart,
   HowItWorks,
-  Testimonials,
-  Integrations,
+  LLMModels,
   Pricing,
   Footer
 } from '@/components';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--background)', color: 'var(--foreground)' }}>
       <Header />
       <main>
         <Hero />
         <Stats />
         <Features />
-        <WhatSetsApart />
         <HowItWorks />
-        <Integrations />
+        <LLMModels />
         <Pricing />
       </main>
       <Footer />
