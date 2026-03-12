@@ -199,14 +199,15 @@ const Pricing: React.FC = () => {
                             <div
                                 onMouseMove={handleCardHover}
                                 onMouseLeave={handleCardLeave}
-                                style={{ willChange: 'transform', transformStyle: 'preserve-3d' }}
+                                style={{ willChange: 'transform', transformStyle: 'preserve-3d', height: '100%' }}
                             >
-                                <a href={plan.href} style={{ textDecoration: 'none', display: 'block' }}>
-                                    <div className={plan.featured ? 'terminal-card glow-border' : 'terminal-card'} style={{
+                                <a href={plan.href} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+                                    <div className="terminal-card" style={{
                                         transition: 'all 0.3s ease',
-                                        transform: plan.featured ? 'translateY(-8px)' : 'none',
-                                        boxShadow: plan.featured ? '0 10px 40px rgba(204, 122, 96, 0.15)' : 'none',
                                         position: 'relative',
+                                        height: '100%',
+                                        display: 'flex',
+                                        flexDirection: 'column',
                                     }}>
                                         {plan.featured && (
                                             <div style={{
@@ -223,7 +224,7 @@ const Pricing: React.FC = () => {
                                             <div className="terminal-dots"><span /><span /><span /></div>
                                             <span style={{ color: '#6b7280', fontSize: '11px', marginLeft: '8px' }}>{plan.filename}</span>
                                         </div>
-                                        <div style={{ padding: '24px' }}>
+                                        <div style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
                                             <h3 style={{ color: '#ffffff', fontSize: '20px', fontWeight: 700, marginBottom: '4px', fontFamily: 'var(--font-heading)' }}>
                                                 {plan.name}
                                             </h3>
@@ -253,7 +254,7 @@ const Pricing: React.FC = () => {
                                                 {plan.bonus && <span style={{ backgroundColor: 'rgba(46,204,113,0.15)', color: '#2ecc71', fontSize: '10px', fontWeight: 700, padding: '2px 6px', borderRadius: '4px' }}>+{plan.bonus}</span>}
                                             </div>
 
-                                            <ul style={{ listStyle: 'none', margin: '0 0 20px', padding: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                            <ul style={{ listStyle: 'none', margin: '0 0 20px', padding: 0, display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
                                                 {plan.features.slice(0, 5).map((feature, i) => (
                                                     <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '12px', color: '#a89890' }}>
                                                         <span style={{ color: 'var(--primary)', fontSize: '14px', lineHeight: 1.2 }}>✓</span>
@@ -269,8 +270,8 @@ const Pricing: React.FC = () => {
                                                 width: '100%', textAlign: 'center', padding: '12px',
                                                 borderRadius: '8px', fontSize: '13px', fontFamily: 'var(--font-mono)', fontWeight: 600,
                                                 backgroundColor: plan.featured ? 'var(--primary)' : 'rgba(255,255,255,0.05)',
-                                                color: plan.featured ? '#ffffff' : '#d4d4d8',
-                                                border: plan.featured ? 'none' : '1px solid rgba(255,255,255,0.08)',
+                                                color: '#d4d4d8',
+                                                border: '1px solid rgba(255,255,255,0.08)',
                                                 transition: 'all 0.3s ease',
                                             }}>
                                                 {plan.cta}
