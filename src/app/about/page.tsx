@@ -27,45 +27,46 @@ export default function AboutPage() {
     const pageRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
-        gsap.from('.about-hero', {
-            y: 40, opacity: 0, duration: 0.8, ease: 'power3.out',
-        });
+        gsap.fromTo('.about-hero',
+            { y: 40, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }
+        );
 
         const reveals = gsap.utils.toArray<HTMLElement>('.about-reveal');
         reveals.forEach((el) => {
-            gsap.from(el, {
-                y: 40, opacity: 0, duration: 0.7, ease: 'power3.out',
-                scrollTrigger: { trigger: el, start: 'top 90%', once: true }
-            });
+            gsap.fromTo(el,
+                { y: 40, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
+                  scrollTrigger: { trigger: el, start: 'top 95%', once: true }
+                }
+            );
         });
 
         // Timeline milestone stagger
         const milestoneEls = gsap.utils.toArray<HTMLElement>('.timeline-milestone');
-        gsap.from(milestoneEls, {
-            x: -40, opacity: 0, stagger: 0.15, duration: 0.7, ease: 'power3.out',
-            scrollTrigger: { trigger: '.timeline-section', start: 'top 85%', once: true }
-        });
+        gsap.fromTo(milestoneEls,
+            { x: -40, opacity: 0 },
+            { x: 0, opacity: 1, stagger: 0.15, duration: 0.7, ease: 'power3.out',
+              scrollTrigger: { trigger: '.timeline-section', start: 'top 95%', once: true }
+            }
+        );
 
         // Timeline line draw
-        gsap.fromTo('.timeline-line-fill', {
-            scaleY: 0,
-        }, {
-            scaleY: 1,
-            ease: 'none',
-            scrollTrigger: {
-                trigger: '.timeline-section',
-                start: 'top 75%',
-                end: 'bottom 60%',
-                scrub: 1,
+        gsap.fromTo('.timeline-line-fill',
+            { scaleY: 0 },
+            { scaleY: 1, ease: 'none',
+              scrollTrigger: { trigger: '.timeline-section', start: 'top 75%', end: 'bottom 60%', scrub: 1 }
             }
-        });
+        );
 
         // Value cards stagger
         const valueCards = gsap.utils.toArray<HTMLElement>('.value-card');
-        gsap.from(valueCards, {
-            y: 30, opacity: 0, scale: 0.95, stagger: 0.1, duration: 0.5, ease: 'back.out(1.2)',
-            scrollTrigger: { trigger: '.values-grid', start: 'top 90%', once: true }
-        });
+        gsap.fromTo(valueCards,
+            { y: 30, opacity: 0, scale: 0.95 },
+            { y: 0, opacity: 1, scale: 1, stagger: 0.1, duration: 0.5, ease: 'back.out(1.2)',
+              scrollTrigger: { trigger: '.values-grid', start: 'top 95%', once: true }
+            }
+        );
     }, { scope: pageRef });
 
     return (
@@ -104,7 +105,7 @@ export default function AboutPage() {
                         {/* Mission & Vision - Asymmetric Cards */}
                         <div className="about-reveal" style={{
                             display: 'grid', gridTemplateColumns: '2fr 1fr',
-                            gap: '16px', marginBottom: '80px',
+                            gap: '16px', marginBottom: '48px',
                         }}>
                             {/* Mission — wider */}
                             <div style={{
@@ -292,7 +293,7 @@ export default function AboutPage() {
                         </div>
 
                         {/* CTA */}
-                        <div style={{ textAlign: 'center', marginTop: '80px' }}>
+                        <div style={{ textAlign: 'center', marginTop: '40px' }}>
                             <Magnetic>
                                 <a href="https://app.openanalyst.com" style={{
                                     display: 'inline-flex', alignItems: 'center', gap: '8px',
