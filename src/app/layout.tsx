@@ -1,21 +1,25 @@
 import type { Metadata } from "next";
-import { Inter, Poppins, JetBrains_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import AgentationProvider from "@/components/AgentationProvider";
 import SmoothScroll from "@/components/SmoothScroll";
-import GrainOverlay from "@/components/GrainOverlay";
+import NoiseOverlay from "@/components/NoiseOverlay";
+import CursorGlow from "@/components/CursorGlow";
+import PageTransition from "@/components/PageTransition";
+import ScrollProgress from "@/components/ScrollProgress";
 import "./globals.css";
 
-const inter = Inter({
+const jakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-jakarta",
   display: "swap",
 });
 
-const poppins = Poppins({
+const bricolageGrotesque = Bricolage_Grotesque({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-poppins",
+  variable: "--font-bricolage",
   display: "swap",
 });
 
@@ -37,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${poppins.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${jakartaSans.variable} ${bricolageGrotesque.variable} ${jetbrainsMono.variable}`}>
       <head>
         <Script id="google-tag-manager" strategy="beforeInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -47,7 +51,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PLDWLN54');`}
         </Script>
       </head>
-      <body className="antialiased selection:bg-brand-primary selection:text-white font-mono" style={{ backgroundColor: 'var(--background)', color: 'var(--foreground)' }}>
+      <body>
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-PLDWLN54"
@@ -57,9 +61,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           />
         </noscript>
         <SmoothScroll>
-          {children}
+          <PageTransition>
+            {children}
+          </PageTransition>
         </SmoothScroll>
-        <GrainOverlay />
+        <ScrollProgress />
+        <CursorGlow />
+        <NoiseOverlay />
         <AgentationProvider />
       </body>
     </html>

@@ -1,671 +1,685 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect, useCallback, Suspense, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Header, Footer } from '@/components';
-import Magnetic from '@/components/Magnetic';
+import { Canvas, useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const SI = 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons';
-
+/* ═══════════ DATA ═══════════ */
 const integrations = [
-    { name: 'Gmail', icon: 'gmail', color: '#EA4335' },
-    { name: 'Slack', icon: 'slack', color: '#4A154B' },
-    { name: 'HubSpot', icon: 'hubspot', color: '#FF7A59' },
-    { name: 'Google Ads', icon: 'googleads', color: '#4285F4' },
-    { name: 'LinkedIn', icon: 'linkedin', color: '#0A66C2' },
-    { name: 'Stripe', icon: 'stripe', color: '#635BFF' },
-    { name: 'Notion', icon: 'notion', color: '#000000' },
-    { name: 'Shopify', icon: 'shopify', color: '#96BF48' },
-    { name: 'YouTube', icon: 'youtube', color: '#FF0000' },
-    { name: 'Facebook', icon: 'facebook', color: '#1877F2' },
-    { name: 'Zoom', icon: 'zoom', color: '#2D8CFF' },
-    { name: 'Google Sheets', icon: 'googlesheets', color: '#34A853' },
-    { name: 'Airtable', icon: 'airtable', color: '#18BFFF' },
-    { name: 'Calendly', icon: 'calendly', color: '#006BFF' },
-    { name: 'Supabase', icon: 'supabase', color: '#3ECF8E' },
-    { name: 'Dropbox', icon: 'dropbox', color: '#0061FF' },
-    { name: 'Google Analytics', icon: 'googleanalytics', color: '#E37400' },
-    { name: 'WhatsApp', icon: 'whatsapp', color: '#25D366' },
-    { name: 'Meta Ads', icon: 'meta', color: '#0081FB' },
-    { name: 'Google Drive', icon: 'googledrive', color: '#4285F4' },
-    { name: 'Google Calendar', icon: 'googlecalendar', color: '#4285F4' },
-    { name: 'Google Docs', icon: 'googledocs', color: '#4285F4' },
-    { name: 'Google Meet', icon: 'googlemeet', color: '#00897B' },
-    { name: 'Google BigQuery', icon: 'googlebigquery', color: '#669DF6' },
-    { name: 'Google Maps', icon: 'googlemaps', color: '#4285F4' },
-    { name: 'Linear', icon: 'linear', color: '#5E6AD2' },
-    { name: 'Outlook', icon: 'microsoftoutlook', color: '#0078D4' },
+    { name: 'Gmail', logo: 'https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg', color: '#EA4335' },
+    { name: 'Slack', logo: 'https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg', color: '#E01E5A' },
+    { name: 'HubSpot', logo: 'https://www.hubspot.com/hubfs/HubSpot_Logos/HubSpot-Inversed-Favicon.png', color: '#FF7A59' },
+    { name: 'Google Ads', logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Google_Ads_logo.svg', color: '#4285F4' },
+    { name: 'LinkedIn', logo: 'https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png', color: '#0A66C2' },
+    { name: 'Stripe', logo: 'https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg', color: '#635BFF' },
+    { name: 'Notion', logo: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png', color: '#000000' },
+    { name: 'Shopify', logo: 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Shopify_logo_2018.svg', color: '#96BF48' },
+    { name: 'YouTube', logo: 'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg', color: '#FF0000' },
+    { name: 'Facebook', logo: 'https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png', color: '#1877F2' },
+    { name: 'Zoom', logo: 'https://upload.wikimedia.org/wikipedia/commons/1/11/Zoom_Logo_2022.svg', color: '#2D8CFF' },
+    { name: 'Sheets', logo: 'https://upload.wikimedia.org/wikipedia/commons/3/30/Google_Sheets_logo_%282014-2020%29.svg', color: '#34A853' },
+    { name: 'Airtable', logo: 'https://upload.wikimedia.org/wikipedia/commons/4/4b/Airtable_Logo.svg', color: '#18BFFF' },
+    { name: 'Calendly', logo: 'https://upload.wikimedia.org/wikipedia/commons/6/60/Calendly_Logo.png', color: '#006BFF' },
+    { name: 'Supabase', logo: 'https://cf-assets.www.cloudflare.com/slt3lc6tev37/5gFRBFABLkFJaOGOUGlBfn/d29b9e2253e47bf44d10bb1e9733e06f/supabase.svg', color: '#3ECF8E' },
+    { name: 'Dropbox', logo: 'https://upload.wikimedia.org/wikipedia/commons/7/78/Dropbox_Icon.svg', color: '#0061FF' },
+    { name: 'Analytics', logo: 'https://upload.wikimedia.org/wikipedia/commons/7/77/GAnalytics.svg', color: '#E37400' },
+    { name: 'WhatsApp', logo: 'https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg', color: '#25D366' },
+    { name: 'Meta', logo: 'https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg', color: '#0081FB' },
+    { name: 'Drive', logo: 'https://upload.wikimedia.org/wikipedia/commons/1/12/Google_Drive_icon_%282020%29.svg', color: '#4285F4' },
+    { name: 'Calendar', logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Calendar_icon_%282020%29.svg', color: '#4285F4' },
+    { name: 'Salesforce', logo: 'https://upload.wikimedia.org/wikipedia/commons/f/f9/Salesforce.com_logo.svg', color: '#00A1E0' },
+    { name: 'TikTok', logo: 'https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg', color: '#000000' },
+    { name: 'Twitter / X', logo: 'https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg', color: '#000000' },
+    { name: 'Mailchimp', logo: 'https://upload.wikimedia.org/wikipedia/commons/b/b6/Mailchimp_Logo.svg', color: '#FFE01B' },
+    { name: 'Twilio', logo: 'https://upload.wikimedia.org/wikipedia/commons/7/7e/Twilio-logo-red.svg', color: '#F22F46' },
+    { name: 'Intercom', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/9b/Intercom_logo.svg', color: '#6AFDEF' },
 ];
 
+const features = [
+    {
+        id: '01',
+        title: 'AI-Powered Campaigns',
+        subtitle: 'Intelligent Automation',
+        description: 'Launch, monitor, and optimize multi-channel marketing campaigns powered by 42 specialist AI agents that understand your brand, audience, and objectives.',
+        details: [
+            'Multi-channel orchestration across email, social, ads',
+            'Real-time performance optimization with AI feedback loops',
+            'A/B testing with automated winner selection',
+            'Predictive budget allocation across channels',
+        ],
+        accent: '#FF6B00',
+    },
+    {
+        id: '02',
+        title: 'Deep Analytics',
+        subtitle: 'Research & Intelligence',
+        description: 'Surface insights buried in your data with research agents that analyze competitors, identify market trends, and deliver actionable intelligence.',
+        details: [
+            'Competitor intelligence with real-time monitoring',
+            'Trend detection across social, search, and news',
+            'Audience segmentation with behavioral clustering',
+            'ROI attribution across touchpoints',
+        ],
+        accent: '#FF8533',
+    },
+    {
+        id: '03',
+        title: 'Universal Integrations',
+        subtitle: '27+ Connected Platforms',
+        description: 'Connect your entire martech stack. OpenAnalyst orchestrates data across 27+ platforms, creating a unified view of your marketing ecosystem.',
+        details: [
+            'Gmail, Slack, Google Drive native integrations',
+            'Ad platforms: Google, Meta, TikTok, LinkedIn',
+            'CRM: HubSpot, Salesforce, Airtable',
+            'Payments: Stripe, Shopify, Analytics',
+        ],
+        accent: '#E85D00',
+    },
+    {
+        id: '04',
+        title: 'Agentic Skills',
+        subtitle: 'Beyond Simple Automation',
+        description: '14 specialized agentic skills that go beyond simple automation — each one a complete workflow engine capable of end-to-end task execution.',
+        details: [
+            'Content creation with brand voice consistency',
+            'Social media scheduling and engagement',
+            'Lead scoring and qualification workflows',
+            'Custom skill builder for unique workflows',
+        ],
+        accent: '#FF6B00',
+    },
+];
+
+/* ═══════════ 3D AI NETWORK SCENE ═══════════ */
+function NetworkNode({ position, color, scale = 1 }: { position: [number, number, number]; color: string; scale?: number }) {
+    const meshRef = useRef<THREE.Mesh>(null);
+    const glowRef = useRef<THREE.Mesh>(null);
+    useFrame(({ clock }) => {
+        if (!meshRef.current) return;
+        const t = clock.getElapsedTime();
+        meshRef.current.position.y = position[1] + Math.sin(t * 0.8 + position[0]) * 0.12;
+        if (glowRef.current) {
+            glowRef.current.position.y = meshRef.current.position.y;
+            glowRef.current.scale.setScalar(1 + Math.sin(t * 1.5 + position[0] * 2) * 0.15);
+        }
+    });
+    return (
+        <group>
+            <mesh ref={glowRef} position={position}>
+                <sphereGeometry args={[0.22 * scale, 16, 16]} />
+                <meshStandardMaterial color={color} transparent opacity={0.15} emissive={color} emissiveIntensity={0.8} />
+            </mesh>
+            <mesh ref={meshRef} position={position}>
+                <sphereGeometry args={[0.12 * scale, 16, 16]} />
+                <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.6} roughness={0.2} metalness={0.8} />
+            </mesh>
+        </group>
+    );
+}
+
+function NetworkEdge({ start, end, color }: { start: [number, number, number]; end: [number, number, number]; color: string }) {
+    const ref = useRef<THREE.Mesh>(null);
+    const { mid, length, rotation } = useMemo(() => {
+        const s = new THREE.Vector3(...start);
+        const e = new THREE.Vector3(...end);
+        const m = s.clone().add(e).multiplyScalar(0.5);
+        const dir = e.clone().sub(s);
+        const len = dir.length();
+        const quat = new THREE.Quaternion();
+        quat.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
+        const euler = new THREE.Euler().setFromQuaternion(quat);
+        return { mid: m, length: len, rotation: euler };
+    }, [start, end]);
+
+    return (
+        <mesh ref={ref} position={[mid.x, mid.y, mid.z]} rotation={rotation}>
+            <cylinderGeometry args={[0.006, 0.006, length, 4]} />
+            <meshBasicMaterial color={color} transparent opacity={0.15} />
+        </mesh>
+    );
+}
+
+function CentralCore() {
+    const groupRef = useRef<THREE.Group>(null);
+    const ringRef1 = useRef<THREE.Mesh>(null);
+    const ringRef2 = useRef<THREE.Mesh>(null);
+    const coreRef = useRef<THREE.Mesh>(null);
+
+    useFrame(({ clock }) => {
+        const t = clock.getElapsedTime();
+        if (groupRef.current) groupRef.current.rotation.y = t * 0.1;
+        if (ringRef1.current) { ringRef1.current.rotation.x = t * 0.3; ringRef1.current.rotation.z = t * 0.1; }
+        if (ringRef2.current) { ringRef2.current.rotation.x = -t * 0.2; ringRef2.current.rotation.y = t * 0.25; }
+        if (coreRef.current) {
+            coreRef.current.rotation.x = t * 0.15;
+            coreRef.current.rotation.y = t * 0.2;
+            const s = 1 + Math.sin(t * 1.2) * 0.05;
+            coreRef.current.scale.setScalar(s);
+        }
+    });
+
+    return (
+        <group ref={groupRef}>
+            {/* Core icosahedron */}
+            <mesh ref={coreRef}>
+                <icosahedronGeometry args={[0.5, 1]} />
+                <meshStandardMaterial color="#FF8533" transparent opacity={0.8} roughness={0.1} metalness={0.9} emissive="#FF6B00" emissiveIntensity={0.5} />
+            </mesh>
+            {/* Wireframe shell */}
+            <mesh>
+                <icosahedronGeometry args={[0.65, 1]} />
+                <meshStandardMaterial color="#FF6B00" wireframe transparent opacity={0.2} />
+            </mesh>
+            {/* Orbit ring 1 */}
+            <mesh ref={ringRef1}>
+                <torusGeometry args={[1.0, 0.012, 16, 80]} />
+                <meshStandardMaterial color="#FF8533" emissive="#FF6B00" emissiveIntensity={0.5} transparent opacity={0.4} />
+            </mesh>
+            {/* Orbit ring 2 */}
+            <mesh ref={ringRef2} rotation={[Math.PI / 3, 0, 0]}>
+                <torusGeometry args={[1.3, 0.008, 16, 80]} />
+                <meshStandardMaterial color="#FFB380" emissive="#FF8533" emissiveIntensity={0.3} transparent opacity={0.25} />
+            </mesh>
+        </group>
+    );
+}
+
+function HeroParticles() {
+    const ref = useRef<THREE.Points>(null);
+    const count = 300;
+    const positions = useMemo(() => {
+        const pos = new Float32Array(count * 3);
+        for (let i = 0; i < count; i++) {
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            const r = 3 + Math.random() * 2;
+            pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+            pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+            pos[i * 3 + 2] = r * Math.cos(phi);
+        }
+        return pos;
+    }, []);
+
+    useFrame(({ clock }) => {
+        if (ref.current) ref.current.rotation.y = clock.getElapsedTime() * 0.03;
+    });
+
+    return (
+        <points ref={ref}>
+            <bufferGeometry>
+                <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+            </bufferGeometry>
+            <pointsMaterial color="#FF8533" size={0.025} transparent opacity={0.4} sizeAttenuation blending={THREE.AdditiveBlending} depthWrite={false} />
+        </points>
+    );
+}
+
+const nodePositions: [number, number, number][] = [
+    [-1.8, 1.2, 0.5], [1.5, 1.5, -0.3], [2.0, -0.3, 0.8], [-1.5, -1.3, -0.2],
+    [0.3, 2.0, -0.8], [-2.2, -0.2, -0.5], [1.0, -1.8, 0.3], [-0.5, -2.0, 0.6],
+    [2.3, 0.8, -0.5], [-1.0, 0.5, 1.2], [0.8, 0.3, -1.5], [-0.3, 1.5, 0.9],
+];
+
+const nodeColors = ['#FF8533', '#FFB380', '#FF6B00', '#FFB380', '#FF8533', '#FFB380', '#FF6B00', '#FFB380', '#FF8533', '#FFB380', '#FF6B00', '#FFB380'];
+
+const edges: [number, number][] = [
+    [0, 4], [0, 9], [1, 4], [1, 8], [2, 8], [2, 6], [3, 5], [3, 7],
+    [4, 11], [5, 9], [6, 7], [9, 11], [10, 1], [10, 3], [11, 0],
+];
+
+function HeroNetworkScene() {
+    return (
+        <Canvas camera={{ position: [0, 0, 6], fov: 50 }} style={{ width: '100%', height: '100%' }} gl={{ alpha: true, antialias: true }}>
+            <ambientLight intensity={0.3} />
+            <pointLight position={[5, 5, 5]} intensity={0.6} color="#FF8533" />
+            <pointLight position={[-4, -3, 4]} intensity={0.3} color="#FFF4EB" />
+            <directionalLight position={[0, 3, 5]} intensity={0.4} />
+            <CentralCore />
+            {nodePositions.map((pos, i) => (
+                <NetworkNode key={i} position={pos} color={nodeColors[i]} scale={0.7 + Math.random() * 0.6} />
+            ))}
+            {edges.map(([a, b], i) => (
+                <NetworkEdge key={i} start={nodePositions[a]} end={nodePositions[b]} color="#FF8533" />
+            ))}
+            <HeroParticles />
+        </Canvas>
+    );
+}
+
+/* ═══════════ ANIMATED COUNTER ═══════════ */
+function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string }) {
+    const ref = useRef<HTMLSpanElement>(null);
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => { if (entry.isIntersecting) setVisible(true); },
+            { threshold: 0.5 }
+        );
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
+
+    useEffect(() => {
+        if (!visible || !ref.current) return;
+        const obj = { val: 0 };
+        gsap.to(obj, {
+            val: value, duration: 2, ease: 'power2.out',
+            onUpdate: () => { if (ref.current) ref.current.textContent = Math.round(obj.val) + suffix; },
+        });
+    }, [visible, value, suffix]);
+
+    return <span ref={ref}>0{suffix}</span>;
+}
+
+/* ═══════════ MAIN PAGE ═══════════ */
 export default function FeaturesPage() {
     const pageRef = useRef<HTMLDivElement>(null);
-    const [showAllIntegrations, setShowAllIntegrations] = useState(false);
+    const heroRef = useRef<HTMLDivElement>(null);
+    const [activeFeature, setActiveFeature] = useState(0);
 
     useGSAP(() => {
-        gsap.fromTo('.features-hero',
-            { y: 40, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }
-        );
+        gsap.from('.feat-hero-line', { y: 100, opacity: 0, stagger: 0.15, duration: 1.2, ease: 'power4.out', delay: 0.3 });
+        gsap.from('.feat-hero-sub', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.9 });
+        gsap.from('.feat-hero-cta', { y: 20, opacity: 0, duration: 0.6, ease: 'power3.out', delay: 1.2 });
 
-        const sections = gsap.utils.toArray<HTMLElement>('.feature-section');
-        sections.forEach((section) => {
-            gsap.fromTo(section,
-                { y: 50, opacity: 0, filter: 'blur(4px)' },
-                { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out',
-                  scrollTrigger: { trigger: section, start: 'top 90%', once: true }
-                }
-            );
+        gsap.from('.feat-stat', {
+            y: 30, stagger: 0.1, duration: 0.7, ease: 'power3.out',
+            scrollTrigger: { trigger: '.feat-stats-bar', start: 'top 90%', once: true },
         });
 
-        // Counter animations for dashboard metrics
-        const counters = gsap.utils.toArray<HTMLElement>('.feat-counter');
-        counters.forEach((counter) => {
-            const target = parseFloat(counter.getAttribute('data-target') || '0');
-            const isFloat = target % 1 !== 0;
-            gsap.fromTo(counter, { innerText: '0' }, {
-                innerText: target,
-                duration: 2,
-                ease: 'power2.out',
-                snap: isFloat ? {} : { innerText: 1 },
-                scrollTrigger: { trigger: counter, start: 'top 95%', once: true },
-                ...(isFloat ? {
-                    onUpdate: function () {
-                        const val = parseFloat(counter.innerText);
-                        counter.innerText = val.toFixed(1);
-                    }
-                } : {}),
+        const featurePanels = gsap.utils.toArray<HTMLElement>('.feat-panel');
+        featurePanels.forEach((panel, i) => {
+            ScrollTrigger.create({
+                trigger: panel, start: 'top 60%', end: 'bottom 40%',
+                onEnter: () => setActiveFeature(i), onEnterBack: () => setActiveFeature(i),
+            });
+            gsap.from(panel.querySelector('.feat-panel-content'), {
+                x: -40, duration: 0.8, ease: 'power3.out',
+                scrollTrigger: { trigger: panel, start: 'top 85%', once: true },
+            });
+            gsap.from(panel.querySelector('.feat-panel-visual'), {
+                x: 40, duration: 0.8, ease: 'power3.out',
+                scrollTrigger: { trigger: panel, start: 'top 85%', once: true },
             });
         });
 
-        // Integration cards cascade
-        const intCards = gsap.utils.toArray<HTMLElement>('.integration-card');
-        gsap.fromTo(intCards,
-            { scale: 0.8, opacity: 0 },
-            { scale: 1, opacity: 1, stagger: 0.03, duration: 0.4, ease: 'back.out(1.2)',
-              scrollTrigger: { trigger: '.integrations-grid', start: 'top 95%', once: true }
-            }
-        );
+        gsap.from('.integ-card', {
+            y: 20, scale: 0.95, stagger: 0.02, duration: 0.4, ease: 'power2.out',
+            scrollTrigger: { trigger: '.integ-section', start: 'top 85%', once: true },
+        });
     }, { scope: pageRef });
 
-    const displayedIntegrations = showAllIntegrations ? integrations : integrations.slice(0, 15);
-
     return (
-        <div ref={pageRef} style={{ minHeight: '100vh', backgroundColor: 'var(--background)', color: 'var(--foreground)' }}>
+        <div ref={pageRef} style={{ minHeight: '100vh' }}>
             <Header />
-            <main style={{ paddingTop: '120px' }}>
-                {/* Hero */}
-                <div className="features-hero" style={{ textAlign: 'center', padding: '40px 20px 80px', maxWidth: '800px', margin: '0 auto' }}>
-                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--syntax-comment)', marginBottom: '16px' }}>
-                        {'// FEATURES'}
-                    </p>
-                    <h1 style={{
-                        fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem, 6vw, 4rem)', fontWeight: 800,
-                        lineHeight: 1.1, marginBottom: '20px',
+
+            {/* ═══════════ HERO — Split: 3D Left + Text Right ═══════════ */}
+            <section ref={heroRef} style={{
+                minHeight: '100vh', display: 'flex', alignItems: 'center',
+                position: 'relative', overflow: 'hidden', paddingTop: '80px',
+                backgroundColor: '#FFFFFF', color: '#1A1A1A',
+            }}>
+                {/* Subtle background elements */}
+                <div style={{
+                    position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.15,
+                    backgroundImage: 'radial-gradient(circle, rgba(255,107,0,0.08) 1px, transparent 1px)',
+                    backgroundSize: '48px 48px',
+                    maskImage: 'radial-gradient(ellipse 80% 70% at 50% 50%, black 0%, transparent 80%)',
+                    WebkitMaskImage: 'radial-gradient(ellipse 80% 70% at 50% 50%, black 0%, transparent 80%)',
+                }} />
+                <div style={{
+                    position: 'absolute', top: '20%', left: '10%', width: '500px', height: '500px',
+                    background: 'radial-gradient(circle, rgba(255,107,0,0.08) 0%, transparent 70%)',
+                    pointerEvents: 'none', filter: 'blur(60px)',
+                }} />
+
+                <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 40px', position: 'relative', zIndex: 2, width: '100%' }}>
+                    <div className="feat-hero-grid" style={{
+                        display: 'grid', gridTemplateColumns: '1fr 1fr',
+                        gap: '60px', alignItems: 'center',
                     }}>
-                        Everything Your <span className="text-gradient">AI Agent</span> Can Do
-                    </h1>
-                    <p style={{ fontSize: '18px', color: 'var(--muted)', maxWidth: '550px', margin: '0 auto', fontFamily: 'var(--font-body)', lineHeight: 1.7 }}>
-                        Comprehensive marketing capabilities powered by AI agents that plan, create, and optimize.
-                    </p>
-                </div>
-
-                {/* ========== Section 1: Campaign Intelligence — Dashboard Mockup ========== */}
-                <div className="feature-section" style={{ padding: '60px 20px 80px', background: 'var(--background)' }}>
-                    <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-                        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--syntax-comment)', marginBottom: '12px' }}>
-                                {'// CAMPAIGN_INTELLIGENCE'}
-                            </p>
-                            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: 700, color: 'var(--foreground)', marginBottom: '12px' }}>
-                                Campaign Intelligence
-                            </h2>
-                            <p style={{ fontSize: '16px', color: 'var(--muted)', maxWidth: '500px', margin: '0 auto', fontFamily: 'var(--font-body)' }}>
-                                Orchestrate multi-channel campaigns with AI-powered optimization.
-                            </p>
+                        {/* LEFT — 3D AI Network */}
+                        <div className="feat-hero-3d" style={{ position: 'relative', height: '520px' }}>
+                            <Suspense fallback={null}>
+                                <HeroNetworkScene />
+                            </Suspense>
+                            {/* Floating label badges around the 3D */}
+                            <div className="feat-hero-line" style={{
+                                position: 'absolute', top: '12%', left: '5%',
+                                padding: '6px 14px', borderRadius: '8px',
+                                background: 'rgba(255,107,0,0.08)', border: '1px solid rgba(255,107,0,0.15)',
+                                backdropFilter: 'blur(8px)',
+                                fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--rust-light)',
+                                letterSpacing: '0.08em',
+                            }}>42 AI AGENTS</div>
+                            <div className="feat-hero-line" style={{
+                                position: 'absolute', bottom: '18%', right: '8%',
+                                padding: '6px 14px', borderRadius: '8px',
+                                background: 'rgba(255,107,0,0.08)', border: '1px solid rgba(255,107,0,0.15)',
+                                backdropFilter: 'blur(8px)',
+                                fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--rust-light)',
+                                letterSpacing: '0.08em',
+                            }}>27+ INTEGRATIONS</div>
+                            <div className="feat-hero-line" style={{
+                                position: 'absolute', top: '50%', right: '3%', transform: 'translateY(-50%)',
+                                padding: '6px 14px', borderRadius: '8px',
+                                background: 'rgba(255,107,0,0.08)', border: '1px solid rgba(255,107,0,0.15)',
+                                backdropFilter: 'blur(8px)',
+                                fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--rust-light)',
+                                letterSpacing: '0.08em',
+                            }}>14 SKILLS</div>
                         </div>
 
-                        {/* Dashboard mockup */}
-                        <div style={{
-                            borderRadius: '20px',
-                            border: '1px solid var(--border)',
-                            background: '#ffffff',
-                            overflow: 'hidden',
-                            boxShadow: '0 20px 60px rgba(26, 18, 16, 0.08)',
-                            maxWidth: '900px',
-                            margin: '0 auto',
-                        }}>
-                            {/* Dashboard header bar */}
-                            <div style={{
-                                display: 'flex', alignItems: 'center', gap: '10px',
-                                padding: '14px 20px', background: 'var(--surface)',
-                                borderBottom: '1px solid var(--border)',
-                            }}>
-                                <div style={{ display: 'flex', gap: '6px' }}>
-                                    <span style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ff5f57' }} />
-                                    <span style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#febc2e' }} />
-                                    <span style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#28c840' }} />
-                                </div>
-                                <span style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginLeft: '8px' }}>Campaign Dashboard</span>
-                                <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#2ecc71' }} />
-                                    <span style={{ fontSize: '10px', color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>Live</span>
-                                </div>
+                        {/* RIGHT — Text content */}
+                        <div>
+                            <div style={{ overflow: 'hidden', marginBottom: '8px' }}>
+                                <span className="feat-hero-line" style={{
+                                    display: 'inline-flex', alignItems: 'center', gap: '8px',
+                                    fontFamily: 'var(--font-mono)', fontSize: '12px',
+                                    color: 'var(--rust-light)', textTransform: 'uppercase', letterSpacing: '0.12em',
+                                }}>
+                                    <span style={{ width: '24px', height: '1px', background: 'var(--rust)' }} />
+                                    Capabilities & Integrations
+                                </span>
                             </div>
+                            <div style={{ overflow: 'hidden', marginBottom: '8px' }}>
+                                <h1 className="feat-hero-line" style={{
+                                    fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem, 5vw, 4.5rem)',
+                                    fontWeight: 800, lineHeight: 1, letterSpacing: '-0.04em', color: '#1A1A1A',
+                                }}>Every tool</h1>
+                            </div>
+                            <div style={{ overflow: 'hidden', marginBottom: '28px' }}>
+                                <h1 className="feat-hero-line" style={{
+                                    fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem, 5vw, 4.5rem)',
+                                    fontWeight: 800, lineHeight: 1, letterSpacing: '-0.04em',
+                                }}><span className="text-gradient">you need.</span></h1>
+                            </div>
+                            <p className="feat-hero-sub" style={{
+                                fontSize: 'clamp(1rem, 1.8vw, 1.15rem)', color: '#4A4A4A',
+                                lineHeight: 1.75, maxWidth: '440px', marginBottom: '36px',
+                                fontFamily: 'var(--font-body)',
+                            }}>
+                                42 AI agents, 14 agentic skills, and 27+ integrations — orchestrated to transform your marketing from reactive to predictive.
+                            </p>
 
-                            {/* Metric cards */}
-                            <div style={{ padding: '24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
-                                {[
-                                    { label: 'Campaigns Active', value: '12', color: 'var(--primary)', icon: '▲' },
-                                    { label: 'ROI', value: '340', suffix: '%', color: '#2ecc71', icon: '◆' },
-                                    { label: 'Total Reach', value: '1.2', suffix: 'M', color: '#3b82f6', icon: '●' },
-                                    { label: 'Conversion Rate', value: '8.4', suffix: '%', color: '#f59e0b', icon: '★' },
-                                ].map((metric) => (
-                                    <div key={metric.label} style={{
-                                        padding: '20px',
-                                        borderRadius: '14px',
-                                        backgroundColor: 'var(--surface)',
-                                        border: '1px solid var(--border)',
-                                    }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
-                                            <span style={{ color: metric.color, fontSize: '10px' }}>{metric.icon}</span>
-                                            <span style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{metric.label}</span>
-                                        </div>
-                                        <div style={{ fontFamily: 'var(--font-heading)', fontSize: '28px', fontWeight: 700, color: metric.color }}>
-                                            <span className="feat-counter" data-target={metric.value}>{metric.value}</span>{metric.suffix || ''}
-                                        </div>
+                            {/* Stats row */}
+                            <div className="feat-hero-sub" style={{
+                                display: 'flex', gap: '32px', marginBottom: '36px',
+                                paddingBottom: '28px', borderBottom: '1px solid rgba(0,0,0,0.06)',
+                            }}>
+                                {[{ val: '42+', label: 'AI Agents' }, { val: '14', label: 'Skills' }, { val: '27+', label: 'Integrations' }].map((s, i) => (
+                                    <div key={i}>
+                                        <div style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', fontWeight: 800, color: 'var(--rust-light)', letterSpacing: '-0.02em' }}>{s.val}</div>
+                                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#8A8A8A', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: '2px' }}>{s.label}</div>
                                     </div>
                                 ))}
                             </div>
 
-                            {/* Feature pills */}
-                            <div style={{ padding: '0 24px 24px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                                {['Multi-channel orchestration', 'A/B testing automation', 'Budget optimization', 'ROI tracking'].map((f) => (
-                                    <span key={f} style={{
-                                        padding: '6px 14px', borderRadius: '9999px', fontSize: '12px', fontWeight: 500,
-                                        backgroundColor: 'rgba(204,122,96,0.08)', color: 'var(--primary)',
-                                        fontFamily: 'var(--font-mono)',
-                                    }}>{f}</span>
-                                ))}
+                            <div className="feat-hero-cta" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                                <a href="https://app.openanalyst.com" className="btn-primary">Start Free Trial <span style={{ fontSize: '18px' }}>→</span></a>
+                                <a href="#features" className="btn-outline">Explore Features</a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* ========== Section 2: Content Creation — Before/After Split ========== */}
-                <div className="feature-section" style={{ padding: '80px 20px', background: 'var(--surface)' }}>
-                    <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-                        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--syntax-comment)', marginBottom: '12px' }}>
-                                {'// CONTENT_CREATION'}
-                            </p>
-                            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: 700, color: 'var(--foreground)', marginBottom: '12px' }}>
-                                Content Creation
-                            </h2>
-                            <p style={{ fontSize: '16px', color: 'var(--muted)', maxWidth: '500px', margin: '0 auto', fontFamily: 'var(--font-body)' }}>
-                                Generate high-converting content across every format and channel.
-                            </p>
-                        </div>
+                <div style={{
+                    position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)', zIndex: 2,
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
+                }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#8A8A8A', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Scroll</span>
+                    <div style={{ width: '1px', height: '40px', background: 'linear-gradient(180deg, var(--rust), transparent)' }} />
+                </div>
+            </section>
 
-                        {/* Before/After Split */}
-                        <div style={{
-                            display: 'grid', gridTemplateColumns: '1fr 2px 1fr', gap: '0',
-                            maxWidth: '900px', margin: '0 auto',
-                            borderRadius: '20px', overflow: 'hidden',
-                            border: '1px solid var(--border)',
-                            boxShadow: '0 12px 40px rgba(26, 18, 16, 0.06)',
+            {/* ═══════════ STATS BAR — Light ═══════════ */}
+            <section className="feat-stats-bar" style={{
+                padding: '60px 24px',
+                borderBottom: '1px solid var(--border-light)',
+                backgroundColor: 'var(--bg-ivory)',
+            }}>
+                <div style={{
+                    maxWidth: '1000px', margin: '0 auto',
+                    display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '32px', textAlign: 'center',
+                }}>
+                    {[
+                        { value: 42, suffix: '+', label: 'AI Agents' },
+                        { value: 14, suffix: '', label: 'Agentic Skills' },
+                        { value: 27, suffix: '+', label: 'Integrations' },
+                        { value: 99, suffix: '%', label: 'Uptime SLA' },
+                    ].map((stat, i) => (
+                        <div key={i} className="feat-stat">
+                            <div style={{
+                                fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)',
+                                fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text-dark)', marginBottom: '4px',
+                            }}>
+                                <AnimatedNumber value={stat.value} suffix={stat.suffix} />
+                            </div>
+                            <div style={{
+                                fontFamily: 'var(--font-mono)', fontSize: '11px',
+                                color: 'var(--rust)', textTransform: 'uppercase', letterSpacing: '0.1em',
+                            }}>{stat.label}</div>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* ═══════════ FEATURES — Sticky Scroll Panels (Light) ═══════════ */}
+            <section id="features" style={{ padding: '120px 0', backgroundColor: 'var(--bg-ivory)', color: 'var(--text-dark)' }}>
+                <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 40px' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '100px' }}>
+                        <span style={{
+                            fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--rust)',
+                            textTransform: 'uppercase', letterSpacing: '0.12em', display: 'block', marginBottom: '16px',
+                        }}>Core Features</span>
+                        <h2 style={{
+                            fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+                            fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.05, color: 'var(--text-dark)',
                         }}>
-                            {/* Before: Raw prompt */}
-                            <div style={{ padding: '32px', background: 'var(--terminal-bg)' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
-                                    <span style={{ fontSize: '10px', fontWeight: 700, padding: '3px 10px', borderRadius: '9999px', backgroundColor: 'rgba(255,255,255,0.08)', color: '#8a7a72', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Input</span>
-                                </div>
-                                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: '#a89890', lineHeight: 2 }}>
-                                    <div><span style={{ color: '#39ff14' }}>$</span> <span style={{ color: '#3b82f6' }}>content</span> generate</div>
-                                    <div style={{ paddingLeft: '16px' }}><span style={{ color: '#e5c07b' }}>--type</span> <span style={{ color: '#98c379' }}>&quot;blog&quot;</span></div>
-                                    <div style={{ paddingLeft: '16px' }}><span style={{ color: '#e5c07b' }}>--topic</span> <span style={{ color: '#98c379' }}>&quot;AI Marketing&quot;</span></div>
-                                    <div style={{ paddingLeft: '16px' }}><span style={{ color: '#e5c07b' }}>--tone</span> <span style={{ color: '#98c379' }}>&quot;professional&quot;</span></div>
-                                    <div style={{ paddingLeft: '16px' }}><span style={{ color: '#e5c07b' }}>--length</span> <span style={{ color: '#d19a66' }}>2400</span></div>
-                                </div>
-                            </div>
-
-                            {/* Divider with animated gradient */}
-                            <div style={{
-                                background: 'linear-gradient(to bottom, var(--primary), var(--primary-light), var(--primary-dark))',
-                                backgroundSize: '100% 200%',
-                                animation: 'gradientShift 4s ease infinite',
-                            }} />
-
-                            {/* After: Polished output */}
-                            <div style={{ padding: '32px', background: '#ffffff' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
-                                    <span style={{ fontSize: '10px', fontWeight: 700, padding: '3px 10px', borderRadius: '9999px', backgroundColor: 'rgba(46,204,113,0.1)', color: '#2ecc71', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Output</span>
-                                    <span style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', color: 'var(--muted)' }}>SEO: 94/100</span>
-                                </div>
-                                <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 700, color: 'var(--foreground)', marginBottom: '12px', lineHeight: 1.4 }}>
-                                    The Complete Guide to AI-Powered Marketing in 2025
-                                </h4>
-                                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, fontFamily: 'var(--font-body)', marginBottom: '16px' }}>
-                                    Artificial intelligence is reshaping how businesses approach marketing. From campaign optimization to content generation, AI agents are enabling marketers to achieve unprecedented scale...
-                                </p>
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                                    {['2,400 words', '42 keywords', '8 sections', 'SEO optimized'].map((tag) => (
-                                        <span key={tag} style={{ fontSize: '10px', padding: '4px 10px', borderRadius: '9999px', backgroundColor: 'var(--surface)', color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>{tag}</span>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', marginTop: '24px' }}>
-                            {['Blog posts & articles', 'Social media content', 'Ad copy & creatives', 'Email sequences'].map((f) => (
-                                <span key={f} style={{
-                                    padding: '6px 14px', borderRadius: '9999px', fontSize: '12px', fontWeight: 500,
-                                    backgroundColor: 'rgba(204,122,96,0.08)', color: 'var(--primary)', fontFamily: 'var(--font-mono)',
-                                }}>{f}</span>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                {/* ========== Section 3: Analytics & Insights — Live Terminal Dashboard ========== */}
-                <div className="feature-section" style={{ padding: '80px 20px', background: 'var(--background)' }}>
-                    <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-                        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--syntax-comment)', marginBottom: '12px' }}>
-                                {'// ANALYTICS_INSIGHTS'}
-                            </p>
-                            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: 700, color: 'var(--foreground)', marginBottom: '12px' }}>
-                                Analytics & Insights
-                            </h2>
-                            <p style={{ fontSize: '16px', color: 'var(--muted)', maxWidth: '500px', margin: '0 auto', fontFamily: 'var(--font-body)' }}>
-                                Turn raw data into actionable marketing intelligence.
-                            </p>
-                        </div>
-
-                        {/* Analytics Dashboard Mockup */}
-                        <div style={{
-                            borderRadius: '20px',
-                            border: '1px solid var(--border)',
-                            background: 'var(--terminal-bg)',
-                            overflow: 'hidden',
-                            boxShadow: '0 20px 60px rgba(26, 18, 16, 0.12)',
-                            maxWidth: '920px',
-                            margin: '0 auto',
-                        }}>
-                            {/* Terminal header */}
-                            <div style={{
-                                display: 'flex', alignItems: 'center', gap: '10px',
-                                padding: '14px 20px',
-                                borderBottom: '1px solid rgba(255,255,255,0.06)',
-                            }}>
-                                <div style={{ display: 'flex', gap: '6px' }}>
-                                    <span style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ff5f57' }} />
-                                    <span style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#febc2e' }} />
-                                    <span style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#28c840' }} />
-                                </div>
-                                <span style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', color: '#6b5e58', marginLeft: '8px' }}>~/openanalyst analytics --live</span>
-                                <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#2ecc71', boxShadow: '0 0 6px rgba(46,204,113,0.4)', animation: 'glowPulse 2s ease-in-out infinite' }} />
-                                    <span style={{ fontSize: '10px', color: '#6b5e58', fontFamily: 'var(--font-mono)' }}>Streaming</span>
-                                </div>
-                            </div>
-
-                            {/* Top metrics row */}
-                            <div className="analytics-metrics-row" style={{ padding: '20px 24px 0', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
-                                {[
-                                    { label: 'SEGMENTS', value: '7', icon: '◎', color: 'var(--primary)', delta: '+2 this week' },
-                                    { label: 'DATA SOURCES', value: '12', icon: '◆', color: '#3b82f6', delta: 'All connected' },
-                                    { label: 'INSIGHTS', value: '24', icon: '★', color: '#2ecc71', delta: '+8 new today' },
-                                    { label: 'ACCURACY', value: '94%', icon: '●', color: '#8b5cf6', delta: '↑ from 89%' },
-                                ].map((m) => (
-                                    <div key={m.label} style={{
-                                        padding: '16px', borderRadius: '12px',
-                                        background: 'rgba(255,255,255,0.03)',
-                                        border: '1px solid rgba(255,255,255,0.06)',
-                                    }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
-                                            <span style={{ color: m.color, fontSize: '10px' }}>{m.icon}</span>
-                                            <span style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', color: '#6b5e58', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{m.label}</span>
-                                        </div>
-                                        <div style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', fontWeight: 700, color: m.color, marginBottom: '4px' }}>
-                                            {m.value}
-                                        </div>
-                                        <div style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', color: '#4a3f3a' }}>{m.delta}</div>
-                                    </div>
-                                ))}
-                            </div>
-
-                            {/* Main content: ASCII chart + live feed side by side */}
-                            <div className="analytics-main-grid" style={{ padding: '20px 24px', display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '16px' }}>
-                                {/* ASCII-style bar chart */}
-                                <div style={{
-                                    padding: '20px', borderRadius: '12px',
-                                    background: 'rgba(255,255,255,0.03)',
-                                    border: '1px solid rgba(255,255,255,0.06)',
-                                }}>
-                                    <div style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: '#6b5e58', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                        <span>Channel Performance (last 30d)</span>
-                                        <span style={{ color: '#2ecc71', fontSize: '10px' }}>● live</span>
-                                    </div>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                                        {[
-                                            { channel: 'Email', pct: 87, color: 'var(--primary)' },
-                                            { channel: 'Social', pct: 72, color: '#3b82f6' },
-                                            { channel: 'Paid Ads', pct: 64, color: '#f59e0b' },
-                                            { channel: 'Organic', pct: 58, color: '#2ecc71' },
-                                            { channel: 'Referral', pct: 41, color: '#8b5cf6' },
-                                        ].map((ch) => (
-                                            <div key={ch.channel}>
-                                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                                                    <span style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: '#8a7a72' }}>{ch.channel}</span>
-                                                    <span style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: ch.color, fontWeight: 600 }}>{ch.pct}%</span>
-                                                </div>
-                                                <div style={{ height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,0.04)', overflow: 'hidden' }}>
-                                                    <div style={{
-                                                        height: '100%', width: `${ch.pct}%`, borderRadius: '3px',
-                                                        background: ch.color,
-                                                        boxShadow: `0 0 8px ${ch.color}40`,
-                                                        transition: 'width 1s ease',
-                                                    }} />
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Live insight feed */}
-                                <div style={{
-                                    padding: '20px', borderRadius: '12px',
-                                    background: 'rgba(255,255,255,0.03)',
-                                    border: '1px solid rgba(255,255,255,0.06)',
-                                    display: 'flex', flexDirection: 'column',
-                                }}>
-                                    <div style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: '#6b5e58', marginBottom: '16px' }}>
-                                        AI Insights Feed
-                                    </div>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
-                                        {[
-                                            { time: '2m ago', text: 'Email open rates up 23% — subject line A/B test winner detected', type: 'success' },
-                                            { time: '8m ago', text: 'New audience segment "High-intent Q1" identified (1,247 users)', type: 'info' },
-                                            { time: '15m ago', text: 'Competitor launched campaign on LinkedIn — similar keywords', type: 'warning' },
-                                            { time: '1h ago', text: 'Budget reallocation suggested: shift 15% from Paid → Organic', type: 'action' },
-                                        ].map((insight, i) => (
-                                            <div key={i} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                                                <span style={{
-                                                    width: '6px', height: '6px', borderRadius: '50%', marginTop: '5px', flexShrink: 0,
-                                                    backgroundColor: insight.type === 'success' ? '#2ecc71' : insight.type === 'info' ? '#3b82f6' : insight.type === 'warning' ? '#f59e0b' : 'var(--primary)',
-                                                    boxShadow: `0 0 6px ${insight.type === 'success' ? 'rgba(46,204,113,0.4)' : insight.type === 'info' ? 'rgba(59,130,246,0.4)' : insight.type === 'warning' ? 'rgba(245,158,11,0.4)' : 'rgba(204,122,96,0.4)'}`,
-                                                }} />
-                                                <div>
-                                                    <div style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: '#a89890', lineHeight: 1.5 }}>{insight.text}</div>
-                                                    <div style={{ fontSize: '9px', fontFamily: 'var(--font-mono)', color: '#4a3f3a', marginTop: '2px' }}>{insight.time}</div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Bottom terminal prompt */}
-                            <div style={{
-                                padding: '12px 24px 16px',
-                                borderTop: '1px solid rgba(255,255,255,0.04)',
-                            }}>
-                                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#4a3f3a' }}>
-                                    <span style={{ color: '#39ff14' }}>$</span> <span style={{ color: '#3b82f6' }}>insight</span> <span style={{ color: '#8a7a72' }}>--generate --scope=all-channels</span>
-                                    <span style={{ animation: 'blink 1s step-end infinite', color: 'var(--primary)' }}>▋</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', marginTop: '24px' }}>
-                            {['Customer segmentation', 'Market research', 'Competitor tracking', 'Trend forecasting'].map((f) => (
-                                <span key={f} style={{
-                                    padding: '6px 14px', borderRadius: '9999px', fontSize: '12px', fontWeight: 500,
-                                    backgroundColor: 'rgba(204,122,96,0.08)', color: 'var(--primary)', fontFamily: 'var(--font-mono)',
-                                }}>{f}</span>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                {/* ========== Section 4: Integrations & Automation — Connected Logo Grid ========== */}
-                <div className="feature-section" style={{ padding: '80px 20px', background: 'var(--surface)' }}>
-                    <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-                        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--syntax-comment)', marginBottom: '12px' }}>
-                                {'// INTEGRATIONS_AUTOMATION'}
-                            </p>
-                            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: 700, color: 'var(--foreground)', marginBottom: '12px' }}>
-                                Integrations & Automation
-                            </h2>
-                            <p style={{ fontSize: '16px', color: 'var(--muted)', maxWidth: '500px', margin: '0 auto', fontFamily: 'var(--font-body)', marginBottom: '16px' }}>
-                                Connect your entire marketing stack with 27 MCP integrations.
-                            </p>
-                            <div style={{
-                                display: 'inline-flex', alignItems: 'center', gap: '8px',
-                                padding: '6px 16px', backgroundColor: 'var(--terminal-bg)', borderRadius: '9999px',
-                                fontSize: '12px', fontFamily: 'var(--font-mono)', color: 'var(--primary)',
-                            }}>
-                                <span style={{
-                                    width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#2ecc71',
-                                    boxShadow: '0 0 6px rgba(46,204,113,0.4)',
-                                    display: 'inline-block',
-                                    animation: 'glowPulse 2s ease-in-out infinite',
-                                }} />
-                                27 Connected
-                            </div>
-                        </div>
-
-                        {/* Integration cards grid */}
-                        <div className="integrations-grid" style={{
-                            display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
-                            gap: '12px', marginBottom: '20px',
-                        }}>
-                            {displayedIntegrations.map((integration) => (
-                                <div key={integration.name} className="integration-card" style={{
-                                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
-                                    padding: '16px 12px', borderRadius: '12px', textAlign: 'center',
-                                    backgroundColor: `${integration.color}10`, border: `1px solid ${integration.color}20`,
-                                    transition: 'all 0.3s ease', cursor: 'default',
-                                }}
-                                    onMouseEnter={(e) => {
-                                        (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
-                                        (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 12px ${integration.color}20`;
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
-                                        (e.currentTarget as HTMLElement).style.boxShadow = 'none';
-                                    }}
-                                >
-                                    <div style={{
-                                        width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    }}>
-                                        <div style={{
-                                            width: '24px', height: '24px',
-                                            backgroundColor: integration.color,
-                                            WebkitMaskImage: `url(${SI}/${integration.icon}.svg)`,
-                                            WebkitMaskSize: 'contain',
-                                            WebkitMaskRepeat: 'no-repeat',
-                                            WebkitMaskPosition: 'center',
-                                            maskImage: `url(${SI}/${integration.icon}.svg)`,
-                                            maskSize: 'contain',
-                                            maskRepeat: 'no-repeat',
-                                            maskPosition: 'center',
-                                        }} />
-                                    </div>
-                                    <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--foreground)' }}>{integration.name}</span>
-                                </div>
-                            ))}
-                        </div>
-
-                        {integrations.length > 15 && (
-                            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                <button
-                                    onClick={() => setShowAllIntegrations(!showAllIntegrations)}
-                                    style={{
-                                        fontFamily: 'var(--font-mono)', fontSize: '13px', padding: '10px 24px',
-                                        borderRadius: '9999px', border: '1px solid var(--border)', backgroundColor: 'transparent',
-                                        color: 'var(--muted)', cursor: 'pointer', transition: 'all 0.3s ease',
-                                    }}
-                                >
-                                    {showAllIntegrations ? '$ show --less' : `$ show --all ${integrations.length}`}
-                                </button>
-                            </div>
-                        )}
-
-                        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', marginTop: '24px' }}>
-                            {['27 MCP integrations', 'Workflow automation', 'API access', 'Webhook triggers'].map((f) => (
-                                <span key={f} style={{
-                                    padding: '6px 14px', borderRadius: '9999px', fontSize: '12px', fontWeight: 500,
-                                    backgroundColor: 'rgba(204,122,96,0.08)', color: 'var(--primary)', fontFamily: 'var(--font-mono)',
-                                }}>{f}</span>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                {/* ========== Section 5: AI Models — Comparison Layout ========== */}
-                <div className="feature-section" style={{ padding: '80px 20px', background: 'var(--background)' }}>
-                    <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-                        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--syntax-comment)', marginBottom: '12px' }}>
-                                {'// AI_MODELS'}
-                            </p>
-                            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: 700, color: 'var(--foreground)', marginBottom: '12px' }}>
-                                AI Models
-                            </h2>
-                            <p style={{ fontSize: '16px', color: 'var(--muted)', maxWidth: '500px', margin: '0 auto', fontFamily: 'var(--font-body)' }}>
-                                Multi-model intelligence with free and premium options.
-                            </p>
-                        </div>
-
-                        {/* Side-by-side comparison */}
-                        <div style={{
-                            display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px',
-                            maxWidth: '800px', margin: '0 auto',
-                        }}>
-                            {/* Free Column */}
-                            <div style={{
-                                borderRadius: '16px', border: '1px solid var(--border)',
-                                backgroundColor: '#ffffff', overflow: 'hidden',
-                            }}>
-                                <div style={{
-                                    padding: '16px 20px', borderBottom: '1px solid var(--border)',
-                                    display: 'flex', alignItems: 'center', gap: '8px',
-                                }}>
-                                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#2ecc71', boxShadow: '0 0 6px rgba(46,204,113,0.3)' }} />
-                                    <span style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 700, color: 'var(--foreground)' }}>Free Models</span>
-                                </div>
-                                <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                    {['Trinity Large Preview', 'Big Pickle', 'MiniMax M2.5', 'GPT-5 Nano', 'Qwen3 Coder'].map((m) => (
-                                        <div key={m} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', fontFamily: 'var(--font-mono)' }}>
-                                            <span style={{ color: '#2ecc71' }}>✓</span>
-                                            <span style={{ color: 'var(--foreground)' }}>{m}</span>
-                                            <span style={{ marginLeft: 'auto', fontSize: '10px', color: '#2ecc71', fontWeight: 700 }}>FREE</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Premium Column */}
-                            <div style={{
-                                borderRadius: '16px', border: '2px solid var(--primary)',
-                                backgroundColor: '#ffffff', overflow: 'hidden',
-                                boxShadow: '0 8px 32px rgba(204,122,96,0.12)',
-                                position: 'relative',
-                            }}>
-                                <div style={{
-                                    position: 'absolute', top: '0', right: '16px',
-                                    backgroundColor: 'var(--primary)', color: '#ffffff', fontSize: '9px',
-                                    fontWeight: 700, padding: '4px 12px', borderRadius: '0 0 8px 8px',
-                                    textTransform: 'uppercase', letterSpacing: '0.1em',
-                                }}>
-                                    Best Value
-                                </div>
-                                <div style={{
-                                    padding: '16px 20px', borderBottom: '1px solid var(--border)',
-                                    display: 'flex', alignItems: 'center', gap: '8px',
-                                }}>
-                                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--primary)', boxShadow: '0 0 6px rgba(204,122,96,0.3)' }} />
-                                    <span style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 700, color: 'var(--foreground)' }}>Premium Models</span>
-                                </div>
-                                <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                    {[
-                                        { name: 'OpenAnalyst Max', badge: 'Recommended' },
-                                        { name: 'OpenAnalyst Less Beta', badge: null },
-                                        { name: 'Claude Opus 4', badge: null },
-                                        { name: 'GPT-4 Turbo', badge: null },
-                                        { name: 'Claude Sonnet 4', badge: null },
-                                    ].map((m) => (
-                                        <div key={m.name} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', fontFamily: 'var(--font-mono)' }}>
-                                            <span style={{ color: 'var(--primary)' }}>★</span>
-                                            <span style={{ color: 'var(--foreground)' }}>{m.name}</span>
-                                            {m.badge && (
-                                                <span style={{
-                                                    marginLeft: 'auto', fontSize: '9px', fontWeight: 700, padding: '2px 8px',
-                                                    borderRadius: '9999px', background: 'linear-gradient(135deg, var(--primary), var(--primary-dark))',
-                                                    color: '#ffffff', textTransform: 'uppercase', letterSpacing: '0.05em',
-                                                }}>{m.badge}</span>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', marginTop: '24px' }}>
-                            {['Multi-model routing', 'Free tier models', 'Premium models', 'Provider-backed'].map((f) => (
-                                <span key={f} style={{
-                                    padding: '6px 14px', borderRadius: '9999px', fontSize: '12px', fontWeight: 500,
-                                    backgroundColor: 'rgba(204,122,96,0.08)', color: 'var(--primary)', fontFamily: 'var(--font-mono)',
-                                }}>{f}</span>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Bottom CTA */}
-                <div style={{ padding: '80px 20px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-                    <div className="morph-blob" style={{
-                        position: 'absolute', width: '400px', height: '400px',
-                        background: 'radial-gradient(circle, rgba(204,122,96,0.08) 0%, transparent 70%)',
-                        top: '50%', left: '50%', transform: 'translate(-50%, -50%)', pointerEvents: 'none',
-                    }} />
-                    <div style={{ position: 'relative', zIndex: 1 }}>
-                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, color: 'var(--foreground)', marginBottom: '24px' }}>
-                            Ready to deploy your AI agent?
+                            Built for the future<br /><span className="text-gradient">of marketing</span>
                         </h2>
-                        <Magnetic>
-                            <a href="https://app.openanalyst.com" style={{
-                                display: 'inline-flex', alignItems: 'center', gap: '8px',
-                                padding: '16px 36px', fontSize: '15px', fontFamily: 'var(--font-mono)', fontWeight: 600,
-                                color: '#ffffff', backgroundColor: 'var(--primary)', borderRadius: '9999px',
-                                textDecoration: 'none', transition: 'all 0.3s ease',
-                                boxShadow: '0 4px 20px rgba(204, 122, 96, 0.3)',
-                            }}>
-                                <span style={{ color: 'var(--cmd-prefix)', fontSize: '12px' }}>$</span>
-                                get_started
-                            </a>
-                        </Magnetic>
+                    </div>
+
+                    {features.map((feature, i) => (
+                        <div key={feature.id} className="feat-panel" style={{
+                            display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px',
+                            alignItems: 'center', minHeight: '70vh', padding: '60px 0',
+                            direction: i % 2 !== 0 ? 'rtl' : 'ltr',
+                        }}>
+                            <div className="feat-panel-content" style={{ direction: 'ltr' }}>
+                                <span style={{
+                                    fontFamily: 'var(--font-mono)', fontSize: '48px', fontWeight: 800,
+                                    color: 'rgba(255,107,0,0.12)', lineHeight: 1, display: 'block', marginBottom: '16px',
+                                }}>{feature.id}</span>
+                                <span style={{
+                                    fontFamily: 'var(--font-mono)', fontSize: '11px', color: feature.accent,
+                                    textTransform: 'uppercase', letterSpacing: '0.15em', display: 'block', marginBottom: '12px',
+                                }}>{feature.subtitle}</span>
+                                <h3 style={{
+                                    fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
+                                    fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '20px',
+                                    color: 'var(--text-dark)',
+                                }}>{feature.title}</h3>
+                                <p style={{
+                                    fontSize: '16px', color: '#4A4A4A', lineHeight: 1.8, marginBottom: '32px',
+                                }}>{feature.description}</p>
+                                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                    {feature.details.map((detail, j) => (
+                                        <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', fontSize: '14px', color: '#4A4A4A' }}>
+                                            <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: feature.accent, flexShrink: 0, marginTop: '6px' }} />
+                                            {detail}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            <div className="feat-panel-visual" style={{ direction: 'ltr' }}>
+                                <div style={{
+                                    borderRadius: '24px', border: '1px solid var(--border-light)',
+                                    backgroundColor: '#0f0d0b', padding: '48px 36px',
+                                    position: 'relative', overflow: 'hidden', minHeight: '400px',
+                                    display: 'flex', flexDirection: 'column', justifyContent: 'center',
+                                    boxShadow: '0 20px 60px rgba(0,0,0,0.12)',
+                                }}>
+                                    <div style={{
+                                        position: 'absolute', top: '-50%', right: '-50%', width: '100%', height: '100%',
+                                        background: `radial-gradient(circle, ${feature.accent}20 0%, transparent 70%)`, pointerEvents: 'none',
+                                    }} />
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '32px' }}>
+                                        <div style={{ display: 'flex', gap: '6px' }}>
+                                            <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#ff5f57' }} />
+                                            <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#febc2e' }} />
+                                            <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#28c840' }} />
+                                        </div>
+                                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#8A8A8A', marginLeft: '8px' }}>
+                                            openanalyst — {feature.subtitle.toLowerCase()}
+                                        </span>
+                                    </div>
+                                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', lineHeight: 2.2, position: 'relative', zIndex: 1, color: '#d4d4d8' }}>
+                                        <div><span style={{ color: '#3b82f6' }}>import</span> <span style={{ color: '#98c379' }}>{'{ Agent }'}</span> <span style={{ color: '#3b82f6' }}>from</span> <span style={{ color: '#98c379' }}>&apos;@openanalyst/core&apos;</span></div>
+                                        <div style={{ color: '#6b7280' }}>// {feature.subtitle}</div>
+                                        <div><span style={{ color: '#3b82f6' }}>const</span> <span style={{ color: '#FF8533' }}>agent</span> = <span style={{ color: '#3b82f6' }}>await</span> Agent.<span style={{ color: '#dcdcaa' }}>create</span>({'{'})</div>
+                                        <div style={{ paddingLeft: '24px' }}><span style={{ color: '#FF8533' }}>skill</span>: <span style={{ color: '#98c379' }}>&apos;{feature.title.toLowerCase().replace(/ /g, '-')}&apos;</span>,</div>
+                                        <div style={{ paddingLeft: '24px' }}><span style={{ color: '#FF8533' }}>mode</span>: <span style={{ color: '#98c379' }}>&apos;autonomous&apos;</span>,</div>
+                                        <div>{'}'})</div>
+                                        <div style={{ marginTop: '8px' }}><span style={{ color: '#39ff14' }}>▸</span> <span style={{ color: 'rgba(255,255,255,0.6)' }}>Agent initialized successfully</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* ═══════════ FEATURE PROGRESS INDICATOR ═══════════ */}
+            <div style={{
+                position: 'fixed', right: '30px', top: '50%', transform: 'translateY(-50%)', zIndex: 100,
+                display: 'flex', flexDirection: 'column', gap: '12px',
+            }}>
+                {features.map((f, i) => (
+                    <div key={i} style={{
+                        width: '3px', height: activeFeature === i ? '32px' : '12px', borderRadius: '3px',
+                        backgroundColor: activeFeature === i ? 'var(--rust)' : 'rgba(255,107,0,0.2)',
+                        transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                    }} />
+                ))}
+            </div>
+
+            {/* ═══════════ INTEGRATIONS — Light Theme ═══════════ */}
+            <section className="integ-section" style={{
+                padding: '120px 24px', backgroundColor: '#ffffff',
+                position: 'relative', overflow: 'hidden',
+            }}>
+                <div style={{
+                    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                    width: '600px', height: '600px',
+                    background: 'radial-gradient(circle, rgba(255,107,0,0.04) 0%, transparent 70%)', pointerEvents: 'none',
+                }} />
+
+                <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 1, padding: '0 24px' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '64px' }}>
+                        <span style={{
+                            fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--rust)',
+                            textTransform: 'uppercase', letterSpacing: '0.12em', display: 'block', marginBottom: '16px',
+                        }}>Ecosystem</span>
+                        <h2 style={{
+                            fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+                            fontWeight: 800, letterSpacing: '-0.03em', marginBottom: '16px', color: 'var(--text-dark)',
+                        }}>Connected to <span className="text-gradient">everything</span></h2>
+                        <p style={{ fontSize: '16px', color: '#4A4A4A', maxWidth: '480px', margin: '0 auto' }}>
+                            27+ native integrations that sync your entire marketing stack in real-time.
+                        </p>
+                    </div>
+
+                    <div className="integ-grid" style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(9, 1fr)',
+                        gridTemplateRows: 'repeat(3, 100px)',
+                        gap: '12px',
+                    }}>
+                        {integrations.map((integ) => (
+                            <div
+                                key={integ.name}
+                                className="integ-card"
+                                style={{
+                                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                                    gap: '8px', padding: '12px 4px', borderRadius: '14px',
+                                    border: '1px solid var(--border-light)',
+                                    backgroundColor: '#ffffff',
+                                    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)', cursor: 'default',
+                                    boxShadow: '0 1px 4px rgba(0,0,0,0.03)',
+                                    height: '100px',
+                                    overflow: 'hidden',
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.borderColor = integ.color + '60';
+                                    e.currentTarget.style.transform = 'translateY(-3px) scale(1.04)';
+                                    e.currentTarget.style.boxShadow = `0 8px 24px ${integ.color}20`;
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.borderColor = 'var(--border-light)';
+                                    e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                                    e.currentTarget.style.boxShadow = '0 1px 4px rgba(0,0,0,0.03)';
+                                }}
+                            >
+                                <div style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', flexShrink: 0, overflow: 'hidden' }}>
+                                    <img
+                                        src={integ.logo}
+                                        alt={integ.name}
+                                        loading="lazy"
+                                        style={{ objectFit: 'contain', width: '36px', height: '36px', display: 'block' }}
+                                        onError={(e) => {
+                                            const target = e.currentTarget;
+                                            target.style.display = 'none';
+                                            const fallback = target.nextElementSibling as HTMLElement;
+                                            if (fallback) fallback.style.display = 'flex';
+                                        }}
+                                    />
+                                    <div style={{
+                                        display: 'none', width: '36px', height: '36px', borderRadius: '8px',
+                                        backgroundColor: integ.color + '18', color: integ.color,
+                                        alignItems: 'center', justifyContent: 'center',
+                                        fontSize: '16px', fontWeight: 700, fontFamily: 'var(--font-heading)',
+                                    }}>{integ.name.charAt(0)}</div>
+                                </div>
+                                <span style={{
+                                    fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 500,
+                                    color: '#4A4A4A', textAlign: 'center', lineHeight: 1,
+                                    overflow: 'hidden', textOverflow: 'ellipsis',
+                                    maxWidth: '100%', whiteSpace: 'nowrap', flexShrink: 0,
+                                }}>{integ.name}</span>
+                            </div>
+                        ))}
                     </div>
                 </div>
+            </section>
 
-                {/* Responsive */}
-                <style>{`
-                    @media (max-width: 768px) {
-                        .analytics-metrics-row { grid-template-columns: repeat(2, 1fr) !important; }
-                        .analytics-main-grid { grid-template-columns: 1fr !important; }
-                    }
-                    @media (max-width: 480px) {
-                        .analytics-metrics-row { grid-template-columns: 1fr !important; }
-                    }
-                `}</style>
-            </main>
             <Footer />
+
+            <style>{`
+                @media (max-width: 900px) {
+                    .feat-hero-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+                    .feat-hero-3d { height: 320px !important; }
+                    .feat-panel { grid-template-columns: 1fr !important; gap: 40px !important; direction: ltr !important; min-height: auto !important; padding: 40px 0 !important; }
+                    .feat-stats-bar > div { grid-template-columns: repeat(2, 1fr) !important; }
+                    .integ-grid { grid-template-columns: repeat(5, 1fr) !important; grid-template-rows: none !important; }
+                    .integ-grid .integ-card { height: 100px !important; }
+                }
+                @media (max-width: 600px) {
+                    .feat-stats-bar > div { grid-template-columns: 1fr !important; }
+                    .integ-grid { grid-template-columns: repeat(3, 1fr) !important; grid-template-rows: none !important; }
+                    .integ-grid .integ-card { height: 90px !important; }
+                }
+            `}</style>
         </div>
     );
 }

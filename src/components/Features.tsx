@@ -1,704 +1,454 @@
 'use client';
 
-import React, { useRef, useState, useCallback, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 
-interface Skill {
+gsap.registerPlugin(ScrollTrigger);
+
+interface Feature {
     id: number;
     name: string;
-    filename: string;
-    command: string;
+    title: string;
     description: string;
-    features: string[];
     accentColor: string;
-    icon: string;
-    gradient: string;
+    capabilities: string[];
+    cliCommand: string;
+    cliSteps: string[];
 }
 
-const skills: Skill[] = [
+const features: Feature[] = [
     {
-        id: 1, name: 'AI-Vibe-Marketer', filename: 'ai-vibe-marketer.ts',
-        command: '$ skill run ai-vibe-marketer',
-        description: 'Full-stack marketing agent for campaign planning, creation, and optimization across every channel.',
-        features: ['Multi-channel campaigns', 'A/B testing', 'Performance tracking', 'Budget engine'],
-        accentColor: '#CC7A60', icon: '◆',
-        gradient: 'linear-gradient(135deg, #CC7A60, #e8a990, #a85d45)',
+        id: 0, name: 'AI-Vibe-Marketer', title: 'Full-Stack Marketing Agent',
+        description: 'Deploy an autonomous marketing agent that plans, creates, and optimizes campaigns across every channel.',
+        accentColor: '#FF6B00',
+        capabilities: ['Multi-channel campaigns', 'A/B testing', 'Performance tracking', 'Budget optimization'],
+        cliCommand: 'ai-vibe-marketer',
+        cliSteps: ['Scanning 12 channels...', 'Generating campaign variants...', 'Running A/B split tests...', 'Optimizing budget allocation...', 'Campaign live — ROI +340%'],
     },
     {
-        id: 2, name: 'Customer-Segmentation', filename: 'customer-segmentation.ts',
-        command: '$ skill run customer-segmentation',
-        description: 'Automatic audience segmentation by behavior, demographics, and engagement patterns.',
-        features: ['Behavioral clustering', 'Demographic profiling', 'Engagement scoring', 'Predictive modeling'],
-        accentColor: '#3b82f6', icon: '⬡',
-        gradient: 'linear-gradient(135deg, #3b82f6, #60a5fa, #2563eb)',
+        id: 1, name: 'Customer Segmentation', title: 'Automatic Audience Segmentation',
+        description: 'Automatically segment your audience by behavior, demographics, and engagement patterns.',
+        accentColor: '#3b82f6',
+        capabilities: ['Behavioral clustering', 'Demographic profiling', 'Engagement scoring', 'Predictive modeling'],
+        cliCommand: 'customer-segmentation',
+        cliSteps: ['Analyzing 847K user profiles...', 'Clustering by behavior...', 'Scoring engagement levels...', 'Building predictive models...', '23 segments identified'],
     },
     {
-        id: 3, name: 'Market-Research-Reports', filename: 'market-research-reports.ts',
-        command: '$ skill run market-research-reports',
-        description: 'Comprehensive market research with competitor analysis, trend forecasting, and actionable insights.',
-        features: ['Competitor analysis', 'Trend forecasting', 'Market sizing', 'Opportunity mapping'],
-        accentColor: '#22c55e', icon: '●',
-        gradient: 'linear-gradient(135deg, #22c55e, #4ade80, #16a34a)',
+        id: 2, name: 'Market Research', title: 'Market Intelligence',
+        description: 'Generate comprehensive research reports with competitor analysis, trend forecasting, and strategic insights.',
+        accentColor: '#22c55e',
+        capabilities: ['Competitor analysis', 'Trend forecasting', 'Market sizing', 'Opportunity mapping'],
+        cliCommand: 'market-research',
+        cliSteps: ['Scraping competitor data...', 'Analyzing 3.2M data points...', 'Forecasting Q3 trends...', 'Sizing addressable market...', 'Report ready — 47 insights'],
     },
     {
-        id: 4, name: 'AI-Search-Optimization', filename: 'ai-search-optimization.ts',
-        command: '$ skill run ai-search-optimization',
-        description: 'Optimize your presence across AI search engines and traditional SEO for maximum discoverability.',
-        features: ['AI search optimization', 'Structured data', 'Content gap analysis', 'Ranking intelligence'],
-        accentColor: '#a855f7', icon: '▲',
-        gradient: 'linear-gradient(135deg, #a855f7, #c084fc, #7c3aed)',
+        id: 3, name: 'AI Search Optimization', title: 'Next-Gen Search Intelligence',
+        description: 'Optimize your brand across AI search engines — ChatGPT, Perplexity, Gemini — for maximum discoverability.',
+        accentColor: '#a855f7',
+        capabilities: ['AI search optimization', 'Structured data', 'Content gap analysis', 'Ranking intelligence'],
+        cliCommand: 'ai-search-optimization',
+        cliSteps: ['Indexing AI search results...', 'Mapping content gaps...', 'Generating structured data...', 'Optimizing for Perplexity...', 'Visibility score: 94/100'],
     },
     {
-        id: 5, name: 'SEO-Content-Optimizer', filename: 'seo-content-optimizer.ts',
-        command: '$ skill run seo-content-optimizer',
-        description: 'Create and optimize ranking content with keyword research, gap analysis, and performance tracking.',
-        features: ['Keyword research', 'Content scoring', 'Gap analysis', 'Performance tracking'],
-        accentColor: '#f59e0b', icon: '★',
-        gradient: 'linear-gradient(135deg, #f59e0b, #fbbf24, #d97706)',
+        id: 4, name: 'SEO Content Optimizer', title: 'Content Ranking Engine',
+        description: 'Create content that ranks with intelligent keyword research, competitive gap analysis, and real-time tracking.',
+        accentColor: '#f59e0b',
+        capabilities: ['Keyword research', 'Content scoring', 'Gap analysis', 'Performance tracking'],
+        cliCommand: 'seo-content-optimizer',
+        cliSteps: ['Researching 2.4K keywords...', 'Scoring content quality...', 'Identifying ranking gaps...', 'Generating optimized drafts...', 'Content score: 97/100'],
     },
 ];
 
-const Features: React.FC = () => {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [activeCard, setActiveCard] = useState<number | null>(null);
-    const [mousePositions, setMousePositions] = useState<Record<number, { x: number; y: number }>>({});
-    const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-    const particleContainerRef = useRef<HTMLDivElement>(null);
+/* ═══ TYPING TERMINAL ANIMATION ═══ */
+function TypingTerminal({ feature, isActive }: { feature: Feature; isActive: boolean }) {
+    const termRef = useRef<HTMLDivElement>(null);
+    const [lines, setLines] = useState<{ text: string; type: 'command' | 'step' | 'result' | 'empty' }[]>([]);
+    const animRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const prevFeatureRef = useRef<number>(-1);
 
-    gsap.registerPlugin(ScrollTrigger, useGSAP);
-
-    // 3D tilt + holographic glow tracking
-    const handleCardMove = useCallback((e: React.MouseEvent<HTMLDivElement>, index: number) => {
-        const card = e.currentTarget;
-        const rect = card.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width;
-        const y = (e.clientY - rect.top) / rect.height;
-        const rotateX = (y - 0.5) * -12;
-        const rotateY = (x - 0.5) * 12;
-
-        gsap.to(card, {
-            rotateX, rotateY,
-            duration: 0.4,
-            ease: 'power2.out',
-            transformPerspective: 800,
-        });
-
-        setMousePositions(prev => ({ ...prev, [index]: { x: e.clientX - rect.left, y: e.clientY - rect.top } }));
-    }, []);
-
-    const handleCardEnter = useCallback((index: number) => {
-        setActiveCard(index);
-        const card = cardRefs.current[index];
-        if (!card) return;
-
-        gsap.to(card, {
-            scale: 1.02,
-            duration: 0.4,
-            ease: 'power2.out',
-        });
-
-        // Animate the inner icon
-        const icon = card.querySelector('.skill-icon-3d');
-        if (icon) {
-            gsap.to(icon, {
-                z: 40, scale: 1.3, rotateY: 15,
-                duration: 0.5, ease: 'back.out(1.7)',
-            });
-        }
-
-        // Animate features stagger
-        const features = card.querySelectorAll('.feature-tag');
-        gsap.fromTo(features, { y: 4, opacity: 0.6 }, {
-            y: 0, opacity: 1, stagger: 0.05, duration: 0.3, ease: 'power2.out',
-        });
-    }, []);
-
-    const handleCardLeave = useCallback((e: React.MouseEvent<HTMLDivElement>, index: number) => {
-        setActiveCard(null);
-        const card = e.currentTarget;
-
-        gsap.to(card, {
-            rotateX: 0, rotateY: 0, scale: 1,
-            duration: 0.6,
-            ease: 'elastic.out(1, 0.5)',
-        });
-
-        const icon = card.querySelector('.skill-icon-3d');
-        if (icon) {
-            gsap.to(icon, { z: 0, scale: 1, rotateY: 0, duration: 0.5, ease: 'power3.out' });
-        }
-    }, []);
-
-    // Floating particles
     useEffect(() => {
-        if (!particleContainerRef.current) return;
-        const container = particleContainerRef.current;
-        const particles: HTMLDivElement[] = [];
+        if (!isActive) return;
+        if (prevFeatureRef.current === feature.id) return;
+        prevFeatureRef.current = feature.id;
 
-        for (let i = 0; i < 20; i++) {
-            const p = document.createElement('div');
-            const size = Math.random() * 4 + 2;
-            p.style.cssText = `
-                position: absolute;
-                width: ${size}px; height: ${size}px;
-                border-radius: 50%;
-                background: ${skills[Math.floor(Math.random() * skills.length)].accentColor};
-                opacity: 0;
-                pointer-events: none;
-            `;
-            container.appendChild(p);
-            particles.push(p);
+        // Reset
+        setLines([]);
+        if (animRef.current) clearTimeout(animRef.current);
 
-            gsap.set(p, {
-                x: Math.random() * 100 + '%',
-                y: Math.random() * 100 + '%',
+        const allLines: { text: string; type: 'command' | 'step' | 'result' | 'empty'; delay: number }[] = [
+            { text: `$ openanalyst run ${feature.cliCommand}`, type: 'command', delay: 100 },
+            { text: '', type: 'empty', delay: 300 },
+            { text: '> Agent initialized...', type: 'step', delay: 200 },
+        ];
+
+        feature.cliSteps.forEach((step, i) => {
+            allLines.push({
+                text: `  ${i === feature.cliSteps.length - 1 ? '✓' : '→'} ${step}`,
+                type: i === feature.cliSteps.length - 1 ? 'result' : 'step',
+                delay: 350,
             });
+        });
 
-            gsap.to(p, {
-                y: `+=${Math.random() * -200 - 100}`,
-                x: `+=${Math.random() * 100 - 50}`,
-                opacity: Math.random() * 0.4 + 0.1,
-                duration: Math.random() * 8 + 6,
-                repeat: -1,
-                yoyo: true,
-                ease: 'sine.inOut',
-                delay: Math.random() * 4,
-            });
-        }
+        allLines.push({ text: '', type: 'empty', delay: 200 });
+        allLines.push({ text: '> Done ●', type: 'result', delay: 300 });
 
-        return () => {
-            particles.forEach(p => p.remove());
+        let idx = 0;
+        const showNext = () => {
+            if (idx >= allLines.length) return;
+            const line = allLines[idx];
+            setLines(prev => [...prev, { text: line.text, type: line.type }]);
+            idx++;
+            if (idx < allLines.length) {
+                animRef.current = setTimeout(showNext, allLines[idx].delay);
+            }
         };
-    }, []);
+        animRef.current = setTimeout(showNext, 400);
+
+        return () => { if (animRef.current) clearTimeout(animRef.current); };
+    }, [isActive, feature]);
+
+    // Auto-scroll terminal
+    useEffect(() => {
+        if (termRef.current) {
+            termRef.current.scrollTop = termRef.current.scrollHeight;
+        }
+    }, [lines]);
+
+    const color = feature.accentColor;
+
+    return (
+        <div style={{
+            width: '100%', height: '100%', borderRadius: '20px',
+            background: '#0c0a09', border: `1px solid ${color}20`,
+            overflow: 'hidden', display: 'flex', flexDirection: 'column',
+            boxShadow: `0 20px 60px rgba(0,0,0,0.4), 0 0 40px ${color}08`,
+        }}>
+            {/* Title bar */}
+            <div style={{
+                padding: '14px 18px', display: 'flex', alignItems: 'center', gap: '8px',
+                borderBottom: `1px solid ${color}10`, background: '#0f0d0b',
+            }}>
+                <div style={{ display: 'flex', gap: '6px' }}>
+                    <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ff5f57' }} />
+                    <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#febc2e' }} />
+                    <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#28c840' }} />
+                </div>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginLeft: '8px' }}>
+                    openanalyst — {feature.title.toLowerCase()}
+                </span>
+            </div>
+
+            {/* Terminal body */}
+            <div ref={termRef} style={{
+                flex: 1, padding: '20px', overflowY: 'auto',
+                fontFamily: 'var(--font-mono)', fontSize: '13px', lineHeight: 2,
+            }}>
+                {lines.map((line, i) => {
+                    if (line.type === 'empty') return <div key={i} style={{ height: '8px' }} />;
+                    return (
+                        <div key={i} style={{
+                            color: line.type === 'command' ? '#ffffff' :
+                                   line.type === 'result' ? color : 'rgba(255,255,255,0.5)',
+                            opacity: 0,
+                            animation: 'termLineIn 0.3s ease forwards',
+                            animationDelay: '0s',
+                        }}>
+                            {line.type === 'command' ? (
+                                <><span style={{ color }}>&gt;</span> {line.text.slice(2)}</>
+                            ) : line.text}
+                        </div>
+                    );
+                })}
+                {/* Blinking cursor */}
+                <span style={{
+                    display: 'inline-block', width: '8px', height: '16px',
+                    background: color, opacity: 0.8,
+                    animation: 'blink 1s step-end infinite',
+                    verticalAlign: 'middle', marginLeft: '2px', borderRadius: '1px',
+                }} />
+            </div>
+        </div>
+    );
+}
+
+/* ═══ MAIN COMPONENT ═══ */
+const Features: React.FC = () => {
+    const sectionRef = useRef<HTMLDivElement>(null);
+    const pinWrapRef = useRef<HTMLDivElement>(null);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const leftPanelRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const lastIndexRef = useRef(0);
 
     useGSAP(() => {
-        // Section header
-        gsap.from('.features-section-tag', {
-            y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
-            scrollTrigger: { trigger: containerRef.current, start: 'top 80%' }
-        });
+        const mm = gsap.matchMedia();
 
-        gsap.from('.features-title-word', {
-            y: 80, opacity: 0, rotateX: -40,
-            stagger: 0.08, duration: 0.8, ease: 'expo.out',
-            scrollTrigger: { trigger: containerRef.current, start: 'top 78%' }
-        });
+        gsap.from('.features-badge', { y: 20, opacity: 0, duration: 0.6, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' } });
+        gsap.from('.features-heading', { y: 40, opacity: 0, duration: 0.8, ease: 'expo.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 78%' } });
+        gsap.from('.features-sub', { y: 20, opacity: 0, duration: 0.6, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' } });
 
-        gsap.from('.features-subtitle', {
-            y: 30, opacity: 0, duration: 0.7, ease: 'power3.out',
-            scrollTrigger: { trigger: containerRef.current, start: 'top 75%' }
-        });
+        mm.add('(min-width: 1025px)', () => {
+            const total = features.length;
 
-        // Terminal preview
-        gsap.from('.features-terminal-preview', {
-            y: 60, opacity: 0, scale: 0.92, duration: 1, ease: 'expo.out',
-            scrollTrigger: { trigger: '.features-terminal-preview', start: 'top 85%' }
-        });
+            leftPanelRefs.current.forEach((p, i) => {
+                if (!p) return;
+                gsap.set(p, { opacity: i === 0 ? 1 : 0, y: i === 0 ? 0 : 40, visibility: i === 0 ? 'visible' : 'hidden' });
+            });
 
-        // Cards with stagger + 3D entrance
-        const cards = gsap.utils.toArray<HTMLElement>('.skill-card-wrapper');
-        cards.forEach((card, i) => {
-            gsap.from(card, {
-                y: 100,
-                opacity: 0,
-                scale: 0.85,
-                rotateX: -15,
-                filter: 'blur(8px)',
-                duration: 0.9,
-                ease: 'expo.out',
-                scrollTrigger: {
-                    trigger: card,
-                    start: 'top 90%',
-                    toggleActions: 'play none none reverse',
+            const st = ScrollTrigger.create({
+                trigger: pinWrapRef.current,
+                start: 'top top',
+                end: () => `+=${total * 100}vh`,
+                pin: true,
+                scrub: 0,
+                anticipatePin: 1,
+                onUpdate: (self) => {
+                    const idx = Math.min(Math.floor(self.progress * total), total - 1);
+                    if (idx !== lastIndexRef.current) {
+                        const dir = idx > lastIndexRef.current ? 1 : -1;
+                        lastIndexRef.current = idx;
+                        setActiveIndex(idx);
+
+                        leftPanelRefs.current.forEach((p, i) => {
+                            if (!p || i === idx) return;
+                            gsap.killTweensOf(p);
+                            gsap.set(p, { opacity: 0, y: i < idx ? -40 : 40, visibility: 'hidden' });
+                        });
+
+                        const active = leftPanelRefs.current[idx];
+                        if (active) {
+                            gsap.set(active, { visibility: 'visible', opacity: 0, y: dir * 30 });
+                            gsap.to(active, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out', overwrite: true });
+                        }
+                    }
                 },
-                delay: i * 0.1,
+            });
+            return () => st.kill();
+        });
+
+        mm.add('(max-width: 1024px)', () => {
+            gsap.utils.toArray<HTMLElement>('.feature-mobile-card').forEach((card) => {
+                gsap.from(card, { y: 60, opacity: 0, duration: 0.7, ease: 'expo.out', scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none reverse' } });
             });
         });
 
-        // Continuous floating animation for icons
-        gsap.utils.toArray<HTMLElement>('.skill-icon-3d').forEach((icon, i) => {
-            gsap.to(icon, {
-                y: -6, duration: 2 + i * 0.3, repeat: -1, yoyo: true, ease: 'sine.inOut',
-                delay: i * 0.4,
-            });
-        });
-    }, { scope: containerRef });
+        return () => mm.revert();
+    }, { scope: sectionRef });
 
-    const currentSkill = skills[activeCard ?? 0];
+    const af = features[activeIndex];
 
     return (
         <>
             <style>{`
-                @property --holo-angle {
-                    syntax: '<angle>';
-                    initial-value: 0deg;
-                    inherits: false;
+                .features-pin-wrapper {
+                    height: 100vh;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                 }
-
-                @keyframes holoRotate {
-                    to { --holo-angle: 360deg; }
-                }
-
-                @keyframes shimmer {
-                    0% { background-position: -200% 0; }
-                    100% { background-position: 200% 0; }
-                }
-
-                @keyframes pulseRing {
-                    0% { transform: scale(1); opacity: 0.6; }
-                    100% { transform: scale(2.5); opacity: 0; }
-                }
-
-                .skill-card-wrapper {
-                    perspective: 1000px;
-                    transform-style: preserve-3d;
-                }
-
-                .skill-card-inner {
-                    position: relative;
-                    height: 100%;
-                    border-radius: 20px;
-                    transform-style: preserve-3d;
-                    transition: box-shadow 0.4s ease;
-                    will-change: transform;
+                .features-dot {
+                    width: 10px; height: 10px; border-radius: 50%;
+                    border: 1.5px solid rgba(0,0,0,0.1);
+                    background: transparent;
+                    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
                     cursor: pointer;
-                    overflow: hidden;
                 }
-
-                .skill-card-inner::before {
-                    content: '';
-                    position: absolute;
-                    inset: -1px;
-                    border-radius: 21px;
-                    padding: 1.5px;
-                    background: conic-gradient(
-                        from var(--holo-angle),
-                        transparent 0%,
-                        var(--card-accent) 15%,
-                        transparent 30%,
-                        rgba(255,255,255,0.1) 50%,
-                        transparent 70%,
-                        var(--card-accent) 85%,
-                        transparent 100%
-                    );
-                    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-                    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-                    -webkit-mask-composite: xor;
-                    mask-composite: exclude;
-                    animation: holoRotate 4s linear infinite;
-                    opacity: 0;
-                    transition: opacity 0.4s ease;
-                    z-index: 0;
+                .features-dot.active {
+                    border-color: var(--dot-color);
+                    background: var(--dot-color);
+                    box-shadow: 0 0 16px var(--dot-color), 0 0 32px color-mix(in srgb, var(--dot-color) 30%, transparent);
+                    transform: scale(1.4);
                 }
-
-                .skill-card-wrapper:hover .skill-card-inner::before {
-                    opacity: 1;
+                .feat-cap {
+                    display: flex; align-items: center; gap: 10px;
+                    padding: 10px 16px; border-radius: 10px;
+                    background: rgba(0,0,0,0.02);
+                    border: 1px solid rgba(0,0,0,0.04);
+                    font-family: var(--font-body); font-size: 13px;
+                    color: var(--text-muted); transition: all 0.3s ease;
                 }
-
-                .skill-card-inner .holo-glow {
-                    position: absolute;
-                    inset: 0;
-                    border-radius: 20px;
-                    pointer-events: none;
-                    z-index: 1;
-                    opacity: 0;
-                    transition: opacity 0.3s ease;
+                .feat-cap:hover {
+                    border-color: var(--cap-color);
+                    background: color-mix(in srgb, var(--cap-color) 6%, transparent);
+                    color: #1A1A1A; transform: translateX(4px);
                 }
-
-                .skill-card-wrapper:hover .holo-glow {
-                    opacity: 1;
+                @keyframes termLineIn {
+                    from { opacity: 0; transform: translateY(4px); }
+                    to { opacity: 1; transform: translateY(0); }
                 }
-
-                .skill-card-inner .shimmer-line {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    height: 1px;
-                    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-                    background-size: 200% 100%;
-                    animation: shimmer 3s linear infinite;
-                    opacity: 0;
-                    transition: opacity 0.3s ease;
-                    z-index: 2;
+                @keyframes blink {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0; }
                 }
-
-                .skill-card-wrapper:hover .shimmer-line {
-                    opacity: 1;
+                .feature-mobile-card { display: none; }
+                @media (max-width: 1024px) {
+                    .features-desktop-layout { display: none !important; }
+                    .features-pin-wrapper { height: auto; display: block; }
+                    .feature-mobile-card { display: block; }
+                    .features-mobile-grid { display: flex; flex-direction: column; gap: 20px; padding-top: 20px; }
                 }
-
-                .skill-icon-3d {
-                    transform-style: preserve-3d;
-                    will-change: transform;
-                }
-
-                .pulse-ring {
-                    position: absolute;
-                    inset: -4px;
-                    border-radius: 16px;
-                    border: 1px solid var(--card-accent);
-                    animation: pulseRing 2s ease-out infinite;
-                    pointer-events: none;
-                }
-
-                .feature-tag {
-                    transition: all 0.3s ease;
-                }
-
-                .skill-card-wrapper:hover .feature-tag {
-                    border-color: var(--card-accent);
-                }
-
-                .terminal-tab-btn {
-                    position: relative;
-                    background: none;
-                    border: none;
-                    cursor: pointer;
-                    font-family: var(--font-mono);
-                    font-size: 11px;
-                    padding: 4px 10px;
-                    border-radius: 6px;
-                    transition: all 0.25s ease;
-                }
-
-                .terminal-tab-btn::after {
-                    content: '';
-                    position: absolute;
-                    bottom: -1px;
-                    left: 50%;
-                    width: 0;
-                    height: 2px;
-                    background: var(--primary);
-                    border-radius: 2px;
-                    transition: all 0.3s ease;
-                    transform: translateX(-50%);
-                }
-
-                .terminal-tab-active::after {
-                    width: 100%;
-                }
-
-                @media (max-width: 768px) {
-                    .skills-card-grid {
-                        grid-template-columns: 1fr !important;
-                    }
-                    .skills-card-grid > * {
-                        grid-column: span 1 !important;
-                    }
-                    .features-terminal-preview {
-                        display: none;
-                    }
-                }
-
-                @media (min-width: 769px) and (max-width: 1024px) {
-                    .skills-card-grid {
-                        grid-template-columns: repeat(2, 1fr) !important;
-                    }
-                    .skills-card-grid > * {
-                        grid-column: span 1 !important;
-                    }
-                }
+                @media (min-width: 1025px) { .features-mobile-grid { display: none !important; } }
             `}</style>
 
-            <section ref={containerRef} style={{
-                padding: '140px 0 120px',
-                background: 'var(--surface)',
-                position: 'relative',
-                overflow: 'hidden',
-            }}>
-                {/* Ambient background effects */}
+            <section ref={sectionRef} id="features" style={{ background: '#FFFFFF', position: 'relative', overflow: 'hidden' }}>
+
+                {/* Dynamic gradient bg */}
                 <div style={{
                     position: 'absolute', inset: 0, pointerEvents: 'none',
-                    background: 'radial-gradient(ellipse 80% 60% at 20% 20%, rgba(204,122,96,0.04) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 80% 80%, rgba(59,130,246,0.03) 0%, transparent 60%)',
-                }} />
-
-                {/* Floating particles */}
-                <div ref={particleContainerRef} style={{
-                    position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none',
+                    background: `radial-gradient(ellipse 60% 50% at 50% 50%, ${af.accentColor}12 0%, transparent 70%)`,
+                    transition: 'background 1.2s ease',
                 }} />
 
                 {/* Dot grid */}
                 <div style={{
-                    position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.4,
-                    backgroundImage: 'radial-gradient(circle, rgba(204,122,96,0.07) 1px, transparent 1px)',
-                    backgroundSize: '32px 32px',
+                    position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.12,
+                    backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.04) 1px, transparent 1px)',
+                    backgroundSize: '48px 48px',
+                    maskImage: 'radial-gradient(ellipse 70% 60% at 50% 50%, black 0%, transparent 80%)',
+                    WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 50% 50%, black 0%, transparent 80%)',
                 }} />
 
-                <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
-
-                    {/* Section Header */}
-                    <div style={{ marginBottom: '72px', textAlign: 'center' }}>
-                        <div className="features-section-tag" style={{
-                            display: 'inline-flex', alignItems: 'center', gap: '8px',
-                            padding: '6px 16px', borderRadius: '9999px', marginBottom: '20px',
-                            background: 'rgba(204,122,96,0.08)', border: '1px solid rgba(204,122,96,0.15)',
-                        }}>
-                            <span style={{
-                                width: '6px', height: '6px', borderRadius: '50%',
-                                background: 'var(--primary)', boxShadow: '0 0 8px rgba(204,122,96,0.5)',
-                            }} />
-                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--primary)', letterSpacing: '0.08em', fontWeight: 600 }}>
-                                READY-TO-DEPLOY SKILLS
-                            </span>
-                        </div>
-
-                        <h2 style={{
-                            fontFamily: 'var(--font-heading)',
-                            fontSize: 'clamp(2.2rem, 5vw, 3.5rem)',
-                            fontWeight: 800,
-                            color: 'var(--foreground)',
-                            lineHeight: 1.1,
-                            maxWidth: '700px',
-                            margin: '0 auto 20px',
-                            perspective: '600px',
-                        }}>
-                            {'Marketing Skills Your '.split(' ').map((word, i) => (
-                                <span key={i} className="features-title-word" style={{ display: 'inline-block', marginRight: '0.3em' }}>
-                                    {word}
-                                </span>
-                            ))}
-                            <span className="features-title-word" style={{
-                                display: 'inline-block',
-                                background: 'linear-gradient(135deg, var(--primary-light), var(--primary), var(--primary-dark))',
-                                backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-                                backgroundSize: '200% 200%',
-                                animation: 'gradientShift 4s ease infinite',
-                            }}>AI Agent</span>{' '}
-                            <span className="features-title-word" style={{ display: 'inline-block' }}>Masters</span>
-                        </h2>
-
-                        <p className="features-subtitle" style={{
-                            fontFamily: 'var(--font-mono)', fontSize: '14px',
-                            color: 'var(--muted)', maxWidth: '480px', margin: '0 auto',
-                            lineHeight: 1.7,
-                        }}>
-                            Deploy specialized agents that handle your entire marketing stack — from research to execution.
-                        </p>
-                    </div>
-
-                    {/* Interactive Terminal Preview */}
-                    <div className="features-terminal-preview" style={{ marginBottom: '48px' }}>
-                        <div className="terminal-card" style={{
-                            overflow: 'hidden',
-                            boxShadow: '0 20px 80px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.04)',
-                        }}>
-                            <div className="terminal-card-header">
-                                <div className="terminal-dots"><span /><span /><span /></div>
-                                <span style={{ color: '#6b7280', fontSize: '11px', marginLeft: '8px' }}>{currentSkill.filename}</span>
-                                <div style={{ marginLeft: 'auto', display: 'flex', gap: '4px' }}>
-                                    {skills.map((s, i) => (
-                                        <button
-                                            key={s.id}
-                                            onClick={() => setActiveCard(i)}
-                                            className={`terminal-tab-btn ${(activeCard ?? 0) === i ? 'terminal-tab-active' : ''}`}
-                                            style={{
-                                                color: (activeCard ?? 0) === i ? 'var(--primary)' : '#4a4a5a',
-                                                backgroundColor: (activeCard ?? 0) === i ? 'rgba(204,122,96,0.1)' : 'transparent',
-                                            }}
-                                        >
-                                            {s.name.split('-')[0]}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                            <div style={{ padding: '28px', fontSize: '13px', lineHeight: 2, fontFamily: 'var(--font-mono)', minHeight: '180px' }}>
-                                <div style={{ color: 'var(--syntax-comment)', marginBottom: '4px' }}>
-                                    {`/** @skill ${currentSkill.name} — ${currentSkill.description} */`}
-                                </div>
-                                <div style={{ marginBottom: '8px' }}>
-                                    <span style={{ color: 'var(--syntax-keyword)' }}>export default</span>{' '}
-                                    <span style={{ color: '#d4d4d8' }}>{'{'}</span>
-                                </div>
-                                <div style={{ paddingLeft: '20px' }}>
-                                    <span style={{ color: '#d4d4d8' }}>name:</span>{' '}
-                                    <span style={{ color: 'var(--syntax-string)' }}>&quot;{currentSkill.name}&quot;</span>,
-                                </div>
-                                <div style={{ paddingLeft: '20px' }}>
-                                    <span style={{ color: '#d4d4d8' }}>capabilities:</span>{' '}
-                                    <span style={{ color: '#d4d4d8' }}>[</span>
-                                    {currentSkill.features.map((f, i) => (
-                                        <span key={i}>
-                                            <span style={{ color: 'var(--syntax-string)' }}>&quot;{f}&quot;</span>
-                                            {i < currentSkill.features.length - 1 ? ', ' : ''}
-                                        </span>
-                                    ))}
-                                    <span style={{ color: '#d4d4d8' }}>],</span>
-                                </div>
-                                <div><span style={{ color: '#d4d4d8' }}>{'};'}</span></div>
-                                <div style={{ marginTop: '12px', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '12px' }}>
-                                    <span style={{ color: 'var(--cmd-prefix)' }}>$</span>{' '}
-                                    <span style={{ color: '#d4d4d8' }}>skill run</span>{' '}
-                                    <span style={{ color: currentSkill.accentColor }}>{currentSkill.name.toLowerCase()}</span>
-                                </div>
-                                <div style={{ color: 'var(--syntax-string)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    ✓ Skill loaded.
-                                    <span style={{
-                                        display: 'inline-block', width: '6px', height: '6px', borderRadius: '50%',
-                                        backgroundColor: '#22c55e', boxShadow: '0 0 8px rgba(34,197,94,0.5)',
-                                    }} />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Skill Cards Grid — Equal height, 3 on top, 2 centered below */}
-                    <div className="skills-card-grid" style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(6, 1fr)',
-                        gap: '20px',
+                {/* Pinned 100vh section — everything centered */}
+                <div ref={pinWrapRef} className="features-pin-wrapper" style={{ position: 'relative', zIndex: 1 }}>
+                    <div className="features-desktop-layout" style={{
+                        maxWidth: '1200px', margin: '0 auto', padding: '0 40px', width: '100%',
                     }}>
-                        {skills.map((skill, index) => {
-                            const mp = mousePositions[index];
-                            const isActive = activeCard === index;
+                        {/* Header — centered above the split */}
+                        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+                            <div className="features-badge" style={{
+                                display: 'inline-flex', alignItems: 'center', gap: '8px',
+                                padding: '6px 16px', borderRadius: '9999px', marginBottom: '16px',
+                                background: 'rgba(255,107,0,0.06)', border: '1px solid rgba(255,107,0,0.12)',
+                            }}>
+                                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--rust)', boxShadow: '0 0 8px rgba(255,107,0,0.4)' }} />
+                                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--rust-light)', letterSpacing: '0.08em', fontWeight: 600 }}>POWERFUL FEATURES</span>
+                            </div>
+                            <h2 className="features-heading" style={{
+                                fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 5vw, 3.2rem)',
+                                fontWeight: 800, color: '#1A1A1A', lineHeight: 1.1, maxWidth: '600px', margin: '0 auto 12px',
+                            }}>
+                                Everything You Need to{' '}
+                                <span style={{ background: 'linear-gradient(135deg, #FF6B00, #E85D00)', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Dominate Marketing</span>
+                            </h2>
+                            <p className="features-sub" style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: 'var(--text-muted)', maxWidth: '480px', margin: '0 auto', lineHeight: 1.7 }}>
+                                Deploy specialized AI agents that handle your entire marketing stack.
+                            </p>
+                        </div>
 
-                            // First 3 cards: span 2 cols each (fills 6 cols)
-                            // Last 2 cards: span 2 cols each but offset to center (col 2-3 and 4-5)
-                            const gridColumn = index < 3
-                                ? 'span 2'
-                                : index === 3 ? '2 / 4' : '4 / 6';
-
-                            return (
-                                <div
-                                    key={skill.id}
-                                    className="skill-card-wrapper"
-                                    style={{ gridColumn }}
-                                    onMouseEnter={() => handleCardEnter(index)}
-                                >
-                                    <div
-                                        ref={el => { cardRefs.current[index] = el; }}
-                                        className="skill-card-inner"
-                                        onMouseMove={(e) => handleCardMove(e, index)}
-                                        onMouseLeave={(e) => handleCardLeave(e, index)}
-                                        style={{
-                                            '--card-accent': skill.accentColor,
-                                            background: isActive
-                                                ? `linear-gradient(145deg, rgba(30,30,46,0.97), rgba(30,30,46,0.92))`
-                                                : 'rgba(255,255,255,0.85)',
-                                            border: '1px solid',
-                                            borderColor: isActive ? 'transparent' : 'var(--border)',
-                                            boxShadow: isActive
-                                                ? `0 20px 60px ${skill.accentColor}20, 0 0 0 1px ${skill.accentColor}30, inset 0 1px 0 rgba(255,255,255,0.05)`
-                                                : '0 2px 12px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.02)',
-                                        } as React.CSSProperties}
-                                    >
-                                        {/* Holographic cursor glow */}
-                                        <div className="holo-glow" style={{
-                                            background: mp
-                                                ? `radial-gradient(300px circle at ${mp.x}px ${mp.y}px, ${skill.accentColor}18 0%, transparent 60%)`
-                                                : 'none',
-                                        }} />
-
-                                        {/* Top shimmer line */}
-                                        <div className="shimmer-line" />
-
-                                        {/* Card content */}
-                                        <div style={{
-                                            padding: '28px 24px',
-                                            position: 'relative',
-                                            zIndex: 2,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            height: '100%',
-                                            minHeight: '320px',
-                                        }}>
-                                            {/* Icon with 3D pop */}
-                                            <div style={{ marginBottom: '20px', position: 'relative', display: 'inline-flex' }}>
-                                                <div className="skill-icon-3d" style={{
-                                                    width: '48px', height: '48px',
-                                                    borderRadius: '14px',
-                                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                    fontSize: '20px',
-                                                    background: isActive
-                                                        ? `linear-gradient(135deg, ${skill.accentColor}30, ${skill.accentColor}10)`
-                                                        : `linear-gradient(135deg, ${skill.accentColor}15, ${skill.accentColor}05)`,
-                                                    border: `1px solid ${skill.accentColor}${isActive ? '40' : '20'}`,
-                                                    color: skill.accentColor,
-                                                    filter: isActive ? `drop-shadow(0 4px 12px ${skill.accentColor}40)` : 'none',
-                                                    transition: 'all 0.4s ease',
-                                                    position: 'relative',
-                                                }}>
-                                                    {skill.icon}
-                                                    {isActive && <div className="pulse-ring" style={{ '--card-accent': skill.accentColor } as React.CSSProperties} />}
-                                                </div>
-                                            </div>
-
-                                            {/* Name */}
-                                            <h3 style={{
-                                                fontFamily: 'var(--font-heading)',
-                                                fontSize: '18px',
-                                                fontWeight: 700,
-                                                color: isActive ? '#ffffff' : 'var(--foreground)',
-                                                marginBottom: '8px',
-                                                transition: 'color 0.3s ease',
-                                                letterSpacing: '-0.01em',
-                                            }}>
-                                                {skill.name.replace(/-/g, ' ')}
-                                            </h3>
-
-                                            {/* Description */}
-                                            <p style={{
-                                                fontSize: '13.5px',
-                                                lineHeight: 1.65,
-                                                color: isActive ? '#a89890' : 'var(--muted)',
-                                                marginBottom: '20px',
-                                                transition: 'color 0.3s ease',
-                                                flex: 1,
-                                            }}>
-                                                {skill.description}
-                                            </p>
-
-                                            {/* Feature tags */}
-                                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '20px' }}>
-                                                {skill.features.map((f, i) => (
-                                                    <span key={i} className="feature-tag" style={{
-                                                        fontFamily: 'var(--font-mono)',
-                                                        fontSize: '11px',
-                                                        padding: '4px 10px',
-                                                        borderRadius: '8px',
-                                                        backgroundColor: isActive ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.03)',
-                                                        color: isActive ? `${skill.accentColor}cc` : 'var(--muted)',
-                                                        border: `1px solid ${isActive ? `${skill.accentColor}25` : 'transparent'}`,
-                                                        transition: 'all 0.3s ease',
-                                                    }}>
-                                                        {f}
-                                                    </span>
-                                                ))}
-                                            </div>
-
-                                            {/* Command bar */}
+                        {/* Split layout: text left, terminal right, dots center */}
+                        <div style={{
+                            display: 'grid', gridTemplateColumns: '1fr 48px 1fr',
+                            alignItems: 'center',
+                        }}>
+                            {/* LEFT — Text panels */}
+                            <div style={{ position: 'relative', height: '380px' }}>
+                                {features.map((f, i) => (
+                                    <div key={f.id} ref={el => { leftPanelRefs.current[i] = el; }} style={{
+                                        position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center',
+                                    }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
                                             <div style={{
-                                                padding: '10px 14px',
-                                                borderRadius: '10px',
-                                                backgroundColor: isActive ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.03)',
-                                                fontFamily: 'var(--font-mono)',
-                                                fontSize: '12px',
-                                                transition: 'all 0.3s ease',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'space-between',
-                                            }}>
-                                                <div>
-                                                    <span style={{ color: isActive ? 'var(--cmd-prefix)' : skill.accentColor, fontSize: '11px' }}>$</span>{' '}
-                                                    <span style={{ color: isActive ? '#d4d4d8' : '#6b7280' }}>skill run {skill.name.toLowerCase()}</span>
+                                                width: '38px', height: '38px', borderRadius: '10px',
+                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                background: `linear-gradient(135deg, ${f.accentColor}25, ${f.accentColor}08)`,
+                                                border: `1px solid ${f.accentColor}30`,
+                                                fontFamily: 'var(--font-mono)', fontSize: '13px', fontWeight: 700, color: f.accentColor,
+                                            }}>0{f.id + 1}</div>
+                                            <div style={{ height: '1px', width: '32px', background: `linear-gradient(90deg, ${f.accentColor}, transparent)` }} />
+                                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: f.accentColor, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{f.title}</span>
+                                        </div>
+
+                                        <h3 style={{
+                                            fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)',
+                                            fontWeight: 800, color: '#1A1A1A', marginBottom: '12px', lineHeight: 1.1, letterSpacing: '-0.02em',
+                                        }}>{f.name}</h3>
+
+                                        <p style={{
+                                            fontFamily: 'var(--font-body)', fontSize: '15px', color: 'var(--text-muted)',
+                                            lineHeight: 1.7, maxWidth: '420px', marginBottom: '24px',
+                                        }}>{f.description}</p>
+
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                            {f.capabilities.map((cap, ci) => (
+                                                <div key={ci} className="feat-cap" style={{ '--cap-color': f.accentColor } as React.CSSProperties}>
+                                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                                        <path d="M3 8L6.5 11.5L13 4.5" stroke={f.accentColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                    </svg>
+                                                    {cap}
                                                 </div>
-                                                <span style={{
-                                                    fontSize: '14px',
-                                                    color: isActive ? skill.accentColor : 'var(--muted)',
-                                                    transition: 'all 0.3s ease',
-                                                    transform: isActive ? 'translateX(0)' : 'translateX(-4px)',
-                                                    opacity: isActive ? 1 : 0.5,
-                                                }}>
-                                                    →
-                                                </span>
-                                            </div>
+                                            ))}
                                         </div>
                                     </div>
-                                </div>
-                            );
-                        })}
+                                ))}
+                            </div>
+
+                            {/* CENTER — Dots */}
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px', justifySelf: 'center', position: 'relative' }}>
+                                <div style={{ position: 'absolute', width: '1px', top: 0, bottom: 0, background: 'linear-gradient(180deg, transparent, rgba(0,0,0,0.06), transparent)', zIndex: 0 }} />
+                                {features.map((f, i) => (
+                                    <div key={f.id} className={`features-dot ${activeIndex === i ? 'active' : ''}`} style={{ '--dot-color': f.accentColor, position: 'relative', zIndex: 1 } as React.CSSProperties} />
+                                ))}
+                            </div>
+
+                            {/* RIGHT — Animated terminal */}
+                            <div style={{ height: '380px' }}>
+                                <TypingTerminal feature={features[activeIndex]} isActive={true} />
+                            </div>
+                        </div>
                     </div>
+                </div>
+
+                {/* Mobile layout */}
+                <div className="features-mobile-grid" style={{ maxWidth: '600px', margin: '0 auto', padding: '80px 24px 100px', position: 'relative', zIndex: 1 }}>
+                    {/* Mobile header */}
+                    <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+                        <div className="features-badge" style={{
+                            display: 'inline-flex', alignItems: 'center', gap: '8px',
+                            padding: '6px 16px', borderRadius: '9999px', marginBottom: '16px',
+                            background: 'rgba(255,107,0,0.06)', border: '1px solid rgba(255,107,0,0.12)',
+                        }}>
+                            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--rust)', boxShadow: '0 0 8px rgba(255,107,0,0.4)' }} />
+                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--rust-light)', letterSpacing: '0.08em', fontWeight: 600 }}>POWERFUL FEATURES</span>
+                        </div>
+                        <h2 className="features-heading" style={{
+                            fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 5vw, 2.8rem)',
+                            fontWeight: 800, color: '#1A1A1A', lineHeight: 1.1, margin: '0 auto 12px',
+                        }}>
+                            Everything You Need to{' '}
+                            <span style={{ background: 'linear-gradient(135deg, #FF6B00, #E85D00)', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Dominate Marketing</span>
+                        </h2>
+                    </div>
+                    {features.map((f) => (
+                        <div key={f.id} className="feature-mobile-card" style={{
+                            borderRadius: '20px', padding: '28px 24px',
+                            background: 'rgba(0,0,0,0.02)', border: `1px solid ${f.accentColor}15`,
+                            position: 'relative', overflow: 'hidden',
+                        }}>
+                            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: `linear-gradient(90deg, transparent, ${f.accentColor}, transparent)`, opacity: 0.5 }} />
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
+                                <div style={{
+                                    width: '40px', height: '40px', borderRadius: '12px',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    fontFamily: 'var(--font-mono)', fontSize: '14px', fontWeight: 700,
+                                    color: f.accentColor, background: `${f.accentColor}15`, border: `1px solid ${f.accentColor}25`,
+                                }}>0{f.id + 1}</div>
+                                <div>
+                                    <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '17px', fontWeight: 700, color: '#1A1A1A', marginBottom: '2px' }}>{f.name}</h3>
+                                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: f.accentColor, fontWeight: 500 }}>{f.title}</p>
+                                </div>
+                            </div>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.65, marginBottom: '16px' }}>{f.description}</p>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                                {f.capabilities.map((cap, ci) => (
+                                    <span key={ci} style={{
+                                        fontFamily: 'var(--font-mono)', fontSize: '10px', padding: '4px 10px', borderRadius: '9999px',
+                                        background: `${f.accentColor}08`, border: `1px solid ${f.accentColor}20`, color: `${f.accentColor}cc`,
+                                    }}>{cap}</span>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </section>
         </>

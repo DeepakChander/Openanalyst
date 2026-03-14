@@ -1,102 +1,403 @@
 'use client';
 
-import React, { useRef } from 'react';
-import { gsap } from 'gsap';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 
-const Testimonials: React.FC = () => {
-    const containerRef = useRef<HTMLDivElement>(null);
+gsap.registerPlugin(ScrollTrigger);
 
-    gsap.registerPlugin(ScrollTrigger, useGSAP);
+const testimonials = [
+  {
+    quote: 'OpenAnalyst transformed our campaign workflow. 3x ROI in the first month.',
+    name: 'Sarah Chen',
+    title: 'VP Marketing',
+    company: 'TechFlow',
+  },
+  {
+    quote: 'The AI agents handle what used to take our team a full week. Game changer.',
+    name: 'Marcus Rivera',
+    title: 'Growth Lead',
+    company: 'ScaleUp',
+  },
+  {
+    quote: 'Finally, AI marketing that actually delivers. Our engagement rates are through the roof.',
+    name: 'Emily Watson',
+    title: 'CMO',
+    company: 'DataDrive',
+  },
+  {
+    quote: 'We replaced 4 separate tools with OpenAnalyst. The ROI speaks for itself.',
+    name: 'James Park',
+    title: 'Founder',
+    company: 'NextGen Labs',
+  },
+];
 
-    const testimonials = [
-        {
-            name: 'Sarah Jenks',
-            role: 'Head of Data, TechCorp',
-            comment: 'OpenAnalyst transformed how we process big data. The AI agents are incredibly accurate and intuitive.',
-            image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-        },
-        {
-            name: 'Michael Chen',
-            role: 'CTO, StartUp Inc',
-            comment: 'The speed at which we can generate reports now is mind-blowing. Weeks of work compressed into minutes.',
-            image: 'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-        },
-        {
-            name: 'Elena Rodriguez',
-            role: 'Marketing Director, GrowthCo',
-            comment: 'Finally, an analytics tool that doesn\'t require a PhD to use. I can ask simple questions and get deep insights.',
-            image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-        }
-    ];
+const companyLogos = ['TechFlow', 'ScaleUp', 'DataDrive', 'NextGen Labs', 'Acme Corp', 'Hyperion'];
 
-    useGSAP(() => {
-        gsap.from('.testimonial-card', {
-            y: 50,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.2,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: containerRef.current,
-                start: 'top 80%',
+export default function Testimonials() {
+  const [active, setActive] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const goTo = useCallback(
+    (index: number) => {
+      if (isAnimating || index === active) return;
+      setIsAnimating(true);
+
+      const card = cardRef.current;
+      if (!card) return;
+
+      gsap.to(card, {
+        opacity: 0,
+        y: 20,
+        duration: 0.3,
+        ease: 'power2.in',
+        onComplete: () => {
+          setActive(index);
+          gsap.fromTo(
+            card,
+            { opacity: 0, y: -20 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.4,
+              ease: 'power2.out',
+              onComplete: () => setIsAnimating(false),
             }
-        });
-    }, { scope: containerRef });
+          );
+        },
+      });
+    },
+    [active, isAnimating]
+  );
 
-    return (
-        <section ref={containerRef} className="py-24 bg-brand-secondary relative overflow-hidden">
-            <div className="container mx-auto px-4 relative z-10">
-                <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-heading font-bold text-black mb-6">
-                        LOVED BY <span className="text-brand-primary">INNOVATORS</span>
-                    </h2>
-                </div>
+  // Auto-rotate every 5s
+  useEffect(() => {
+    timerRef.current = setInterval(() => {
+      setActive((prev) => {
+        const next = (prev + 1) % testimonials.length;
+        const card = cardRef.current;
+        if (card) {
+          gsap.to(card, {
+            opacity: 0,
+            y: 20,
+            duration: 0.3,
+            ease: 'power2.in',
+            onComplete: () => {
+              gsap.fromTo(
+                card,
+                { opacity: 0, y: -20 },
+                { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }
+              );
+            },
+          });
+        }
+        return next;
+      });
+    }, 5000);
 
-                <div className="grid md:grid-cols-3 gap-8">
-                    {testimonials.map((item, index) => (
-                        <div
-                            key={index}
-                            className="testimonial-card p-8 rounded-2xl bg-white border border-black/5 hover:border-brand-primary/30 transition-all duration-300 hover:-translate-y-2 group"
-                        >
-                            <div className="flex gap-1 mb-6">
-                                {[...Array(5)].map((_, i) => (
-                                    <svg key={i} className="w-5 h-5 text-brand-warning fill-current" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                    </svg>
-                                ))}
-                            </div>
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, []);
 
-                            <p className="text-gray-600 text-lg mb-8 leading-relaxed">
-                                "{item.comment}"
-                            </p>
+  // Scroll-triggered entrance animations
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return;
 
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-brand-secondary to-gray-300 p-[2px]">
-                                    <div className="w-full h-full rounded-full overflow-hidden bg-gray-100">
-                                        <img
-                                            src={item.image}
-                                            alt={item.name}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 className="font-bold text-black group-hover:text-brand-primary transition-colors">
-                                        {item.name}
-                                    </h4>
-                                    <p className="text-sm text-gray-500">
-                                        {item.role}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 80%',
+          end: 'top 30%',
+          toggleActions: 'play none none none',
+        },
+      });
+
+      tl.from('.testimonials-heading', {
+        opacity: 0,
+        y: 40,
+        duration: 0.6,
+        ease: 'power3.out',
+      })
+        .from(
+          '.testimonials-subheading',
+          {
+            opacity: 0,
+            y: 30,
+            duration: 0.5,
+            ease: 'power3.out',
+          },
+          '-=0.3'
+        )
+        .from(
+          '.testimonials-quote-mark',
+          {
+            opacity: 0,
+            scale: 0.5,
+            duration: 0.5,
+            ease: 'back.out(1.7)',
+          },
+          '-=0.2'
+        )
+        .from(
+          '.testimonials-card',
+          {
+            opacity: 0,
+            y: 50,
+            duration: 0.6,
+            ease: 'power3.out',
+          },
+          '-=0.3'
+        )
+        .from(
+          '.testimonials-dots',
+          {
+            opacity: 0,
+            y: 20,
+            duration: 0.4,
+            ease: 'power3.out',
+          },
+          '-=0.2'
+        )
+        .from(
+          '.testimonials-logos',
+          {
+            opacity: 0,
+            y: 30,
+            duration: 0.5,
+            ease: 'power3.out',
+          },
+          '-=0.2'
+        );
+    },
+    { scope: sectionRef }
+  );
+
+  const current = testimonials[active];
+
+  return (
+    <section
+      ref={sectionRef}
+      style={{
+        background: '#FFFFFF',
+        padding: '6rem 1.5rem',
+        overflow: 'hidden',
+      }}
+    >
+      <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
+        {/* Section heading */}
+        <h2
+          className="testimonials-heading"
+          style={{
+            fontFamily: 'var(--font-heading)',
+            fontSize: 'clamp(2rem, 4vw, 3rem)',
+            fontWeight: 700,
+            color: '#1A1A1A',
+            marginBottom: '0.75rem',
+            lineHeight: 1.2,
+          }}
+        >
+          Trusted by Growth Teams
+        </h2>
+        <p
+          className="testimonials-subheading"
+          style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: 'clamp(1rem, 2vw, 1.15rem)',
+            color: 'var(--text-muted)',
+            marginBottom: '3rem',
+            maxWidth: '560px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        >
+          See why marketing leaders choose OpenAnalyst to power their campaigns.
+        </p>
+
+        {/* Decorative quote mark */}
+        <div
+          className="testimonials-quote-mark"
+          style={{
+            fontSize: 'clamp(5rem, 10vw, 8rem)',
+            lineHeight: 1,
+            fontFamily: 'Georgia, serif',
+            color: 'var(--rust)',
+            opacity: 0.35,
+            userSelect: 'none',
+            marginBottom: '-2rem',
+          }}
+          aria-hidden="true"
+        >
+          {'\u201C'}
+        </div>
+
+        {/* Testimonial card */}
+        <div
+          ref={cardRef}
+          className="testimonials-card"
+          style={{
+            background: '#FAFAFA',
+            border: '1px solid #E5E5E5',
+            borderRadius: '16px',
+            padding: 'clamp(2rem, 4vw, 3rem)',
+            marginBottom: '2rem',
+          }}
+        >
+          <blockquote
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)',
+              color: '#1A1A1A',
+              lineHeight: 1.6,
+              fontStyle: 'italic',
+              marginBottom: '2rem',
+              position: 'relative',
+            }}
+          >
+            {'\u201C'}{current.quote}{'\u201D'}
+          </blockquote>
+
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '1rem',
+            }}
+          >
+            {/* Avatar placeholder */}
+            <div
+              style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #FF6B00, #FF8533)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontFamily: 'var(--font-heading)',
+                fontWeight: 700,
+                fontSize: '1.1rem',
+                color: '#FFFFFF',
+                flexShrink: 0,
+              }}
+            >
+              {current.name
+                .split(' ')
+                .map((n) => n[0])
+                .join('')}
             </div>
-        </section>
-    );
-};
+            <div style={{ textAlign: 'left' }}>
+              <p
+                style={{
+                  fontFamily: 'var(--font-heading)',
+                  fontWeight: 600,
+                  fontSize: '1rem',
+                  color: '#1A1A1A',
+                  margin: 0,
+                }}
+              >
+                {current.name}
+              </p>
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '0.875rem',
+                  color: 'var(--text-muted)',
+                  margin: 0,
+                }}
+              >
+                {current.title} at{' '}
+                <span style={{ color: '#FF6B00' }}>{current.company}</span>
+              </p>
+            </div>
+          </div>
+        </div>
 
-export default Testimonials;
+        {/* Dot navigation */}
+        <div
+          className="testimonials-dots"
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '0.6rem',
+            marginBottom: '3.5rem',
+          }}
+        >
+          {testimonials.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              aria-label={`Go to testimonial ${i + 1}`}
+              style={{
+                width: i === active ? '28px' : '10px',
+                height: '10px',
+                borderRadius: '999px',
+                border: 'none',
+                background: i === active ? '#FF6B00' : '#E5E5E5',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                padding: 0,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Company logos strip */}
+        <div className="testimonials-logos">
+          <p
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: '0.8rem',
+              color: 'var(--text-muted)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.15em',
+              marginBottom: '1.5rem',
+            }}
+          >
+            Trusted by innovative teams
+          </p>
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: 'clamp(1.5rem, 4vw, 3rem)',
+            }}
+          >
+            {companyLogos.map((logo) => (
+              <span
+                key={logo}
+                style={{
+                  fontFamily: 'var(--font-heading)',
+                  fontSize: 'clamp(0.85rem, 1.5vw, 1.05rem)',
+                  fontWeight: 600,
+                  color: 'var(--text-muted)',
+                  opacity: 0.55,
+                  letterSpacing: '0.03em',
+                  transition: 'opacity 0.3s ease',
+                  cursor: 'default',
+                }}
+                onMouseEnter={(e) => {
+                  (e.target as HTMLSpanElement).style.opacity = '0.9';
+                }}
+                onMouseLeave={(e) => {
+                  (e.target as HTMLSpanElement).style.opacity = '0.55';
+                }}
+              >
+                {logo}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

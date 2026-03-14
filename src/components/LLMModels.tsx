@@ -145,7 +145,7 @@ const LLMModels: React.FC = () => {
     return (
         <section ref={containerRef} style={{
             padding: '100px 0',
-            background: 'var(--surface)',
+            background: 'var(--background)',
             position: 'relative',
             overflow: 'hidden',
         }}>
@@ -187,8 +187,8 @@ const LLMModels: React.FC = () => {
                                                     position: 'absolute',
                                                     inset: '-4px -8px',
                                                     borderRadius: '4px',
-                                                    border: '1px solid rgba(204,122,96,0.3)',
-                                                    backgroundColor: 'rgba(204,122,96,0.05)',
+                                                    border: '1px solid rgba(255,107,0,0.3)',
+                                                    backgroundColor: 'rgba(255,107,0,0.05)',
                                                     pointerEvents: 'none',
                                                 }} />
                                             )}
@@ -247,8 +247,8 @@ const LLMModels: React.FC = () => {
                                     padding: '14px 20px',
                                     borderRadius: '12px',
                                     border: '1px solid',
-                                    borderColor: hoveredRow === i ? 'rgba(204,122,96,0.3)' : 'var(--border)',
-                                    backgroundColor: hoveredRow === i ? 'rgba(204,122,96,0.03)' : 'rgba(255,255,255,0.6)',
+                                    borderColor: hoveredRow === i ? 'rgba(255,107,0,0.3)' : 'var(--border)',
+                                    backgroundColor: hoveredRow === i ? 'rgba(255,107,0,0.03)' : 'rgba(255,255,255,0.6)',
                                     transition: 'all 0.3s ease',
                                     position: 'relative',
                                     overflow: 'hidden',
@@ -373,7 +373,7 @@ const LLMModels: React.FC = () => {
                         }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.borderColor = 'var(--primary)';
-                            e.currentTarget.style.backgroundColor = 'rgba(204, 122, 96, 0.05)';
+                            e.currentTarget.style.backgroundColor = 'rgba(140, 59, 31, 0.05)';
                         }}
                         onMouseLeave={(e) => {
                             e.currentTarget.style.borderColor = 'var(--border)';

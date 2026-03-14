@@ -4,7 +4,6 @@ import { useState, useRef } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { Header, Footer } from '@/components';
-import Magnetic from '@/components/Magnetic';
 
 export default function ContactPage() {
     const [name, setName] = useState('');
@@ -14,7 +13,6 @@ export default function ContactPage() {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [error, setError] = useState('');
     const pageRef = useRef<HTMLDivElement>(null);
-    const formRef = useRef<HTMLFormElement>(null);
     const successRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
@@ -22,10 +20,10 @@ export default function ContactPage() {
             y: 40, opacity: 0, duration: 0.8, ease: 'power3.out',
         });
         gsap.from('.contact-left', {
-            x: -40, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.2,
+            y: 40, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.2,
         });
         gsap.from('.contact-right', {
-            x: 40, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.3,
+            y: 40, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.3,
         });
     }, { scope: pageRef });
 
@@ -46,14 +44,10 @@ export default function ContactPage() {
             if (!response.ok) throw new Error('Something went wrong. Please try again.');
             setIsSubmitted(true);
 
-            // Morph success message in
             if (successRef.current) {
                 gsap.from(successRef.current, {
-                    scale: 0.8,
-                    y: 20,
-                    opacity: 0,
-                    duration: 0.6,
-                    ease: 'back.out(1.4)',
+                    scale: 0.8, y: 20, opacity: 0,
+                    duration: 0.6, ease: 'back.out(1.4)',
                 });
             }
         } catch {
@@ -63,108 +57,84 @@ export default function ContactPage() {
         }
     };
 
-    // Ripple effect on submit button
-    const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        const button = e.currentTarget;
-        const rect = button.getBoundingClientRect();
-        const ripple = document.createElement('span');
-        const size = Math.max(rect.width, rect.height);
-        ripple.style.cssText = `
-            position: absolute; width: ${size}px; height: ${size}px;
-            left: ${e.clientX - rect.left - size / 2}px;
-            top: ${e.clientY - rect.top - size / 2}px;
-            background: rgba(255,255,255,0.3); border-radius: 50%;
-            transform: scale(0); pointer-events: none;
-        `;
-        button.appendChild(ripple);
-        gsap.to(ripple, {
-            scale: 2, opacity: 0, duration: 0.6, ease: 'power2.out',
-            onComplete: () => ripple.remove(),
-        });
-        // Bounce the button
-        gsap.fromTo(button, { scale: 0.97 }, { scale: 1, duration: 0.4, ease: 'elastic.out(1, 0.4)' });
-    };
-
     return (
-        <div ref={pageRef} style={{ minHeight: '100vh', backgroundColor: 'var(--background)', color: 'var(--foreground)' }}>
+        <div ref={pageRef} style={{ minHeight: '100vh', backgroundColor: '#FFFFFF', color: '#1A1A1A' }}>
             <Header />
-            <main style={{ paddingTop: '120px', paddingBottom: '80px' }}>
+            <main style={{ paddingTop: '160px', paddingBottom: '80px' }}>
                 <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '0 20px' }}>
-                    {/* Hero */}
-                    <div className="contact-hero" style={{ textAlign: 'center', marginBottom: '48px' }}>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--syntax-comment)', marginBottom: '16px' }}>
-                            {'// CONTACT'}
-                        </p>
+                    {/* Hero — Linear-inspired minimal */}
+                    <div className="contact-hero" style={{ textAlign: 'center', marginBottom: '64px' }}>
                         <h1 style={{
-                            fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 800,
-                            lineHeight: 1.1, marginBottom: '16px',
+                            fontFamily: 'var(--font-heading)',
+                            fontSize: 'clamp(2.5rem, 6vw, 4rem)',
+                            fontWeight: 800,
+                            lineHeight: 1.1,
+                            marginBottom: '16px',
+                            letterSpacing: '-0.03em',
                         }}>
                             Get in Touch
                         </h1>
-                        <p style={{ fontSize: '16px', color: 'var(--muted)', fontFamily: 'var(--font-body)', lineHeight: 1.7, maxWidth: '500px', margin: '0 auto' }}>
+                        <p style={{ fontSize: '17px', color: 'var(--text-muted)', fontFamily: 'var(--font-body)', lineHeight: 1.7, maxWidth: '500px', margin: '0 auto' }}>
                             Have questions about our AI marketing agent? We&apos;d love to hear from you.
                         </p>
                     </div>
 
-                    {/* Split Layout */}
+                    {/* Split Layout — Info left, Form right */}
                     <div className="contact-split-grid" style={{
                         display: 'grid',
                         gridTemplateColumns: '1fr 1.3fr',
-                        gap: '32px',
+                        gap: '40px',
                         alignItems: 'start',
                     }}>
-                        {/* Left Panel — Company Info */}
+                        {/* Left Panel */}
                         <div className="contact-left">
                             <div style={{
-                                padding: '32px',
+                                padding: '36px',
                                 borderRadius: '20px',
-                                backgroundColor: 'var(--terminal-bg)',
-                                border: '1px solid rgba(255,255,255,0.08)',
+                                backgroundColor: '#FAFAFA',
+                                border: '1px solid #E5E5E5',
                             }}>
-                                <div style={{ marginBottom: '32px' }}>
-                                    <h3 style={{
-                                        fontFamily: 'var(--font-heading)', fontSize: '24px', fontWeight: 700,
-                                        color: '#ffffff', marginBottom: '12px',
-                                    }}>
-                                        Let&apos;s talk
-                                    </h3>
-                                    <p style={{ fontSize: '14px', color: '#a89890', lineHeight: 1.7 }}>
-                                        Whether you&apos;re exploring AI marketing or ready to deploy, we&apos;re here to help.
-                                    </p>
-                                </div>
+                                <h3 style={{
+                                    fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 700,
+                                    color: '#1A1A1A', marginBottom: '12px',
+                                }}>
+                                    Let&apos;s talk
+                                </h3>
+                                <p style={{ fontSize: '15px', color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: '32px', fontFamily: 'var(--font-body)' }}>
+                                    Whether you&apos;re exploring AI marketing or ready to deploy, we&apos;re here to help.
+                                </p>
 
-                                {/* Contact details */}
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                                         <div style={{
-                                            width: '36px', height: '36px', borderRadius: '10px',
-                                            backgroundColor: 'rgba(204,122,96,0.1)',
+                                            width: '40px', height: '40px', borderRadius: '12px',
+                                            backgroundColor: 'rgba(255,107,0,0.06)',
                                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            fontSize: '14px', color: 'var(--primary)',
+                                            fontSize: '16px', color: 'var(--rust)',
                                         }}>@</div>
                                         <div>
-                                            <p style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: '#6b6260', marginBottom: '2px' }}>{'// email'}</p>
-                                            <a href="mailto:team@openanalyst.com" style={{ fontSize: '13px', color: '#d4d4d8', textDecoration: 'none', fontFamily: 'var(--font-mono)' }}>
+                                            <p style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', marginBottom: '2px' }}>Email</p>
+                                            <a href="mailto:team@openanalyst.com" style={{ fontSize: '14px', color: '#1A1A1A', textDecoration: 'none', fontWeight: 500 }}>
                                                 team@openanalyst.com
                                             </a>
                                         </div>
                                     </div>
 
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                                         <div style={{
-                                            width: '36px', height: '36px', borderRadius: '10px',
-                                            backgroundColor: 'rgba(204,122,96,0.1)',
+                                            width: '40px', height: '40px', borderRadius: '12px',
+                                            backgroundColor: 'rgba(255,107,0,0.06)',
                                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            fontSize: '14px', color: 'var(--primary)',
+                                            fontSize: '16px', color: 'var(--rust)',
                                         }}>◎</div>
                                         <div>
-                                            <p style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: '#6b6260', marginBottom: '2px' }}>{'// location'}</p>
-                                            <p style={{ fontSize: '13px', color: '#d4d4d8', fontFamily: 'var(--font-mono)' }}>San Francisco, CA</p>
+                                            <p style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', marginBottom: '2px' }}>Location</p>
+                                            <p style={{ fontSize: '14px', color: '#1A1A1A', fontWeight: 500 }}>San Francisco, CA</p>
                                         </div>
                                     </div>
 
-                                    <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '16px', marginTop: '8px' }}>
-                                        <p style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: '#6b6260', marginBottom: '12px' }}>{'// socials'}</p>
+                                    <div style={{ borderTop: '1px solid #E5E5E5', paddingTop: '20px', marginTop: '8px' }}>
+                                        <p style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', marginBottom: '12px' }}>Follow us</p>
                                         <div style={{ display: 'flex', gap: '8px' }}>
                                             {[
                                                 { label: 'X', href: 'https://x.com/OpenAnalystInc' },
@@ -172,20 +142,22 @@ export default function ContactPage() {
                                                 { label: 'ig', href: 'https://www.instagram.com/openanalystinc/' },
                                             ].map((social) => (
                                                 <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" style={{
-                                                    width: '36px', height: '36px', borderRadius: '10px',
-                                                    backgroundColor: 'rgba(255,255,255,0.05)',
-                                                    border: '1px solid rgba(255,255,255,0.08)',
+                                                    width: '40px', height: '40px', borderRadius: '12px',
+                                                    backgroundColor: 'rgba(255,107,0,0.04)',
+                                                    border: '1px solid #E5E5E5',
                                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                    fontSize: '12px', color: '#a89890', fontFamily: 'var(--font-mono)',
+                                                    fontSize: '13px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)',
                                                     textDecoration: 'none', transition: 'all 0.3s ease', fontWeight: 600,
                                                 }}
                                                     onMouseEnter={(e) => {
-                                                        (e.currentTarget as HTMLElement).style.borderColor = 'var(--primary)';
-                                                        (e.currentTarget as HTMLElement).style.color = 'var(--primary)';
+                                                        (e.currentTarget as HTMLElement).style.borderColor = '#FF6B00';
+                                                        (e.currentTarget as HTMLElement).style.color = '#FF6B00';
+                                                        (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,107,0,0.06)';
                                                     }}
                                                     onMouseLeave={(e) => {
-                                                        (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)';
-                                                        (e.currentTarget as HTMLElement).style.color = '#a89890';
+                                                        (e.currentTarget as HTMLElement).style.borderColor = '#E5E5E5';
+                                                        (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)';
+                                                        (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,107,0,0.04)';
                                                     }}
                                                 >
                                                     {social.label}
@@ -195,199 +167,167 @@ export default function ContactPage() {
                                     </div>
                                 </div>
                             </div>
-
-                            {/* Quick CTA */}
-                            <div style={{ marginTop: '16px', textAlign: 'center' }}>
-                                <Magnetic>
-                                    <a href="https://app.openanalyst.com" style={{
-                                        display: 'inline-flex', alignItems: 'center', gap: '6px',
-                                        fontSize: '13px', fontFamily: 'var(--font-mono)', fontWeight: 500,
-                                        color: 'var(--muted)', textDecoration: 'none', transition: 'color 0.3s ease',
-                                    }}
-                                        onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--primary)'; }}
-                                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--muted)'; }}
-                                    >
-                                        Or just get started &rarr;
-                                    </a>
-                                </Magnetic>
-                            </div>
                         </div>
 
-                        {/* Right Panel — Form */}
+                        {/* Right Panel — Form with floating labels */}
                         <div className="contact-right">
-                            <div className="terminal-card" style={{ position: 'relative', overflow: 'hidden' }}>
-                                <div className="terminal-card-header">
-                                    <div className="terminal-dots"><span /><span /><span /></div>
-                                    <span style={{ color: '#6b7280', fontSize: '11px', marginLeft: '8px' }}>contact-form.tsx</span>
-                                </div>
-                                <div style={{ padding: '32px 24px', position: 'relative' }}>
-                                    {/* Form */}
-                                    <form ref={formRef} onSubmit={handleSubmit} style={{
-                                        opacity: isSubmitted ? 0.15 : 1,
-                                        filter: isSubmitted ? 'blur(2px)' : 'none',
-                                        transition: 'all 0.4s ease',
-                                        pointerEvents: isSubmitted ? 'none' : 'auto',
-                                    }}>
-                                        {/* Floating label input — Name */}
-                                        <div className="floating-field" style={{ marginBottom: '24px', position: 'relative' }}>
-                                            <input
-                                                type="text"
-                                                id="name"
-                                                value={name}
-                                                onChange={(e) => setName(e.target.value)}
-                                                required
-                                                placeholder=" "
-                                                style={{
-                                                    width: '100%', padding: '18px 16px 8px',
-                                                    backgroundColor: 'rgba(255,255,255,0.03)',
-                                                    border: '1px solid rgba(255,255,255,0.1)',
-                                                    borderRadius: '10px', color: '#d4d4d8', fontSize: '14px',
-                                                    fontFamily: 'var(--font-mono)', outline: 'none',
-                                                    transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
-                                                }}
-                                                onFocus={(e) => {
-                                                    e.currentTarget.style.borderColor = 'var(--primary)';
-                                                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(204, 122, 96, 0.1)';
-                                                }}
-                                                onBlur={(e) => {
-                                                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
-                                                    e.currentTarget.style.boxShadow = 'none';
-                                                }}
-                                            />
-                                            <label htmlFor="name" style={{
-                                                position: 'absolute', left: '16px', top: '14px',
-                                                fontSize: '12px', fontFamily: 'var(--font-mono)',
-                                                color: 'var(--syntax-comment)', pointerEvents: 'none',
-                                                transition: 'all 0.2s ease',
-                                            }}>
-                                                {'// your_name'}
-                                            </label>
-                                        </div>
-
-                                        {/* Floating label input — Email */}
-                                        <div className="floating-field" style={{ marginBottom: '24px', position: 'relative' }}>
-                                            <input
-                                                type="email"
-                                                id="email"
-                                                value={email}
-                                                onChange={(e) => setEmail(e.target.value)}
-                                                required
-                                                placeholder=" "
-                                                style={{
-                                                    width: '100%', padding: '18px 16px 8px',
-                                                    backgroundColor: 'rgba(255,255,255,0.03)',
-                                                    border: '1px solid rgba(255,255,255,0.1)',
-                                                    borderRadius: '10px', color: '#d4d4d8', fontSize: '14px',
-                                                    fontFamily: 'var(--font-mono)', outline: 'none',
-                                                    transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
-                                                }}
-                                                onFocus={(e) => {
-                                                    e.currentTarget.style.borderColor = 'var(--primary)';
-                                                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(204, 122, 96, 0.1)';
-                                                }}
-                                                onBlur={(e) => {
-                                                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
-                                                    e.currentTarget.style.boxShadow = 'none';
-                                                }}
-                                            />
-                                            <label htmlFor="email" style={{
-                                                position: 'absolute', left: '16px', top: '14px',
-                                                fontSize: '12px', fontFamily: 'var(--font-mono)',
-                                                color: 'var(--syntax-comment)', pointerEvents: 'none',
-                                                transition: 'all 0.2s ease',
-                                            }}>
-                                                {'// your_email'}
-                                            </label>
-                                        </div>
-
-                                        {/* Floating label input — Message */}
-                                        <div className="floating-field" style={{ marginBottom: '24px', position: 'relative' }}>
-                                            <textarea
-                                                id="message"
-                                                rows={4}
-                                                value={message}
-                                                onChange={(e) => setMessage(e.target.value)}
-                                                required
-                                                placeholder=" "
-                                                style={{
-                                                    width: '100%', padding: '18px 16px 8px',
-                                                    backgroundColor: 'rgba(255,255,255,0.03)',
-                                                    border: '1px solid rgba(255,255,255,0.1)',
-                                                    borderRadius: '10px', color: '#d4d4d8', fontSize: '14px',
-                                                    fontFamily: 'var(--font-mono)', outline: 'none', resize: 'vertical',
-                                                    transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
-                                                }}
-                                                onFocus={(e) => {
-                                                    e.currentTarget.style.borderColor = 'var(--primary)';
-                                                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(204, 122, 96, 0.1)';
-                                                }}
-                                                onBlur={(e) => {
-                                                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
-                                                    e.currentTarget.style.boxShadow = 'none';
-                                                }}
-                                            />
-                                            <label htmlFor="message" style={{
-                                                position: 'absolute', left: '16px', top: '14px',
-                                                fontSize: '12px', fontFamily: 'var(--font-mono)',
-                                                color: 'var(--syntax-comment)', pointerEvents: 'none',
-                                                transition: 'all 0.2s ease',
-                                            }}>
-                                                {'// your_message'}
-                                            </label>
-                                        </div>
-
-                                        {error && (
-                                            <p style={{ color: 'var(--error)', fontSize: '13px', marginBottom: '12px', fontFamily: 'var(--font-mono)' }}>{error}</p>
-                                        )}
-
-                                        <button
-                                            type="submit"
-                                            disabled={isSubmitting}
-                                            onClick={handleButtonClick}
+                            <div style={{
+                                padding: '36px',
+                                borderRadius: '20px',
+                                backgroundColor: '#FAFAFA',
+                                border: '1px solid #E5E5E5',
+                                position: 'relative',
+                                overflow: 'hidden',
+                            }}>
+                                <form onSubmit={handleSubmit} style={{
+                                    opacity: isSubmitted ? 0.15 : 1,
+                                    filter: isSubmitted ? 'blur(2px)' : 'none',
+                                    transition: 'all 0.4s ease',
+                                    pointerEvents: isSubmitted ? 'none' : 'auto',
+                                }}>
+                                    <div className="floating-field" style={{ marginBottom: '24px', position: 'relative' }}>
+                                        <input
+                                            type="text" id="name" value={name}
+                                            onChange={(e) => setName(e.target.value)}
+                                            required placeholder=" "
                                             style={{
-                                                width: '100%', padding: '14px', position: 'relative', overflow: 'hidden',
-                                                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                                                backgroundColor: isSubmitting ? 'var(--primary-dark)' : 'var(--primary)',
-                                                color: '#ffffff', fontWeight: 600, fontFamily: 'var(--font-mono)', fontSize: '14px',
-                                                borderRadius: '10px', border: 'none',
-                                                cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                                                transition: 'all 0.3s ease', opacity: isSubmitting ? 0.7 : 1,
+                                                width: '100%', padding: '18px 16px 8px',
+                                                backgroundColor: '#FFFFFF',
+                                                border: '1px solid #E5E5E5',
+                                                borderRadius: '12px', color: '#1A1A1A', fontSize: '14px',
+                                                fontFamily: 'var(--font-body)', outline: 'none',
+                                                transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
                                             }}
-                                        >
-                                            <span style={{ color: 'var(--cmd-prefix)', fontSize: '12px' }}>$</span>
-                                            {isSubmitting ? 'sending...' : 'send_message'}
-                                        </button>
-                                    </form>
-
-                                    {/* Success overlay */}
-                                    {isSubmitted && (
-                                        <div ref={successRef} style={{
-                                            position: 'absolute',
-                                            inset: 0,
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            zIndex: 2,
+                                            onFocus={(e) => {
+                                                e.currentTarget.style.borderColor = '#FF6B00';
+                                                e.currentTarget.style.boxShadow = '0 0 0 3px rgba(255, 107, 0, 0.08)';
+                                            }}
+                                            onBlur={(e) => {
+                                                e.currentTarget.style.borderColor = '#E5E5E5';
+                                                e.currentTarget.style.boxShadow = 'none';
+                                            }}
+                                        />
+                                        <label htmlFor="name" style={{
+                                            position: 'absolute', left: '16px', top: '14px',
+                                            fontSize: '13px', fontFamily: 'var(--font-body)',
+                                            color: 'var(--text-muted)', pointerEvents: 'none',
+                                            transition: 'all 0.2s ease',
                                         }}>
-                                            <div style={{ textAlign: 'center' }}>
-                                                <div style={{
-                                                    width: '56px', height: '56px', borderRadius: '50%',
-                                                    background: 'rgba(46, 204, 113, 0.1)',
-                                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                    margin: '0 auto 20px',
-                                                }}>
-                                                    <span style={{ color: 'var(--syntax-string)', fontSize: '28px' }}>✓</span>
-                                                </div>
-                                                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '16px', color: 'var(--syntax-string)', marginBottom: '8px' }}>
-                                                    ✓ Message sent successfully.
-                                                </p>
-                                                <p style={{ color: '#8a7a72', fontSize: '14px' }}>
-                                                    Thank you for reaching out. We&apos;ll get back to you soon.
-                                                </p>
-                                            </div>
-                                        </div>
+                                            Your name
+                                        </label>
+                                    </div>
+
+                                    <div className="floating-field" style={{ marginBottom: '24px', position: 'relative' }}>
+                                        <input
+                                            type="email" id="email" value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            required placeholder=" "
+                                            style={{
+                                                width: '100%', padding: '18px 16px 8px',
+                                                backgroundColor: '#FFFFFF',
+                                                border: '1px solid #E5E5E5',
+                                                borderRadius: '12px', color: '#1A1A1A', fontSize: '14px',
+                                                fontFamily: 'var(--font-body)', outline: 'none',
+                                                transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+                                            }}
+                                            onFocus={(e) => {
+                                                e.currentTarget.style.borderColor = '#FF6B00';
+                                                e.currentTarget.style.boxShadow = '0 0 0 3px rgba(255, 107, 0, 0.08)';
+                                            }}
+                                            onBlur={(e) => {
+                                                e.currentTarget.style.borderColor = '#E5E5E5';
+                                                e.currentTarget.style.boxShadow = 'none';
+                                            }}
+                                        />
+                                        <label htmlFor="email" style={{
+                                            position: 'absolute', left: '16px', top: '14px',
+                                            fontSize: '13px', fontFamily: 'var(--font-body)',
+                                            color: 'var(--text-muted)', pointerEvents: 'none',
+                                            transition: 'all 0.2s ease',
+                                        }}>
+                                            Your email
+                                        </label>
+                                    </div>
+
+                                    <div className="floating-field" style={{ marginBottom: '24px', position: 'relative' }}>
+                                        <textarea
+                                            id="message" rows={4} value={message}
+                                            onChange={(e) => setMessage(e.target.value)}
+                                            required placeholder=" "
+                                            style={{
+                                                width: '100%', padding: '18px 16px 8px',
+                                                backgroundColor: '#FFFFFF',
+                                                border: '1px solid #E5E5E5',
+                                                borderRadius: '12px', color: '#1A1A1A', fontSize: '14px',
+                                                fontFamily: 'var(--font-body)', outline: 'none', resize: 'vertical',
+                                                transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+                                            }}
+                                            onFocus={(e) => {
+                                                e.currentTarget.style.borderColor = '#FF6B00';
+                                                e.currentTarget.style.boxShadow = '0 0 0 3px rgba(255, 107, 0, 0.08)';
+                                            }}
+                                            onBlur={(e) => {
+                                                e.currentTarget.style.borderColor = '#E5E5E5';
+                                                e.currentTarget.style.boxShadow = 'none';
+                                            }}
+                                        />
+                                        <label htmlFor="message" style={{
+                                            position: 'absolute', left: '16px', top: '14px',
+                                            fontSize: '13px', fontFamily: 'var(--font-body)',
+                                            color: 'var(--text-muted)', pointerEvents: 'none',
+                                            transition: 'all 0.2s ease',
+                                        }}>
+                                            Your message
+                                        </label>
+                                    </div>
+
+                                    {error && (
+                                        <p style={{ color: 'var(--error)', fontSize: '13px', marginBottom: '12px', fontFamily: 'var(--font-mono)' }}>{error}</p>
                                     )}
-                                </div>
+
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        style={{
+                                            width: '100%', padding: '14px', position: 'relative', overflow: 'hidden',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                                            backgroundColor: isSubmitting ? '#E85D00' : '#FF6B00',
+                                            color: '#FFFFFF', fontWeight: 600, fontFamily: 'var(--font-body)', fontSize: '15px',
+                                            borderRadius: '12px', border: 'none',
+                                            cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                                            transition: 'all 0.3s ease', opacity: isSubmitting ? 0.7 : 1,
+                                            boxShadow: '0 2px 12px rgba(255,107,0,0.2)',
+                                        }}
+                                    >
+                                        {isSubmitting ? 'Sending...' : 'Send Message'}
+                                        {!isSubmitting && <span>&rarr;</span>}
+                                    </button>
+                                </form>
+
+                                {isSubmitted && (
+                                    <div ref={successRef} style={{
+                                        position: 'absolute', inset: 0,
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        zIndex: 2,
+                                    }}>
+                                        <div style={{ textAlign: 'center' }}>
+                                            <div style={{
+                                                width: '56px', height: '56px', borderRadius: '50%',
+                                                background: 'rgba(46, 204, 113, 0.1)',
+                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                margin: '0 auto 20px',
+                                            }}>
+                                                <span style={{ color: '#2ecc71', fontSize: '28px' }}>✓</span>
+                                            </div>
+                                            <p style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', color: '#1A1A1A', marginBottom: '8px', fontWeight: 600 }}>
+                                                Message sent!
+                                            </p>
+                                            <p style={{ color: 'var(--text-muted)', fontSize: '14px', fontFamily: 'var(--font-body)' }}>
+                                                Thank you for reaching out. We&apos;ll get back to you soon.
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -399,7 +339,7 @@ export default function ContactPage() {
                     .floating-field textarea:focus + label,
                     .floating-field textarea:not(:placeholder-shown) + label {
                         transform: translateY(-12px) scale(0.85);
-                        color: var(--primary) !important;
+                        color: var(--rust) !important;
                     }
                     @media (max-width: 768px) {
                         .contact-split-grid {

@@ -7,7 +7,7 @@ interface ButtonProps {
     children: React.ReactNode;
     href?: string;
     onClick?: () => void;
-    variant?: 'stroke' | 'fill';
+    variant?: 'stroke' | 'fill' | 'primary' | 'ghost';
     className?: string;
     type?: 'button' | 'submit' | 'reset';
     disabled?: boolean;
@@ -25,8 +25,12 @@ const Button: React.FC<ButtonProps> = ({
     const baseClasses = `
         group inline-flex items-stretch overflow-hidden transition-all duration-300
         ${variant === 'stroke'
-            ? 'border border-black/20 hover:border-black bg-transparent text-black'
-            : 'bg-black hover:bg-gray-800 border border-black text-white'
+            ? 'border border-[#E5E5E5] hover:border-[#FF6B00] bg-transparent text-[#1A1A1A]'
+            : variant === 'fill'
+            ? 'bg-[#1A1A1A] hover:bg-[#FF6B00] border border-[#1A1A1A] text-[#FFFFFF]'
+            : variant === 'primary'
+            ? 'bg-[#FF6B00] hover:bg-[#E85D00] border border-[#FF6B00] text-[#FFFFFF] shadow-[0_2px_12px_rgba(255,107,0,0.2)] hover:shadow-[0_4px_24px_rgba(255,107,0,0.35)]'
+            : 'bg-transparent hover:bg-[rgba(255,107,0,0.04)] border border-transparent text-[#1A1A1A] hover:text-[#FF6B00]'
         }
         ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
         ${className}
@@ -34,24 +38,31 @@ const Button: React.FC<ButtonProps> = ({
 
     const textClasses = `
         px-6 py-3.5 text-sm font-semibold uppercase tracking-wider
-        ${variant === 'stroke' ? 'text-black' : 'text-white'}
+        ${variant === 'stroke' ? 'text-[#1A1A1A]'
+            : variant === 'ghost' ? 'text-[#1A1A1A] group-hover:text-[#FF6B00]'
+            : 'text-[#FFFFFF]'}
     `;
 
     const arrowContainerClasses = `
         flex items-center justify-center px-4 border-l transition-all duration-300
         ${variant === 'stroke'
-            ? 'border-black/20 group-hover:border-black bg-transparent group-hover:bg-black/5'
-            : 'border-white/10 bg-white/10 group-hover:bg-white/20'
+            ? 'border-[#E5E5E5] group-hover:border-[#FF6B00] bg-transparent group-hover:bg-[rgba(255,107,0,0.04)]'
+            : variant === 'primary'
+            ? 'border-[rgba(255,255,240,0.15)] bg-[rgba(255,255,240,0.1)] group-hover:bg-[rgba(255,255,240,0.2)]'
+            : variant === 'ghost'
+            ? 'border-transparent bg-transparent'
+            : 'border-[rgba(255,255,240,0.1)] bg-[rgba(255,255,240,0.1)] group-hover:bg-[rgba(255,255,240,0.2)]'
         }
     `;
+
+    const arrowColor = variant === 'stroke' || variant === 'ghost' ? 'text-[#1A1A1A] group-hover:text-[#FF6B00]' : 'text-[#FFFFFF]';
 
     const content = (
         <>
             <span className={textClasses}>{children}</span>
             <span className={arrowContainerClasses}>
-                {/* Default arrow */}
                 <svg
-                    className={`w-4 h-4 transition-all duration-300 group-hover:hidden ${variant === 'stroke' ? 'text-black' : 'text-white'}`}
+                    className={`w-4 h-4 transition-all duration-300 group-hover:hidden ${arrowColor}`}
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -61,9 +72,8 @@ const Button: React.FC<ButtonProps> = ({
                 >
                     <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
-                {/* Hover arrow (diagonal) */}
                 <svg
-                    className={`w-4 h-4 transition-all duration-300 hidden group-hover:block ${variant === 'stroke' ? 'text-black' : 'text-white'}`}
+                    className={`w-4 h-4 transition-all duration-300 hidden group-hover:block ${arrowColor}`}
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
