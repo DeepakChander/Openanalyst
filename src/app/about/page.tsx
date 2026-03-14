@@ -26,10 +26,10 @@ const metrics = [
 ];
 
 const milestones = [
-    { year: '2024', quarter: 'Q1', event: 'Founded', desc: 'OpenAnalyst was born from a vision to democratize AI-powered marketing for every business.', icon: '🚀' },
-    { year: '2024', quarter: 'Q3', event: 'First 1,000 Users', desc: 'Reached our first major milestone with early adopters from startups and agencies worldwide.', icon: '📈' },
-    { year: '2025', quarter: 'Q1', event: '27 Integrations', desc: 'Connected to the entire marketing stack — Gmail, Slack, HubSpot, Google Ads, and more.', icon: '🔗' },
-    { year: '2025', quarter: 'Q3', event: '10K+ Campaigns', desc: 'Our AI agents have planned, launched, and optimized over 10,000 marketing campaigns.', icon: '🎯' },
+    { year: '2024', quarter: 'Q1', event: 'Founded', desc: 'OpenAnalyst was born from a vision to democratize AI-powered marketing for every business.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg> },
+    { year: '2024', quarter: 'Q3', event: 'First 1,000 Users', desc: 'Reached our first major milestone with early adopters from startups and agencies worldwide.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg> },
+    { year: '2025', quarter: 'Q1', event: '27 Integrations', desc: 'Connected to the entire marketing stack — Gmail, Slack, HubSpot, Google Ads, and more.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> },
+    { year: '2025', quarter: 'Q3', event: '10K+ Campaigns', desc: 'Our AI agents have planned, launched, and optimized over 10,000 marketing campaigns.', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> },
 ];
 
 const teamPhotos = [
@@ -1087,12 +1087,12 @@ export default function AboutPage() {
                         display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px',
                     }}>
                         {[
-                            { title: 'Remote-First', desc: 'Work from anywhere. We believe great talent isn\'t bound by geography.', icon: '🌍' },
-                            { title: 'Ship Fast', desc: 'Weekly releases, daily deployments. We move at startup speed, always.', icon: '🚀' },
-                            { title: 'Radical Transparency', desc: 'Open books, open roadmap. Everyone sees the full picture.', icon: '🔍' },
-                            { title: 'Customer Obsessed', desc: 'Every feature starts with a customer problem, not a hypothesis.', icon: '💡' },
-                            { title: 'Learn & Grow', desc: '$5K annual learning budget, internal tech talks, and mentorship.', icon: '📚' },
-                            { title: 'Play to Win', desc: 'We celebrate wins big and small. Growth is a team sport here.', icon: '🏆' },
+                            { title: 'Remote-First', desc: 'Work from anywhere. We believe great talent isn\'t bound by geography.', icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF8533" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg> },
+                            { title: 'Ship Fast', desc: 'Weekly releases, daily deployments. We move at startup speed, always.', icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF8533" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg> },
+                            { title: 'Radical Transparency', desc: 'Open books, open roadmap. Everyone sees the full picture.', icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF8533" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg> },
+                            { title: 'Customer Obsessed', desc: 'Every feature starts with a customer problem, not a hypothesis.', icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF8533" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> },
+                            { title: 'Learn & Grow', desc: '$5K annual learning budget, internal tech talks, and mentorship.', icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF8533" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg> },
+                            { title: 'Play to Win', desc: 'We celebrate wins big and small. Growth is a team sport here.', icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF8533" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> },
                         ].map((item, i) => (
                             <TiltCard key={i} className="sec-head" style={{
                                 padding: '36px 28px', borderRadius: '20px',

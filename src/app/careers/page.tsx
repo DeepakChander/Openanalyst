@@ -141,7 +141,7 @@ const benefits = [
 const departments = [
     {
         name: 'Engineering',
-        emoji: '⚡',
+        icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>,
         color: '#FF6B00',
         roles: [
             { title: 'Senior Full-Stack Engineer', location: 'Remote · Worldwide', type: 'Full-time' },
@@ -152,7 +152,7 @@ const departments = [
     },
     {
         name: 'Product & Design',
-        emoji: '✦',
+        icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E85D00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>,
         color: '#E85D00',
         roles: [
             { title: 'Product Manager', location: 'Remote · US/EU', type: 'Full-time' },
@@ -162,7 +162,7 @@ const departments = [
     },
     {
         name: 'Marketing & Growth',
-        emoji: '◈',
+        icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF8533" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>,
         color: '#FF8533',
         roles: [
             { title: 'Growth Lead', location: 'Remote · US', type: 'Full-time' },
@@ -172,7 +172,7 @@ const departments = [
     },
     {
         name: 'Operations',
-        emoji: '○',
+        icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFB380" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>,
         color: '#FFB380',
         roles: [
             { title: 'People Operations Lead', location: 'Remote · US/EU', type: 'Full-time' },
@@ -243,12 +243,12 @@ const testimonials = [
 ];
 
 const lifeImages = [
-    { label: 'Tokyo Offsite 2025', tag: 'RETREAT', aspect: 'tall', emoji: '🗼', gradient: 'linear-gradient(135deg, #FF6B00 0%, #FF8533 50%, #FFB380 100%)' },
-    { label: 'Hack Week Finals', tag: 'CULTURE', aspect: 'wide', emoji: '🚀', gradient: 'linear-gradient(135deg, #1A1A1A 0%, #333 50%, #555 100%)' },
-    { label: 'Team Standup', tag: 'DAILY', aspect: 'square', emoji: '☕', gradient: 'linear-gradient(135deg, #E85D00 0%, #FF6B00 50%, #FF8533 100%)' },
-    { label: 'Product Launch Day', tag: 'MILESTONE', aspect: 'wide', emoji: '🎉', gradient: 'linear-gradient(135deg, #FF8533 0%, #FFB380 50%, #FFD9B3 100%)' },
-    { label: 'Design Sprint', tag: 'WORKSHOP', aspect: 'tall', emoji: '🎨', gradient: 'linear-gradient(135deg, #2A1A0A 0%, #4A2A0A 50%, #6A3A0A 100%)' },
-    { label: 'Friday Demos', tag: 'CULTURE', aspect: 'square', emoji: '🎤', gradient: 'linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 50%, #2A2A2A 100%)' },
+    { label: 'Tokyo Offsite 2025', tag: 'RETREAT', aspect: 'tall', icon: <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><path d="M9 9v.01"/><path d="M9 12v.01"/><path d="M9 15v.01"/><path d="M9 18v.01"/></svg>, gradient: 'linear-gradient(135deg, #FF6B00 0%, #FF8533 50%, #FFB380 100%)' },
+    { label: 'Hack Week Finals', tag: 'CULTURE', aspect: 'wide', icon: <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>, gradient: 'linear-gradient(135deg, #1A1A1A 0%, #333 50%, #555 100%)' },
+    { label: 'Team Standup', tag: 'DAILY', aspect: 'square', icon: <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>, gradient: 'linear-gradient(135deg, #E85D00 0%, #FF6B00 50%, #FF8533 100%)' },
+    { label: 'Product Launch Day', tag: 'MILESTONE', aspect: 'wide', icon: <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12v0c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11v0c-.18.95-1.12 1.54-2.04 1.2l-.19-.07"/><path d="m22 2-1 1"/></svg>, gradient: 'linear-gradient(135deg, #FF8533 0%, #FFB380 50%, #FFD9B3 100%)' },
+    { label: 'Design Sprint', tag: 'WORKSHOP', aspect: 'tall', icon: <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="m2 13 5.2-8.5C8 3.5 9.2 3 10.5 3h3c1.3 0 2.5.5 3.3 1.5L22 13"/><path d="M14.3 4.1 12 8.5 9.7 4.1"/><path d="M2 13h20"/><path d="M7 13v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-8"/></svg>, gradient: 'linear-gradient(135deg, #2A1A0A 0%, #4A2A0A 50%, #6A3A0A 100%)' },
+    { label: 'Friday Demos', tag: 'CULTURE', aspect: 'square', icon: <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="m12 8-9.04 9.06a2.82 2.82 0 1 0 3.98 3.98L16 12"/><circle cx="17" cy="7" r="5"/></svg>, gradient: 'linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 50%, #2A2A2A 100%)' },
 ];
 
 const marqueeItems = [
@@ -1331,7 +1331,7 @@ export default function CareersPage() {
                                         filter: 'grayscale(0.1)',
                                         opacity: 0.9,
                                     }}>
-                                        {img.emoji}
+                                        {img.icon}
                                     </div>
 
                                     {/* Image placeholder badge */}
@@ -1602,7 +1602,7 @@ export default function CareersPage() {
                                             display: 'flex', alignItems: 'center', gap: '12px',
                                             padding: '16px 0 12px',
                                         }}>
-                                            <span style={{ fontSize: '16px' }}>{dept.emoji}</span>
+                                            <span style={{ display: 'inline-flex' }}>{dept.icon}</span>
                                             <h3 style={{
                                                 fontFamily: 'var(--font-heading)', fontSize: '1.1rem',
                                                 fontWeight: 700, color: '#1A1A1A',
