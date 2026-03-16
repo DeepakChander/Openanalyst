@@ -242,7 +242,7 @@ const LLMModels: React.FC = () => {
                                 style={{
                                     display: 'grid',
                                     gridTemplateColumns: '1fr auto auto',
-                                    gap: '16px',
+                                    gap: '8px 16px',
                                     alignItems: 'center',
                                     padding: '14px 20px',
                                     borderRadius: '12px',

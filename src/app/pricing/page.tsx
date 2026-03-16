@@ -665,15 +665,40 @@ export default function PricingPage() {
                         margin-right: auto !important;
                     }
                     .compare-row {
-                        grid-template-columns: 1.2fr 1fr 1fr 1fr !important;
+                        grid-template-columns: 1.5fr 0.8fr 0.8fr 0.8fr !important;
                         font-size: 12px !important;
-                        padding: 12px 16px !important;
+                        padding: 12px 12px !important;
+                    }
+                    .compare-row span {
+                        font-size: 12px !important;
+                    }
+                    /* Fix sticky header overlap on mobile */
+                    .compare-row[style*="sticky"] {
+                        position: relative !important;
+                        top: 0 !important;
                     }
                     .credit-row, .credits-section div[style*="grid-template-columns"] {
                         grid-template-columns: 1fr 1fr 1fr 1fr !important;
                     }
                     .credit-row span:last-child, .credits-section div[style*="grid-template-columns"] span:last-child {
                         display: none !important;
+                    }
+                }
+                @media (max-width: 480px) {
+                    .compare-row {
+                        grid-template-columns: 1.2fr 0.7fr 0.7fr 0.7fr !important;
+                        padding: 10px 8px !important;
+                        gap: 4px !important;
+                    }
+                    .compare-row span {
+                        font-size: 11px !important;
+                    }
+                    .credit-row {
+                        padding: 10px 12px !important;
+                        gap: 8px !important;
+                    }
+                    .credit-row span {
+                        font-size: 11px !important;
                     }
                 }
             `}</style>

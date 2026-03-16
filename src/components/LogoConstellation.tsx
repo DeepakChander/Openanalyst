@@ -42,8 +42,17 @@ const LogoCard: React.FC<{
   const springX = useSpring(mouseX, { stiffness: 300, damping: 20 });
   const springY = useSpring(mouseY, { stiffness: 300, damping: 20 });
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 600);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
   const angle = (index / totalInRing) * 360;
-  const radius = ring === 'inner' ? 140 : 240;
+  const radius = ring === 'inner' ? (isMobile ? 80 : 140) : (isMobile ? 140 : 240);
   const orbitDuration = ring === 'inner' ? 60 : 90;
   const direction = ring === 'inner' ? 1 : -1;
 
@@ -178,9 +187,16 @@ const LogoConstellation: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [mounted, setMounted] = useState(false);
+  const [containerSize, setContainerSize] = useState(560);
 
   useEffect(() => {
     setMounted(true);
+    const updateSize = () => {
+      setContainerSize(window.innerWidth < 600 ? Math.min(320, window.innerWidth - 40) : 560);
+    };
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
   }, []);
 
   return (
@@ -257,8 +273,8 @@ const LogoConstellation: React.FC = () => {
       <div style={{
         position: 'relative',
         width: '100%',
-        maxWidth: 560,
-        height: 560,
+        maxWidth: containerSize,
+        height: containerSize,
         margin: '0 auto',
       }}>
         {/* Orbital rings (SVG) */}
@@ -268,15 +284,15 @@ const LogoConstellation: React.FC = () => {
             left: '50%',
             top: '50%',
             transform: 'translate(-50%, -50%)',
-            width: 560,
-            height: 560,
+            width: containerSize,
+            height: containerSize,
             pointerEvents: 'none',
           }}
           viewBox="-280 -280 560 560"
         >
           {/* Inner ring */}
           <motion.circle
-            cx="0" cy="0" r="140"
+            cx="0" cy="0" r={containerSize < 400 ? 80 : 140}
             fill="none"
             stroke="rgba(255,255,255,0.06)"
             strokeWidth="1"
@@ -287,7 +303,7 @@ const LogoConstellation: React.FC = () => {
           />
           {/* Outer ring */}
           <motion.circle
-            cx="0" cy="0" r="240"
+            cx="0" cy="0" r={containerSize < 400 ? 140 : 240}
             fill="none"
             stroke="rgba(255,255,255,0.04)"
             strokeWidth="1"
@@ -298,7 +314,7 @@ const LogoConstellation: React.FC = () => {
           />
           {/* Glow ring for inner */}
           <motion.circle
-            cx="0" cy="0" r="140"
+            cx="0" cy="0" r={containerSize < 400 ? 80 : 140}
             fill="none"
             stroke="rgba(255,107,0,0.08)"
             strokeWidth="2"

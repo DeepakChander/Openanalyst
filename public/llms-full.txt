@@ -1,0 +1,105 @@
+# OpenAnalyst — Complete Reference
+
+> AI marketing agent platform that plans, creates, and optimizes campaigns across every channel.
+
+## Overview
+
+OpenAnalyst is an AI-powered marketing automation platform founded in Q1 2024. It provides 42 specialized AI agents and 14 agentic skills that autonomously manage multi-channel marketing campaigns for SaaS companies, e-commerce businesses, and marketing agencies worldwide.
+
+The platform serves 10,000+ campaigns deployed across 150+ countries with a 99.9% uptime SLA.
+
+## Product Architecture
+
+### AI Agents (42 Total)
+OpenAnalyst uses specialized AI agents that work together autonomously:
+
+1. **AI Vibe Marketer** — Full-stack marketing orchestrator. Plans, creates, and optimizes campaigns across every channel with multi-channel optimization, A/B testing, and real-time performance analytics.
+2. **Content Strategist** — Generates high-converting copy for ads, emails, landing pages, blog posts, and social media.
+3. **Ad Optimizer** — Manages paid advertising budgets and creatives across Google Ads, Meta Ads, LinkedIn, and TikTok.
+4. **Audience Analyst** — Segments audiences, builds lookalike profiles, and identifies high-value customer cohorts using predictive modeling.
+5. **Lead Scorer** — Ranks and prioritizes leads based on behavioral signals, engagement patterns, and conversion probability.
+6. **Competitor Intelligence** — Monitors competitor campaigns, pricing strategies, ad spend, and market positioning.
+7. **Email Campaign Manager** — Creates, segments, and optimizes email marketing sequences with personalized content.
+8. **Social Media Manager** — Schedules, publishes, and optimizes social media content across platforms.
+9. **SEO Analyst** — Monitors search rankings, identifies keyword opportunities, and optimizes content for organic traffic.
+10. **Budget Allocator** — Dynamically distributes marketing budget across channels based on real-time performance data.
+
+### Agentic Skills (14 Total)
+Autonomous workflow engines that execute complex marketing tasks end-to-end without human intervention.
+
+### Integrations (27+)
+- **Communication**: Gmail, Slack, WhatsApp, Twilio
+- **CRM**: HubSpot, Salesforce
+- **Advertising**: Google Ads, Meta Ads (Facebook/Instagram), LinkedIn Ads, TikTok Ads
+- **Social Media**: Facebook, LinkedIn, YouTube, Twitter/X
+- **E-commerce**: Shopify, Stripe
+- **Productivity**: Notion, Google Sheets, Airtable, Google Drive, Google Calendar, Dropbox, Calendly, Zoom
+- **Analytics**: Google Analytics
+- **Database**: Supabase
+- **Support**: Intercom
+- **Email**: Mailchimp
+
+## Pricing Details
+
+### Trial Pack — $1
+- 500 credits (valid 15 days)
+- 5 Agentic Skills
+- 26 Specialist Agents
+- 5 MCP integrations (Gmail, Google Drive, Slack, Google Ads, Meta Ads)
+- Community support
+
+### Growth Pack — $399/month
+- 25,000 credits per month
+- 14 Agentic Skills
+- 42 Specialist Agents
+- 27+ MCP integrations
+- Priority support
+- Custom workflows
+- Advanced analytics
+
+### CLI Pricing (BYOK — Bring Your Own Key)
+Connect your own API keys for LLM providers and pay only for OpenAnalyst orchestration credits:
+- Starter: 500 credits — $5 ($0.010/credit)
+- Standard: 2,500 credits — $20 ($0.008/credit, save 20%)
+- Pro: 10,000 credits — $60 ($0.006/credit, save 40%)
+- Scale: 50,000 credits — $200 ($0.004/credit, save 60%)
+- Enterprise: 500,000 credits — $1,500 ($0.003/credit, save 70%)
+
+## Platform Availability
+- Web (dashboard)
+- macOS (native app)
+- Windows (native app)
+- Linux (native app)
+- CLI (command-line interface)
+
+## Security & Compliance
+- SOC 2 Type II certified
+- GDPR compliant
+- Data never trains external models
+- Campaign integrity checks before going live
+- Enterprise-grade encryption
+
+## Key Metrics
+- 10,000+ campaigns deployed
+- 42 AI agents working 24/7
+- 99.9% uptime SLA
+- 150+ countries served
+
+## Company Values
+1. **Innovation** — AI-first thinking in everything built
+2. **Simplicity** — Complex problems, elegant solutions
+3. **Trust** — SOC 2 Type II, GDPR compliant, data privacy
+4. **Impact** — Real growth, not vanity metrics
+
+## Use Cases
+- **SaaS Companies**: Scale customer acquisition, reduce CAC, automate content marketing
+- **E-commerce**: Optimize ad spend, personalize customer journeys, increase conversion rates
+- **Agencies**: Manage multiple client campaigns, standardize workflows, improve ROI reporting
+- **Startups**: Launch and iterate on marketing campaigns quickly with limited team
+
+## Contact
+- Website: https://openanalyst.com
+- Email: Available via contact form at https://openanalyst.com/contact/
+
+## Documentation
+Full API documentation, guides, and configuration references available at https://openanalyst.com/docs/

@@ -1183,6 +1183,24 @@ export default function AboutPage() {
                     .hero-3d-container { height: 350px !important; }
                     .hero-stats { flex-wrap: wrap !important; gap: 24px !important; justify-content: center !important; }
                     .hero-badge-anim[style*="position: absolute"] { display: none; }
+                    /* Stats strip — wrap on mobile */
+                    section > div > div[style*="gap: 64px"] {
+                        flex-wrap: wrap !important;
+                        gap: 24px 32px !important;
+                        justify-content: center !important;
+                    }
+                    /* Metrics section */
+                    .metrics-section > div > div[style*="repeat(4"] {
+                        grid-template-columns: repeat(2, 1fr) !important;
+                    }
+                }
+                @media (max-width: 480px) {
+                    section > div > div[style*="gap: 64px"] {
+                        gap: 20px 24px !important;
+                    }
+                    .metrics-section > div > div[style*="repeat(4"] {
+                        grid-template-columns: 1fr !important;
+                    }
                 }
             `}</style>
         </div>

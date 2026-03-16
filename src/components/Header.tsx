@@ -169,7 +169,7 @@ const Header: React.FC = () => {
                         {/* Desktop CTA */}
                         <a
                             href="https://app.openanalyst.com"
-                            className="hidden lg:inline-flex btn-primary"
+                            className="hidden md:inline-flex btn-primary"
                             style={{ padding: '10px 24px', fontSize: '13px' }}
                         >
                             Get Started

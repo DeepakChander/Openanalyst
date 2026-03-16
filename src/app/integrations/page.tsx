@@ -1,4 +1,29 @@
+import type { Metadata } from 'next';
 import { Header, Footer, Integrations as IntegrationsSection } from '@/components';
+
+export const metadata: Metadata = {
+  title: "Integrations - Connect 27+ Marketing Tools & Platforms",
+  description:
+    "Connect OpenAnalyst with 27+ tools: Gmail, HubSpot, Google Ads, Meta, LinkedIn, Slack, Shopify, Stripe, Salesforce, TikTok, and more. Unified marketing automation.",
+  keywords: [
+    "marketing integrations",
+    "AI marketing integrations",
+    "HubSpot integration",
+    "Google Ads integration",
+    "Meta Ads integration",
+    "Shopify marketing automation",
+    "marketing tool integrations",
+  ],
+  alternates: {
+    canonical: "https://openanalyst.com/integrations/",
+  },
+  openGraph: {
+    title: "27+ Marketing Integrations - Connect Your Entire Stack",
+    description:
+      "Connect OpenAnalyst with Gmail, HubSpot, Google Ads, Meta, LinkedIn, Shopify, Stripe, and 20+ more tools.",
+    url: "https://openanalyst.com/integrations/",
+  },
+};
 
 export default function IntegrationsPage() {
     return (

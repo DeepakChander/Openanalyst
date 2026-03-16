@@ -1,9 +1,19 @@
+import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import {
   Header,
   Hero,
   Footer
 } from '@/components';
+
+export const metadata: Metadata = {
+  title: "OpenAnalyst - AI Marketing Agent Platform | Automate Campaigns with AI",
+  description:
+    "OpenAnalyst is the #1 AI marketing agent platform. 42 AI agents automate campaign creation, optimization, and analytics across every channel. 27+ integrations. Start for $1.",
+  alternates: {
+    canonical: "https://openanalyst.com/",
+  },
+};
 
 // Lazy load below-the-fold sections
 const MarqueeStrip = dynamic(() => import('@/components/MarqueeStrip'), { ssr: true });

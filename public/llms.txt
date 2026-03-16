@@ -1,0 +1,51 @@
+# OpenAnalyst
+
+> AI marketing agent platform that plans, creates, and optimizes campaigns across every channel.
+
+OpenAnalyst is an AI-powered marketing automation platform with 42 specialized AI agents and 14 agentic skills that autonomously manage multi-channel marketing campaigns. The platform integrates with 27+ marketing tools and provides real-time campaign optimization, predictive analytics, and intelligent budget allocation.
+
+## Core Capabilities
+
+- **42 AI Marketing Agents**: Specialized agents for content creation, ad optimization, audience segmentation, lead scoring, competitor analysis, and more.
+- **14 Agentic Skills**: Autonomous workflow engines that handle end-to-end campaign management without human intervention.
+- **27+ Integrations**: Connect with Gmail, Slack, HubSpot, Google Ads, LinkedIn, Meta, TikTok, Stripe, Shopify, Salesforce, and more.
+- **Multi-Channel Orchestration**: Coordinate campaigns across Email, Social Media, Paid Ads, SMS, and Web simultaneously.
+- **Real-Time Optimization**: AI-powered feedback loops that continuously optimize campaigns for maximum ROI.
+- **Predictive Analytics**: Forecast campaign performance, identify trends, and allocate budgets intelligently.
+
+## Featured Agents
+
+- **AI Vibe Marketer**: Full-stack marketing agent that orchestrates end-to-end campaigns with A/B testing and real-time performance analytics.
+- **Content Strategist**: Generates high-converting copy, blog posts, ad creatives, and social media content.
+- **Ad Optimizer**: Manages and optimizes paid advertising across Google Ads, Meta Ads, LinkedIn Ads, and TikTok Ads.
+- **Audience Analyst**: Segments audiences, builds lookalike profiles, and identifies high-value customer cohorts.
+- **Lead Scorer**: Ranks and prioritizes leads based on engagement signals and conversion probability.
+- **Competitor Intelligence**: Monitors competitor campaigns, pricing, and positioning in real-time.
+
+## Pricing
+
+- **Trial Pack**: $1 for 500 credits, 26 agents, 5 integrations (15-day trial)
+- **Growth Pack**: $399/month for 25,000 credits, 42 agents, 27+ integrations, priority support
+- **CLI (BYOK)**: Bring Your Own API Keys — pay only for orchestration credits
+
+## Technology
+
+- SOC 2 Type II certified
+- GDPR compliant
+- Your data never trains external models
+- 99.9% uptime SLA
+- Available on Web, macOS, Windows, and Linux
+
+## Links
+
+- Website: https://openanalyst.com
+- Documentation: https://openanalyst.com/docs/
+- Pricing: https://openanalyst.com/pricing/
+- Features: https://openanalyst.com/features/
+- Integrations: https://openanalyst.com/integrations/
+- Contact: https://openanalyst.com/contact/
+- About: https://openanalyst.com/about/
+- Careers: https://openanalyst.com/careers/
+- Changelog: https://openanalyst.com/changelog/
+- Privacy Policy: https://openanalyst.com/privacy-policy/
+- Terms of Service: https://openanalyst.com/terms-of-use/

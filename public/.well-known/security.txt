@@ -1,0 +1,3 @@
+Contact: https://openanalyst.com/contact/
+Preferred-Languages: en
+Canonical: https://openanalyst.com/.well-known/security.txt

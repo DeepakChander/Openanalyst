@@ -247,8 +247,8 @@ const Hero: React.FC = () => {
                     </div>
                 </div>
 
-                {/* RIGHT — Dashboard mockup */}
-                <div style={{
+                {/* RIGHT — Dashboard mockup (hidden on mobile) */}
+                <div className="hero-dashboard-mobile-hide" style={{
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',

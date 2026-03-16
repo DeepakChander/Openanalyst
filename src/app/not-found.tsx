@@ -3,22 +3,54 @@ import { Header, Footer } from '@/components';
 
 export default function NotFound() {
     return (
-        <div className="min-h-screen bg-black text-white flex flex-col">
+        <div style={{ minHeight: '100vh', backgroundColor: '#FFFFFF', color: '#1A1A1A', display: 'flex', flexDirection: 'column' }}>
             <Header />
-            <main className="flex-1 flex flex-col items-center justify-center text-center px-4 relative overflow-hidden">
-                {/* Background blobs */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-primary/10 rounded-full blur-[120px] pointer-events-none" />
+            <main style={{
+                flex: 1, display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'center',
+                textAlign: 'center', padding: '120px 20px 60px',
+                position: 'relative', overflow: 'hidden',
+            }}>
+                {/* Background glow */}
+                <div style={{
+                    position: 'absolute', top: '50%', left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '500px', height: '500px',
+                    background: 'radial-gradient(circle, rgba(255,107,0,0.06) 0%, transparent 70%)',
+                    pointerEvents: 'none', borderRadius: '50%',
+                }} />
 
-                <h1 className="text-[10rem] font-heading font-bold text-transparent bg-clip-text bg-gradient-to-br from-white/20 to-transparent leading-none select-none">
+                <h1 style={{
+                    fontSize: 'clamp(6rem, 20vw, 10rem)',
+                    fontFamily: 'var(--font-heading)',
+                    fontWeight: 800,
+                    background: 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, transparent 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                    lineHeight: 1,
+                    userSelect: 'none',
+                }}>
                     404
                 </h1>
-                <h2 className="text-4xl font-bold mb-4 z-10">Page Not Found</h2>
-                <p className="text-gray-400 max-w-md mb-8 z-10">
-                    The page you're looking for seems to have vanished into the digital void.
+                <h2 style={{
+                    fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
+                    fontWeight: 700, marginBottom: '16px',
+                    position: 'relative', zIndex: 10,
+                    fontFamily: 'var(--font-heading)',
+                }}>Page Not Found</h2>
+                <p style={{
+                    color: '#8A8A8A', maxWidth: '400px',
+                    marginBottom: '32px', position: 'relative', zIndex: 10,
+                    fontSize: 'clamp(14px, 2vw, 16px)', lineHeight: 1.7,
+                    fontFamily: 'var(--font-body)',
+                }}>
+                    The page you&apos;re looking for seems to have vanished into the digital void.
                 </p>
                 <Link
                     href="/"
-                    className="z-10 px-8 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-primary/90 transition-all hover:scale-105 shadow-[0_0_20px_rgba(255,133,82,0.3)]"
+                    className="btn-primary"
+                    style={{ position: 'relative', zIndex: 10 }}
                 >
                     Return Home
                 </Link>
