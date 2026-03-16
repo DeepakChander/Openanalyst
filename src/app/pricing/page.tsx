@@ -146,9 +146,10 @@ export default function PricingPage() {
         });
 
         // FAQs
-        gsap.from('.faq-item', {
-            y: 24, opacity: 0, stagger: 0.06, duration: 0.5, ease: 'power3.out',
-            scrollTrigger: { trigger: '.faq-section', start: 'top 85%', once: true },
+        gsap.fromTo('.faq-item',
+            { y: 24, opacity: 0 },
+            { y: 0, opacity: 1, stagger: 0.06, duration: 0.5, ease: 'power3.out',
+            scrollTrigger: { trigger: '.faq-section', start: 'top 90%', once: true },
         });
 
         // Bottom CTA
@@ -554,7 +555,7 @@ export default function PricingPage() {
                                 border: '1px solid',
                                 borderColor: openFaq === i ? 'rgba(255,107,0,0.25)' : '#E5E5E5',
                                 backgroundColor: openFaq === i ? 'rgba(255,107,0,0.02)' : '#FFFFFF',
-                                transition: 'all 0.3s ease',
+                                transition: 'border-color 0.3s ease, background-color 0.3s ease',
                                 overflow: 'hidden',
                             }}>
                                 <button onClick={() => toggleFaq(i)} style={{

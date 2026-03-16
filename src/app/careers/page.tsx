@@ -1103,23 +1103,6 @@ export default function CareersPage() {
                         </div>
                     </div>
 
-                    {/* Scroll indicator */}
-                    <div className="hero-scroll-hint" style={{
-                        position: 'absolute', bottom: '36px', left: '50%',
-                        transform: 'translateX(-50%)', display: 'flex',
-                        flexDirection: 'column', alignItems: 'center', gap: '8px',
-                    }}>
-                        <span style={{
-                            fontFamily: 'var(--font-mono)', fontSize: '10px',
-                            color: 'rgba(255,255,255,0.25)', letterSpacing: '3px',
-                            textTransform: 'uppercase',
-                        }}>Scroll</span>
-                        <div style={{
-                            width: '1px', height: '36px',
-                            background: 'linear-gradient(180deg, rgba(255,107,0,0.6) 0%, transparent 100%)',
-                            animation: 'scroll-line 2s ease-in-out infinite',
-                        }} />
-                    </div>
                 </section>
 
                 {/* ═══════════════════════════════════════════════

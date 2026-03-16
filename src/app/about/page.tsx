@@ -669,14 +669,6 @@ export default function AboutPage() {
                     </div>
                 </div>
 
-                {/* Scroll indicator */}
-                <div style={{
-                    position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)', zIndex: 2,
-                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
-                }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgba(26,26,26,0.35)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Scroll to explore</span>
-                    <div style={{ width: '1px', height: '40px', background: 'linear-gradient(180deg, var(--orange), transparent)' }} />
-                </div>
             </section>
 
             {/* ═══════════ MISSION & VISION ═══════════ */}

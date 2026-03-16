@@ -5,7 +5,7 @@ import AgentationProvider from "@/components/AgentationProvider";
 import SmoothScroll from "@/components/SmoothScroll";
 import NoiseOverlay from "@/components/NoiseOverlay";
 import CursorGlow from "@/components/CursorGlow";
-import PageTransition from "@/components/PageTransition";
+import ScrollToTop from "@/components/ScrollToTop";
 import ScrollProgress from "@/components/ScrollProgress";
 import "./globals.css";
 
@@ -61,9 +61,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           />
         </noscript>
         <SmoothScroll>
-          <PageTransition>
-            {children}
-          </PageTransition>
+          <ScrollToTop />
+          {children}
         </SmoothScroll>
         <ScrollProgress />
         <CursorGlow />

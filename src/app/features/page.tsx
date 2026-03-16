@@ -432,13 +432,6 @@ export default function FeaturesPage() {
                     </div>
                 </div>
 
-                <div style={{
-                    position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)', zIndex: 2,
-                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
-                }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#8A8A8A', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Scroll</span>
-                    <div style={{ width: '1px', height: '40px', background: 'linear-gradient(180deg, var(--rust), transparent)' }} />
-                </div>
             </section>
 
             {/* ═══════════ STATS BAR — Light ═══════════ */}

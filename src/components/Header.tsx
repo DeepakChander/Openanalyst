@@ -118,16 +118,16 @@ const Header: React.FC = () => {
                     {/* Logo */}
                     <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', zIndex: 101 }}>
                         <div style={{
-                            width: '32px',
-                            height: '32px',
+                            width: '36px',
+                            height: '36px',
                             borderRadius: '10px',
-                            background: 'linear-gradient(135deg, #FF6B00, #E85D00)',
+                            background: '#1A1A1A',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             overflow: 'hidden',
                         }}>
-                            <img src="/images/logo.png" alt="OpenAnalyst" width={24} height={24} style={{ objectFit: 'contain' }} />
+                            <img src="/images/new-logo.png" alt="OpenAnalyst" width={26} height={26} style={{ objectFit: 'contain' }} />
                         </div>
                         <span style={{
                             fontFamily: 'var(--font-heading)',
