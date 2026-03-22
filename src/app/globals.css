@@ -445,12 +445,11 @@ body {
 }
 
 @media (max-width: 900px) {
-  #hero-section > div:nth-child(3) {
+  .hero-grid {
     grid-template-columns: 1fr !important;
     text-align: center;
-    padding-top: 100px !important;
-    padding-bottom: 60px !important;
-    gap: 20px !important;
+    padding: 100px 24px 60px !important;
+    gap: 24px !important;
   }
 
   #hero-section .hero-sub {
@@ -461,10 +460,17 @@ body {
   #hero-section .hero-proof,
   #hero-section .hero-logos {
     justify-content: center !important;
+    flex-wrap: wrap !important;
   }
 
-  #hero-section div[style*="flex-wrap"] {
+  .hero-ctas {
+    justify-content: center !important;
+  }
+
+  .hero-ctas a {
+    width: 100%;
     justify-content: center;
+    text-align: center;
   }
 
   /* Hide dashboard mockup on mobile to prevent overlap */
@@ -474,9 +480,30 @@ body {
 }
 
 @media (max-width: 600px) {
-  #hero-section > div:nth-child(3) {
-    padding: 100px 16px 40px !important;
+  .hero-grid {
+    padding: 90px 16px 40px !important;
     gap: 16px !important;
+  }
+
+  .hero-ctas a {
+    padding: 12px 24px !important;
+    font-size: 14px !important;
+  }
+
+  #hero-section .hero-proof {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  #hero-section .hero-logos {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .hero-grid {
+    padding: 80px 12px 32px !important;
   }
 }
 
@@ -857,6 +884,69 @@ body {
     font-size: 14px;
   }
 
+  /* Stats section — stack header columns */
+  .intro-text-block { grid-column: 1 / -1; }
+
+  /* HowItWorks — stack cards on tablet */
+  #how-it-works > div:nth-child(3) {
+    grid-template-columns: 1fr !important;
+    max-width: 520px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .hiw-progress-bar {
+    display: none !important;
+  }
+
+  /* PlatformAvailability — reduce excessive padding */
+  section[style*="padding: 120px 0"] {
+    padding: 80px 0 !important;
+  }
+
+  /* Platform grid — 2 columns on tablet */
+  .platform-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Footer CTA — reduce padding on buttons */
+  .footer-cta-section {
+    padding: 80px 20px !important;
+  }
+
+  .footer-cta-section a {
+    padding: 14px 28px !important;
+    font-size: 14px !important;
+  }
+
+  /* Footer grid — better mobile layout */
+  .footer-dark-grid > div > div:first-child {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 32px !important;
+  }
+
+  /* Footer newsletter */
+  .footer-newsletter-reveal {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  .footer-newsletter-reveal form {
+    width: 100%;
+    flex-direction: column !important;
+  }
+
+  .footer-newsletter-reveal input {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .footer-newsletter-reveal button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
   /* Docs layout — collapse sidebar */
   .docs-sidebar-desktop { display: none !important; }
   .docs-toc-desktop { display: none !important; }
@@ -882,6 +972,56 @@ body {
   .heading-xl { font-size: clamp(2rem, 10vw, 3rem); }
   .heading-lg { font-size: clamp(1.8rem, 6vw, 2.5rem); }
   .heading-md { font-size: clamp(1.5rem, 4vw, 2rem); }
+
+  /* Platform grid — 1 column on small mobile */
+  .platform-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Pricing section — reduce padding */
+  section[style*="padding: 120px 0"] {
+    padding: 60px 0 !important;
+  }
+
+  /* Footer grid — single column */
+  .footer-dark-grid > div > div:first-child {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+
+  /* Footer CTA */
+  .footer-cta-section {
+    padding: 60px 16px !important;
+  }
+
+  .footer-cta-section a {
+    padding: 12px 20px !important;
+    font-size: 13px !important;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Footer bottom bar */
+  .footer-bottom-reveal {
+    flex-direction: column !important;
+    text-align: center;
+    gap: 12px !important;
+  }
+
+  .footer-bottom-reveal > div {
+    justify-content: center !important;
+  }
+
+  /* Testimonials section — less padding */
+  section[style*="padding: 6rem 1.5rem"] {
+    padding: 3rem 1rem !important;
+  }
+
+  /* LogoConstellation — reduce padding */
+  section[style*="padding: 100px 0"] {
+    padding: 60px 0 !important;
+  }
 }
 
 /* Header — reduce padding on small screens */

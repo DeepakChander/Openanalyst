@@ -857,7 +857,9 @@ const Footer: React.FC = () => {
                                         border: `1px solid ${emailFocused ? 'rgba(255,107,0,0.5)' : 'rgba(255,255,255,0.1)'}`,
                                         borderRadius: '10px',
                                         outline: 'none',
-                                        width: '260px',
+                                        width: '100%',
+                                        minWidth: '200px',
+                                        maxWidth: '260px',
                                         transition: 'all 0.3s ease',
                                         boxShadow: emailFocused ? '0 0 20px rgba(255,107,0,0.1)' : 'none',
                                     }}

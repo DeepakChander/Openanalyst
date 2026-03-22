@@ -340,9 +340,16 @@ const HowItWorks: React.FC = () => {
                 @media (max-width: 900px) {
                     #how-it-works > div:nth-child(3) {
                         grid-template-columns: 1fr !important;
-                        max-width: 480px !important;
+                        max-width: 520px !important;
+                        margin-left: auto !important;
+                        margin-right: auto !important;
                     }
                     .hiw-progress-bar { display: none !important; }
+                }
+                @media (max-width: 600px) {
+                    #how-it-works {
+                        padding: 60px 16px 48px !important;
+                    }
                 }
             `}</style>
         </section>

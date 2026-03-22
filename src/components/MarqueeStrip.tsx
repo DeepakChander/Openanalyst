@@ -9,8 +9,13 @@ interface LogoItem {
   color?: string;
 }
 
+interface MarqueeItem {
+  text: string;
+  icon?: React.ReactNode;
+}
+
 interface MarqueeStripProps {
-  items?: string[];
+  items?: string[] | MarqueeItem[];
   logos?: LogoItem[];
   speed?: number;
   separator?: string;
@@ -71,10 +76,10 @@ const MarqueeStrip: React.FC<MarqueeStripProps> = ({
 
   const itemStyle: React.CSSProperties = {
     fontFamily: 'var(--font-body)',
-    fontSize: '14px',
+    fontSize: 'clamp(11px, 2.5vw, 14px)',
     fontWeight: 500,
     textTransform: 'uppercase',
-    letterSpacing: '0.15em',
+    letterSpacing: '0.12em',
     color: textColor,
     flexShrink: 0,
   };
@@ -89,12 +94,19 @@ const MarqueeStrip: React.FC<MarqueeStripProps> = ({
   };
 
   const renderTextItems = () =>
-    (items || []).map((item, i) => (
-      <React.Fragment key={i}>
-        <span style={itemStyle}>{item}</span>
-        <span style={sepStyle}>{separator}</span>
-      </React.Fragment>
-    ));
+    (items || []).map((item, i) => {
+      const text = typeof item === 'string' ? item : item.text;
+      const icon = typeof item === 'string' ? null : item.icon;
+      return (
+        <React.Fragment key={i}>
+          <span style={{ ...itemStyle, display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+            {icon && <span style={{ display: 'inline-flex', flexShrink: 0, opacity: 0.7 }}>{icon}</span>}
+            {text}
+          </span>
+          <span style={sepStyle}>{separator}</span>
+        </React.Fragment>
+      );
+    });
 
   const renderLogoItems = () =>
     (logos || []).map((logo, i) => (

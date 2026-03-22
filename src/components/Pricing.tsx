@@ -214,6 +214,11 @@ const Pricing: React.FC = () => {
                         margin-right: auto !important;
                     }
                 }
+                @media (max-width: 600px) {
+                    section[style*="padding: 120px 0"] {
+                        padding: 60px 0 !important;
+                    }
+                }
             `}</style>
         </section>
     );
