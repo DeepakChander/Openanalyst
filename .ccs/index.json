@@ -1,0 +1,5459 @@
+{
+  "version": "2.0.0",
+  "timestamp": "2026-03-12T08:29:25.643Z",
+  "root": "C:\\Users\\hp\\Desktop\\OpenAnalyst.com",
+  "stats": {
+    "totalFiles": 48,
+    "totalDirs": 16,
+    "totalLines": 14822,
+    "languages": [
+      {
+        "language": "typescript",
+        "files": 41,
+        "lines": 13755,
+        "percentage": 93
+      },
+      {
+        "language": "css",
+        "files": 1,
+        "lines": 894,
+        "percentage": 6
+      },
+      {
+        "language": "json",
+        "files": 2,
+        "lines": 67,
+        "percentage": 0
+      },
+      {
+        "language": "markdown",
+        "files": 1,
+        "lines": 37,
+        "percentage": 0
+      },
+      {
+        "language": "javascript",
+        "files": 2,
+        "lines": 27,
+        "percentage": 0
+      }
+    ],
+    "techStack": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS"
+    ],
+    "entryPoints": [
+      "src/components/index.ts"
+    ]
+  },
+  "files": {
+    ".gitignore": {
+      "path": ".gitignore",
+      "role": "config",
+      "language": "",
+      "lines": 42,
+      "size": 480,
+      "hash": "985b677fbe13",
+      "lastModified": 1768991900211.684,
+      "imports": [],
+      "importedBy": [],
+      "exports": [],
+      "symbols": [],
+      "rank": "D",
+      "centrality": 0
+    },
+    "eslint.config.mjs": {
+      "path": "eslint.config.mjs",
+      "role": "unknown",
+      "language": "javascript",
+      "lines": 19,
+      "size": 465,
+      "hash": "dfa1f5f6a703",
+      "lastModified": 1768991900239.4363,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "eslintConfig",
+          "type": "const",
+          "line": 5,
+          "exported": false
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "next.config.ts": {
+      "path": "next.config.ts",
+      "role": "config",
+      "language": "typescript",
+      "lines": 17,
+      "size": 340,
+      "hash": "f5427f80393e",
+      "lastModified": 1771660928109.2502,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "nextConfig",
+          "type": "const",
+          "line": 3,
+          "exported": false
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "package.json": {
+      "path": "package.json",
+      "role": "unknown",
+      "language": "json",
+      "lines": 32,
+      "size": 704,
+      "hash": "f00dd92e17a7",
+      "lastModified": 1772268582708.0107,
+      "imports": [],
+      "importedBy": [],
+      "exports": [],
+      "symbols": [],
+      "rank": "D",
+      "centrality": 0
+    },
+    "postcss.config.mjs": {
+      "path": "postcss.config.mjs",
+      "role": "config",
+      "language": "javascript",
+      "lines": 8,
+      "size": 94,
+      "hash": "239f3ebf7174",
+      "lastModified": 1768991900184.0254,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "config",
+          "type": "const",
+          "line": 1,
+          "exported": false
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "README.md": {
+      "path": "README.md",
+      "role": "unknown",
+      "language": "markdown",
+      "lines": 37,
+      "size": 1450,
+      "hash": "f15aaa42d5d2",
+      "lastModified": 1768991900207.3765,
+      "imports": [],
+      "importedBy": [],
+      "exports": [],
+      "symbols": [],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/app/about/page.tsx": {
+      "path": "src/app/about/page.tsx",
+      "role": "unknown",
+      "language": "typescript",
+      "lines": 325,
+      "size": 19256,
+      "hash": "6520ebab1096",
+      "lastModified": 1773302443381.487,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "values",
+          "type": "const",
+          "line": 12,
+          "exported": false
+        },
+        {
+          "name": "milestones",
+          "type": "const",
+          "line": 19,
+          "exported": false
+        },
+        {
+          "name": "AboutPage",
+          "type": "function",
+          "line": 26,
+          "exported": true
+        },
+        {
+          "name": "pageRef",
+          "type": "const",
+          "line": 27,
+          "exported": false
+        },
+        {
+          "name": "reveals",
+          "type": "const",
+          "line": 35,
+          "exported": false
+        },
+        {
+          "name": "milestoneEls",
+          "type": "const",
+          "line": 46,
+          "exported": false
+        },
+        {
+          "name": "valueCards",
+          "type": "const",
+          "line": 63,
+          "exported": false
+        },
+        {
+          "name": "marketing",
+          "type": "class",
+          "line": 131,
+          "exported": false
+        },
+        {
+          "name": "marketing",
+          "type": "class",
+          "line": 150,
+          "exported": false
+        },
+        {
+          "name": "el",
+          "type": "const",
+          "line": 264,
+          "exported": false
+        },
+        {
+          "name": "el",
+          "type": "const",
+          "line": 270,
+          "exported": false
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/app/api/webhook/route.ts": {
+      "path": "src/app/api/webhook/route.ts",
+      "role": "hook",
+      "language": "typescript",
+      "lines": 31,
+      "size": 872,
+      "hash": "c269134229b4",
+      "lastModified": 1771659646558.1335,
+      "imports": [],
+      "importedBy": [],
+      "exports": [],
+      "symbols": [
+        {
+          "name": "WEBHOOK_URL",
+          "type": "const",
+          "line": 3,
+          "exported": false
+        },
+        {
+          "name": "POST",
+          "type": "function",
+          "line": 5,
+          "exported": true
+        },
+        {
+          "name": "body",
+          "type": "const",
+          "line": 7,
+          "exported": false
+        },
+        {
+          "name": "response",
+          "type": "const",
+          "line": 9,
+          "exported": false
+        },
+        {
+          "name": "data",
+          "type": "const",
+          "line": 22,
+          "exported": false
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/app/changelog/page.tsx": {
+      "path": "src/app/changelog/page.tsx",
+      "role": "unknown",
+      "language": "typescript",
+      "lines": 36,
+      "size": 1997,
+      "hash": "e961c68cd0b6",
+      "lastModified": 1768992029480.4153,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "ChangelogPage",
+          "type": "function",
+          "line": 3,
+          "exported": true
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/app/contact/page.tsx": {
+      "path": "src/app/contact/page.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 415,
+      "size": 26488,
+      "hash": "4b95f6f25364",
+      "lastModified": 1772282936209.644,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "ContactPage",
+          "type": "function",
+          "line": 9,
+          "exported": true
+        },
+        {
+          "name": "pageRef",
+          "type": "const",
+          "line": 16,
+          "exported": false
+        },
+        {
+          "name": "formRef",
+          "type": "const",
+          "line": 17,
+          "exported": false
+        },
+        {
+          "name": "successRef",
+          "type": "const",
+          "line": 18,
+          "exported": false
+        },
+        {
+          "name": "handleSubmit",
+          "type": "function",
+          "line": 32,
+          "exported": false
+        },
+        {
+          "name": "response",
+          "type": "const",
+          "line": 40,
+          "exported": false
+        },
+        {
+          "name": "handleButtonClick",
+          "type": "function",
+          "line": 67,
+          "exported": false
+        },
+        {
+          "name": "button",
+          "type": "const",
+          "line": 68,
+          "exported": false
+        },
+        {
+          "name": "rect",
+          "type": "const",
+          "line": 69,
+          "exported": false
+        },
+        {
+          "name": "ripple",
+          "type": "const",
+          "line": 70,
+          "exported": false
+        },
+        {
+          "name": "size",
+          "type": "const",
+          "line": 71,
+          "exported": false
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/app/docs/layout.tsx": {
+      "path": "src/app/docs/layout.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 46,
+      "size": 1004,
+      "hash": "fe82a6a31a5b",
+      "lastModified": 1772199032664.047,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "metadata",
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "metadata",
+          "type": "const",
+          "line": 5,
+          "exported": true
+        },
+        {
+          "name": "DocsLayout",
+          "type": "function",
+          "line": 10,
+          "exported": true
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/app/docs/[[...slug]]/page.tsx": {
+      "path": "src/app/docs/[[...slug]]/page.tsx",
+      "role": "unknown",
+      "language": "typescript",
+      "lines": 207,
+      "size": 6505,
+      "hash": "a72ac797be39",
+      "lastModified": 1772198771421.083,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "allPages",
+          "type": "const",
+          "line": 10,
+          "exported": false
+        },
+        {
+          "name": "allNavItems",
+          "type": "const",
+          "line": 17,
+          "exported": false
+        },
+        {
+          "name": "getNavigation",
+          "type": "function",
+          "line": 19,
+          "exported": false
+        },
+        {
+          "name": "index",
+          "type": "const",
+          "line": 20,
+          "exported": false
+        },
+        {
+          "name": "generateStaticParams",
+          "type": "function",
+          "line": 27,
+          "exported": true
+        },
+        {
+          "name": "slugs",
+          "type": "const",
+          "line": 28,
+          "exported": false
+        },
+        {
+          "name": "generateMetadata",
+          "type": "function",
+          "line": 35,
+          "exported": true
+        },
+        {
+          "name": "currentSlug",
+          "type": "const",
+          "line": 41,
+          "exported": false
+        },
+        {
+          "name": "page",
+          "type": "const",
+          "line": 42,
+          "exported": false
+        },
+        {
+          "name": "DocsPage",
+          "type": "function",
+          "line": 53,
+          "exported": true
+        },
+        {
+          "name": "currentSlug",
+          "type": "const",
+          "line": 59,
+          "exported": false
+        },
+        {
+          "name": "page",
+          "type": "const",
+          "line": 60,
+          "exported": false
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/app/features/page.tsx": {
+      "path": "src/app/features/page.tsx",
+      "role": "unknown",
+      "language": "typescript",
+      "lines": 672,
+      "size": 48347,
+      "hash": "701d0017495f",
+      "lastModified": 1773302551902.1626,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "SI",
+          "type": "const",
+          "line": 12,
+          "exported": false
+        },
+        {
+          "name": "integrations",
+          "type": "const",
+          "line": 14,
+          "exported": false
+        },
+        {
+          "name": "FeaturesPage",
+          "type": "function",
+          "line": 44,
+          "exported": true
+        },
+        {
+          "name": "pageRef",
+          "type": "const",
+          "line": 45,
+          "exported": false
+        },
+        {
+          "name": "sections",
+          "type": "const",
+          "line": 54,
+          "exported": false
+        },
+        {
+          "name": "counters",
+          "type": "const",
+          "line": 65,
+          "exported": false
+        },
+        {
+          "name": "target",
+          "type": "const",
+          "line": 67,
+          "exported": false
+        },
+        {
+          "name": "isFloat",
+          "type": "const",
+          "line": 68,
+          "exported": false
+        },
+        {
+          "name": "val",
+          "type": "const",
+          "line": 77,
+          "exported": false
+        },
+        {
+          "name": "intCards",
+          "type": "const",
+          "line": 85,
+          "exported": false
+        },
+        {
+          "name": "displayedIntegrations",
+          "type": "const",
+          "line": 94,
+          "exported": false
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/app/globals.css": {
+      "path": "src/app/globals.css",
+      "role": "style",
+      "language": "css",
+      "lines": 894,
+      "size": 21478,
+      "hash": "254fcd9f8914",
+      "lastModified": 1773296906087.4292,
+      "imports": [],
+      "importedBy": [
+        "src/app/layout.tsx"
+      ],
+      "exports": [],
+      "symbols": [],
+      "rank": "C",
+      "centrality": 1
+    },
+    "src/app/integrations/page.tsx": {
+      "path": "src/app/integrations/page.tsx",
+      "role": "unknown",
+      "language": "typescript",
+      "lines": 39,
+      "size": 1723,
+      "hash": "7a3ab869a7c2",
+      "lastModified": 1772269452807.6892,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "IntegrationsPage",
+          "type": "function",
+          "line": 3,
+          "exported": true
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/app/layout.tsx": {
+      "path": "src/app/layout.tsx",
+      "role": "unknown",
+      "language": "typescript",
+      "lines": 68,
+      "size": 2195,
+      "hash": "65fdd526b2b1",
+      "lastModified": 1772268673521.848,
+      "imports": [
+        "src/app/globals.css"
+      ],
+      "importedBy": [],
+      "exports": [
+        "metadata",
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "inter",
+          "type": "const",
+          "line": 9,
+          "exported": false
+        },
+        {
+          "name": "poppins",
+          "type": "const",
+          "line": 15,
+          "exported": false
+        },
+        {
+          "name": "jetbrainsMono",
+          "type": "const",
+          "line": 22,
+          "exported": false
+        },
+        {
+          "name": "metadata",
+          "type": "const",
+          "line": 29,
+          "exported": true
+        },
+        {
+          "name": "RootLayout",
+          "type": "function",
+          "line": 34,
+          "exported": true
+        },
+        {
+          "name": "f",
+          "type": "const",
+          "line": 44,
+          "exported": false
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/app/not-found.tsx": {
+      "path": "src/app/not-found.tsx",
+      "role": "unknown",
+      "language": "typescript",
+      "lines": 30,
+      "size": 1422,
+      "hash": "d1235eab24e2",
+      "lastModified": 1768992029436.3984,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "NotFound",
+          "type": "function",
+          "line": 4,
+          "exported": true
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/app/page.tsx": {
+      "path": "src/app/page.tsx",
+      "role": "unknown",
+      "language": "typescript",
+      "lines": 28,
+      "size": 470,
+      "hash": "ddb7f0c62042",
+      "lastModified": 1772269036912.3853,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "Home",
+          "type": "function",
+          "line": 12,
+          "exported": true
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/app/pricing/page.tsx": {
+      "path": "src/app/pricing/page.tsx",
+      "role": "unknown",
+      "language": "typescript",
+      "lines": 14,
+      "size": 465,
+      "hash": "08d2047ca227",
+      "lastModified": 1772269421400.4807,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "PricingPage",
+          "type": "function",
+          "line": 3,
+          "exported": true
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/app/privacy-policy/page.tsx": {
+      "path": "src/app/privacy-policy/page.tsx",
+      "role": "unknown",
+      "language": "typescript",
+      "lines": 207,
+      "size": 24211,
+      "hash": "a5f1666eb949",
+      "lastModified": 1769505079854.0205,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "PrivacyPolicyPage",
+          "type": "function",
+          "line": 3,
+          "exported": true
+        },
+        {
+          "name": "properly",
+          "type": "function",
+          "line": 49,
+          "exported": false
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/app/solutions-by-agents/page.tsx": {
+      "path": "src/app/solutions-by-agents/page.tsx",
+      "role": "unknown",
+      "language": "typescript",
+      "lines": 354,
+      "size": 19542,
+      "hash": "8aa867b63577",
+      "lastModified": 1772282951396.6682,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "featuredAgent",
+          "type": "const",
+          "line": 12,
+          "exported": false
+        },
+        {
+          "name": "otherAgents",
+          "type": "const",
+          "line": 28,
+          "exported": false
+        },
+        {
+          "name": "SolutionsPage",
+          "type": "function",
+          "line": 66,
+          "exported": true
+        },
+        {
+          "name": "pageRef",
+          "type": "const",
+          "line": 67,
+          "exported": false
+        },
+        {
+          "name": "handleCardHover",
+          "type": "const",
+          "line": 72,
+          "exported": false
+        },
+        {
+          "name": "card",
+          "type": "const",
+          "line": 73,
+          "exported": false
+        },
+        {
+          "name": "rect",
+          "type": "const",
+          "line": 74,
+          "exported": false
+        },
+        {
+          "name": "x",
+          "type": "const",
+          "line": 75,
+          "exported": false
+        },
+        {
+          "name": "y",
+          "type": "const",
+          "line": 76,
+          "exported": false
+        },
+        {
+          "name": "handleCardLeave",
+          "type": "const",
+          "line": 80,
+          "exported": false
+        },
+        {
+          "name": "lineIndex",
+          "type": "const",
+          "line": 86,
+          "exported": false
+        },
+        {
+          "name": "charIndex",
+          "type": "const",
+          "line": 87,
+          "exported": false
+        },
+        {
+          "name": "lines",
+          "type": "const",
+          "line": 89,
+          "exported": false
+        },
+        {
+          "name": "type",
+          "type": "function",
+          "line": 91,
+          "exported": false
+        },
+        {
+          "name": "line",
+          "type": "const",
+          "line": 93,
+          "exported": false
+        },
+        {
+          "name": "speed",
+          "type": "const",
+          "line": 94,
+          "exported": false
+        },
+        {
+          "name": "cursorInterval",
+          "type": "const",
+          "line": 110,
+          "exported": false
+        },
+        {
+          "name": "cards",
+          "type": "const",
+          "line": 128,
+          "exported": false
+        },
+        {
+          "name": "isWide",
+          "type": "const",
+          "line": 256,
+          "exported": false
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/app/terms-of-use/page.tsx": {
+      "path": "src/app/terms-of-use/page.tsx",
+      "role": "unknown",
+      "language": "typescript",
+      "lines": 276,
+      "size": 37937,
+      "hash": "452049153d85",
+      "lastModified": 1769505075258.049,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "TermsPage",
+          "type": "function",
+          "line": 3,
+          "exported": true
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/components/AgentationProvider.tsx": {
+      "path": "src/components/AgentationProvider.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 14,
+      "size": 320,
+      "hash": "e36f07e383e4",
+      "lastModified": 1769506186061.8113,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "AgentationComponent",
+          "type": "const",
+          "line": 5,
+          "exported": false
+        },
+        {
+          "name": "AgentationProvider",
+          "type": "function",
+          "line": 10,
+          "exported": true
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/components/Button.tsx": {
+      "path": "src/components/Button.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 101,
+      "size": 3030,
+      "hash": "da0935d7af18",
+      "lastModified": 1768992029600.8054,
+      "imports": [],
+      "importedBy": [
+        "src/components/index.ts"
+      ],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "ButtonProps",
+          "type": "interface",
+          "line": 6,
+          "exported": false
+        },
+        {
+          "name": "Button",
+          "type": "const",
+          "line": 16,
+          "exported": false
+        },
+        {
+          "name": "baseClasses",
+          "type": "const",
+          "line": 25,
+          "exported": false
+        },
+        {
+          "name": "textClasses",
+          "type": "const",
+          "line": 35,
+          "exported": false
+        },
+        {
+          "name": "arrowContainerClasses",
+          "type": "const",
+          "line": 40,
+          "exported": false
+        },
+        {
+          "name": "content",
+          "type": "const",
+          "line": 48,
+          "exported": false
+        }
+      ],
+      "rank": "C",
+      "centrality": 1
+    },
+    "src/components/docs/DocsSidebar.tsx": {
+      "path": "src/components/docs/DocsSidebar.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 212,
+      "size": 6371,
+      "hash": "07681d6de869",
+      "lastModified": 1772195884051.5598,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "DocsSidebar",
+          "type": "function",
+          "line": 8,
+          "exported": true
+        },
+        {
+          "name": "pathname",
+          "type": "const",
+          "line": 9,
+          "exported": false
+        },
+        {
+          "name": "currentSlug",
+          "type": "const",
+          "line": 11,
+          "exported": false
+        },
+        {
+          "name": "active",
+          "type": "const",
+          "line": 16,
+          "exported": false
+        },
+        {
+          "name": "isActive",
+          "type": "const",
+          "line": 140,
+          "exported": false
+        },
+        {
+          "name": "href",
+          "type": "const",
+          "line": 141,
+          "exported": false
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/components/docs/DocsTableOfContents.tsx": {
+      "path": "src/components/docs/DocsTableOfContents.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 201,
+      "size": 5720,
+      "hash": "d8675cdf3a1f",
+      "lastModified": 1772199026418.2046,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "TocItem",
+          "type": "interface",
+          "line": 6,
+          "exported": false
+        },
+        {
+          "name": "DocsTableOfContents",
+          "type": "function",
+          "line": 12,
+          "exported": true
+        },
+        {
+          "name": "observerRef",
+          "type": "const",
+          "line": 15,
+          "exported": false
+        },
+        {
+          "name": "pathname",
+          "type": "const",
+          "line": 16,
+          "exported": false
+        },
+        {
+          "name": "timer",
+          "type": "const",
+          "line": 19,
+          "exported": false
+        },
+        {
+          "name": "content",
+          "type": "const",
+          "line": 20,
+          "exported": false
+        },
+        {
+          "name": "elements",
+          "type": "const",
+          "line": 23,
+          "exported": false
+        },
+        {
+          "name": "items",
+          "type": "const",
+          "line": 24,
+          "exported": false
+        },
+        {
+          "name": "text",
+          "type": "const",
+          "line": 27,
+          "exported": false
+        },
+        {
+          "name": "id",
+          "type": "const",
+          "line": 30,
+          "exported": false
+        },
+        {
+          "name": "callback",
+          "type": "const",
+          "line": 61,
+          "exported": false
+        },
+        {
+          "name": "visible",
+          "type": "const",
+          "line": 62,
+          "exported": false
+        },
+        {
+          "name": "el",
+          "type": "const",
+          "line": 77,
+          "exported": false
+        },
+        {
+          "name": "isActive",
+          "type": "const",
+          "line": 156,
+          "exported": false
+        },
+        {
+          "name": "isH3",
+          "type": "const",
+          "line": 157,
+          "exported": false
+        },
+        {
+          "name": "el",
+          "type": "const",
+          "line": 166,
+          "exported": false
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/components/Features.tsx": {
+      "path": "src/components/Features.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 709,
+      "size": 34925,
+      "hash": "c23187ba7bc4",
+      "lastModified": 1773128563451.2136,
+      "imports": [],
+      "importedBy": [
+        "src/components/index.ts"
+      ],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "Skill",
+          "type": "interface",
+          "line": 8,
+          "exported": false
+        },
+        {
+          "name": "skills",
+          "type": "const",
+          "line": 20,
+          "exported": false
+        },
+        {
+          "name": "Features",
+          "type": "const",
+          "line": 63,
+          "exported": false
+        },
+        {
+          "name": "containerRef",
+          "type": "const",
+          "line": 64,
+          "exported": false
+        },
+        {
+          "name": "cardRefs",
+          "type": "const",
+          "line": 67,
+          "exported": false
+        },
+        {
+          "name": "particleContainerRef",
+          "type": "const",
+          "line": 68,
+          "exported": false
+        },
+        {
+          "name": "handleCardMove",
+          "type": "const",
+          "line": 73,
+          "exported": false
+        },
+        {
+          "name": "card",
+          "type": "const",
+          "line": 74,
+          "exported": false
+        },
+        {
+          "name": "rect",
+          "type": "const",
+          "line": 75,
+          "exported": false
+        },
+        {
+          "name": "x",
+          "type": "const",
+          "line": 76,
+          "exported": false
+        },
+        {
+          "name": "y",
+          "type": "const",
+          "line": 77,
+          "exported": false
+        },
+        {
+          "name": "rotateX",
+          "type": "const",
+          "line": 78,
+          "exported": false
+        },
+        {
+          "name": "rotateY",
+          "type": "const",
+          "line": 79,
+          "exported": false
+        },
+        {
+          "name": "handleCardEnter",
+          "type": "const",
+          "line": 91,
+          "exported": false
+        },
+        {
+          "name": "card",
+          "type": "const",
+          "line": 93,
+          "exported": false
+        },
+        {
+          "name": "icon",
+          "type": "const",
+          "line": 103,
+          "exported": false
+        },
+        {
+          "name": "features",
+          "type": "const",
+          "line": 112,
+          "exported": false
+        },
+        {
+          "name": "handleCardLeave",
+          "type": "const",
+          "line": 118,
+          "exported": false
+        },
+        {
+          "name": "card",
+          "type": "const",
+          "line": 120,
+          "exported": false
+        },
+        {
+          "name": "icon",
+          "type": "const",
+          "line": 128,
+          "exported": false
+        },
+        {
+          "name": "container",
+          "type": "const",
+          "line": 137,
+          "exported": false
+        },
+        {
+          "name": "particles",
+          "type": "const",
+          "line": 138,
+          "exported": false
+        },
+        {
+          "name": "i",
+          "type": "const",
+          "line": 140,
+          "exported": false
+        },
+        {
+          "name": "p",
+          "type": "const",
+          "line": 141,
+          "exported": false
+        },
+        {
+          "name": "size",
+          "type": "const",
+          "line": 142,
+          "exported": false
+        },
+        {
+          "name": "cards",
+          "type": "const",
+          "line": 201,
+          "exported": false
+        },
+        {
+          "name": "currentSkill",
+          "type": "const",
+          "line": 229,
+          "exported": false
+        }
+      ],
+      "rank": "C",
+      "centrality": 1
+    },
+    "src/components/Footer.tsx": {
+      "path": "src/components/Footer.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 369,
+      "size": 16655,
+      "hash": "aee572da1aa2",
+      "lastModified": 1772282459089.0605,
+      "imports": [
+        "src/components/Magnetic.tsx"
+      ],
+      "importedBy": [
+        "src/components/index.ts"
+      ],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "Footer",
+          "type": "const",
+          "line": 10,
+          "exported": false
+        },
+        {
+          "name": "footerRef",
+          "type": "const",
+          "line": 11,
+          "exported": false
+        },
+        {
+          "name": "words",
+          "type": "const",
+          "line": 17,
+          "exported": false
+        },
+        {
+          "name": "linkGroups",
+          "type": "const",
+          "line": 57,
+          "exported": false
+        },
+        {
+          "name": "ctaWords",
+          "type": "const",
+          "line": 91,
+          "exported": false
+        }
+      ],
+      "rank": "C",
+      "centrality": 1
+    },
+    "src/components/GrainOverlay.tsx": {
+      "path": "src/components/GrainOverlay.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 13,
+      "size": 393,
+      "hash": "66185ae992b9",
+      "lastModified": 1772268655026.6448,
+      "imports": [],
+      "importedBy": [
+        "src/components/index.ts"
+      ],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "GrainOverlay",
+          "type": "function",
+          "line": 3,
+          "exported": true
+        }
+      ],
+      "rank": "C",
+      "centrality": 1
+    },
+    "src/components/Header.tsx": {
+      "path": "src/components/Header.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 407,
+      "size": 23941,
+      "hash": "f96d8adfeeb0",
+      "lastModified": 1772279705078.6453,
+      "imports": [],
+      "importedBy": [
+        "src/components/index.ts"
+      ],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "NavItem",
+          "type": "interface",
+          "line": 9,
+          "exported": false
+        },
+        {
+          "name": "navItems",
+          "type": "const",
+          "line": 16,
+          "exported": false
+        },
+        {
+          "name": "Header",
+          "type": "const",
+          "line": 31,
+          "exported": false
+        },
+        {
+          "name": "pathname",
+          "type": "const",
+          "line": 35,
+          "exported": false
+        },
+        {
+          "name": "headerRef",
+          "type": "const",
+          "line": 36,
+          "exported": false
+        },
+        {
+          "name": "mobileMenuRef",
+          "type": "const",
+          "line": 37,
+          "exported": false
+        },
+        {
+          "name": "handleScroll",
+          "type": "function",
+          "line": 42,
+          "exported": false
+        }
+      ],
+      "rank": "C",
+      "centrality": 1
+    },
+    "src/components/Hero.tsx": {
+      "path": "src/components/Hero.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 700,
+      "size": 26989,
+      "hash": "b5430e8bb869",
+      "lastModified": 1773297692872.0515,
+      "imports": [
+        "src/components/Magnetic.tsx"
+      ],
+      "importedBy": [
+        "src/components/index.ts"
+      ],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "MARQUEE_ITEMS",
+          "type": "const",
+          "line": 13,
+          "exported": false
+        },
+        {
+          "name": "BENTO_CARDS",
+          "type": "const",
+          "line": 29,
+          "exported": false
+        },
+        {
+          "name": "TRUST_ITEMS",
+          "type": "const",
+          "line": 77,
+          "exported": false
+        },
+        {
+          "name": "Hero",
+          "type": "const",
+          "line": 84,
+          "exported": false
+        },
+        {
+          "name": "heroRef",
+          "type": "const",
+          "line": 85,
+          "exported": false
+        },
+        {
+          "name": "containerRef",
+          "type": "const",
+          "line": 86,
+          "exported": false
+        },
+        {
+          "name": "titleLine1Ref",
+          "type": "const",
+          "line": 87,
+          "exported": false
+        },
+        {
+          "name": "titleLine2Ref",
+          "type": "const",
+          "line": 88,
+          "exported": false
+        },
+        {
+          "name": "auroraRef",
+          "type": "const",
+          "line": 89,
+          "exported": false
+        },
+        {
+          "name": "dotGridRef",
+          "type": "const",
+          "line": 90,
+          "exported": false
+        },
+        {
+          "name": "marqueeRef",
+          "type": "const",
+          "line": 91,
+          "exported": false
+        },
+        {
+          "name": "rafId",
+          "type": "const",
+          "line": 94,
+          "exported": false
+        },
+        {
+          "name": "canvas",
+          "type": "const",
+          "line": 98,
+          "exported": false
+        },
+        {
+          "name": "ctx",
+          "type": "const",
+          "line": 101,
+          "exported": false
+        },
+        {
+          "name": "mouseX",
+          "type": "const",
+          "line": 105,
+          "exported": false
+        },
+        {
+          "name": "mouseY",
+          "type": "const",
+          "line": 106,
+          "exported": false
+        },
+        {
+          "name": "resize",
+          "type": "function",
+          "line": 108,
+          "exported": false
+        },
+        {
+          "name": "dpr",
+          "type": "const",
+          "line": 109,
+          "exported": false
+        },
+        {
+          "name": "draw",
+          "type": "function",
+          "line": 115,
+          "exported": false
+        },
+        {
+          "name": "w",
+          "type": "const",
+          "line": 116,
+          "exported": false
+        },
+        {
+          "name": "h",
+          "type": "const",
+          "line": 117,
+          "exported": false
+        },
+        {
+          "name": "spacing",
+          "type": "const",
+          "line": 120,
+          "exported": false
+        },
+        {
+          "name": "baseRadius",
+          "type": "const",
+          "line": 121,
+          "exported": false
+        },
+        {
+          "name": "maxRadius",
+          "type": "const",
+          "line": 122,
+          "exported": false
+        },
+        {
+          "name": "influenceRadius",
+          "type": "const",
+          "line": 123,
+          "exported": false
+        },
+        {
+          "name": "x",
+          "type": "const",
+          "line": 125,
+          "exported": false
+        },
+        {
+          "name": "y",
+          "type": "const",
+          "line": 126,
+          "exported": false
+        },
+        {
+          "name": "dist",
+          "type": "const",
+          "line": 127,
+          "exported": false
+        },
+        {
+          "name": "influence",
+          "type": "const",
+          "line": 128,
+          "exported": false
+        },
+        {
+          "name": "radius",
+          "type": "const",
+          "line": 129,
+          "exported": false
+        },
+        {
+          "name": "alpha",
+          "type": "const",
+          "line": 130,
+          "exported": false
+        },
+        {
+          "name": "handleMouseMove",
+          "type": "function",
+          "line": 142,
+          "exported": false
+        },
+        {
+          "name": "rect",
+          "type": "const",
+          "line": 143,
+          "exported": false
+        },
+        {
+          "name": "handleMouseLeave",
+          "type": "function",
+          "line": 148,
+          "exported": false
+        },
+        {
+          "name": "handleMouseMove",
+          "type": "function",
+          "line": 170,
+          "exported": false
+        },
+        {
+          "name": "mql",
+          "type": "const",
+          "line": 181,
+          "exported": false
+        },
+        {
+          "name": "prefersReduced",
+          "type": "const",
+          "line": 194,
+          "exported": false
+        },
+        {
+          "name": "isMobile",
+          "type": "const",
+          "line": 195,
+          "exported": false
+        },
+        {
+          "name": "split1",
+          "type": "const",
+          "line": 197,
+          "exported": false
+        },
+        {
+          "name": "tl",
+          "type": "const",
+          "line": 199,
+          "exported": false
+        },
+        {
+          "name": "observer",
+          "type": "const",
+          "line": 394,
+          "exported": false
+        },
+        {
+          "name": "counters",
+          "type": "const",
+          "line": 397,
+          "exported": false
+        },
+        {
+          "name": "el",
+          "type": "const",
+          "line": 399,
+          "exported": false
+        },
+        {
+          "name": "target",
+          "type": "const",
+          "line": 400,
+          "exported": false
+        },
+        {
+          "name": "isNumber",
+          "type": "const",
+          "line": 401,
+          "exported": false
+        },
+        {
+          "name": "num",
+          "type": "const",
+          "line": 404,
+          "exported": false
+        },
+        {
+          "name": "suffix",
+          "type": "const",
+          "line": 405,
+          "exported": false
+        },
+        {
+          "name": "trustBar",
+          "type": "const",
+          "line": 425,
+          "exported": false
+        }
+      ],
+      "rank": "C",
+      "centrality": 1
+    },
+    "src/components/HowItWorks.tsx": {
+      "path": "src/components/HowItWorks.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 539,
+      "size": 27205,
+      "hash": "368a8fc896be",
+      "lastModified": 1773128605183.3313,
+      "imports": [
+        "src/components/Magnetic.tsx"
+      ],
+      "importedBy": [
+        "src/components/index.ts"
+      ],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "HowItWorks",
+          "type": "const",
+          "line": 9,
+          "exported": false
+        },
+        {
+          "name": "containerRef",
+          "type": "const",
+          "line": 10,
+          "exported": false
+        },
+        {
+          "name": "steps",
+          "type": "const",
+          "line": 42,
+          "exported": false
+        },
+        {
+          "name": "orbitIcons",
+          "type": "const",
+          "line": 59,
+          "exported": false
+        },
+        {
+          "name": "counters",
+          "type": "const",
+          "line": 72,
+          "exported": false
+        },
+        {
+          "name": "target",
+          "type": "const",
+          "line": 74,
+          "exported": false
+        },
+        {
+          "name": "integrationIcons",
+          "type": "const",
+          "line": 91,
+          "exported": false
+        }
+      ],
+      "rank": "C",
+      "centrality": 1
+    },
+    "src/components/index.ts": {
+      "path": "src/components/index.ts",
+      "role": "entry",
+      "language": "typescript",
+      "lines": 15,
+      "size": 712,
+      "hash": "5e3afc63c3a3",
+      "lastModified": 1772268682070.4014,
+      "imports": [
+        "src/components/Button.tsx",
+        "src/components/Header.tsx",
+        "src/components/Hero.tsx",
+        "src/components/Stats.tsx",
+        "src/components/Features.tsx",
+        "src/components/WhatSetsApart.tsx",
+        "src/components/HowItWorks.tsx",
+        "src/components/Pricing.tsx",
+        "src/components/Integrations.tsx",
+        "src/components/LLMModels.tsx",
+        "src/components/Footer.tsx",
+        "src/components/SmoothScroll.tsx",
+        "src/components/GrainOverlay.tsx",
+        "src/components/Magnetic.tsx"
+      ],
+      "importedBy": [],
+      "exports": [
+        "Button",
+        "Header",
+        "Hero",
+        "Stats",
+        "Features",
+        "WhatSetsApart",
+        "HowItWorks",
+        "Pricing",
+        "Integrations",
+        "LLMModels",
+        "Footer",
+        "SmoothScroll",
+        "GrainOverlay",
+        "Magnetic"
+      ],
+      "symbols": [],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/components/Integrations.tsx": {
+      "path": "src/components/Integrations.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 122,
+      "size": 6529,
+      "hash": "14b9db04b40a",
+      "lastModified": 1773302574436.583,
+      "imports": [],
+      "importedBy": [
+        "src/components/index.ts"
+      ],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "SI",
+          "type": "const",
+          "line": 8,
+          "exported": false
+        },
+        {
+          "name": "Integrations",
+          "type": "const",
+          "line": 40,
+          "exported": false
+        },
+        {
+          "name": "containerRef",
+          "type": "const",
+          "line": 41,
+          "exported": false
+        },
+        {
+          "name": "cards",
+          "type": "const",
+          "line": 46,
+          "exported": false
+        },
+        {
+          "name": "card",
+          "type": "const",
+          "line": 83,
+          "exported": false
+        },
+        {
+          "name": "card",
+          "type": "const",
+          "line": 88,
+          "exported": false
+        }
+      ],
+      "rank": "C",
+      "centrality": 1
+    },
+    "src/components/LLMModels.tsx": {
+      "path": "src/components/LLMModels.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 394,
+      "size": 20321,
+      "hash": "b67a6cbab07d",
+      "lastModified": 1772282325901.8687,
+      "imports": [],
+      "importedBy": [
+        "src/components/index.ts"
+      ],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "providers",
+          "type": "const",
+          "line": 9,
+          "exported": false
+        },
+        {
+          "name": "llmModels",
+          "type": "const",
+          "line": 19,
+          "exported": false
+        },
+        {
+          "name": "modelTabs",
+          "type": "const",
+          "line": 67,
+          "exported": false
+        },
+        {
+          "name": "codeLines",
+          "type": "const",
+          "line": 76,
+          "exported": false
+        },
+        {
+          "name": "LLMModels",
+          "type": "const",
+          "line": 92,
+          "exported": false
+        },
+        {
+          "name": "containerRef",
+          "type": "const",
+          "line": 93,
+          "exported": false
+        },
+        {
+          "name": "lines",
+          "type": "const",
+          "line": 106,
+          "exported": false
+        },
+        {
+          "name": "getStyleColor",
+          "type": "function",
+          "line": 136,
+          "exported": false
+        }
+      ],
+      "rank": "C",
+      "centrality": 1
+    },
+    "src/components/Magnetic.tsx": {
+      "path": "src/components/Magnetic.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 51,
+      "size": 1343,
+      "hash": "6f471072200f",
+      "lastModified": 1772268661840.201,
+      "imports": [],
+      "importedBy": [
+        "src/components/Footer.tsx",
+        "src/components/Hero.tsx",
+        "src/components/HowItWorks.tsx",
+        "src/components/index.ts",
+        "src/components/Pricing.tsx"
+      ],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "MagneticProps",
+          "type": "interface",
+          "line": 6,
+          "exported": false
+        },
+        {
+          "name": "Magnetic",
+          "type": "function",
+          "line": 12,
+          "exported": true
+        },
+        {
+          "name": "ref",
+          "type": "const",
+          "line": 13,
+          "exported": false
+        },
+        {
+          "name": "handleMouseMove",
+          "type": "const",
+          "line": 15,
+          "exported": false
+        },
+        {
+          "name": "rect",
+          "type": "const",
+          "line": 17,
+          "exported": false
+        },
+        {
+          "name": "x",
+          "type": "const",
+          "line": 18,
+          "exported": false
+        },
+        {
+          "name": "y",
+          "type": "const",
+          "line": 19,
+          "exported": false
+        },
+        {
+          "name": "handleMouseLeave",
+          "type": "const",
+          "line": 29,
+          "exported": false
+        }
+      ],
+      "rank": "A",
+      "centrality": 5
+    },
+    "src/components/Pricing.tsx": {
+      "path": "src/components/Pricing.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 329,
+      "size": 20474,
+      "hash": "67157e8d7ebd",
+      "lastModified": 1773299743315.9795,
+      "imports": [
+        "src/components/Magnetic.tsx"
+      ],
+      "importedBy": [
+        "src/components/index.ts"
+      ],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "Pricing",
+          "type": "const",
+          "line": 10,
+          "exported": false
+        },
+        {
+          "name": "containerRef",
+          "type": "const",
+          "line": 11,
+          "exported": false
+        },
+        {
+          "name": "toggleRef",
+          "type": "const",
+          "line": 12,
+          "exported": false
+        },
+        {
+          "name": "priceRefs",
+          "type": "const",
+          "line": 14,
+          "exported": false
+        },
+        {
+          "name": "handleCardHover",
+          "type": "const",
+          "line": 18,
+          "exported": false
+        },
+        {
+          "name": "card",
+          "type": "const",
+          "line": 19,
+          "exported": false
+        },
+        {
+          "name": "rect",
+          "type": "const",
+          "line": 20,
+          "exported": false
+        },
+        {
+          "name": "x",
+          "type": "const",
+          "line": 21,
+          "exported": false
+        },
+        {
+          "name": "y",
+          "type": "const",
+          "line": 22,
+          "exported": false
+        },
+        {
+          "name": "handleCardLeave",
+          "type": "const",
+          "line": 26,
+          "exported": false
+        },
+        {
+          "name": "cards",
+          "type": "const",
+          "line": 36,
+          "exported": false
+        },
+        {
+          "name": "plans",
+          "type": "const",
+          "line": 43,
+          "exported": false
+        },
+        {
+          "name": "getPrice",
+          "type": "function",
+          "line": 66,
+          "exported": false
+        },
+        {
+          "name": "handleBillingSwitch",
+          "type": "function",
+          "line": 72,
+          "exported": false
+        },
+        {
+          "name": "el",
+          "type": "const",
+          "line": 78,
+          "exported": false
+        },
+        {
+          "name": "oldVal",
+          "type": "const",
+          "line": 80,
+          "exported": false
+        },
+        {
+          "name": "newVal",
+          "type": "const",
+          "line": 81,
+          "exported": false
+        },
+        {
+          "name": "pill",
+          "type": "const",
+          "line": 92,
+          "exported": false
+        },
+        {
+          "name": "pill",
+          "type": "const",
+          "line": 108,
+          "exported": false
+        },
+        {
+          "name": "price",
+          "type": "const",
+          "line": 232,
+          "exported": false
+        }
+      ],
+      "rank": "C",
+      "centrality": 1
+    },
+    "src/components/SmoothScroll.tsx": {
+      "path": "src/components/SmoothScroll.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 33,
+      "size": 702,
+      "hash": "cca5debdc9fc",
+      "lastModified": 1772268649688.295,
+      "imports": [],
+      "importedBy": [
+        "src/components/index.ts"
+      ],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "SmoothScroll",
+          "type": "function",
+          "line": 6,
+          "exported": true
+        },
+        {
+          "name": "lenisRef",
+          "type": "const",
+          "line": 7,
+          "exported": false
+        },
+        {
+          "name": "lenis",
+          "type": "const",
+          "line": 10,
+          "exported": false
+        },
+        {
+          "name": "raf",
+          "type": "function",
+          "line": 18,
+          "exported": false
+        }
+      ],
+      "rank": "C",
+      "centrality": 1
+    },
+    "src/components/Stats.tsx": {
+      "path": "src/components/Stats.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 437,
+      "size": 21385,
+      "hash": "9f2510801db6",
+      "lastModified": 1772280056781.0125,
+      "imports": [],
+      "importedBy": [
+        "src/components/index.ts"
+      ],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "StatCard",
+          "type": "interface",
+          "line": 8,
+          "exported": false
+        },
+        {
+          "name": "stats",
+          "type": "const",
+          "line": 18,
+          "exported": false
+        },
+        {
+          "name": "Stats",
+          "type": "const",
+          "line": 57,
+          "exported": false
+        },
+        {
+          "name": "containerRef",
+          "type": "const",
+          "line": 58,
+          "exported": false
+        },
+        {
+          "name": "sectionRef",
+          "type": "const",
+          "line": 59,
+          "exported": false
+        },
+        {
+          "name": "handleSectionMouseMove",
+          "type": "const",
+          "line": 64,
+          "exported": false
+        },
+        {
+          "name": "rect",
+          "type": "const",
+          "line": 65,
+          "exported": false
+        },
+        {
+          "name": "x",
+          "type": "const",
+          "line": 66,
+          "exported": false
+        },
+        {
+          "name": "y",
+          "type": "const",
+          "line": 67,
+          "exported": false
+        },
+        {
+          "name": "glow",
+          "type": "const",
+          "line": 68,
+          "exported": false
+        },
+        {
+          "name": "handleCardMouseMove",
+          "type": "const",
+          "line": 75,
+          "exported": false
+        },
+        {
+          "name": "card",
+          "type": "const",
+          "line": 76,
+          "exported": false
+        },
+        {
+          "name": "rect",
+          "type": "const",
+          "line": 77,
+          "exported": false
+        },
+        {
+          "name": "x",
+          "type": "const",
+          "line": 78,
+          "exported": false
+        },
+        {
+          "name": "y",
+          "type": "const",
+          "line": 79,
+          "exported": false
+        },
+        {
+          "name": "num",
+          "type": "const",
+          "line": 89,
+          "exported": false
+        },
+        {
+          "name": "label",
+          "type": "const",
+          "line": 90,
+          "exported": false
+        },
+        {
+          "name": "glow",
+          "type": "const",
+          "line": 95,
+          "exported": false
+        },
+        {
+          "name": "handleCardMouseLeave",
+          "type": "const",
+          "line": 101,
+          "exported": false
+        },
+        {
+          "name": "card",
+          "type": "const",
+          "line": 102,
+          "exported": false
+        },
+        {
+          "name": "num",
+          "type": "const",
+          "line": 105,
+          "exported": false
+        },
+        {
+          "name": "label",
+          "type": "const",
+          "line": 106,
+          "exported": false
+        },
+        {
+          "name": "glow",
+          "type": "const",
+          "line": 110,
+          "exported": false
+        },
+        {
+          "name": "cards",
+          "type": "const",
+          "line": 125,
+          "exported": false
+        },
+        {
+          "name": "counter",
+          "type": "const",
+          "line": 140,
+          "exported": false
+        },
+        {
+          "name": "target",
+          "type": "const",
+          "line": 143,
+          "exported": false
+        },
+        {
+          "name": "suffix",
+          "type": "const",
+          "line": 144,
+          "exported": false
+        },
+        {
+          "name": "isDecimal",
+          "type": "const",
+          "line": 145,
+          "exported": false
+        },
+        {
+          "name": "val",
+          "type": "const",
+          "line": 154,
+          "exported": false
+        },
+        {
+          "name": "line",
+          "type": "const",
+          "line": 165,
+          "exported": false
+        }
+      ],
+      "rank": "C",
+      "centrality": 1
+    },
+    "src/components/Testimonials.tsx": {
+      "path": "src/components/Testimonials.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 103,
+      "size": 5061,
+      "hash": "7b7948c8b5a9",
+      "lastModified": 1768992029583.5125,
+      "imports": [],
+      "importedBy": [],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "Testimonials",
+          "type": "const",
+          "line": 8,
+          "exported": false
+        },
+        {
+          "name": "containerRef",
+          "type": "const",
+          "line": 9,
+          "exported": false
+        },
+        {
+          "name": "testimonials",
+          "type": "const",
+          "line": 13,
+          "exported": false
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/components/WhatSetsApart.tsx": {
+      "path": "src/components/WhatSetsApart.tsx",
+      "role": "component",
+      "language": "typescript",
+      "lines": 199,
+      "size": 8199,
+      "hash": "3061c6cd97dc",
+      "lastModified": 1769505717637.9443,
+      "imports": [],
+      "importedBy": [
+        "src/components/index.ts"
+      ],
+      "exports": [
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "Benefit",
+          "type": "interface",
+          "line": 8,
+          "exported": false
+        },
+        {
+          "name": "benefits",
+          "type": "const",
+          "line": 13,
+          "exported": false
+        },
+        {
+          "name": "workflow",
+          "type": "class",
+          "line": 28,
+          "exported": false
+        },
+        {
+          "name": "WhatSetsApart",
+          "type": "const",
+          "line": 32,
+          "exported": false
+        },
+        {
+          "name": "containerRef",
+          "type": "const",
+          "line": 33,
+          "exported": false
+        },
+        {
+          "name": "stepCards",
+          "type": "const",
+          "line": 51,
+          "exported": false
+        },
+        {
+          "name": "progressLine",
+          "type": "const",
+          "line": 67,
+          "exported": false
+        },
+        {
+          "name": "stepNumber",
+          "type": "const",
+          "line": 84,
+          "exported": false
+        },
+        {
+          "name": "title",
+          "type": "const",
+          "line": 100,
+          "exported": false
+        },
+        {
+          "name": "desc",
+          "type": "const",
+          "line": 117,
+          "exported": false
+        }
+      ],
+      "rank": "C",
+      "centrality": 1
+    },
+    "src/lib/docs/content-configure.tsx": {
+      "path": "src/lib/docs/content-configure.tsx",
+      "role": "util",
+      "language": "typescript",
+      "lines": 1468,
+      "size": 76108,
+      "hash": "92f5bed6a149",
+      "lastModified": 1772195035764.0696,
+      "imports": [
+        "src/lib/docs/types.ts"
+      ],
+      "importedBy": [],
+      "exports": [
+        "configurePages"
+      ],
+      "symbols": [
+        {
+          "name": "configurePages",
+          "type": "const",
+          "line": 3,
+          "exported": true
+        },
+        {
+          "name": "accessible",
+          "type": "interface",
+          "line": 272,
+          "exported": false
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/lib/docs/content-develop.tsx": {
+      "path": "src/lib/docs/content-develop.tsx",
+      "role": "util",
+      "language": "typescript",
+      "lines": 1434,
+      "size": 58062,
+      "hash": "0ed57b68fe09",
+      "lastModified": 1772194952719.5603,
+      "imports": [
+        "src/lib/docs/types.ts"
+      ],
+      "importedBy": [],
+      "exports": [
+        "developPages",
+        "default",
+        "default",
+        "default"
+      ],
+      "symbols": [
+        {
+          "name": "developPages",
+          "type": "const",
+          "line": 3,
+          "exported": true
+        },
+        {
+          "name": "programmatic",
+          "type": "class",
+          "line": 11,
+          "exported": false
+        },
+        {
+          "name": "across",
+          "type": "interface",
+          "line": 14,
+          "exported": false
+        },
+        {
+          "name": "client",
+          "type": "const",
+          "line": 67,
+          "exported": false
+        },
+        {
+          "name": "createWeeklyReport",
+          "type": "function",
+          "line": 176,
+          "exported": false
+        },
+        {
+          "name": "client",
+          "type": "const",
+          "line": 196,
+          "exported": false
+        },
+        {
+          "name": "report",
+          "type": "const",
+          "line": 199,
+          "exported": false
+        },
+        {
+          "name": "dataset",
+          "type": "const",
+          "line": 237,
+          "exported": false
+        },
+        {
+          "name": "execution",
+          "type": "const",
+          "line": 257,
+          "exported": false
+        },
+        {
+          "name": "results",
+          "type": "const",
+          "line": 271,
+          "exported": false
+        },
+        {
+          "name": "report",
+          "type": "const",
+          "line": 276,
+          "exported": false
+        },
+        {
+          "name": "session",
+          "type": "const",
+          "line": 298,
+          "exported": false
+        },
+        {
+          "name": "exportJob",
+          "type": "const",
+          "line": 314,
+          "exported": false
+        },
+        {
+          "name": "fileBuffer",
+          "type": "const",
+          "line": 323,
+          "exported": false
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/lib/docs/content-getting-started.tsx": {
+      "path": "src/lib/docs/content-getting-started.tsx",
+      "role": "util",
+      "language": "typescript",
+      "lines": 1851,
+      "size": 78748,
+      "hash": "7c09c40a2d61",
+      "lastModified": 1772194971708.173,
+      "imports": [
+        "src/lib/docs/types.ts"
+      ],
+      "importedBy": [],
+      "exports": [
+        "gettingStartedPages"
+      ],
+      "symbols": [
+        {
+          "name": "gettingStartedPages",
+          "type": "const",
+          "line": 3,
+          "exported": true
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/lib/docs/content-usage.tsx": {
+      "path": "src/lib/docs/content-usage.tsx",
+      "role": "util",
+      "language": "typescript",
+      "lines": 1210,
+      "size": 58577,
+      "hash": "c83ba2510d00",
+      "lastModified": 1772195164707.178,
+      "imports": [
+        "src/lib/docs/types.ts"
+      ],
+      "importedBy": [],
+      "exports": [
+        "usagePages"
+      ],
+      "symbols": [
+        {
+          "name": "usagePages",
+          "type": "const",
+          "line": 3,
+          "exported": true
+        },
+        {
+          "name": "for",
+          "type": "interface",
+          "line": 13,
+          "exported": false
+        },
+        {
+          "name": "for",
+          "type": "interface",
+          "line": 94,
+          "exported": false
+        },
+        {
+          "name": "response",
+          "type": "const",
+          "line": 255,
+          "exported": false
+        },
+        {
+          "name": "data",
+          "type": "const",
+          "line": 271,
+          "exported": false
+        },
+        {
+          "name": "embedded",
+          "type": "interface",
+          "line": 435,
+          "exported": false
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/lib/docs/navigation.ts": {
+      "path": "src/lib/docs/navigation.ts",
+      "role": "util",
+      "language": "typescript",
+      "lines": 59,
+      "size": 1974,
+      "hash": "6f321ed2e039",
+      "lastModified": 1772194521753.4878,
+      "imports": [
+        "src/lib/docs/types.ts"
+      ],
+      "importedBy": [],
+      "exports": [
+        "docsNavigation"
+      ],
+      "symbols": [
+        {
+          "name": "docsNavigation",
+          "type": "const",
+          "line": 3,
+          "exported": true
+        }
+      ],
+      "rank": "D",
+      "centrality": 0
+    },
+    "src/lib/docs/types.ts": {
+      "path": "src/lib/docs/types.ts",
+      "role": "type",
+      "language": "typescript",
+      "lines": 20,
+      "size": 311,
+      "hash": "5cd0e879cfb1",
+      "lastModified": 1772194513839.8606,
+      "imports": [],
+      "importedBy": [
+        "src/lib/docs/content-configure.tsx",
+        "src/lib/docs/content-develop.tsx",
+        "src/lib/docs/content-getting-started.tsx",
+        "src/lib/docs/content-usage.tsx",
+        "src/lib/docs/navigation.ts"
+      ],
+      "exports": [
+        "DocPage",
+        "ContentMap",
+        "NavItem",
+        "NavSection"
+      ],
+      "symbols": [
+        {
+          "name": "DocPage",
+          "type": "interface",
+          "line": 3,
+          "exported": true
+        },
+        {
+          "name": "ContentMap",
+          "type": "type",
+          "line": 9,
+          "exported": true
+        },
+        {
+          "name": "NavItem",
+          "type": "interface",
+          "line": 11,
+          "exported": true
+        },
+        {
+          "name": "NavSection",
+          "type": "interface",
+          "line": 16,
+          "exported": true
+        }
+      ],
+      "rank": "A",
+      "centrality": 5
+    },
+    "tsconfig.json": {
+      "path": "tsconfig.json",
+      "role": "config",
+      "language": "json",
+      "lines": 35,
+      "size": 670,
+      "hash": "ee17fd1c97c7",
+      "lastModified": 1768991900234.439,
+      "imports": [],
+      "importedBy": [],
+      "exports": [],
+      "symbols": [],
+      "rank": "D",
+      "centrality": 0
+    }
+  },
+  "symbols": {
+    "eslintConfig": [
+      {
+        "file": "eslint.config.mjs",
+        "line": 5,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "nextConfig": [
+      {
+        "file": "next.config.ts",
+        "line": 3,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "config": [
+      {
+        "file": "postcss.config.mjs",
+        "line": 1,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "values": [
+      {
+        "file": "src/app/about/page.tsx",
+        "line": 12,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "milestones": [
+      {
+        "file": "src/app/about/page.tsx",
+        "line": 19,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "AboutPage": [
+      {
+        "file": "src/app/about/page.tsx",
+        "line": 26,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "pageRef": [
+      {
+        "file": "src/app/about/page.tsx",
+        "line": 27,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/app/contact/page.tsx",
+        "line": 16,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/app/features/page.tsx",
+        "line": 45,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 67,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "reveals": [
+      {
+        "file": "src/app/about/page.tsx",
+        "line": 35,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "milestoneEls": [
+      {
+        "file": "src/app/about/page.tsx",
+        "line": 46,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "valueCards": [
+      {
+        "file": "src/app/about/page.tsx",
+        "line": 63,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "marketing": [
+      {
+        "file": "src/app/about/page.tsx",
+        "line": 131,
+        "type": "class",
+        "exported": false
+      },
+      {
+        "file": "src/app/about/page.tsx",
+        "line": 150,
+        "type": "class",
+        "exported": false
+      }
+    ],
+    "el": [
+      {
+        "file": "src/app/about/page.tsx",
+        "line": 264,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/app/about/page.tsx",
+        "line": 270,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/docs/DocsTableOfContents.tsx",
+        "line": 77,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/docs/DocsTableOfContents.tsx",
+        "line": 166,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 399,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 78,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "WEBHOOK_URL": [
+      {
+        "file": "src/app/api/webhook/route.ts",
+        "line": 3,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "POST": [
+      {
+        "file": "src/app/api/webhook/route.ts",
+        "line": 5,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "body": [
+      {
+        "file": "src/app/api/webhook/route.ts",
+        "line": 7,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "response": [
+      {
+        "file": "src/app/api/webhook/route.ts",
+        "line": 9,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/app/contact/page.tsx",
+        "line": 40,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/lib/docs/content-usage.tsx",
+        "line": 255,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "data": [
+      {
+        "file": "src/app/api/webhook/route.ts",
+        "line": 22,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/lib/docs/content-usage.tsx",
+        "line": 271,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "ChangelogPage": [
+      {
+        "file": "src/app/changelog/page.tsx",
+        "line": 3,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "ContactPage": [
+      {
+        "file": "src/app/contact/page.tsx",
+        "line": 9,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "formRef": [
+      {
+        "file": "src/app/contact/page.tsx",
+        "line": 17,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "successRef": [
+      {
+        "file": "src/app/contact/page.tsx",
+        "line": 18,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "handleSubmit": [
+      {
+        "file": "src/app/contact/page.tsx",
+        "line": 32,
+        "type": "function",
+        "exported": false
+      }
+    ],
+    "handleButtonClick": [
+      {
+        "file": "src/app/contact/page.tsx",
+        "line": 67,
+        "type": "function",
+        "exported": false
+      }
+    ],
+    "button": [
+      {
+        "file": "src/app/contact/page.tsx",
+        "line": 68,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "rect": [
+      {
+        "file": "src/app/contact/page.tsx",
+        "line": 69,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 74,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Features.tsx",
+        "line": 75,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 143,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Magnetic.tsx",
+        "line": 17,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 20,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 65,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 77,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "ripple": [
+      {
+        "file": "src/app/contact/page.tsx",
+        "line": 70,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "size": [
+      {
+        "file": "src/app/contact/page.tsx",
+        "line": 71,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Features.tsx",
+        "line": 142,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "metadata": [
+      {
+        "file": "src/app/docs/layout.tsx",
+        "line": 5,
+        "type": "const",
+        "exported": true
+      },
+      {
+        "file": "src/app/layout.tsx",
+        "line": 29,
+        "type": "const",
+        "exported": true
+      }
+    ],
+    "DocsLayout": [
+      {
+        "file": "src/app/docs/layout.tsx",
+        "line": 10,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "allPages": [
+      {
+        "file": "src/app/docs/[[...slug]]/page.tsx",
+        "line": 10,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "allNavItems": [
+      {
+        "file": "src/app/docs/[[...slug]]/page.tsx",
+        "line": 17,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "getNavigation": [
+      {
+        "file": "src/app/docs/[[...slug]]/page.tsx",
+        "line": 19,
+        "type": "function",
+        "exported": false
+      }
+    ],
+    "index": [
+      {
+        "file": "src/app/docs/[[...slug]]/page.tsx",
+        "line": 20,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "generateStaticParams": [
+      {
+        "file": "src/app/docs/[[...slug]]/page.tsx",
+        "line": 27,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "slugs": [
+      {
+        "file": "src/app/docs/[[...slug]]/page.tsx",
+        "line": 28,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "generateMetadata": [
+      {
+        "file": "src/app/docs/[[...slug]]/page.tsx",
+        "line": 35,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "currentSlug": [
+      {
+        "file": "src/app/docs/[[...slug]]/page.tsx",
+        "line": 41,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/app/docs/[[...slug]]/page.tsx",
+        "line": 59,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/docs/DocsSidebar.tsx",
+        "line": 11,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "page": [
+      {
+        "file": "src/app/docs/[[...slug]]/page.tsx",
+        "line": 42,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/app/docs/[[...slug]]/page.tsx",
+        "line": 60,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "DocsPage": [
+      {
+        "file": "src/app/docs/[[...slug]]/page.tsx",
+        "line": 53,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "SI": [
+      {
+        "file": "src/app/features/page.tsx",
+        "line": 12,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Integrations.tsx",
+        "line": 8,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "integrations": [
+      {
+        "file": "src/app/features/page.tsx",
+        "line": 14,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "FeaturesPage": [
+      {
+        "file": "src/app/features/page.tsx",
+        "line": 44,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "sections": [
+      {
+        "file": "src/app/features/page.tsx",
+        "line": 54,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "counters": [
+      {
+        "file": "src/app/features/page.tsx",
+        "line": 65,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 397,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/HowItWorks.tsx",
+        "line": 72,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "target": [
+      {
+        "file": "src/app/features/page.tsx",
+        "line": 67,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 400,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/HowItWorks.tsx",
+        "line": 74,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 143,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "isFloat": [
+      {
+        "file": "src/app/features/page.tsx",
+        "line": 68,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "val": [
+      {
+        "file": "src/app/features/page.tsx",
+        "line": 77,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 154,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "intCards": [
+      {
+        "file": "src/app/features/page.tsx",
+        "line": 85,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "displayedIntegrations": [
+      {
+        "file": "src/app/features/page.tsx",
+        "line": 94,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "IntegrationsPage": [
+      {
+        "file": "src/app/integrations/page.tsx",
+        "line": 3,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "inter": [
+      {
+        "file": "src/app/layout.tsx",
+        "line": 9,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "poppins": [
+      {
+        "file": "src/app/layout.tsx",
+        "line": 15,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "jetbrainsMono": [
+      {
+        "file": "src/app/layout.tsx",
+        "line": 22,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "RootLayout": [
+      {
+        "file": "src/app/layout.tsx",
+        "line": 34,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "f": [
+      {
+        "file": "src/app/layout.tsx",
+        "line": 44,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "NotFound": [
+      {
+        "file": "src/app/not-found.tsx",
+        "line": 4,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "Home": [
+      {
+        "file": "src/app/page.tsx",
+        "line": 12,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "PricingPage": [
+      {
+        "file": "src/app/pricing/page.tsx",
+        "line": 3,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "PrivacyPolicyPage": [
+      {
+        "file": "src/app/privacy-policy/page.tsx",
+        "line": 3,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "properly": [
+      {
+        "file": "src/app/privacy-policy/page.tsx",
+        "line": 49,
+        "type": "function",
+        "exported": false
+      }
+    ],
+    "featuredAgent": [
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 12,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "otherAgents": [
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 28,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "SolutionsPage": [
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 66,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "handleCardHover": [
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 72,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 18,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "card": [
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 73,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Features.tsx",
+        "line": 74,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Features.tsx",
+        "line": 93,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Features.tsx",
+        "line": 120,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Integrations.tsx",
+        "line": 83,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Integrations.tsx",
+        "line": 88,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 19,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 76,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 102,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "x": [
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 75,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Features.tsx",
+        "line": 76,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 125,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Magnetic.tsx",
+        "line": 18,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 21,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 66,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 78,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "y": [
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 76,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Features.tsx",
+        "line": 77,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 126,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Magnetic.tsx",
+        "line": 19,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 22,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 67,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 79,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "handleCardLeave": [
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 80,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Features.tsx",
+        "line": 118,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 26,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "lineIndex": [
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 86,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "charIndex": [
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 87,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "lines": [
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 89,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/LLMModels.tsx",
+        "line": 106,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "type": [
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 91,
+        "type": "function",
+        "exported": false
+      }
+    ],
+    "line": [
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 93,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 165,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "speed": [
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 94,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "cursorInterval": [
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 110,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "cards": [
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 128,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Features.tsx",
+        "line": 201,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Integrations.tsx",
+        "line": 46,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 36,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 125,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "isWide": [
+      {
+        "file": "src/app/solutions-by-agents/page.tsx",
+        "line": 256,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "TermsPage": [
+      {
+        "file": "src/app/terms-of-use/page.tsx",
+        "line": 3,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "AgentationComponent": [
+      {
+        "file": "src/components/AgentationProvider.tsx",
+        "line": 5,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "AgentationProvider": [
+      {
+        "file": "src/components/AgentationProvider.tsx",
+        "line": 10,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "ButtonProps": [
+      {
+        "file": "src/components/Button.tsx",
+        "line": 6,
+        "type": "interface",
+        "exported": false
+      }
+    ],
+    "Button": [
+      {
+        "file": "src/components/Button.tsx",
+        "line": 16,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "baseClasses": [
+      {
+        "file": "src/components/Button.tsx",
+        "line": 25,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "textClasses": [
+      {
+        "file": "src/components/Button.tsx",
+        "line": 35,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "arrowContainerClasses": [
+      {
+        "file": "src/components/Button.tsx",
+        "line": 40,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "content": [
+      {
+        "file": "src/components/Button.tsx",
+        "line": 48,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/docs/DocsTableOfContents.tsx",
+        "line": 20,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "DocsSidebar": [
+      {
+        "file": "src/components/docs/DocsSidebar.tsx",
+        "line": 8,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "pathname": [
+      {
+        "file": "src/components/docs/DocsSidebar.tsx",
+        "line": 9,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/docs/DocsTableOfContents.tsx",
+        "line": 16,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Header.tsx",
+        "line": 35,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "active": [
+      {
+        "file": "src/components/docs/DocsSidebar.tsx",
+        "line": 16,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "isActive": [
+      {
+        "file": "src/components/docs/DocsSidebar.tsx",
+        "line": 140,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/docs/DocsTableOfContents.tsx",
+        "line": 156,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "href": [
+      {
+        "file": "src/components/docs/DocsSidebar.tsx",
+        "line": 141,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "TocItem": [
+      {
+        "file": "src/components/docs/DocsTableOfContents.tsx",
+        "line": 6,
+        "type": "interface",
+        "exported": false
+      }
+    ],
+    "DocsTableOfContents": [
+      {
+        "file": "src/components/docs/DocsTableOfContents.tsx",
+        "line": 12,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "observerRef": [
+      {
+        "file": "src/components/docs/DocsTableOfContents.tsx",
+        "line": 15,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "timer": [
+      {
+        "file": "src/components/docs/DocsTableOfContents.tsx",
+        "line": 19,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "elements": [
+      {
+        "file": "src/components/docs/DocsTableOfContents.tsx",
+        "line": 23,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "items": [
+      {
+        "file": "src/components/docs/DocsTableOfContents.tsx",
+        "line": 24,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "text": [
+      {
+        "file": "src/components/docs/DocsTableOfContents.tsx",
+        "line": 27,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "id": [
+      {
+        "file": "src/components/docs/DocsTableOfContents.tsx",
+        "line": 30,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "callback": [
+      {
+        "file": "src/components/docs/DocsTableOfContents.tsx",
+        "line": 61,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "visible": [
+      {
+        "file": "src/components/docs/DocsTableOfContents.tsx",
+        "line": 62,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "isH3": [
+      {
+        "file": "src/components/docs/DocsTableOfContents.tsx",
+        "line": 157,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "Skill": [
+      {
+        "file": "src/components/Features.tsx",
+        "line": 8,
+        "type": "interface",
+        "exported": false
+      }
+    ],
+    "skills": [
+      {
+        "file": "src/components/Features.tsx",
+        "line": 20,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "Features": [
+      {
+        "file": "src/components/Features.tsx",
+        "line": 63,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "containerRef": [
+      {
+        "file": "src/components/Features.tsx",
+        "line": 64,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 86,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/HowItWorks.tsx",
+        "line": 10,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Integrations.tsx",
+        "line": 41,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/LLMModels.tsx",
+        "line": 93,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 11,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 58,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Testimonials.tsx",
+        "line": 9,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/WhatSetsApart.tsx",
+        "line": 33,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "cardRefs": [
+      {
+        "file": "src/components/Features.tsx",
+        "line": 67,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "particleContainerRef": [
+      {
+        "file": "src/components/Features.tsx",
+        "line": 68,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "handleCardMove": [
+      {
+        "file": "src/components/Features.tsx",
+        "line": 73,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "rotateX": [
+      {
+        "file": "src/components/Features.tsx",
+        "line": 78,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "rotateY": [
+      {
+        "file": "src/components/Features.tsx",
+        "line": 79,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "handleCardEnter": [
+      {
+        "file": "src/components/Features.tsx",
+        "line": 91,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "icon": [
+      {
+        "file": "src/components/Features.tsx",
+        "line": 103,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Features.tsx",
+        "line": 128,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "features": [
+      {
+        "file": "src/components/Features.tsx",
+        "line": 112,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "container": [
+      {
+        "file": "src/components/Features.tsx",
+        "line": 137,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "particles": [
+      {
+        "file": "src/components/Features.tsx",
+        "line": 138,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "i": [
+      {
+        "file": "src/components/Features.tsx",
+        "line": 140,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "p": [
+      {
+        "file": "src/components/Features.tsx",
+        "line": 141,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "currentSkill": [
+      {
+        "file": "src/components/Features.tsx",
+        "line": 229,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "Footer": [
+      {
+        "file": "src/components/Footer.tsx",
+        "line": 10,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "footerRef": [
+      {
+        "file": "src/components/Footer.tsx",
+        "line": 11,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "words": [
+      {
+        "file": "src/components/Footer.tsx",
+        "line": 17,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "linkGroups": [
+      {
+        "file": "src/components/Footer.tsx",
+        "line": 57,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "ctaWords": [
+      {
+        "file": "src/components/Footer.tsx",
+        "line": 91,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "GrainOverlay": [
+      {
+        "file": "src/components/GrainOverlay.tsx",
+        "line": 3,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "NavItem": [
+      {
+        "file": "src/components/Header.tsx",
+        "line": 9,
+        "type": "interface",
+        "exported": false
+      },
+      {
+        "file": "src/lib/docs/types.ts",
+        "line": 11,
+        "type": "interface",
+        "exported": true
+      }
+    ],
+    "navItems": [
+      {
+        "file": "src/components/Header.tsx",
+        "line": 16,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "Header": [
+      {
+        "file": "src/components/Header.tsx",
+        "line": 31,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "headerRef": [
+      {
+        "file": "src/components/Header.tsx",
+        "line": 36,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "mobileMenuRef": [
+      {
+        "file": "src/components/Header.tsx",
+        "line": 37,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "handleScroll": [
+      {
+        "file": "src/components/Header.tsx",
+        "line": 42,
+        "type": "function",
+        "exported": false
+      }
+    ],
+    "MARQUEE_ITEMS": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 13,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "BENTO_CARDS": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 29,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "TRUST_ITEMS": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 77,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "Hero": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 84,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "heroRef": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 85,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "titleLine1Ref": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 87,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "titleLine2Ref": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 88,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "auroraRef": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 89,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "dotGridRef": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 90,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "marqueeRef": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 91,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "rafId": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 94,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "canvas": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 98,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "ctx": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 101,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "mouseX": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 105,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "mouseY": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 106,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "resize": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 108,
+        "type": "function",
+        "exported": false
+      }
+    ],
+    "dpr": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 109,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "draw": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 115,
+        "type": "function",
+        "exported": false
+      }
+    ],
+    "w": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 116,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "h": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 117,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "spacing": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 120,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "baseRadius": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 121,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "maxRadius": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 122,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "influenceRadius": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 123,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "dist": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 127,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "influence": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 128,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "radius": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 129,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "alpha": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 130,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "handleMouseMove": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 142,
+        "type": "function",
+        "exported": false
+      },
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 170,
+        "type": "function",
+        "exported": false
+      },
+      {
+        "file": "src/components/Magnetic.tsx",
+        "line": 15,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "handleMouseLeave": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 148,
+        "type": "function",
+        "exported": false
+      },
+      {
+        "file": "src/components/Magnetic.tsx",
+        "line": 29,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "mql": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 181,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "prefersReduced": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 194,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "isMobile": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 195,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "split1": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 197,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "tl": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 199,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "observer": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 394,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "isNumber": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 401,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "num": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 404,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 89,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 105,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "suffix": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 405,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 144,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "trustBar": [
+      {
+        "file": "src/components/Hero.tsx",
+        "line": 425,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "HowItWorks": [
+      {
+        "file": "src/components/HowItWorks.tsx",
+        "line": 9,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "steps": [
+      {
+        "file": "src/components/HowItWorks.tsx",
+        "line": 42,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "orbitIcons": [
+      {
+        "file": "src/components/HowItWorks.tsx",
+        "line": 59,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "integrationIcons": [
+      {
+        "file": "src/components/HowItWorks.tsx",
+        "line": 91,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "Integrations": [
+      {
+        "file": "src/components/Integrations.tsx",
+        "line": 40,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "providers": [
+      {
+        "file": "src/components/LLMModels.tsx",
+        "line": 9,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "llmModels": [
+      {
+        "file": "src/components/LLMModels.tsx",
+        "line": 19,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "modelTabs": [
+      {
+        "file": "src/components/LLMModels.tsx",
+        "line": 67,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "codeLines": [
+      {
+        "file": "src/components/LLMModels.tsx",
+        "line": 76,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "LLMModels": [
+      {
+        "file": "src/components/LLMModels.tsx",
+        "line": 92,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "getStyleColor": [
+      {
+        "file": "src/components/LLMModels.tsx",
+        "line": 136,
+        "type": "function",
+        "exported": false
+      }
+    ],
+    "MagneticProps": [
+      {
+        "file": "src/components/Magnetic.tsx",
+        "line": 6,
+        "type": "interface",
+        "exported": false
+      }
+    ],
+    "Magnetic": [
+      {
+        "file": "src/components/Magnetic.tsx",
+        "line": 12,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "ref": [
+      {
+        "file": "src/components/Magnetic.tsx",
+        "line": 13,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "Pricing": [
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 10,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "toggleRef": [
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 12,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "priceRefs": [
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 14,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "plans": [
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 43,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "getPrice": [
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 66,
+        "type": "function",
+        "exported": false
+      }
+    ],
+    "handleBillingSwitch": [
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 72,
+        "type": "function",
+        "exported": false
+      }
+    ],
+    "oldVal": [
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 80,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "newVal": [
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 81,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "pill": [
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 92,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 108,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "price": [
+      {
+        "file": "src/components/Pricing.tsx",
+        "line": 232,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "SmoothScroll": [
+      {
+        "file": "src/components/SmoothScroll.tsx",
+        "line": 6,
+        "type": "function",
+        "exported": true
+      }
+    ],
+    "lenisRef": [
+      {
+        "file": "src/components/SmoothScroll.tsx",
+        "line": 7,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "lenis": [
+      {
+        "file": "src/components/SmoothScroll.tsx",
+        "line": 10,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "raf": [
+      {
+        "file": "src/components/SmoothScroll.tsx",
+        "line": 18,
+        "type": "function",
+        "exported": false
+      }
+    ],
+    "StatCard": [
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 8,
+        "type": "interface",
+        "exported": false
+      }
+    ],
+    "stats": [
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 18,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "Stats": [
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 57,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "sectionRef": [
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 59,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "handleSectionMouseMove": [
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 64,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "glow": [
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 68,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 95,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 110,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "handleCardMouseMove": [
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 75,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "label": [
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 90,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 106,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "handleCardMouseLeave": [
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 101,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "counter": [
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 140,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "isDecimal": [
+      {
+        "file": "src/components/Stats.tsx",
+        "line": 145,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "Testimonials": [
+      {
+        "file": "src/components/Testimonials.tsx",
+        "line": 8,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "testimonials": [
+      {
+        "file": "src/components/Testimonials.tsx",
+        "line": 13,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "Benefit": [
+      {
+        "file": "src/components/WhatSetsApart.tsx",
+        "line": 8,
+        "type": "interface",
+        "exported": false
+      }
+    ],
+    "benefits": [
+      {
+        "file": "src/components/WhatSetsApart.tsx",
+        "line": 13,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "workflow": [
+      {
+        "file": "src/components/WhatSetsApart.tsx",
+        "line": 28,
+        "type": "class",
+        "exported": false
+      }
+    ],
+    "WhatSetsApart": [
+      {
+        "file": "src/components/WhatSetsApart.tsx",
+        "line": 32,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "stepCards": [
+      {
+        "file": "src/components/WhatSetsApart.tsx",
+        "line": 51,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "progressLine": [
+      {
+        "file": "src/components/WhatSetsApart.tsx",
+        "line": 67,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "stepNumber": [
+      {
+        "file": "src/components/WhatSetsApart.tsx",
+        "line": 84,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "title": [
+      {
+        "file": "src/components/WhatSetsApart.tsx",
+        "line": 100,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "desc": [
+      {
+        "file": "src/components/WhatSetsApart.tsx",
+        "line": 117,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "configurePages": [
+      {
+        "file": "src/lib/docs/content-configure.tsx",
+        "line": 3,
+        "type": "const",
+        "exported": true
+      }
+    ],
+    "accessible": [
+      {
+        "file": "src/lib/docs/content-configure.tsx",
+        "line": 272,
+        "type": "interface",
+        "exported": false
+      }
+    ],
+    "developPages": [
+      {
+        "file": "src/lib/docs/content-develop.tsx",
+        "line": 3,
+        "type": "const",
+        "exported": true
+      }
+    ],
+    "programmatic": [
+      {
+        "file": "src/lib/docs/content-develop.tsx",
+        "line": 11,
+        "type": "class",
+        "exported": false
+      }
+    ],
+    "across": [
+      {
+        "file": "src/lib/docs/content-develop.tsx",
+        "line": 14,
+        "type": "interface",
+        "exported": false
+      }
+    ],
+    "client": [
+      {
+        "file": "src/lib/docs/content-develop.tsx",
+        "line": 67,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/lib/docs/content-develop.tsx",
+        "line": 196,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "createWeeklyReport": [
+      {
+        "file": "src/lib/docs/content-develop.tsx",
+        "line": 176,
+        "type": "function",
+        "exported": false
+      }
+    ],
+    "report": [
+      {
+        "file": "src/lib/docs/content-develop.tsx",
+        "line": 199,
+        "type": "const",
+        "exported": false
+      },
+      {
+        "file": "src/lib/docs/content-develop.tsx",
+        "line": 276,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "dataset": [
+      {
+        "file": "src/lib/docs/content-develop.tsx",
+        "line": 237,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "execution": [
+      {
+        "file": "src/lib/docs/content-develop.tsx",
+        "line": 257,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "results": [
+      {
+        "file": "src/lib/docs/content-develop.tsx",
+        "line": 271,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "session": [
+      {
+        "file": "src/lib/docs/content-develop.tsx",
+        "line": 298,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "exportJob": [
+      {
+        "file": "src/lib/docs/content-develop.tsx",
+        "line": 314,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "fileBuffer": [
+      {
+        "file": "src/lib/docs/content-develop.tsx",
+        "line": 323,
+        "type": "const",
+        "exported": false
+      }
+    ],
+    "gettingStartedPages": [
+      {
+        "file": "src/lib/docs/content-getting-started.tsx",
+        "line": 3,
+        "type": "const",
+        "exported": true
+      }
+    ],
+    "usagePages": [
+      {
+        "file": "src/lib/docs/content-usage.tsx",
+        "line": 3,
+        "type": "const",
+        "exported": true
+      }
+    ],
+    "for": [
+      {
+        "file": "src/lib/docs/content-usage.tsx",
+        "line": 13,
+        "type": "interface",
+        "exported": false
+      },
+      {
+        "file": "src/lib/docs/content-usage.tsx",
+        "line": 94,
+        "type": "interface",
+        "exported": false
+      }
+    ],
+    "embedded": [
+      {
+        "file": "src/lib/docs/content-usage.tsx",
+        "line": 435,
+        "type": "interface",
+        "exported": false
+      }
+    ],
+    "docsNavigation": [
+      {
+        "file": "src/lib/docs/navigation.ts",
+        "line": 3,
+        "type": "const",
+        "exported": true
+      }
+    ],
+    "DocPage": [
+      {
+        "file": "src/lib/docs/types.ts",
+        "line": 3,
+        "type": "interface",
+        "exported": true
+      }
+    ],
+    "ContentMap": [
+      {
+        "file": "src/lib/docs/types.ts",
+        "line": 9,
+        "type": "type",
+        "exported": true
+      }
+    ],
+    "NavSection": [
+      {
+        "file": "src/lib/docs/types.ts",
+        "line": 16,
+        "type": "interface",
+        "exported": true
+      }
+    ]
+  },
+  "conventions": {
+    "naming": {
+      "files": "camelCase",
+      "variables": "camelCase",
+      "classes": "camelCase",
+      "functions": "PascalCase"
+    },
+    "imports": "relative",
+    "testing": {
+      "framework": "unknown",
+      "pattern": "",
+      "location": "unknown"
+    },
+    "errorHandling": "try-catch",
+    "architecture": "src-based"
+  }
+}

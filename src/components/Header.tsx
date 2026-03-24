@@ -8,8 +8,7 @@ import { useGSAP } from '@gsap/react';
 
 const navItems = [
     { label: 'Features', path: '/features' },
-    { label: 'Pricing', path: '/pricing' },
-    { label: 'About', path: '/about' },
+{ label: 'About', path: '/about' },
     { label: 'Resources', path: '/resources' },
     { label: 'Careers', path: '/careers' },
     { label: 'Contact', path: '/contact' },

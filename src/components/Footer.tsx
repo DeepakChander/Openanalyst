@@ -342,7 +342,6 @@ const Footer: React.FC = () => {
             title: 'Product',
             links: [
                 { label: 'Features', href: '/features' },
-                { label: 'Pricing', href: '/pricing' },
                 { label: 'Docs', href: '/docs' },
                 { label: 'Changelog', href: '/changelog' },
             ]

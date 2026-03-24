@@ -82,7 +82,7 @@ export default function TermsPage() {
 
                     <h2 style={{ color: '#1A1A1A', fontSize: 'clamp(1.25rem, 3vw, 1.5rem)', fontWeight: 700, marginTop: '48px', marginBottom: '16px' }}>4. Subscription Plans and Billing</h2>
                     <h3 style={{ color: '#1A1A1A', fontSize: 'clamp(1rem, 2.5vw, 1.125rem)', fontWeight: 600, marginTop: '24px', marginBottom: '12px' }}>4.1 Subscription Fees</h3>
-                    <p>Access to the Services requires a paid subscription, the fees for which are set forth on our pricing page (the &ldquo;Subscription Fees&rdquo;). All Subscription Fees are exclusive of applicable taxes.</p>
+                    <p>Access to the Services requires a paid subscription (the &ldquo;Subscription Fees&rdquo;). All Subscription Fees are exclusive of applicable taxes.</p>
 
                     <h3 style={{ color: '#1A1A1A', fontSize: 'clamp(1rem, 2.5vw, 1.125rem)', fontWeight: 600, marginTop: '24px', marginBottom: '12px' }}>4.2 Payment Terms</h3>
                     <p>You agree to provide valid payment information at the time of registration. Subscription Fees will be charged automatically on a recurring basis until you cancel your subscription.</p>

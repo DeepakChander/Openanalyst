@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -14,63 +14,6 @@ const providers = [
     { name: 'OpenRouter', color: '#6366f1' },
     { name: 'DeepSeek', color: '#4a90d9' },
     { name: 'Qwen', color: '#5c6bc0' },
-];
-
-const llmModels: Record<string, { title: string; models: { name: string; inputCredits: string; outputCredits: string; isFree?: boolean; recommended?: boolean }[] }> = {
-    openanalyst: {
-        title: 'OpenAnalyst Models',
-        models: [
-            { name: 'OpenAnalyst Max', inputCredits: '28 credits / 1M', outputCredits: '56 credits / 1M', recommended: true },
-            { name: 'OpenAnalyst Less Beta', inputCredits: '36 credits / 1M', outputCredits: '140 credits / 1M' },
-        ]
-    },
-    free: {
-        title: 'Free Models',
-        models: [
-            { name: 'Trinity Large Preview', inputCredits: 'FREE', outputCredits: 'FREE', isFree: true },
-            { name: 'Big Pickle', inputCredits: 'FREE', outputCredits: 'FREE', isFree: true },
-            { name: 'MiniMax M2.5 Free', inputCredits: 'FREE', outputCredits: 'FREE', isFree: true },
-            { name: 'GPT-5 Nano', inputCredits: 'FREE', outputCredits: 'FREE', isFree: true },
-        ]
-    },
-    openai: {
-        title: 'OpenAI Models',
-        models: [
-            { name: 'GPT-4 Turbo', inputCredits: '2,000 credits / 1M', outputCredits: '6,000 credits / 1M' },
-            { name: 'GPT-4o', inputCredits: '1,000 credits / 1M', outputCredits: '3,000 credits / 1M' },
-            { name: 'GPT-4o Mini', inputCredits: '30 credits / 1M', outputCredits: '120 credits / 1M' },
-        ]
-    },
-    claude: {
-        title: 'Anthropic Models',
-        models: [
-            { name: 'Claude Opus 4', inputCredits: '3,000 credits / 1M', outputCredits: '15,000 credits / 1M' },
-            { name: 'Claude Sonnet 4', inputCredits: '600 credits / 1M', outputCredits: '3,000 credits / 1M' },
-            { name: 'Claude Haiku 3.5', inputCredits: '160 credits / 1M', outputCredits: '800 credits / 1M' },
-        ]
-    },
-    deepseek: {
-        title: 'DeepSeek Models',
-        models: [
-            { name: 'DeepSeek V3.2', inputCredits: '28 credits / 1M', outputCredits: '56 credits / 1M' },
-        ]
-    },
-    qwen: {
-        title: 'Qwen Models',
-        models: [
-            { name: 'Qwen3 Coder', inputCredits: '36 credits / 1M', outputCredits: '140 credits / 1M' },
-            { name: 'Qwen3 Coder (Free)', inputCredits: 'FREE', outputCredits: 'FREE', isFree: true },
-        ]
-    },
-};
-
-const modelTabs = [
-    { id: 'openanalyst', label: 'OpenAnalyst' },
-    { id: 'free', label: 'Free' },
-    { id: 'openai', label: 'OpenAI' },
-    { id: 'claude', label: 'Anthropic' },
-    { id: 'deepseek', label: 'DeepSeek' },
-    { id: 'qwen', label: 'Qwen' },
 ];
 
 const codeLines = [
@@ -91,8 +34,6 @@ const codeLines = [
 
 const LLMModels: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
-    const [activeModelTab, setActiveModelTab] = useState('openanalyst');
-    const [hoveredRow, setHoveredRow] = useState<number | null>(null);
 
     gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -206,124 +147,6 @@ const LLMModels: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Model Pricing — Horizontal Cards */}
-                <div className="llm-pricing" style={{ marginBottom: '40px' }}>
-                    <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--syntax-comment)', marginBottom: '12px' }}>
-                            {'// CREDIT_USAGE'}
-                        </p>
-                        <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, color: 'var(--foreground)', marginBottom: '8px' }}>
-                            LLM Model Pricing
-                        </h3>
-                    </div>
-
-                    {/* Model Tabs */}
-                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '6px', marginBottom: '20px' }}>
-                        {modelTabs.map((tab) => (
-                            <button key={tab.id} onClick={() => setActiveModelTab(tab.id)} style={{
-                                fontFamily: 'var(--font-mono)', fontSize: '12px', padding: '8px 16px',
-                                borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 500,
-                                transition: 'all 0.3s ease',
-                                backgroundColor: activeModelTab === tab.id ? 'var(--terminal-bg)' : 'rgba(255,255,255,0.6)',
-                                color: activeModelTab === tab.id ? '#d4d4d8' : 'var(--muted)',
-                            }}>
-                                {tab.label}
-                            </button>
-                        ))}
-                    </div>
-
-                    {/* Horizontal Model Cards */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        {llmModels[activeModelTab].models.map((model, i) => (
-                            <div
-                                key={i}
-                                onMouseEnter={() => setHoveredRow(i)}
-                                onMouseLeave={() => setHoveredRow(null)}
-                                style={{
-                                    display: 'grid',
-                                    gridTemplateColumns: '1fr auto auto',
-                                    gap: '8px 16px',
-                                    alignItems: 'center',
-                                    padding: '14px 20px',
-                                    borderRadius: '12px',
-                                    border: '1px solid',
-                                    borderColor: hoveredRow === i ? 'rgba(255,107,0,0.3)' : 'var(--border)',
-                                    backgroundColor: hoveredRow === i ? 'rgba(255,107,0,0.03)' : 'rgba(255,255,255,0.6)',
-                                    transition: 'all 0.3s ease',
-                                    position: 'relative',
-                                    overflow: 'hidden',
-                                }}
-                            >
-                                {/* Hover underline */}
-                                <div style={{
-                                    position: 'absolute',
-                                    bottom: 0,
-                                    left: 0,
-                                    height: '2px',
-                                    width: '100%',
-                                    background: 'linear-gradient(to right, var(--primary), var(--primary-light))',
-                                    transform: hoveredRow === i ? 'scaleX(1)' : 'scaleX(0)',
-                                    transformOrigin: 'left center',
-                                    transition: 'transform 0.4s ease',
-                                }} />
-
-                                {/* Model name + indicators */}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                    {model.isFree && (
-                                        <span style={{
-                                            width: '8px', height: '8px', borderRadius: '50%',
-                                            backgroundColor: '#2ecc71',
-                                            boxShadow: '0 0 6px rgba(46,204,113,0.4)',
-                                            display: 'inline-block',
-                                            animation: 'glowPulse 2s ease-in-out infinite',
-                                        }} />
-                                    )}
-                                    <span style={{
-                                        fontFamily: 'var(--font-mono)', fontSize: '13px',
-                                        color: 'var(--foreground)', fontWeight: 600,
-                                    }}>
-                                        {model.name}
-                                    </span>
-                                    {model.recommended && (
-                                        <span style={{
-                                            fontSize: '10px',
-                                            fontWeight: 700,
-                                            padding: '3px 10px',
-                                            borderRadius: '9999px',
-                                            background: 'linear-gradient(135deg, var(--primary), var(--primary-dark))',
-                                            color: '#ffffff',
-                                            textTransform: 'uppercase',
-                                            letterSpacing: '0.05em',
-                                            animation: 'glowPulse 3s ease-in-out infinite',
-                                        }}>
-                                            Recommended
-                                        </span>
-                                    )}
-                                </div>
-
-                                {/* Input credits */}
-                                <span style={{
-                                    fontFamily: 'var(--font-mono)', fontSize: '12px',
-                                    color: model.isFree ? '#2ecc71' : 'var(--muted)',
-                                    fontWeight: model.isFree ? 700 : 400,
-                                    whiteSpace: 'nowrap',
-                                }}>
-                                    {model.inputCredits}
-                                </span>
-
-                                {/* Output credits */}
-                                <span style={{
-                                    fontFamily: 'var(--font-mono)', fontSize: '12px',
-                                    color: model.isFree ? '#2ecc71' : 'var(--muted)',
-                                    fontWeight: model.isFree ? 700 : 400,
-                                    whiteSpace: 'nowrap',
-                                }}>
-                                    {model.outputCredits}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
 
                 {/* Provider Logos — Infinite Marquee */}
                 <div className="llm-marquee-section" style={{
@@ -363,7 +186,7 @@ const LLMModels: React.FC = () => {
                 {/* CTA */}
                 <div style={{ textAlign: 'center' }}>
                     <Link
-                        href="/pricing"
+                        href="/features"
                         style={{
                             display: 'inline-flex', alignItems: 'center', gap: '8px',
                             padding: '12px 24px', fontSize: '14px', fontFamily: 'var(--font-mono)', fontWeight: 500,

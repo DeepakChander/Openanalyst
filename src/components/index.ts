@@ -5,7 +5,6 @@ export { default as Stats } from './Stats';
 export { default as Features } from './Features';
 export { default as WhatSetsApart } from './WhatSetsApart';
 export { default as HowItWorks } from './HowItWorks';
-export { default as Pricing } from './Pricing';
 export { default as Integrations } from './Integrations';
 export { default as LLMModels } from './LLMModels';
 export { default as Footer } from './Footer';

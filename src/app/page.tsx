@@ -21,7 +21,6 @@ const Stats = dynamic(() => import('@/components/Stats'), { ssr: true });
 const Features = dynamic(() => import('@/components/Features'), { ssr: true });
 const HowItWorks = dynamic(() => import('@/components/HowItWorks'), { ssr: true });
 const Testimonials = dynamic(() => import('@/components/Testimonials'), { ssr: true });
-const Pricing = dynamic(() => import('@/components/Pricing'), { ssr: true });
 const PlatformAvailability = dynamic(() => import('@/components/PlatformAvailability'), { ssr: true });
 const LogoConstellation = dynamic(() => import('@/components/LogoConstellation'), { ssr: true });
 
@@ -72,7 +71,6 @@ export default function Home() {
         <LogoConstellation />
         <HowItWorks />
         <Testimonials />
-        <Pricing />
         <PlatformAvailability />
       </main>
       <Footer />
