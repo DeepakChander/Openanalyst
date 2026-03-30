@@ -128,6 +128,37 @@ export default function CareersPage() {
                 </div>
             </section>
 
+            {/* ═══ LIFE AT OPENANALYST — Photo Grid ═══ */}
+            <section className="dark-section" style={{ padding: '80px 24px', background: 'var(--bg-dark-elevated)' }}>
+                <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+                    <div className="car-reveal" style={{ textAlign: 'center', marginBottom: 40 }}>
+                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#FF8533', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Life at OpenAnalyst</p>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr 1fr', gridTemplateRows: '200px 200px', gap: 12 }}>
+                        {[
+                            { src: '/images/culture/office.png', span: '1 / 2', row: '1 / 3' },
+                            { src: '/images/culture/workshop.png', span: '2 / 3', row: '1 / 2' },
+                            { src: '/images/culture/remote.png', span: '3 / 4', row: '1 / 2' },
+                            { src: '/images/culture/event.png', span: '2 / 3', row: '2 / 3' },
+                            { src: '/images/culture/workshop2.png', span: '3 / 4', row: '2 / 3' },
+                        ].map((photo, i) => (
+                            <div key={i} className="car-reveal" style={{
+                                gridColumn: photo.span, gridRow: photo.row,
+                                borderRadius: 16, overflow: 'hidden', position: 'relative',
+                            }}>
+                                <img src={photo.src} alt="Life at OpenAnalyst" style={{
+                                    width: '100%', height: '100%', objectFit: 'cover',
+                                    transition: 'transform 0.6s var(--ease-spring)',
+                                }}
+                                    onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.04)'; }}
+                                    onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
             {/* ═══ OPEN POSITIONS — Dark ═══ */}
             <section className="dark-section" style={{ padding: '120px 24px', background: 'var(--bg-dark-primary)' }}>
                 <div style={{ maxWidth: 800, margin: '0 auto' }}>

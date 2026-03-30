@@ -41,24 +41,18 @@ const ProductShowcase: React.FC = () => {
                 {/* Video placeholder container */}
                 <div className="ps-video" style={{
                     position: 'relative', borderRadius: 24, overflow: 'hidden',
-                    background: 'var(--bg-dark-primary)',
                     border: '1px solid var(--border-default)',
                     boxShadow: '0 24px 80px -16px rgba(0,0,0,0.12)',
                     aspectRatio: '16/9',
                 }}>
-                    {/* Grid pattern */}
-                    <div style={{
-                        position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.3,
-                        backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)',
-                        backgroundSize: '48px 48px',
+                    {/* Background image */}
+                    <img src="/images/misc/product-showcase.png" alt="OpenAnalyst Product Demo" style={{
+                        position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover',
                     }} />
 
-                    {/* Ambient glow */}
+                    {/* Dark overlay for play button contrast */}
                     <div style={{
-                        position: 'absolute', top: '40%', left: '50%', transform: 'translate(-50%, -50%)',
-                        width: '50%', height: '50%', borderRadius: '50%',
-                        background: 'radial-gradient(circle, rgba(255,107,0,0.08) 0%, transparent 70%)',
-                        filter: 'blur(60px)', pointerEvents: 'none',
+                        position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.35)', pointerEvents: 'none',
                     }} />
 
                     {/* Center play button */}

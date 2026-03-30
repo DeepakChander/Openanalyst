@@ -20,6 +20,14 @@ const features = [
 
 const TAB_DURATION = 8000; // 8 seconds per tab auto-rotation
 
+const featureImages = [
+    '/images/features/campaign-agent.png',
+    '/images/features/segmentation.png',
+    '/images/features/research.png',
+    '/images/features/ai-search.png',
+    '/images/features/seo-content.png',
+];
+
 /* ═══════════════════════════════════════
    VIDEO PLACEHOLDER
    ═══════════════════════════════════════ */
@@ -319,11 +327,16 @@ const Features: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Right — video placeholder */}
-                    <div key={`vid-${active}`} style={{
-                        height: 380, animation: 'featFadeIn 0.6s var(--ease-spring) forwards',
+                    {/* Right — feature image */}
+                    <div key={`img-${active}`} style={{
+                        height: 380, borderRadius: 20, overflow: 'hidden',
+                        border: '1px solid var(--border-dark-default)',
+                        boxShadow: `0 24px 64px -16px ${f.color}15`,
+                        animation: 'featFadeIn 0.6s var(--ease-spring) forwards',
                     }}>
-                        <VideoPlaceholder color={f.color} label={f.tab} />
+                        <img src={featureImages[active]} alt={f.tab} style={{
+                            width: '100%', height: '100%', objectFit: 'cover',
+                        }} />
                     </div>
                 </div>
             </div>

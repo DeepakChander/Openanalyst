@@ -12,14 +12,14 @@ type Category = 'All' | 'Blog' | 'Case Studies' | 'FAQs';
 const categories: Category[] = ['All', 'Blog', 'Case Studies', 'FAQs'];
 
 const resources = [
-    { title: 'Getting Started with AI Marketing', desc: 'A comprehensive guide to leveraging AI agents for your marketing strategy.', category: 'Blog' as Category, date: 'Mar 10, 2026' },
-    { title: 'Case Study: 10x ROI with Automated Campaigns', desc: 'How a mid-market SaaS company scaled paid acquisition and cut CAC by 60%.', category: 'Case Studies' as Category, date: 'Feb 28, 2026' },
-    { title: 'How to Set Up Your First Campaign', desc: 'Step-by-step walkthrough for creating and optimizing your first AI campaign.', category: 'Blog' as Category, date: 'Feb 15, 2026' },
-    { title: 'The Future of Marketing Automation', desc: 'Why traditional automation is being replaced by AI agents that think and adapt.', category: 'Blog' as Category, date: 'Jan 30, 2026' },
-    { title: 'Case Study: From 0 to 50K Leads in 90 Days', desc: 'An e-commerce brand managed multi-channel campaigns across Google, Meta, and email.', category: 'Case Studies' as Category, date: 'Jan 18, 2026' },
-    { title: 'AI-Driven Content Strategy Playbook', desc: 'How to use AI agents for a content marketing strategy that drives organic growth.', category: 'Blog' as Category, date: 'Jan 5, 2026' },
-    { title: 'Case Study: Agency Scales to 100 Clients', desc: 'A digital marketing agency managed campaigns for 100+ clients without adding headcount.', category: 'Case Studies' as Category, date: 'Dec 20, 2025' },
-    { title: 'Integrating OpenAnalyst with Your Stack', desc: 'Connect to HubSpot, Salesforce, Google Ads, Meta, Slack, and 20+ tools in minutes.', category: 'Blog' as Category, date: 'Dec 8, 2025' },
+    { title: 'Getting Started with AI Marketing', desc: 'A comprehensive guide to leveraging AI agents for your marketing strategy.', category: 'Blog' as Category, date: 'Mar 10, 2026', img: '/images/blog/rise-of-ai.png' },
+    { title: 'Case Study: 10x ROI with Automated Campaigns', desc: 'How a mid-market SaaS company scaled paid acquisition and cut CAC by 60%.', category: 'Case Studies' as Category, date: 'Feb 28, 2026', img: '/images/cases/roi-340.png' },
+    { title: 'How to Set Up Your First Campaign', desc: 'Step-by-step walkthrough for creating and optimizing your first AI campaign.', category: 'Blog' as Category, date: 'Feb 15, 2026', img: '/images/blog/multi-channel.png' },
+    { title: 'The Future of Marketing Automation', desc: 'Why traditional automation is being replaced by AI agents that think and adapt.', category: 'Blog' as Category, date: 'Jan 30, 2026', img: '/images/blog/future-martech.png' },
+    { title: 'Case Study: From 0 to 50K Leads in 90 Days', desc: 'An e-commerce brand managed multi-channel campaigns across Google, Meta, and email.', category: 'Case Studies' as Category, date: 'Jan 18, 2026', img: '/images/cases/global-scale.png' },
+    { title: 'AI-Driven Content Strategy Playbook', desc: 'How to use AI agents for a content marketing strategy that drives organic growth.', category: 'Blog' as Category, date: 'Jan 5, 2026', img: '/images/blog/content-gen.png' },
+    { title: 'Case Study: Agency Scales to 100 Clients', desc: 'A digital marketing agency managed campaigns for 100+ clients without adding headcount.', category: 'Case Studies' as Category, date: 'Dec 20, 2025', img: '/images/blog/measuring-roi.png' },
+    { title: 'Integrating OpenAnalyst with Your Stack', desc: 'Connect to HubSpot, Salesforce, Google Ads, Meta, Slack, and 20+ tools in minutes.', category: 'Blog' as Category, date: 'Dec 8, 2025', img: '/images/blog/segmentation.png' },
 ];
 
 const faqs = [
@@ -112,7 +112,7 @@ export default function ResourcesPage() {
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16, marginBottom: 80 }}>
                         {filtered.map((r, i) => (
                             <div key={i} style={{
-                                padding: '28px 24px', borderRadius: 20,
+                                borderRadius: 20, overflow: 'hidden',
                                 background: 'var(--bg-white)', border: '1px solid var(--border-default)',
                                 transition: 'all 0.3s var(--ease-spring)', cursor: 'default',
                                 display: 'flex', flexDirection: 'column',
@@ -120,7 +120,15 @@ export default function ResourcesPage() {
                                 onMouseEnter={(e) => { e.currentTarget.style.borderColor = catColor(r.category); e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = `0 8px 24px ${catColor(r.category)}12`; }}
                                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-default)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
                             >
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                                {/* Thumbnail */}
+                                <div style={{ height: 160, overflow: 'hidden' }}>
+                                    <img src={r.img} alt={r.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s var(--ease-spring)' }}
+                                        onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
+                                    />
+                                </div>
+                                <div style={{ padding: '20px 24px 24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
                                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 999, background: `${catColor(r.category)}10`, color: catColor(r.category), textTransform: 'uppercase', letterSpacing: '0.04em' }}>{r.category}</span>
                                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-muted)' }}>{r.date}</span>
                                 </div>
@@ -128,6 +136,7 @@ export default function ResourcesPage() {
                                 <p style={{ color: 'var(--text-muted)', fontSize: 13, lineHeight: 1.7, flex: 1 }}>{r.desc}</p>
                                 <div style={{ marginTop: 16 }}>
                                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600, color: 'var(--orange)' }}>Read more &rarr;</span>
+                                </div>
                                 </div>
                             </div>
                         ))}

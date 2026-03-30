@@ -33,10 +33,10 @@ const milestones = [
 ];
 
 const teamPhotos = [
-    { src: '/team-2.jpg', label: 'The Full Team', desc: 'Builders, dreamers, and marketing revolutionaries.' },
-    { src: '/team-1.jpg', label: 'Leadership', desc: 'Vision and strategy at OpenAnalyst.' },
-    { src: '/team-4.jpg', label: 'Engineering', desc: 'The minds behind the AI agents.' },
-    { src: '/team-3.jpg', label: 'Team Bonding', desc: 'We work hard, celebrate harder.' },
+    { src: '/images/culture/office.png', label: 'The Full Team', desc: 'Builders, dreamers, and marketing revolutionaries.' },
+    { src: '/images/culture/workshop.png', label: 'Leadership', desc: 'Vision and strategy at OpenAnalyst.' },
+    { src: '/images/culture/remote.png', label: 'Engineering', desc: 'The minds behind the AI agents.' },
+    { src: '/images/culture/event.png', label: 'Team Bonding', desc: 'We work hard, celebrate harder.' },
 ];
 
 const cultureItems = [

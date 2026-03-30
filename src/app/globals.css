@@ -727,6 +727,12 @@ body {
   border-radius: 4px;
 }
 
+/* Crop watermark from AI-generated images — clips bottom-right corner */
+.img-crop-watermark {
+  object-position: center top;
+  object-fit: cover;
+}
+
 /* Screen reader only utility */
 .sr-only {
   position: absolute;

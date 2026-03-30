@@ -36,6 +36,13 @@ const features = [
     },
 ];
 
+const featureIllustrations = [
+    '/images/features/feat-campaign.png',
+    '/images/features/feat-analytics.png',
+    '/images/features/feat-integrations.png',
+    '/images/features/feat-skills.png',
+];
+
 const stats = [
     { value: 42, suffix: '+', label: 'AI Agents' },
     { value: 14, suffix: '', label: 'Agentic Skills' },
@@ -194,8 +201,8 @@ export default function FeaturesPage() {
                                 </div>
 
                                 {/* Video placeholder */}
-                                <div className="fp-panel-visual" style={{ order: isReversed ? 1 : 2, height: 400 }}>
-                                    <VideoPlaceholder color={feature.accent} label={feature.title} />
+                                <div className="fp-panel-visual" style={{ order: isReversed ? 1 : 2, height: 400, borderRadius: 20, overflow: 'hidden', border: `1px solid ${isDark ? 'var(--border-dark-default)' : 'var(--border-default)'}`, boxShadow: `0 24px 64px -16px ${feature.accent}15` }}>
+                                    <img src={featureIllustrations[i]} alt={feature.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                 </div>
                             </div>
                         </section>

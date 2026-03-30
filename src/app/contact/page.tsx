@@ -196,6 +196,19 @@ export default function ContactPage() {
                 </div>
             </section>
 
+            {/* ═══ GLOBAL PRESENCE — Dark ═══ */}
+            <section className="dark-section" style={{ padding: '80px 24px', background: 'var(--bg-dark-primary)', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ maxWidth: 1000, margin: '0 auto', textAlign: 'center' }}>
+                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#FF8533', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Global Presence</p>
+                    <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800, color: '#FAFAFA', marginBottom: 32, letterSpacing: '-0.02em' }}>
+                        Serving teams in <span className="text-gradient">150+ countries</span>
+                    </h2>
+                    <div style={{ borderRadius: 20, overflow: 'hidden', border: '1px solid var(--border-dark-default)' }}>
+                        <img src="/images/misc/world-map.png" alt="OpenAnalyst global presence" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                    </div>
+                </div>
+            </section>
+
             <Footer />
 
             <style>{`
