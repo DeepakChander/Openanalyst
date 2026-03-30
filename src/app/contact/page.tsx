@@ -215,43 +215,40 @@ export default function ContactPage() {
                 </div>
             </section>
 
-            {/* ═══ GLOBAL PRESENCE — Light with dark map card ═══ */}
-            <section className="ct-map-section" style={{ padding: '60px 24px 80px', background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}>
-                <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
-                    <p className="label-mono" style={{ marginBottom: 12 }}>Global Presence</p>
-                    <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: 32, letterSpacing: '-0.02em' }}>
-                        Serving teams in <span className="text-gradient">150+ countries</span>
-                    </h2>
-                    {/* Instead of SVG map — simple stat cards showing global reach */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, maxWidth: 800, margin: '0 auto' }}>
-                        {[
-                            { city: 'San Francisco', flag: '🇺🇸', region: 'HQ', color: '#FF6B00' },
-                            { city: 'London', flag: '🇬🇧', region: 'Europe', color: '#3B82F6' },
-                            { city: 'Mumbai', flag: '🇮🇳', region: 'South Asia', color: '#10B981' },
-                            { city: 'Singapore', flag: '🇸🇬', region: 'SE Asia', color: '#8B5CF6' },
-                        ].map((loc, i) => (
-                            <div key={i} style={{
-                                padding: '24px 16px', borderRadius: 'var(--radius-xl)',
-                                background: 'var(--bg-white)', border: '1px solid var(--border)',
-                                boxShadow: 'var(--shadow-sm)', textAlign: 'center',
-                                transition: 'all 0.3s var(--ease-out)',
-                            }}
-                                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 8px 24px ${loc.color}12`; e.currentTarget.style.borderColor = `${loc.color}25`; }}
-                                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; e.currentTarget.style.borderColor = 'var(--border)'; }}
-                            >
-                                <div style={{ fontSize: 28, marginBottom: 8 }}>{loc.flag}</div>
-                                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 2 }}>{loc.city}</h3>
-                                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: loc.color, letterSpacing: '0.06em', textTransform: 'uppercase' }}>{loc.region}</span>
-                            </div>
-                        ))}
+            {/* ═══ GLOBAL PRESENCE — Dark map section ═══ */}
+            <section className="ct-map-section dark-section" style={{ padding: '80px 24px', background: 'var(--bg-dark)', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+                    <div style={{ textAlign: 'center', marginBottom: 40 }}>
+                        <p className="label-mono" style={{ color: '#FF8533', marginBottom: 12 }}>Global Presence</p>
+                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 800, color: '#FAFAFA', marginBottom: 0, letterSpacing: '-0.02em' }}>
+                            Serving teams in <span className="text-gradient">150+ countries</span>
+                        </h2>
                     </div>
 
-                    {/* Stats bar */}
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: 40, marginTop: 32, paddingTop: 24, borderTop: '1px solid var(--border)' }}>
-                        {[{ val: '150+', label: 'Countries' }, { val: '10K+', label: 'Campaigns' }, { val: '24/7', label: 'Uptime' }].map((s, i) => (
-                            <div key={i} style={{ textAlign: 'center' }}>
-                                <div style={{ fontFamily: 'var(--font-heading)', fontSize: 22, fontWeight: 800, color: 'var(--orange)' }}>{s.val}</div>
-                                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: 2 }}>{s.label}</div>
+                    {/* World map image — full width, cropped to hide watermark */}
+                    <div className="ai-img-container" style={{
+                        borderRadius: 'var(--radius-xl)', overflow: 'hidden',
+                        border: '1px solid rgba(255,255,255,0.06)',
+                        boxShadow: '0 24px 80px -16px rgba(255,107,0,0.1)',
+                    }}>
+                        <img src="/images/misc/world-map.png" alt="OpenAnalyst global presence — 150+ countries" style={{
+                            width: '100%', height: 'auto', display: 'block',
+                        }} />
+                    </div>
+
+                    {/* Location + stats strip below map */}
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: 48, marginTop: 32, flexWrap: 'wrap' }}>
+                        {[
+                            { city: 'San Francisco', label: 'HQ', color: '#FF6B00' },
+                            { city: 'London', label: 'Europe', color: '#3B82F6' },
+                            { city: 'Mumbai', label: 'South Asia', color: '#10B981' },
+                            { city: 'Singapore', label: 'SE Asia', color: '#8B5CF6' },
+                            { city: 'São Paulo', label: 'LATAM', color: '#F59E0B' },
+                        ].map((loc, i) => (
+                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                <span style={{ width: 8, height: 8, borderRadius: '50%', background: loc.color, boxShadow: `0 0 8px ${loc.color}50` }} />
+                                <span style={{ fontSize: 13, fontWeight: 600, color: '#FAFAFA' }}>{loc.city}</span>
+                                <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-mono)' }}>{loc.label}</span>
                             </div>
                         ))}
                     </div>
