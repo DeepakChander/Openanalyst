@@ -327,16 +327,113 @@ const Features: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Right — feature image */}
-                    <div key={`img-${active}`} className="ai-img-container" style={{
+                    {/* Right — coded interactive visual */}
+                    <div key={`vis-${active}`} style={{
                         height: 380, borderRadius: 20, overflow: 'hidden',
-                        border: '1px solid var(--border-dark-default)',
+                        background: 'var(--bg-dark-card)', border: '1px solid var(--border-dark-default)',
                         boxShadow: `0 24px 64px -16px ${f.color}15`,
                         animation: 'featFadeIn 0.6s var(--ease-spring) forwards',
+                        padding: 24, display: 'flex', flexDirection: 'column',
+                        position: 'relative',
                     }}>
-                        <img src={featureImages[active]} alt={f.tab} style={{
-                            width: '100%', height: '100%',
-                        }} />
+                        {/* Ambient glow */}
+                        <div style={{ position: 'absolute', top: '20%', right: '10%', width: '60%', height: '60%', borderRadius: '50%', background: `radial-gradient(circle, ${f.color}08 0%, transparent 70%)`, filter: 'blur(40px)', pointerEvents: 'none' }} />
+
+                        {/* Header bar */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 16 }}>
+                            <div style={{ display: 'flex', gap: 4 }}>
+                                <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#FF5F57' }} />
+                                <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#FEBC2E' }} />
+                                <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#28C840' }} />
+                            </div>
+                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--text-dark-muted)', marginLeft: 6 }}>openanalyst — {f.tab.toLowerCase()}</span>
+                            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 4 }}>
+                                <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 6px rgba(16,185,129,0.5)' }} />
+                                <span style={{ fontSize: 8, color: '#10B981', fontFamily: 'var(--font-mono)' }}>Live</span>
+                            </div>
+                        </div>
+
+                        {/* Feature-specific visual */}
+                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8, position: 'relative', zIndex: 1 }}>
+                            {active === 0 && /* Campaign Agent — channel cards */
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                    {[{ ch: 'Email Campaign', stat: '2,400 sent', pct: 78, c: '#FF6B00' }, { ch: 'Social Ads', stat: '4 platforms', pct: 92, c: '#3B82F6' }, { ch: 'Retargeting', stat: '840 users', pct: 65, c: '#10B981' }, { ch: 'Google Ads', stat: '$2.4k spend', pct: 85, c: '#F59E0B' }].map((ch, i) => (
+                                        <div key={i} style={{ padding: '10px 14px', borderRadius: 10, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                                                <span style={{ fontSize: 11, fontWeight: 600, color: '#FAFAFA' }}>{ch.ch}</span>
+                                                <span style={{ fontSize: 10, color: ch.c, fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{ch.stat}</span>
+                                            </div>
+                                            <div style={{ height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.06)' }}>
+                                                <div style={{ width: `${ch.pct}%`, height: '100%', borderRadius: 2, background: `linear-gradient(90deg, ${ch.c}, ${ch.c}99)`, transition: 'width 1s ease' }} />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            }
+                            {active === 1 && /* Segmentation — cluster dots */
+                                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                                    {[{ x: 25, y: 30, r: 45, c: '#3B82F6', l: 'High Intent', n: '3,240' }, { x: 65, y: 25, r: 35, c: '#10B981', l: 'Engaged', n: '12.4K' }, { x: 45, y: 70, r: 30, c: '#F59E0B', l: 'At Risk', n: '180' }, { x: 80, y: 65, r: 25, c: '#8B5CF6', l: 'New Users', n: '2,800' }].map((seg, i) => (
+                                        <div key={i} style={{ position: 'absolute', left: `${seg.x}%`, top: `${seg.y}%`, transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
+                                            <div style={{ width: seg.r, height: seg.r, borderRadius: '50%', background: `${seg.c}18`, border: `1px solid ${seg.c}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
+                                                <span style={{ fontSize: 11, fontWeight: 800, color: seg.c, fontFamily: 'var(--font-heading)' }}>{seg.n}</span>
+                                            </div>
+                                            <span style={{ fontSize: 8, color: 'var(--text-dark-muted)', fontFamily: 'var(--font-mono)' }}>{seg.l}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            }
+                            {active === 2 && /* Research — insight cards */
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                    {[{ t: 'Competitor Alert', d: 'Brand X launched new campaign targeting your audience', s: 'HIGH', sc: '#EF4444' }, { t: 'Trend Detected', d: 'AI marketing queries up 340% in your vertical', s: 'RISING', sc: '#10B981' }, { t: 'Market Gap', d: 'No competitor targeting "autonomous campaign" keywords', s: 'OPPORTUNITY', sc: '#F59E0B' }].map((ins, i) => (
+                                        <div key={i} style={{ padding: '12px 14px', borderRadius: 10, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                                                <span style={{ fontSize: 12, fontWeight: 700, color: '#FAFAFA' }}>{ins.t}</span>
+                                                <span style={{ fontSize: 8, fontWeight: 700, color: ins.sc, padding: '2px 6px', borderRadius: 4, background: `${ins.sc}15`, fontFamily: 'var(--font-mono)' }}>{ins.s}</span>
+                                            </div>
+                                            <p style={{ fontSize: 10, color: 'var(--text-dark-secondary)', lineHeight: 1.5, margin: 0 }}>{ins.d}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            }
+                            {active === 3 && /* AI Search — ranking cards */
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                    {[{ q: 'AI marketing automation platform', rank: '#1', engine: 'ChatGPT', score: 97 }, { q: 'best AI marketing tools 2026', rank: '#2', engine: 'Perplexity', score: 89 }, { q: 'autonomous campaign management', rank: '#1', engine: 'Gemini', score: 94 }].map((r, i) => (
+                                        <div key={i} style={{ padding: '12px 14px', borderRadius: 10, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                                                <span style={{ fontSize: 16, fontWeight: 900, color: '#10B981', fontFamily: 'var(--font-heading)' }}>{r.rank}</span>
+                                                <span style={{ fontSize: 11, fontWeight: 600, color: '#FAFAFA', flex: 1 }}>{r.q}</span>
+                                            </div>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                                <span style={{ fontSize: 8, color: 'var(--text-dark-muted)', fontFamily: 'var(--font-mono)' }}>{r.engine}</span>
+                                                <div style={{ flex: 1, height: 3, borderRadius: 2, background: 'rgba(255,255,255,0.06)' }}>
+                                                    <div style={{ width: `${r.score}%`, height: '100%', borderRadius: 2, background: 'linear-gradient(90deg, #10B981, #10B98180)' }} />
+                                                </div>
+                                                <span style={{ fontSize: 9, fontWeight: 700, color: '#10B981', fontFamily: 'var(--font-mono)' }}>{r.score}%</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            }
+                            {active === 4 && /* SEO Content — content scores */
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                    {[{ t: 'AI Marketing Guide', kw: 12, score: 94, status: 'Published' }, { t: 'Campaign Automation Tips', kw: 8, score: 87, status: 'Draft' }, { t: 'ROI Optimization Playbook', kw: 15, score: 91, status: 'Published' }].map((c, i) => (
+                                        <div key={i} style={{ padding: '12px 14px', borderRadius: 10, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                                                <span style={{ fontSize: 12, fontWeight: 700, color: '#FAFAFA' }}>{c.t}</span>
+                                                <span style={{ fontSize: 8, fontWeight: 600, color: c.status === 'Published' ? '#10B981' : '#F59E0B', padding: '2px 6px', borderRadius: 4, background: c.status === 'Published' ? 'rgba(16,185,129,0.1)' : 'rgba(245,158,11,0.1)', fontFamily: 'var(--font-mono)' }}>{c.status}</span>
+                                            </div>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                                <span style={{ fontSize: 8, color: 'var(--text-dark-muted)', fontFamily: 'var(--font-mono)' }}>{c.kw} keywords</span>
+                                                <div style={{ flex: 1, height: 3, borderRadius: 2, background: 'rgba(255,255,255,0.06)' }}>
+                                                    <div style={{ width: `${c.score}%`, height: '100%', borderRadius: 2, background: `linear-gradient(90deg, #F59E0B, #F59E0B80)` }} />
+                                                </div>
+                                                <span style={{ fontSize: 10, fontWeight: 800, color: '#F59E0B', fontFamily: 'var(--font-heading)' }}>{c.score}</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>

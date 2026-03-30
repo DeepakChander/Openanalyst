@@ -69,7 +69,7 @@ export default function CareersPage() {
         });
 
         gsap.from('.car-value-card', { y: 60, opacity: 0, stagger: 0.1, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: '.car-values', start: 'top 85%' } });
-        gsap.from('.car-benefit', { y: 30, opacity: 0, stagger: 0.06, duration: 0.5, ease: 'power3.out', scrollTrigger: { trigger: '.car-benefits', start: 'top 85%' } });
+        gsap.fromTo('.car-benefit', { y: 30, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.06, duration: 0.5, ease: 'power3.out', scrollTrigger: { trigger: '.car-benefits', start: 'top 90%', toggleActions: 'play none none none' } });
         gsap.from('.car-step', { x: -30, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power3.out', scrollTrigger: { trigger: '.car-process', start: 'top 85%' } });
     }, { scope: pageRef });
 
