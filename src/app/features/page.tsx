@@ -335,44 +335,48 @@ export default function FeaturesPage() {
                         </div>
                     </div>
 
-                    {/* Right — Scrolling feature blocks */}
-                    <div className="fp-scroll-column" style={{ display: 'flex', flexDirection: 'column', gap: 80 }}>
+                    {/* Right — Scrolling feature blocks in CARDS */}
+                    <div className="fp-scroll-column" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
                         {features.map((f, i) => (
-                            <div key={f.id} className="fp-feature-block" style={{ paddingTop: i === 0 ? 0 : 0 }}>
+                            <div key={f.id} className="fp-feature-block" style={{
+                                padding: '32px 28px', borderRadius: 'var(--radius-xl)',
+                                background: 'var(--bg-surface)', border: `1px solid var(--border)`,
+                                boxShadow: 'var(--shadow-sm)',
+                                transition: 'all 0.3s var(--ease-out)',
+                                borderLeftWidth: 3, borderLeftColor: `${f.accent}40`,
+                            }}
+                                onMouseEnter={(e) => { e.currentTarget.style.borderLeftColor = f.accent; e.currentTarget.style.boxShadow = `0 8px 32px ${f.accent}10`; }}
+                                onMouseLeave={(e) => { e.currentTarget.style.borderLeftColor = `${f.accent}40`; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; }}
+                            >
                                 {/* Number + subtitle */}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
                                     <span style={{
-                                        fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 700,
-                                        color: f.accent, background: `${f.accent}08`,
-                                        padding: '4px 10px', borderRadius: 'var(--radius-sm)',
-                                        border: `1px solid ${f.accent}18`,
+                                        fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700,
+                                        color: f.accent, background: `${f.accent}10`,
+                                        padding: '3px 8px', borderRadius: 'var(--radius-sm)',
                                     }}>{f.id}</span>
-                                    <span className="label-mono" style={{ color: f.accent, fontSize: 11 }}>{f.subtitle}</span>
+                                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: f.accent, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{f.subtitle}</span>
                                 </div>
 
-                                {/* Title */}
                                 <h3 style={{
-                                    fontFamily: 'var(--font-heading)',
-                                    fontSize: 'clamp(1.6rem, 3vw, 2.2rem)',
-                                    fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.15,
-                                    color: 'var(--text-primary)', marginBottom: 16,
+                                    fontFamily: 'var(--font-heading)', fontSize: 20,
+                                    fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.2,
+                                    color: 'var(--text-primary)', marginBottom: 8,
                                 }}>{f.title}</h3>
 
-                                {/* Description */}
                                 <p style={{
-                                    fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.8,
-                                    marginBottom: 24,
+                                    fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7,
+                                    marginBottom: 16,
                                 }}>{f.description}</p>
 
-                                {/* Detail bullets */}
-                                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
                                     {f.details.map((detail, j) => (
                                         <li key={j} style={{
-                                            display: 'flex', alignItems: 'flex-start', gap: 12,
-                                            fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7,
+                                            display: 'flex', alignItems: 'center', gap: 8,
+                                            fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.5,
                                         }}>
                                             <span style={{
-                                                width: 20, height: 20, borderRadius: 'var(--radius-sm)',
+                                                width: 16, height: 16, borderRadius: 'var(--radius-sm)',
                                                 background: `${f.accent}08`, border: `1px solid ${f.accent}15`,
                                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                                 flexShrink: 0, marginTop: 2,
