@@ -5,90 +5,30 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Header, Footer } from '@/components';
-import Magnetic from '@/components/Magnetic';
 
 gsap.registerPlugin(ScrollTrigger);
 
 type Category = 'All' | 'Blog' | 'Case Studies' | 'FAQs';
-
 const categories: Category[] = ['All', 'Blog', 'Case Studies', 'FAQs'];
 
 const resources = [
-    {
-        title: 'Getting Started with AI Marketing',
-        desc: 'A comprehensive guide to leveraging AI agents for your marketing strategy, from setup to your first automated campaign.',
-        category: 'Blog' as Category,
-        date: 'Mar 10, 2026',
-    },
-    {
-        title: 'Case Study: 10x ROI with Automated Campaigns',
-        desc: 'How a mid-market SaaS company used OpenAnalyst to scale paid acquisition and cut CAC by 60%.',
-        category: 'Case Studies' as Category,
-        date: 'Feb 28, 2026',
-    },
-    {
-        title: 'How to Set Up Your First Campaign',
-        desc: 'Step-by-step walkthrough for creating, launching, and optimizing your first AI-powered marketing campaign.',
-        category: 'Blog' as Category,
-        date: 'Feb 15, 2026',
-    },
-    {
-        title: 'The Future of Marketing Automation',
-        desc: 'Why traditional automation tools are being replaced by AI agents that think, adapt, and optimize in real-time.',
-        category: 'Blog' as Category,
-        date: 'Jan 30, 2026',
-    },
-    {
-        title: 'Case Study: From 0 to 50K Leads in 90 Days',
-        desc: 'An e-commerce brand shares how OpenAnalyst agents managed multi-channel campaigns across Google, Meta, and email.',
-        category: 'Case Studies' as Category,
-        date: 'Jan 18, 2026',
-    },
-    {
-        title: 'AI-Driven Content Strategy Playbook',
-        desc: 'How to use AI agents to research, plan, and execute a content marketing strategy that drives organic growth.',
-        category: 'Blog' as Category,
-        date: 'Jan 5, 2026',
-    },
-    {
-        title: 'Case Study: Agency Scales to 100 Clients',
-        desc: 'A digital marketing agency used OpenAnalyst to manage campaigns for 100+ clients without adding headcount.',
-        category: 'Case Studies' as Category,
-        date: 'Dec 20, 2025',
-    },
-    {
-        title: 'Integrating OpenAnalyst with Your Stack',
-        desc: 'Connect OpenAnalyst to HubSpot, Salesforce, Google Ads, Meta, Slack, and 20+ other tools in minutes.',
-        category: 'Blog' as Category,
-        date: 'Dec 8, 2025',
-    },
+    { title: 'Getting Started with AI Marketing', desc: 'A comprehensive guide to leveraging AI agents for your marketing strategy.', category: 'Blog' as Category, date: 'Mar 10, 2026' },
+    { title: 'Case Study: 10x ROI with Automated Campaigns', desc: 'How a mid-market SaaS company scaled paid acquisition and cut CAC by 60%.', category: 'Case Studies' as Category, date: 'Feb 28, 2026' },
+    { title: 'How to Set Up Your First Campaign', desc: 'Step-by-step walkthrough for creating and optimizing your first AI campaign.', category: 'Blog' as Category, date: 'Feb 15, 2026' },
+    { title: 'The Future of Marketing Automation', desc: 'Why traditional automation is being replaced by AI agents that think and adapt.', category: 'Blog' as Category, date: 'Jan 30, 2026' },
+    { title: 'Case Study: From 0 to 50K Leads in 90 Days', desc: 'An e-commerce brand managed multi-channel campaigns across Google, Meta, and email.', category: 'Case Studies' as Category, date: 'Jan 18, 2026' },
+    { title: 'AI-Driven Content Strategy Playbook', desc: 'How to use AI agents for a content marketing strategy that drives organic growth.', category: 'Blog' as Category, date: 'Jan 5, 2026' },
+    { title: 'Case Study: Agency Scales to 100 Clients', desc: 'A digital marketing agency managed campaigns for 100+ clients without adding headcount.', category: 'Case Studies' as Category, date: 'Dec 20, 2025' },
+    { title: 'Integrating OpenAnalyst with Your Stack', desc: 'Connect to HubSpot, Salesforce, Google Ads, Meta, Slack, and 20+ tools in minutes.', category: 'Blog' as Category, date: 'Dec 8, 2025' },
 ];
 
 const faqs = [
-    {
-        q: 'What is OpenAnalyst and how does it work?',
-        a: 'OpenAnalyst is an AI-powered marketing platform that uses intelligent agents to plan, execute, and optimize your marketing campaigns. Our agents connect to your existing tools and autonomously manage campaigns across channels like Google Ads, Meta, email, and more.',
-    },
-    {
-        q: 'How is OpenAnalyst different from traditional marketing automation?',
-        a: 'Traditional automation tools follow pre-set rules. OpenAnalyst agents learn from your data, adapt to market changes in real-time, and make decisions like a seasoned marketer would \u2014 but 24/7 and at scale.',
-    },
-    {
-        q: 'Do I need technical expertise to use OpenAnalyst?',
-        a: 'Not at all. OpenAnalyst is designed for marketers, not engineers. You describe your goals in plain English, and our AI agents handle the technical execution. No coding or API knowledge required.',
-    },
-    {
-        q: 'What integrations does OpenAnalyst support?',
-        a: 'We integrate with 27+ marketing tools including Google Ads, Meta Ads, HubSpot, Salesforce, Mailchimp, Slack, Gmail, Shopify, and more. New integrations are added regularly based on user feedback.',
-    },
-    {
-        q: 'Is my data secure with OpenAnalyst?',
-        a: 'Absolutely. We use enterprise-grade encryption (AES-256 at rest, TLS 1.3 in transit), SOC 2 Type II compliance, and never share your data with third parties. You retain full ownership of all your data.',
-    },
-    {
-        q: 'Can I try OpenAnalyst before committing?',
-        a: 'Yes. We offer a free tier with limited agent runs so you can experience the platform firsthand. No credit card required to get started.',
-    },
+    { q: 'What is OpenAnalyst and how does it work?', a: 'OpenAnalyst is an AI-powered marketing platform that uses intelligent agents to plan, execute, and optimize your marketing campaigns. Our agents connect to your existing tools and autonomously manage campaigns across channels.' },
+    { q: 'How is OpenAnalyst different from traditional automation?', a: 'Traditional automation follows pre-set rules. OpenAnalyst agents learn from your data, adapt to market changes in real-time, and make decisions like a seasoned marketer — but 24/7 and at scale.' },
+    { q: 'Do I need technical expertise?', a: 'Not at all. OpenAnalyst is designed for marketers. You describe your goals in plain English, and our AI agents handle the technical execution. No coding required.' },
+    { q: 'What integrations are supported?', a: 'We integrate with 27+ tools including Google Ads, Meta Ads, HubSpot, Salesforce, Mailchimp, Slack, Gmail, Shopify, and more. New integrations are added regularly.' },
+    { q: 'Is my data secure?', a: 'Enterprise-grade encryption (AES-256 at rest, TLS 1.3 in transit), SOC 2 Type II compliance. We never share your data with third parties. You retain full ownership.' },
+    { q: 'Can I try before committing?', a: 'Yes. We offer a free trial so you can experience the platform firsthand. No credit card required to get started.' },
 ];
 
 export default function ResourcesPage() {
@@ -97,312 +37,146 @@ export default function ResourcesPage() {
     const [openFaq, setOpenFaq] = useState<number | null>(null);
     const faqRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-    const filteredResources = activeTab === 'All'
-        ? resources
-        : resources.filter((r) => r.category === activeTab);
+    const filtered = activeTab === 'All' ? resources : resources.filter((r) => r.category === activeTab);
 
     useGSAP(() => {
-        gsap.from('.resources-hero', {
-            y: 40, opacity: 0, duration: 0.8, ease: 'power3.out',
-        });
-
-        const reveals = gsap.utils.toArray<HTMLElement>('.resources-reveal');
-        reveals.forEach((el) => {
-            gsap.from(el, {
-                y: 40, opacity: 0, duration: 0.7, ease: 'power3.out',
-                scrollTrigger: { trigger: el, start: 'top 90%', once: true },
-            });
+        gsap.from('.res-hero-label', { y: 16, opacity: 0, duration: 0.5, delay: 0.2 });
+        gsap.from('.res-hero-line', { y: 80, opacity: 0, stagger: 0.12, duration: 1, ease: 'power4.out', delay: 0.3 });
+        gsap.from('.res-hero-sub', { y: 20, opacity: 0, duration: 0.6, delay: 0.8 });
+        gsap.utils.toArray<HTMLElement>('.res-reveal').forEach((el) => {
+            gsap.from(el, { y: 40, opacity: 0, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%', once: true } });
         });
     }, { scope: pageRef });
 
     const toggleFaq = useCallback((index: number) => {
         const el = faqRefs.current[index];
         if (!el) return;
-
         if (openFaq === index) {
-            // Close
-            gsap.to(el, {
-                height: 0, opacity: 0, duration: 0.3, ease: 'power2.inOut',
-                onComplete: () => setOpenFaq(null),
-            });
+            gsap.to(el, { height: 0, opacity: 0, duration: 0.3, ease: 'power2.inOut', onComplete: () => setOpenFaq(null) });
         } else {
-            // Close previous
             if (openFaq !== null && faqRefs.current[openFaq]) {
-                gsap.to(faqRefs.current[openFaq]!, {
-                    height: 0, opacity: 0, duration: 0.25, ease: 'power2.inOut',
-                });
+                gsap.to(faqRefs.current[openFaq]!, { height: 0, opacity: 0, duration: 0.25, ease: 'power2.inOut' });
             }
             setOpenFaq(index);
-            // Open new
             gsap.set(el, { height: 'auto', opacity: 1 });
             const h = el.offsetHeight;
-            gsap.fromTo(el,
-                { height: 0, opacity: 0 },
-                { height: h, opacity: 1, duration: 0.35, ease: 'power2.out' },
-            );
+            gsap.fromTo(el, { height: 0, opacity: 0 }, { height: h, opacity: 1, duration: 0.35, ease: 'power2.out' });
         }
     }, [openFaq]);
 
-    const categoryColor = (cat: Category) => {
-        switch (cat) {
-            case 'Blog': return 'var(--rust)';
-            case 'Case Studies': return '#3b82f6';
-            case 'FAQs': return '#2ecc71';
-            default: return 'var(--text-muted)';
-        }
-    };
+    const catColor = (cat: Category) => cat === 'Blog' ? '#FF6B00' : cat === 'Case Studies' ? '#3B82F6' : '#10B981';
 
     return (
-        <div ref={pageRef} style={{ minHeight: '100vh', backgroundColor: '#FFFFFF', color: '#1A1A1A' }}>
+        <div ref={pageRef} style={{ minHeight: '100vh' }}>
             <Header />
-            <main style={{ paddingTop: '120px', paddingBottom: '80px' }}>
-                <div style={{ position: 'relative', overflow: 'hidden' }}>
-                    <div style={{
-                        position: 'absolute', inset: '-20%',
-                        background: `
-                            radial-gradient(ellipse 50% 40% at 30% 30%, rgba(255,107,0,0.08) 0%, transparent 60%),
-                            radial-gradient(ellipse 40% 50% at 70% 60%, rgba(255,133,51,0.05) 0%, transparent 60%)
-                        `,
-                        pointerEvents: 'none',
-                    }} />
 
-                    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '0 20px', position: 'relative', zIndex: 1 }}>
+            {/* ═══ HERO — Dark ═══ */}
+            <section className="dark-section" style={{ paddingTop: 160, paddingBottom: 60, background: 'var(--bg-dark-primary)', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '80px 80px', maskImage: 'radial-gradient(ellipse 50% 60% at 50% 50%, black 0%, transparent 70%)', WebkitMaskImage: 'radial-gradient(ellipse 50% 60% at 50% 50%, black 0%, transparent 70%)' }} />
+                <div style={{ position: 'absolute', top: '10%', left: '30%', width: 500, height: 500, borderRadius: '50%', background: 'rgba(255,107,0,0.04)', filter: 'blur(100px)', pointerEvents: 'none' }} />
+                <div style={{ maxWidth: 700, margin: '0 auto', padding: '0 24px', textAlign: 'center', position: 'relative', zIndex: 2 }}>
+                    <div className="res-hero-label" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px', borderRadius: 999, marginBottom: 32, border: '1px solid rgba(255,107,0,0.2)', background: 'rgba(255,107,0,0.06)' }}>
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF6B00', boxShadow: '0 0 8px rgba(255,107,0,0.5)' }} />
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#FF8533', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Resources</span>
+                    </div>
+                    <h1>
+                        <span style={{ display: 'block', overflow: 'hidden' }}>
+                            <span className="res-hero-line" style={{ display: 'block', fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.8rem, 6vw, 5rem)', fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.04em', background: 'var(--gradient-hero)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Resources</span>
+                        </span>
+                    </h1>
+                    <p className="res-hero-sub" style={{ maxWidth: 520, margin: '24px auto 0', fontSize: 16, color: 'var(--text-dark-secondary)', lineHeight: 1.7 }}>
+                        Guides, case studies, and insights to help you get the most out of AI-powered marketing.
+                    </p>
+                </div>
+            </section>
 
-                        {/* Hero */}
-                        <div className="resources-hero" style={{ textAlign: 'center', marginBottom: '56px' }}>
-                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--text-muted)', marginBottom: '16px', letterSpacing: '2px', textTransform: 'uppercase' }}>
-                                Resources
-                            </p>
-                            <h1 style={{
-                                fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', fontWeight: 800,
-                                lineHeight: 1.1, marginBottom: '24px',
-                            }}>
-                                <span className="text-gradient">Resources</span>
-                            </h1>
-                            <p style={{ fontSize: '1.15rem', color: 'var(--text-muted)', lineHeight: 1.7, fontFamily: 'var(--font-body)', maxWidth: '580px', margin: '0 auto' }}>
-                                Guides, case studies, and insights to help you get the most out of AI-powered marketing.
-                            </p>
+            {/* ═══ CONTENT — Light ═══ */}
+            <section className="light-section" style={{ padding: '80px 24px 100px', background: 'var(--bg-surface)' }}>
+                <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+                    {/* Category tabs */}
+                    <div className="res-reveal" style={{ marginBottom: 40, display: 'flex', justifyContent: 'center' }}>
+                        <div style={{ display: 'inline-flex', gap: 6, padding: 4, borderRadius: 12, background: 'var(--bg-white)', border: '1px solid var(--border-default)' }}>
+                            {categories.map((cat) => (
+                                <button key={cat} onClick={() => setActiveTab(cat)} style={{
+                                    padding: '8px 20px', borderRadius: 9, border: 'none',
+                                    background: activeTab === cat ? 'var(--orange)' : 'transparent',
+                                    color: activeTab === cat ? '#fff' : 'var(--text-muted)',
+                                    fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600,
+                                    cursor: 'pointer', transition: 'all 0.3s var(--ease-spring)',
+                                }}>{cat}</button>
+                            ))}
                         </div>
+                    </div>
 
-                        {/* Category Tabs */}
-                        <div className="resources-reveal" style={{ marginBottom: '40px' }}>
-                            <div style={{
-                                display: 'flex', gap: '8px', flexWrap: 'wrap',
-                                justifyContent: 'center',
-                            }}>
-                                {categories.map((cat) => (
-                                    <button
-                                        key={cat}
-                                        onClick={() => setActiveTab(cat)}
-                                        style={{
-                                            padding: '8px 20px',
-                                            borderRadius: '9999px',
-                                            border: '1px solid',
-                                            borderColor: activeTab === cat ? 'var(--rust)' : '#E5E5E5',
-                                            backgroundColor: activeTab === cat ? 'var(--rust)' : 'transparent',
-                                            color: activeTab === cat ? '#ffffff' : 'var(--text-muted)',
-                                            fontFamily: 'var(--font-mono)', fontSize: '13px', fontWeight: 600,
-                                            cursor: 'pointer', transition: 'all 0.3s ease',
-                                        }}
-                                        onMouseEnter={(e) => {
-                                            if (activeTab !== cat) {
-                                                e.currentTarget.style.borderColor = 'var(--rust)';
-                                                e.currentTarget.style.color = 'var(--rust)';
-                                            }
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            if (activeTab !== cat) {
-                                                e.currentTarget.style.borderColor = '#E5E5E5';
-                                                e.currentTarget.style.color = 'var(--text-muted)';
-                                            }
-                                        }}
-                                    >
-                                        {cat}
-                                    </button>
-                                ))}
+                    {/* Resource cards */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16, marginBottom: 80 }}>
+                        {filtered.map((r, i) => (
+                            <div key={i} style={{
+                                padding: '28px 24px', borderRadius: 20,
+                                background: 'var(--bg-white)', border: '1px solid var(--border-default)',
+                                transition: 'all 0.3s var(--ease-spring)', cursor: 'default',
+                                display: 'flex', flexDirection: 'column',
+                            }}
+                                onMouseEnter={(e) => { e.currentTarget.style.borderColor = catColor(r.category); e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = `0 8px 24px ${catColor(r.category)}12`; }}
+                                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-default)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
+                            >
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 999, background: `${catColor(r.category)}10`, color: catColor(r.category), textTransform: 'uppercase', letterSpacing: '0.04em' }}>{r.category}</span>
+                                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-muted)' }}>{r.date}</span>
+                                </div>
+                                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 17, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 10, lineHeight: 1.3 }}>{r.title}</h3>
+                                <p style={{ color: 'var(--text-muted)', fontSize: 13, lineHeight: 1.7, flex: 1 }}>{r.desc}</p>
+                                <div style={{ marginTop: 16 }}>
+                                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600, color: 'var(--orange)' }}>Read more &rarr;</span>
+                                </div>
                             </div>
-                        </div>
+                        ))}
+                    </div>
 
-                        {/* Resource Cards Grid */}
-                        <div style={{
-                            display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                            gap: '20px', marginBottom: '80px',
-                        }}>
-                            {filteredResources.map((resource, i) => (
+                    {/* FAQ */}
+                    <div className="res-reveal">
+                        <div style={{ textAlign: 'center', marginBottom: 40 }}>
+                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>FAQ</p>
+                            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>Frequently Asked Questions</h2>
+                        </div>
+                        <div style={{ maxWidth: 700, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                            {faqs.map((faq, i) => (
                                 <div key={i} style={{
-                                    padding: '28px 24px',
-                                    borderRadius: '16px',
-                                    backgroundColor: '#F5F5F5',
-                                    border: '1px solid #E5E5E5',
-                                    transition: 'all 0.3s ease',
-                                    cursor: 'default',
-                                    display: 'flex', flexDirection: 'column',
-                                }}
-                                    onMouseEnter={(e) => {
-                                        const el = e.currentTarget as HTMLElement;
-                                        el.style.borderColor = 'var(--rust)';
-                                        el.style.transform = 'translateY(-4px)';
-                                        el.style.boxShadow = '0 8px 24px rgba(255,107,0,0.08)';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        const el = e.currentTarget as HTMLElement;
-                                        el.style.borderColor = '#E5E5E5';
-                                        el.style.transform = 'translateY(0)';
-                                        el.style.boxShadow = 'none';
-                                    }}
-                                >
-                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                                        <span style={{
-                                            fontFamily: 'var(--font-mono)', fontSize: '11px', fontWeight: 700,
-                                            padding: '3px 10px', borderRadius: '9999px',
-                                            backgroundColor: `${categoryColor(resource.category)}15`,
-                                            color: categoryColor(resource.category),
-                                        }}>
-                                            {resource.category}
-                                        </span>
-                                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-muted)' }}>
-                                            {resource.date}
-                                        </span>
-                                    </div>
-                                    <h3 style={{
-                                        fontFamily: 'var(--font-heading)', fontSize: '1.1rem', fontWeight: 700,
-                                        color: '#1A1A1A', marginBottom: '10px', lineHeight: 1.3,
+                                    borderRadius: 16, background: 'var(--bg-white)', border: `1px solid ${openFaq === i ? 'var(--orange)' : 'var(--border-default)'}`,
+                                    overflow: 'hidden', transition: 'border-color 0.3s ease',
+                                }}>
+                                    <button onClick={() => toggleFaq(i)} style={{
+                                        width: '100%', padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                        background: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left', gap: 16,
                                     }}>
-                                        {resource.title}
-                                    </h3>
-                                    <p style={{
-                                        color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.6,
-                                        fontFamily: 'var(--font-body)', flex: 1,
-                                    }}>
-                                        {resource.desc}
-                                    </p>
-                                    <div style={{ marginTop: '16px' }}>
-                                        <span style={{
-                                            fontFamily: 'var(--font-mono)', fontSize: '13px', fontWeight: 600,
-                                            color: 'var(--rust)', cursor: 'pointer',
-                                        }}>
-                                            Read more &rarr;
-                                        </span>
+                                        <span style={{ fontFamily: 'var(--font-heading)', fontSize: 15, fontWeight: 600, color: 'var(--text-primary)' }}>{faq.q}</span>
+                                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 18, color: 'var(--orange)', flexShrink: 0, transition: 'transform 0.3s ease', transform: openFaq === i ? 'rotate(45deg)' : 'rotate(0deg)' }}>+</span>
+                                    </button>
+                                    <div ref={(el) => { faqRefs.current[i] = el; }} style={{ height: 0, opacity: 0, overflow: 'hidden' }}>
+                                        <div style={{ padding: '0 24px 20px' }}>
+                                            <p style={{ color: 'var(--text-muted)', fontSize: 14, lineHeight: 1.7 }}>{faq.a}</p>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
                         </div>
+                    </div>
 
-                        {/* FAQ Section */}
-                        <div className="resources-reveal" style={{ marginBottom: '80px' }}>
-                            <h2 style={{
-                                fontFamily: 'var(--font-heading)', fontSize: '2rem', fontWeight: 700,
-                                color: '#1A1A1A', marginBottom: '12px',
-                            }}>
-                                Frequently Asked Questions
-                            </h2>
-                            <p style={{ fontSize: '1rem', color: 'var(--text-muted)', lineHeight: 1.7, fontFamily: 'var(--font-body)', marginBottom: '32px', maxWidth: '600px' }}>
-                                Everything you need to know about OpenAnalyst and AI marketing.
-                            </p>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                {faqs.map((faq, i) => (
-                                    <div key={i} style={{
-                                        borderRadius: '14px',
-                                        backgroundColor: '#F5F5F5',
-                                        border: '1px solid #E5E5E5',
-                                        overflow: 'hidden',
-                                        transition: 'border-color 0.3s ease',
-                                        ...(openFaq === i ? { borderColor: 'var(--rust)' } : {}),
-                                    }}>
-                                        <button
-                                            onClick={() => toggleFaq(i)}
-                                            style={{
-                                                width: '100%', padding: '20px 24px',
-                                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                                                backgroundColor: 'transparent', border: 'none',
-                                                cursor: 'pointer', textAlign: 'left',
-                                                gap: '16px',
-                                            }}
-                                        >
-                                            <span style={{
-                                                fontFamily: 'var(--font-heading)', fontSize: '0.95rem', fontWeight: 600,
-                                                color: '#1A1A1A',
-                                            }}>
-                                                {faq.q}
-                                            </span>
-                                            <span style={{
-                                                fontFamily: 'var(--font-mono)', fontSize: '18px',
-                                                color: 'var(--rust)', flexShrink: 0,
-                                                transition: 'transform 0.3s ease',
-                                                transform: openFaq === i ? 'rotate(45deg)' : 'rotate(0deg)',
-                                            }}>
-                                                +
-                                            </span>
-                                        </button>
-                                        <div
-                                            ref={(el) => { faqRefs.current[i] = el; }}
-                                            style={{ height: 0, opacity: 0, overflow: 'hidden' }}
-                                        >
-                                            <div style={{ padding: '0 24px 20px' }}>
-                                                <p style={{
-                                                    color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.7,
-                                                    fontFamily: 'var(--font-body)',
-                                                }}>
-                                                    {faq.a}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* CTA */}
-                        <div className="resources-reveal" style={{
-                            textAlign: 'center', padding: '48px 24px',
-                            borderRadius: '20px',
-                            backgroundColor: '#F5F5F5',
-                            border: '1px solid #E5E5E5',
-                        }}>
-                            <h3 style={{
-                                fontFamily: 'var(--font-heading)', fontSize: '1.5rem', fontWeight: 700,
-                                color: '#1A1A1A', marginBottom: '12px',
-                            }}>
-                                Ready to transform your marketing?
-                            </h3>
-                            <p style={{ fontSize: '1rem', color: 'var(--text-muted)', lineHeight: 1.7, fontFamily: 'var(--font-body)', marginBottom: '24px', maxWidth: '480px', margin: '0 auto 24px' }}>
-                                Get started with OpenAnalyst today and let AI agents handle your marketing campaigns.
-                            </p>
-                            <Magnetic>
-                                <a href="https://app.openanalyst.com" style={{
-                                    display: 'inline-flex', alignItems: 'center', gap: '8px',
-                                    padding: '14px 32px', fontSize: '15px', fontFamily: 'var(--font-mono)', fontWeight: 600,
-                                    color: '#FFFFFF', backgroundColor: 'var(--rust)', borderRadius: '9999px',
-                                    textDecoration: 'none', transition: 'all 0.3s ease',
-                                    boxShadow: '0 4px 20px rgba(255, 107, 0, 0.25)',
-                                }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.backgroundColor = 'var(--rust-light)';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.backgroundColor = 'var(--rust)';
-                                    }}
-                                >
-                                    Get Started Free &rarr;
-                                </a>
-                            </Magnetic>
-                        </div>
+                    {/* CTA */}
+                    <div className="res-reveal" style={{ textAlign: 'center', padding: '56px 24px', borderRadius: 24, background: 'var(--bg-white)', border: '1px solid var(--border-default)', marginTop: 80 }}>
+                        <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: 12 }}>
+                            Ready to transform your marketing?
+                        </h3>
+                        <p style={{ fontSize: 15, color: 'var(--text-muted)', lineHeight: 1.7, maxWidth: 480, margin: '0 auto 28px' }}>
+                            Get started with OpenAnalyst today and let AI agents handle your campaigns.
+                        </p>
+                        <a href="https://app.openanalyst.com" className="btn-primary" style={{ textDecoration: 'none' }}>
+                            Get Started Free <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </a>
                     </div>
                 </div>
+            </section>
 
-                <style>{`
-                    @media (max-width: 768px) {
-                        .resources-reveal > div:first-child {
-                            grid-template-columns: repeat(2, 1fr) !important;
-                        }
-                    }
-                    @media (max-width: 480px) {
-                        .resources-reveal > div:first-child {
-                            grid-template-columns: 1fr !important;
-                        }
-                    }
-                `}</style>
-            </main>
             <Footer />
         </div>
     );
