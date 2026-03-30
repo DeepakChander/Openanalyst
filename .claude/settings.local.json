@@ -145,7 +145,11 @@
       "WebFetch(domain:www.hover.dev)",
       "WebFetch(domain:www.navattic.com)",
       "WebFetch(domain:21st.dev)",
-      "Bash(wc -l /c/Users/hp/Desktop/OpenAnalyst.com/src/components/*.tsx)"
+      "Bash(wc -l /c/Users/hp/Desktop/OpenAnalyst.com/src/components/*.tsx)",
+      "WebFetch(domain:www.apple.com)",
+      "Bash(find \"C:\\\\Users\\\\hp\\\\Desktop\\\\OpenAnalyst.com\\\\src\\\\components\" -name \"*.tsx\" -exec wc -l {} +)",
+      "WebFetch(domain:stripesessions.com)",
+      "Bash(find src/app -name \"page.tsx\" -exec wc -l {} +)"
     ]
   },
   "enableAllProjectMcpServers": true,
