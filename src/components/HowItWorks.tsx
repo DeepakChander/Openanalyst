@@ -1,189 +1,121 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ═══ Pattern #6: Vertical SVG timeline with line-draw + sliding cards ═══ */
-
 const steps = [
     {
-        num: '01', title: 'Connect Your Stack',
-        desc: 'Link Gmail, Slack, HubSpot, and 24 more tools in 60 seconds. Zero configuration needed.',
-        detail: 'Drag, drop, done.',
+        num: '01', title: 'Connect', subtitle: 'Your Stack',
+        desc: 'Link Gmail, Slack, HubSpot, and 24 more tools in 60 seconds.',
         color: '#FF6B00',
-        icons: ['Gmail', 'Slack', 'HubSpot'],
+        icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4M4.22 4.22l2.83 2.83m8.48 8.48l2.83 2.83M1 12h4m14 0h4M4.22 19.78l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>,
     },
     {
-        num: '02', title: 'Set Your Goals',
-        desc: 'Tell your AI agents what to optimize — revenue, leads, engagement, or custom KPIs.',
-        detail: 'Natural language, not dashboards.',
+        num: '02', title: 'Set', subtitle: 'Your Goals',
+        desc: 'Tell agents what to optimize — revenue, leads, or custom KPIs.',
         color: '#8B5CF6',
-        icons: ['Target', 'Budget', 'Channels'],
+        icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>,
     },
     {
-        num: '03', title: 'Agents Activate',
-        desc: 'Specialized AI agents start working immediately — planning, creating, and optimizing campaigns.',
-        detail: '42 agents, always on.',
+        num: '03', title: 'Agents', subtitle: 'Activate',
+        desc: '42 AI agents start working immediately — planning, creating, optimizing.',
         color: '#10B981',
-        icons: ['Content', 'Ads', 'SEO'],
+        icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z"/></svg>,
     },
     {
-        num: '04', title: 'Watch Results Grow',
-        desc: 'Real-time analytics, live ROI tracking, and continuous optimization — all on autopilot.',
-        detail: '340% average ROI.',
+        num: '04', title: 'Watch', subtitle: 'Results Grow',
+        desc: 'Real-time ROI tracking and continuous optimization. 340% avg ROI.',
         color: '#F59E0B',
-        icons: ['ROI', 'Leads', 'Growth'],
+        icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>,
     },
 ];
 
 const HowItWorks: React.FC = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
-    const lineRef = useRef<SVGLineElement>(null);
+    const [hovered, setHovered] = useState<number | null>(null);
 
     useGSAP(() => {
-        // Heading
         gsap.fromTo('.hiw-label', { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, scrollTrigger: { trigger: sectionRef.current, start: 'top 82%' } });
-        gsap.fromTo('.hiw-title-word', { y: 20, opacity: 0, filter: 'blur(4px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', stagger: 0.05, duration: 0.5, scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' } });
-
-        // SVG line draws with scroll
-        if (lineRef.current) {
-            const length = lineRef.current.getTotalLength();
-            gsap.set(lineRef.current, { strokeDasharray: length, strokeDashoffset: length });
-            gsap.to(lineRef.current, {
-                strokeDashoffset: 0, ease: 'none',
-                scrollTrigger: { trigger: '.hiw-timeline', start: 'top 70%', end: 'bottom 40%', scrub: 1 },
-            });
-        }
-
-        // Cards slide in alternating directions
-        gsap.utils.toArray<HTMLElement>('.hiw-step').forEach((el, i) => {
-            gsap.fromTo(el,
-                { x: i % 2 === 0 ? -60 : 60, y: 20, opacity: 0 },
-                { x: 0, y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
-                    scrollTrigger: { trigger: el, start: 'top 88%' } }
-            );
-        });
-
-        // Step dots scale in
-        gsap.fromTo('.hiw-dot', { scale: 0 }, {
-            scale: 1, duration: 0.4, ease: 'back.out(2)', stagger: 0.2,
-            scrollTrigger: { trigger: '.hiw-timeline', start: 'top 75%' },
-        });
+        gsap.fromTo('.hiw-heading', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' } });
+        gsap.fromTo('.hiw-card', { y: 40, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, scale: 1, stagger: 0.12, duration: 0.7, ease: 'back.out(1.3)', scrollTrigger: { trigger: '.hiw-grid', start: 'top 85%' } });
+        gsap.fromTo('.hiw-line', { scaleX: 0 }, { scaleX: 1, stagger: 0.2, duration: 0.6, ease: 'power3.out', scrollTrigger: { trigger: '.hiw-grid', start: 'top 80%' } });
+        gsap.fromTo('.hiw-dot', { scale: 0 }, { scale: 1, stagger: 0.15, duration: 0.4, ease: 'back.out(2)', scrollTrigger: { trigger: '.hiw-grid', start: 'top 82%' } });
     }, { scope: sectionRef });
 
     return (
         <section id="how-it-works" ref={sectionRef} style={{
-            padding: 'var(--space-section) 24px',
+            padding: 'var(--space-section-sm) 24px',
             background: 'var(--bg-primary)',
-            position: 'relative', overflow: 'hidden',
         }}>
             <div className="container">
-                {/* Header */}
-                <div style={{ textAlign: 'center', marginBottom: 72 }}>
-                    <p className="hiw-label label-mono" style={{ marginBottom: 16 }}>How It Works</p>
-                    <h2 style={{
-                        fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)',
+                <div style={{ textAlign: 'center', marginBottom: 48 }}>
+                    <p className="hiw-label label-mono" style={{ marginBottom: 12 }}>How It Works</p>
+                    <h2 className="hiw-heading" style={{
+                        fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)',
                         fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text-primary)',
-                        display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0 0.25em',
                     }}>
-                        {'From zero to results in minutes'.split(' ').map((word, i) => (
-                            <span key={i} className="hiw-title-word" style={{
-                                display: 'inline-block',
-                                ...(word === 'results' ? { color: 'var(--orange)' } : {}),
-                            }}>{word}</span>
-                        ))}
+                        From zero to <span className="text-gradient">results</span> in minutes
                     </h2>
                 </div>
 
-                {/* Timeline */}
-                <div className="hiw-timeline" style={{
-                    maxWidth: 700, margin: '0 auto',
-                    position: 'relative', padding: '0 0 0 48px',
+                {/* 4 horizontal cards with connector dots and lines */}
+                <div className="hiw-grid" style={{
+                    display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0,
+                    maxWidth: 960, margin: '0 auto', position: 'relative',
                 }}>
-                    {/* SVG vertical line that draws on scroll */}
-                    <svg style={{
-                        position: 'absolute', left: 19, top: 0, width: 2, height: '100%',
-                        overflow: 'visible',
-                    }}>
-                        {/* Background track */}
-                        <line x1="1" y1="0" x2="1" y2="100%" stroke="var(--border)" strokeWidth="2" />
-                        {/* Animated fill line */}
-                        <line ref={lineRef} x1="1" y1="0" x2="1" y2="100%"
-                            stroke="var(--orange)" strokeWidth="2" strokeLinecap="round" />
-                    </svg>
-
-                    {/* Steps */}
                     {steps.map((step, i) => (
-                        <div key={i} className="hiw-step" style={{
-                            position: 'relative',
-                            marginBottom: i < steps.length - 1 ? 56 : 0,
-                        }}>
-                            {/* Dot on timeline */}
+                        <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+                            {/* Connector line */}
+                            {i > 0 && (
+                                <div className="hiw-line" style={{
+                                    position: 'absolute', top: 20, left: '-50%', right: '50%', height: 2,
+                                    background: `linear-gradient(90deg, ${steps[i - 1].color}30, ${step.color}30)`,
+                                    transformOrigin: 'left', zIndex: 0,
+                                }} />
+                            )}
+
+                            {/* Dot with icon */}
                             <div className="hiw-dot" style={{
-                                position: 'absolute', left: -37, top: 12,
-                                width: 16, height: 16, borderRadius: '50%',
-                                background: step.color,
-                                border: '3px solid var(--bg-primary)',
-                                boxShadow: `0 0 0 3px ${step.color}25, 0 0 16px ${step.color}20`,
-                            }} />
+                                width: 42, height: 42, borderRadius: '50%',
+                                background: hovered === i ? step.color : 'var(--bg-white)',
+                                border: `2px solid ${hovered === i ? step.color : step.color + '25'}`,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                marginBottom: 16, position: 'relative', zIndex: 1,
+                                transition: 'all 0.3s var(--ease-out)',
+                                boxShadow: hovered === i ? `0 0 16px ${step.color}30` : 'var(--shadow-sm)',
+                                color: hovered === i ? '#fff' : step.color,
+                            }}>
+                                {step.icon}
+                            </div>
 
                             {/* Card */}
-                            <div style={{
-                                padding: '32px 28px', borderRadius: 'var(--radius-xl)',
-                                background: 'var(--bg-white)',
-                                border: '1px solid var(--border)',
-                                boxShadow: 'var(--shadow-sm)',
-                                transition: 'all 0.4s var(--ease-out)',
-                                position: 'relative', overflow: 'hidden',
+                            <div className="hiw-card" style={{
+                                padding: '20px 16px', borderRadius: 'var(--radius-lg)',
+                                background: 'var(--bg-white)', border: '1px solid var(--border)',
+                                boxShadow: 'var(--shadow-sm)', textAlign: 'center',
+                                width: '100%', maxWidth: 210,
+                                transition: 'all 0.3s var(--ease-out)',
+                                transform: hovered === i ? 'translateY(-4px)' : 'translateY(0)',
+                                borderColor: hovered === i ? `${step.color}25` : 'var(--border)',
                             }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.borderColor = `${step.color}30`;
-                                    e.currentTarget.style.boxShadow = `0 8px 32px ${step.color}10`;
-                                    e.currentTarget.style.transform = 'translateX(4px)';
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.borderColor = 'var(--border)';
-                                    e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
-                                    e.currentTarget.style.transform = 'translateX(0)';
-                                }}
+                                onMouseEnter={() => setHovered(i)}
+                                onMouseLeave={() => setHovered(null)}
                             >
-                                {/* Faded number */}
                                 <span style={{
-                                    position: 'absolute', top: 12, right: 20,
-                                    fontFamily: 'var(--font-heading)', fontSize: 56, fontWeight: 900,
-                                    color: `${step.color}08`, lineHeight: 1, pointerEvents: 'none',
-                                }}>{step.num}</span>
-
-                                {/* Step number badge */}
-                                <div style={{
-                                    display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 14,
-                                }}>
-                                    <span style={{
-                                        width: 28, height: 28, borderRadius: 'var(--radius-sm)',
-                                        background: `${step.color}12`, border: `1px solid ${step.color}20`,
-                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700, color: step.color,
-                                    }}>{step.num}</span>
-                                    <span style={{
-                                        fontFamily: 'var(--font-mono)', fontSize: 11,
-                                        color: step.color, letterSpacing: '0.06em', textTransform: 'uppercase',
-                                    }}>{step.detail}</span>
-                                </div>
-
+                                    fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 700,
+                                    color: step.color, letterSpacing: '0.1em', display: 'block', marginBottom: 6,
+                                }}>STEP {step.num}</span>
                                 <h3 style={{
-                                    fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)',
-                                    fontWeight: 700, color: 'var(--text-primary)',
-                                    marginBottom: 8, letterSpacing: '-0.01em',
-                                }}>{step.title}</h3>
-
-                                <p style={{
-                                    fontSize: 14, color: 'var(--text-secondary)',
-                                    lineHeight: 1.7, margin: 0,
-                                }}>{step.desc}</p>
+                                    fontFamily: 'var(--font-heading)', fontSize: 16, fontWeight: 800,
+                                    color: 'var(--text-primary)', marginBottom: 6, lineHeight: 1.2,
+                                }}>
+                                    {step.title} <span style={{ color: step.color }}>{step.subtitle}</span>
+                                </h3>
+                                <p style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>{step.desc}</p>
                             </div>
                         </div>
                     ))}
@@ -191,8 +123,12 @@ const HowItWorks: React.FC = () => {
             </div>
 
             <style>{`
-                @media (max-width: 600px) {
-                    #how-it-works { padding: clamp(48px, 8vw, 80px) 16px !important; }
+                @media (max-width: 768px) {
+                    .hiw-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 24px !important; }
+                    .hiw-line { display: none !important; }
+                }
+                @media (max-width: 480px) {
+                    .hiw-grid { grid-template-columns: 1fr !important; }
                 }
             `}</style>
         </section>
