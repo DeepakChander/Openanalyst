@@ -73,11 +73,11 @@ export default async function DocsPage({
           style={{
             fontSize: 'clamp(1.875rem, 4vw, 2.5rem)',
             fontWeight: 800,
-            color: '#111827',
+            color: 'var(--text-primary)',
             letterSpacing: '-0.03em',
             lineHeight: 1.15,
             marginBottom: '16px',
-            fontFamily: 'var(--font-poppins), Poppins, sans-serif',
+            fontFamily: 'var(--font-heading)',
           }}
         >
           {page.title}
@@ -86,7 +86,7 @@ export default async function DocsPage({
           style={{
             fontSize: '17px',
             lineHeight: 1.7,
-            color: '#6b7280',
+            color: 'var(--text-muted)',
             maxWidth: '640px',
           }}
         >
@@ -96,7 +96,7 @@ export default async function DocsPage({
           style={{
             marginTop: '24px',
             height: '1px',
-            background: 'linear-gradient(to right, rgba(255, 133, 82, 0.4), transparent)',
+            background: 'linear-gradient(to right, rgba(255, 107, 0, 0.3), transparent)',
           }}
         />
       </header>
@@ -112,7 +112,7 @@ export default async function DocsPage({
           gap: '20px',
           marginTop: '72px',
           paddingTop: '40px',
-          borderTop: '1px solid #e5e7eb',
+          borderTop: '1px solid var(--border-default)',
         }}
       >
         {prev ? (
@@ -123,7 +123,7 @@ export default async function DocsPage({
               display: 'flex',
               alignItems: 'stretch',
               overflow: 'hidden',
-              border: '1px solid rgba(0,0,0,0.15)',
+              border: '1px solid var(--border-default)',
               textDecoration: 'none',
               transition: 'all 0.3s ease',
               flex: '1',
@@ -137,19 +137,19 @@ export default async function DocsPage({
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: '0 16px',
-                borderRight: '1px solid rgba(0,0,0,0.1)',
+                borderRight: '1px solid var(--border-subtle)',
                 transition: 'all 0.3s ease',
               }}
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#374151' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--text-secondary)' }}>
                 <path d="M19 12H5M12 19l-7-7 7-7" />
               </svg>
             </span>
             <span style={{ display: 'flex', flexDirection: 'column', gap: '2px', padding: '14px 20px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#9ca3af' }}>
+              <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)' }}>
                 Previous
               </span>
-              <span style={{ fontSize: '14px', fontWeight: 600, color: '#111827', letterSpacing: '-0.01em' }}>
+              <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
                 {prev.title}
               </span>
             </span>
@@ -165,7 +165,7 @@ export default async function DocsPage({
               display: 'flex',
               alignItems: 'stretch',
               overflow: 'hidden',
-              border: '1px solid rgba(0,0,0,0.15)',
+              border: '1px solid var(--border-default)',
               textDecoration: 'none',
               transition: 'all 0.3s ease',
               flex: '1',
@@ -174,10 +174,10 @@ export default async function DocsPage({
             }}
           >
             <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px', padding: '14px 20px', flex: 1 }}>
-              <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#9ca3af' }}>
+              <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)' }}>
                 Next
               </span>
-              <span style={{ fontSize: '14px', fontWeight: 600, color: '#111827', letterSpacing: '-0.01em' }}>
+              <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
                 {next.title}
               </span>
             </span>
@@ -188,11 +188,11 @@ export default async function DocsPage({
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: '0 16px',
-                borderLeft: '1px solid rgba(0,0,0,0.1)',
+                borderLeft: '1px solid var(--border-subtle)',
                 transition: 'all 0.3s ease',
               }}
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#374151' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--text-secondary)' }}>
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </span>

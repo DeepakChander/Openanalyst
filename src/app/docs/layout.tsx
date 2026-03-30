@@ -5,7 +5,7 @@ import DocsTableOfContents from '@/components/docs/DocsTableOfContents';
 export const metadata: Metadata = {
   title: 'Documentation - Guides, API Reference & Setup',
   description:
-    'OpenAnalyst documentation: getting started guides, API references, agent configuration, integration setup, and CLI usage. Everything you need to automate marketing with AI.',
+    'OpenAnalyst documentation: getting started guides, API references, agent configuration, integration setup, and CLI usage.',
   keywords: [
     'OpenAnalyst documentation',
     'AI marketing API',
@@ -24,13 +24,7 @@ export default function DocsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        backgroundColor: '#ffffff',
-        color: '#1f2937',
-      }}
-    >
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-white)', color: 'var(--text-primary)' }}>
       <div className="docs-sidebar-desktop">
         <DocsSidebar />
       </div>
@@ -39,20 +33,8 @@ export default function DocsLayout({
         <DocsTableOfContents />
       </div>
 
-      <main
-        className="docs-main-content"
-        style={{
-          minHeight: '100vh',
-          marginLeft: '272px',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '780px',
-            padding: '48px 40px 80px 120px',
-          }}
-          className="xl:mr-80"
-        >
+      <main className="docs-main-content" style={{ minHeight: '100vh', marginLeft: '272px' }}>
+        <div style={{ maxWidth: '780px', padding: '48px 40px 80px 120px' }} className="xl:mr-80">
           {children}
         </div>
       </main>
