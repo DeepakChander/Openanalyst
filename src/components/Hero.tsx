@@ -1,336 +1,316 @@
 'use client';
 
-import React, { useRef, useState, useEffect, useCallback, Suspense } from 'react';
+import React, { useRef, useState, useEffect, useMemo, Suspense } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import dynamic from 'next/dynamic';
+import { Canvas, useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
 
 gsap.registerPlugin(useGSAP);
 
 const WORDS = ['Campaigns', 'Analytics', 'Content', 'Ads', 'SEO'];
+const WORD_COLORS: Record<string, string> = {
+    Campaigns: '#FF6B00',
+    Analytics: '#8B5CF6',
+    Content: '#10B981',
+    Ads: '#3B82F6',
+    SEO: '#F59E0B',
+};
 
-/* Lazy-load the 3D constellation (heavy, Three.js) */
-const AgentConstellationScene = dynamic(
-    () => import('./AgentConstellation'),
-    { ssr: false }
-);
+/* ── 3D Neural Mesh — Lives BEHIND the text as ambient depth ── */
+function NeuralMesh() {
+    const meshRef = useRef<THREE.Mesh>(null);
+    const pointsRef = useRef<THREE.Points>(null);
+    const linesRef = useRef<THREE.LineSegments>(null);
 
-/* ── Interactive dot grid (canvas) — dark variant ── */
-function DotGrid() {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const mouseRef = useRef({ x: -1000, y: -1000 });
-    const rafRef = useRef<number>(0);
-    const dotsRef = useRef<{ x: number; y: number; baseX: number; baseY: number; size: number }[]>([]);
+    const { nodePositions, linePositions, particlePositions } = useMemo(() => {
+        const nodes: number[] = [];
+        const lines: number[] = [];
+        const particles = new Float32Array(200 * 3);
 
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
+        // Create nodes in a soft cloud shape
+        const nodeCount = 40;
+        for (let i = 0; i < nodeCount; i++) {
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            const r = 2 + Math.random() * 2;
+            nodes.push(
+                r * Math.sin(phi) * Math.cos(theta),
+                r * Math.sin(phi) * Math.sin(theta) * 0.6, // flatten Y
+                r * Math.cos(phi) * 0.5
+            );
+        }
 
-        const gap = 40;
-        const baseSize = 1;
-        const influenceRadius = 130;
-
-        const resize = () => {
-            const dpr = Math.min(window.devicePixelRatio, 2);
-            const rect = canvas.parentElement?.getBoundingClientRect();
-            if (!rect) return;
-            canvas.width = rect.width * dpr;
-            canvas.height = rect.height * dpr;
-            canvas.style.width = rect.width + 'px';
-            canvas.style.height = rect.height + 'px';
-            ctx.scale(dpr, dpr);
-            dotsRef.current = [];
-            for (let x = gap / 2; x < rect.width; x += gap) {
-                for (let y = gap / 2; y < rect.height; y += gap) {
-                    dotsRef.current.push({ x, y, baseX: x, baseY: y, size: baseSize });
+        // Connect nearby nodes
+        for (let i = 0; i < nodeCount; i++) {
+            for (let j = i + 1; j < nodeCount; j++) {
+                const dx = nodes[i * 3] - nodes[j * 3];
+                const dy = nodes[i * 3 + 1] - nodes[j * 3 + 1];
+                const dz = nodes[i * 3 + 2] - nodes[j * 3 + 2];
+                const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                if (dist < 2.5) {
+                    lines.push(nodes[i * 3], nodes[i * 3 + 1], nodes[i * 3 + 2]);
+                    lines.push(nodes[j * 3], nodes[j * 3 + 1], nodes[j * 3 + 2]);
                 }
             }
-        };
+        }
 
-        resize();
-        window.addEventListener('resize', resize);
+        // Scattered particles
+        for (let i = 0; i < 200; i++) {
+            particles[i * 3] = (Math.random() - 0.5) * 12;
+            particles[i * 3 + 1] = (Math.random() - 0.5) * 8;
+            particles[i * 3 + 2] = (Math.random() - 0.5) * 4;
+        }
 
-        const handleMouseMove = (e: MouseEvent) => {
-            const rect = canvas.getBoundingClientRect();
-            mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-        };
-        const handleMouseLeave = () => { mouseRef.current = { x: -1000, y: -1000 }; };
-
-        canvas.addEventListener('mousemove', handleMouseMove);
-        canvas.addEventListener('mouseleave', handleMouseLeave);
-
-        const draw = () => {
-            const rect = canvas.parentElement?.getBoundingClientRect();
-            if (!rect) return;
-            ctx.clearRect(0, 0, rect.width, rect.height);
-            const mx = mouseRef.current.x;
-            const my = mouseRef.current.y;
-
-            for (const dot of dotsRef.current) {
-                const dx = mx - dot.baseX;
-                const dy = my - dot.baseY;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-
-                if (dist < influenceRadius) {
-                    const force = (1 - dist / influenceRadius) * 0.6;
-                    dot.x += (dot.baseX - dx * force * 0.3 - dot.x) * 0.15;
-                    dot.y += (dot.baseY - dy * force * 0.3 - dot.y) * 0.15;
-                    dot.size += ((baseSize + force * 3) - dot.size) * 0.15;
-                } else {
-                    dot.x += (dot.baseX - dot.x) * 0.08;
-                    dot.y += (dot.baseY - dot.y) * 0.08;
-                    dot.size += (baseSize - dot.size) * 0.08;
-                }
-
-                const alpha = dist < influenceRadius ? 0.06 + (1 - dist / influenceRadius) * 0.2 : 0.03;
-                ctx.beginPath();
-                ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 107, 0, ${alpha})`;
-                ctx.fill();
-            }
-            rafRef.current = requestAnimationFrame(draw);
-        };
-        rafRef.current = requestAnimationFrame(draw);
-
-        return () => {
-            cancelAnimationFrame(rafRef.current);
-            window.removeEventListener('resize', resize);
-            canvas.removeEventListener('mousemove', handleMouseMove);
-            canvas.removeEventListener('mouseleave', handleMouseLeave);
+        return {
+            nodePositions: new Float32Array(nodes),
+            linePositions: new Float32Array(lines),
+            particlePositions: particles,
         };
     }, []);
 
-    return <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'auto' }} />;
+    useFrame(({ clock, pointer }) => {
+        const t = clock.getElapsedTime();
+        if (meshRef.current) {
+            meshRef.current.rotation.y = t * 0.03 + pointer.x * 0.1;
+            meshRef.current.rotation.x = Math.sin(t * 0.02) * 0.05 + pointer.y * 0.05;
+        }
+    });
+
+    return (
+        <group ref={meshRef}>
+            {/* Connection lines */}
+            <lineSegments ref={linesRef}>
+                <bufferGeometry>
+                    <bufferAttribute attach="attributes-position" args={[linePositions, 3]} />
+                </bufferGeometry>
+                <lineBasicMaterial color="#FF6B00" transparent opacity={0.06} />
+            </lineSegments>
+
+            {/* Node points */}
+            <points>
+                <bufferGeometry>
+                    <bufferAttribute attach="attributes-position" args={[nodePositions, 3]} />
+                </bufferGeometry>
+                <pointsMaterial color="#FF6B00" size={0.06} transparent opacity={0.2} sizeAttenuation />
+            </points>
+
+            {/* Ambient particles */}
+            <points ref={pointsRef}>
+                <bufferGeometry>
+                    <bufferAttribute attach="attributes-position" args={[particlePositions, 3]} />
+                </bufferGeometry>
+                <pointsMaterial color="#FF6B00" size={0.02} transparent opacity={0.08} sizeAttenuation blending={THREE.AdditiveBlending} depthWrite={false} />
+            </points>
+        </group>
+    );
 }
 
-const Hero: React.FC = () => {
-    const heroRef = useRef<HTMLElement>(null);
-    const [currentWord, setCurrentWord] = useState(0);
+/* ── Animated word with color transition ── */
+function CyclingWord({ words }: { words: string[] }) {
+    const [index, setIndex] = useState(0);
     const wordRef = useRef<HTMLSpanElement>(null);
-    const lineRef = useRef<HTMLDivElement>(null);
-    const spotlightRef = useRef<HTMLDivElement>(null);
 
-    /* Spotlight cursor tracking */
-    useEffect(() => {
-        const hero = heroRef.current;
-        if (!hero) return;
-        const handleMove = (e: MouseEvent) => {
-            if (!spotlightRef.current) return;
-            const rect = hero.getBoundingClientRect();
-            spotlightRef.current.style.setProperty('--spot-x', `${e.clientX - rect.left}px`);
-            spotlightRef.current.style.setProperty('--spot-y', `${e.clientY - rect.top}px`);
-            spotlightRef.current.style.opacity = '1';
-        };
-        const handleLeave = () => { if (spotlightRef.current) spotlightRef.current.style.opacity = '0'; };
-        hero.addEventListener('mousemove', handleMove);
-        hero.addEventListener('mouseleave', handleLeave);
-        return () => { hero.removeEventListener('mousemove', handleMove); hero.removeEventListener('mouseleave', handleLeave); };
-    }, []);
-
-    /* Word cycling with blur transition */
     useEffect(() => {
         const interval = setInterval(() => {
             if (!wordRef.current) return;
             gsap.to(wordRef.current, {
-                y: -12, opacity: 0, filter: 'blur(4px)', duration: 0.3, ease: 'power2.in',
+                y: -16, opacity: 0, filter: 'blur(6px)', duration: 0.35, ease: 'power2.in',
                 onComplete: () => {
-                    setCurrentWord(prev => (prev + 1) % WORDS.length);
+                    setIndex(prev => (prev + 1) % words.length);
                     if (wordRef.current) {
                         gsap.fromTo(wordRef.current,
-                            { y: 12, opacity: 0, filter: 'blur(4px)' },
-                            { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.4, ease: 'power2.out' }
+                            { y: 16, opacity: 0, filter: 'blur(6px)' },
+                            { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.45, ease: 'power2.out' }
                         );
                     }
                 }
             });
-        }, 2400);
+        }, 2800);
         return () => clearInterval(interval);
-    }, []);
+    }, [words]);
 
-    /* Entrance animations */
+    const word = words[index];
+    const color = WORD_COLORS[word] || '#FF6B00';
+
+    return (
+        <span style={{ position: 'relative', display: 'inline-block' }}>
+            <span ref={wordRef} style={{
+                display: 'inline-block', color,
+                transition: 'color 0.3s ease',
+            }}>{word}</span>
+            <span style={{
+                position: 'absolute', bottom: -4, left: 0, right: 0,
+                height: 4, borderRadius: 2,
+                background: `linear-gradient(90deg, ${color}, ${color}60)`,
+            }} />
+        </span>
+    );
+}
+
+const Hero: React.FC = () => {
+    const heroRef = useRef<HTMLElement>(null);
+
     useGSAP(() => {
         const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (prefersReduced) return;
-        const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, delay: 0.2 });
-        tl.from('.h-badge', { opacity: 0, y: 16, filter: 'blur(6px)', duration: 0.6 }, 0);
-        tl.from('.h-line', { opacity: 0, y: 50, filter: 'blur(8px)', stagger: 0.1, duration: 0.8, ease: 'power4.out' }, 0.1);
-        tl.from('.h-sub', { opacity: 0, y: 16, filter: 'blur(4px)', duration: 0.6 }, 0.5);
-        tl.from('.h-cta-wrap', { opacity: 0, y: 16, duration: 0.5 }, 0.65);
-        tl.from('.h-proof', { opacity: 0, duration: 0.5 }, 0.8);
-        tl.from('.h-constellation', { opacity: 0, scale: 0.85, filter: 'blur(10px)', duration: 1.2, ease: 'power2.out' }, 0.3);
-        if (lineRef.current) {
-            gsap.fromTo(lineRef.current, { scaleX: 0 }, { scaleX: 1, duration: 0.8, delay: 1, ease: 'power3.inOut' });
-        }
+
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+        // Staggered word-by-word headline reveal with IRREGULAR timing
+        tl.from('.hero-word', {
+            y: 80, opacity: 0, filter: 'blur(8px)', rotateX: 40,
+            stagger: { each: 0.08, from: 'start' },
+            duration: 1, ease: 'power4.out',
+        }, 0.3);
+
+        tl.from('.hero-cycling', {
+            y: 40, opacity: 0, scale: 0.9, duration: 0.8, ease: 'back.out(1.4)',
+        }, 0.9);
+
+        tl.from('.hero-subtitle', {
+            y: 20, opacity: 0, filter: 'blur(4px)', duration: 0.7,
+        }, 1.2);
+
+        tl.from('.hero-cta', {
+            y: 16, opacity: 0, stagger: 0.1, duration: 0.5,
+        }, 1.5);
+
+        tl.from('.hero-proof', {
+            y: 12, opacity: 0, duration: 0.5,
+        }, 1.8);
+
+        tl.from('.hero-mesh-container', {
+            opacity: 0, scale: 0.9, duration: 1.5, ease: 'power2.out',
+        }, 0.1);
+
     }, { scope: heroRef });
 
     return (
-        <section id="hero-section" ref={heroRef} className="dark-section" style={{
+        <section id="hero-section" ref={heroRef} style={{
             position: 'relative', overflow: 'hidden',
-            background: 'var(--bg-dark-primary)',
+            background: 'var(--bg-primary)',
             minHeight: '100vh',
+            display: 'flex', alignItems: 'center',
         }}>
-            {/* Perspective grid lines */}
-            <div style={{
-                position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none',
-                backgroundImage: 'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
-                backgroundSize: '80px 80px',
-                maskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)',
-                WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)',
-            }} aria-hidden="true" />
-
-            {/* Aurora background orbs */}
-            <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }} aria-hidden="true">
-                <div className="hero-aurora-1" style={{
-                    position: 'absolute', width: '50vw', height: '50vw', maxWidth: 700, maxHeight: 700,
-                    top: '-10%', left: '-5%', borderRadius: '50%',
-                    background: 'rgba(255, 107, 0, 0.06)', filter: 'blur(100px)',
-                }} />
-                <div className="hero-aurora-2" style={{
-                    position: 'absolute', width: '40vw', height: '40vw', maxWidth: 560, maxHeight: 560,
-                    top: '20%', right: '-5%', borderRadius: '50%',
-                    background: 'rgba(139, 92, 246, 0.04)', filter: 'blur(90px)',
-                }} />
-                <div className="hero-aurora-3" style={{
-                    position: 'absolute', width: '35vw', height: '35vw', maxWidth: 480, maxHeight: 480,
-                    bottom: '-10%', left: '30%', borderRadius: '50%',
-                    background: 'rgba(20, 184, 166, 0.03)', filter: 'blur(100px)',
-                }} />
+            {/* ── 3D mesh lives BEHIND everything ── */}
+            <div className="hero-mesh-container hide-mobile" style={{
+                position: 'absolute', inset: 0, zIndex: 1,
+                opacity: 0.5,
+            }}>
+                <Suspense fallback={null}>
+                    <Canvas camera={{ position: [0, 0, 6], fov: 50 }} gl={{ alpha: true, antialias: true }} style={{ width: '100%', height: '100%' }}>
+                        <ambientLight intensity={0.3} />
+                        <pointLight position={[5, 5, 5]} intensity={0.4} color="#FF6B00" />
+                        <NeuralMesh />
+                    </Canvas>
+                </Suspense>
             </div>
 
-            {/* Interactive dot grid */}
-            <div style={{ position: 'absolute', inset: 0, zIndex: 1 }} aria-hidden="true"><DotGrid /></div>
-
-            {/* Spotlight cursor glow */}
-            <div ref={spotlightRef} style={{
-                position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none', opacity: 0,
-                background: 'radial-gradient(600px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(255,107,0,0.06), transparent 40%)',
-                transition: 'opacity 0.5s ease',
+            {/* ── Warm radial gradient for depth ── */}
+            <div style={{
+                position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
+                background: 'radial-gradient(ellipse 80% 60% at 50% 40%, transparent 0%, var(--bg-primary) 70%)',
             }} />
 
-            {/* Main Grid */}
-            <div className="hero-grid" style={{
-                position: 'relative', zIndex: 10, maxWidth: 1200, margin: '0 auto',
-                padding: '160px 28px 100px', display: 'grid', gridTemplateColumns: '1.1fr 0.9fr',
-                gap: 48, alignItems: 'center',
+            {/* ── Subtle dot grid ── */}
+            <div style={{
+                position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none', opacity: 0.4,
+                backgroundImage: 'radial-gradient(circle, rgba(255,107,0,0.08) 1px, transparent 1px)',
+                backgroundSize: '48px 48px',
+                maskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)',
+                WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)',
+            }} />
+
+            {/* ── Main Content — Centered ── */}
+            <div style={{
+                position: 'relative', zIndex: 10,
+                maxWidth: 900, margin: '0 auto',
+                padding: '160px 24px 100px',
+                textAlign: 'center',
             }}>
-                {/* LEFT — Content */}
-                <div style={{ maxWidth: 540 }}>
-                    {/* Announcement badge */}
-                    <div className="h-badge" style={{
-                        display: 'inline-flex', alignItems: 'center', gap: 8,
-                        padding: '5px 14px 5px 6px', borderRadius: 100,
-                        background: 'rgba(255,107,0,0.08)', border: '1px solid rgba(255,107,0,0.2)',
-                        marginBottom: 28, fontSize: 12.5, fontWeight: 600, color: '#FF8533',
-                    }}>
-                        <span style={{
-                            width: 22, height: 22, borderRadius: '50%',
-                            background: '#FF6B00', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            boxShadow: '0 0 12px rgba(255,107,0,0.4)',
-                        }}>
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
-                        </span>
-                        v2.0 — The Agentic Era is here
-                    </div>
+                {/* Headline — word-by-word with variable weights */}
+                <h1 style={{
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: 'clamp(3rem, 7vw, 5rem)',
+                    lineHeight: 1.05,
+                    letterSpacing: '-0.04em',
+                    marginBottom: 8,
+                    perspective: 1000,
+                }}>
+                    {['AI', 'agents', 'that', 'run'].map((word, i) => (
+                        <span key={i} className="hero-word" style={{
+                            display: 'inline-block', marginRight: '0.25em',
+                            fontWeight: ['AI', 'agents'].includes(word) ? 800 : 400,
+                            color: word === 'AI' ? 'var(--orange)' : 'var(--text-primary)',
+                        }}>{word}</span>
+                    ))}
+                    <br />
+                    <span className="hero-word" style={{
+                        display: 'inline-block', marginRight: '0.25em',
+                        fontWeight: 400, color: 'var(--text-primary)',
+                    }}>your</span>
+                    <span className="hero-cycling" style={{ display: 'inline-block' }}>
+                        <CyclingWord words={WORDS} />
+                    </span>
+                </h1>
 
-                    {/* Headline */}
-                    <h1 style={{
-                        fontFamily: 'var(--font-heading)', fontWeight: 800,
-                        fontSize: 'clamp(2.4rem, 4.2vw, 3.8rem)', lineHeight: 1.08,
-                        letterSpacing: '-0.035em', marginBottom: 24,
-                    }}>
-                        <span className="h-line" style={{ display: 'block', color: '#FAFAFA' }}>AI agents for</span>
-                        <span className="h-line" style={{ display: 'block', position: 'relative', color: '#FAFAFA' }}>
-                            your{' '}
-                            <span style={{ position: 'relative', display: 'inline-block' }}>
-                                <span ref={wordRef} className="text-gradient-shimmer" style={{ display: 'inline-block' }}>{WORDS[currentWord]}</span>
-                                <div ref={lineRef} style={{
-                                    position: 'absolute', bottom: -2, left: 0, right: 0, height: 3,
-                                    background: 'linear-gradient(90deg, #FF6B00, #F59E0B)', borderRadius: 2, transformOrigin: 'left',
-                                }} />
-                            </span>
-                        </span>
-                    </h1>
+                {/* Subtitle */}
+                <p className="hero-subtitle" style={{
+                    fontSize: 'clamp(16px, 1.8vw, 19px)',
+                    color: 'var(--text-secondary)',
+                    lineHeight: 1.7,
+                    maxWidth: 520, margin: '28px auto 40px',
+                }}>
+                    Autonomous agents that plan, create, and optimize your marketing
+                    across every channel. Measurable results in days, not months.
+                </p>
 
-                    {/* Subtitle */}
-                    <p className="h-sub" style={{
-                        fontSize: 'clamp(15px, 1.15vw, 16.5px)', color: 'var(--text-dark-secondary)',
-                        lineHeight: 1.7, maxWidth: 440, marginBottom: 36,
-                    }}>
-                        Autonomous agents that plan, create, and optimize your marketing across every channel. Measurable results in days, not months.
-                    </p>
-
-                    {/* CTA Buttons */}
-                    <div className="h-cta-wrap" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16, marginBottom: 36 }}>
-                        <a href="https://app.openanalyst.com" className="btn-primary hero-cta-glow" style={{ fontSize: 14, padding: '13px 28px' }}>
-                            Start free trial
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-                        </a>
-                        <a href="#how-it-works" style={{
-                            fontSize: 14, fontWeight: 500, color: 'var(--text-dark-secondary)',
-                            textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6,
-                            transition: 'color 0.2s ease',
-                        }}
-                            onMouseEnter={(e) => { e.currentTarget.style.color = '#FF6B00'; }}
-                            onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-dark-secondary)'; }}
-                        >
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polygon points="10 8 16 12 10 16" fill="currentColor" stroke="none" /></svg>
-                            See how it works
-                        </a>
-                    </div>
-
-                    {/* Social proof */}
-                    <div className="h-proof" style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 13, color: 'var(--text-dark-muted)' }}>
-                        <div style={{ display: 'flex' }}>
-                            {['Maren', 'Kael', 'Priya'].map((s, i) => (
-                                <img key={s} src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${s}&backgroundColor=${['ffd5dc', 'c0aede', 'b6e3f4'][i]}`}
-                                    alt="" width={28} height={28}
-                                    style={{
-                                        width: 28, height: 28, borderRadius: '50%',
-                                        border: '2px solid var(--bg-dark-primary)',
-                                        marginLeft: i > 0 ? -8 : 0, zIndex: 3 - i, position: 'relative',
-                                        background: 'var(--bg-dark-surface)',
-                                    }}
-                                />
-                            ))}
-                        </div>
-                        <span><strong style={{ color: '#FAFAFA', fontWeight: 600 }}>2,400+</strong> teams</span>
-                        <span style={{ width: 1, height: 14, background: 'var(--border-dark-default)' }} />
-                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
-                            <strong style={{ color: '#FAFAFA', fontWeight: 600 }}>4.9</strong>/5
-                        </span>
-                    </div>
+                {/* CTAs */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 14, marginBottom: 48 }}>
+                    <a href="https://app.openanalyst.com" className="hero-cta btn-primary" style={{ fontSize: 15, padding: '15px 32px' }}>
+                        Start free trial
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                    </a>
+                    <a href="#how-it-works" className="hero-cta btn-outline" style={{ fontSize: 15, padding: '15px 32px' }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polygon points="10 8 16 12 10 16" fill="currentColor" stroke="none" /></svg>
+                        See how it works
+                    </a>
                 </div>
 
-                {/* RIGHT — 3D Agent Constellation */}
-                <div className="h-constellation hero-dashboard-mobile-hide" style={{
-                    position: 'relative', height: 520,
+                {/* Social proof */}
+                <div className="hero-proof" style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    gap: 16, fontSize: 14, color: 'var(--text-muted)',
                 }}>
-                    <Suspense fallback={
-                        <div style={{
-                            width: '100%', height: '100%', display: 'flex',
-                            alignItems: 'center', justifyContent: 'center',
-                        }}>
-                            <div style={{
-                                width: 48, height: 48, borderRadius: '50%',
-                                border: '2px solid rgba(255,107,0,0.2)',
-                                borderTopColor: '#FF6B00',
-                                animation: 'spin 1s linear infinite',
-                            }} />
-                        </div>
-                    }>
-                        <AgentConstellationScene />
-                    </Suspense>
+                    <div style={{ display: 'flex' }}>
+                        {['Maren', 'Kael', 'Priya'].map((s, i) => (
+                            <img key={s}
+                                src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${s}&backgroundColor=${['ffd5dc', 'c0aede', 'b6e3f4'][i]}`}
+                                alt="" width={32} height={32}
+                                style={{
+                                    width: 32, height: 32, borderRadius: '50%',
+                                    border: '2px solid var(--bg-primary)',
+                                    marginLeft: i > 0 ? -10 : 0, zIndex: 3 - i,
+                                    position: 'relative', background: 'var(--bg-surface)',
+                                }}
+                            />
+                        ))}
+                    </div>
+                    <span><strong style={{ color: 'var(--text-primary)', fontWeight: 600 }}>2,400+</strong> teams</span>
+                    <span style={{ width: 1, height: 16, background: 'var(--border)' }} />
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+                        <strong style={{ color: 'var(--text-primary)', fontWeight: 600 }}>4.9</strong>/5
+                    </span>
                 </div>
             </div>
 
-            {/* Bottom fade to next section */}
+            {/* ── Bottom gradient fade ── */}
             <div style={{
-                position: 'absolute', bottom: 0, left: 0, right: 0, height: 120,
-                background: 'linear-gradient(transparent, var(--bg-dark-primary))',
-                pointerEvents: 'none', zIndex: 5,
+                position: 'absolute', bottom: 0, left: 0, right: 0, height: 120, zIndex: 5,
+                background: 'linear-gradient(transparent, var(--bg-primary))',
+                pointerEvents: 'none',
             }} />
         </section>
     );
