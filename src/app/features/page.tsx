@@ -89,9 +89,9 @@ export default function FeaturesPage() {
 
     useGSAP(() => {
         /* ── Hero entrance ── */
-        gsap.from('.fp-hero-label', { y: 16, opacity: 0, duration: 0.5, delay: 0.2 });
-        gsap.from('.fp-hero-heading', { y: 60, opacity: 0, duration: 1, ease: 'power4.out', delay: 0.35 });
-        gsap.from('.fp-hero-sub', { y: 24, opacity: 0, duration: 0.7, delay: 0.7 });
+        gsap.fromTo('.fp-hero-label', { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, delay: 0.2 });
+        gsap.fromTo('.fp-hero-heading', { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power4.out', delay: 0.35 });
+        gsap.fromTo('.fp-hero-sub', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, delay: 0.7 });
 
         /* ── Card deck fan-out on scroll ── */
         const cards = gsap.utils.toArray<HTMLElement>('.fp-card');
@@ -112,8 +112,8 @@ export default function FeaturesPage() {
         }
 
         /* ── Stats counter entrance ── */
-        gsap.from('.fp-stat', {
-            y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'back.out(1.2)',
+        gsap.fromTo('.fp-stat', { y: 30, opacity: 0 }, {
+            y: 0, opacity: 1, stagger: 0.1, duration: 0.6, ease: 'back.out(1.2)',
             scrollTrigger: { trigger: '.fp-stats-section', start: 'top 88%' },
         });
 
@@ -126,15 +126,15 @@ export default function FeaturesPage() {
                 onEnter: () => setActiveFeature(i),
                 onEnterBack: () => setActiveFeature(i),
             });
-            gsap.from(block, {
-                y: 40, opacity: 0, duration: 0.7, ease: 'power3.out',
+            gsap.fromTo(block, { y: 40, opacity: 0 }, {
+                y: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
                 scrollTrigger: { trigger: block, start: 'top 85%' },
             });
         });
 
         /* ── CTA entrance ── */
-        gsap.from('.fp-cta-inner', {
-            y: 40, opacity: 0, duration: 0.8, ease: 'power3.out',
+        gsap.fromTo('.fp-cta-inner', { y: 40, opacity: 0 }, {
+            y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
             scrollTrigger: { trigger: '.fp-cta-section', start: 'top 85%' },
         });
     }, { scope: pageRef });
@@ -270,14 +270,15 @@ export default function FeaturesPage() {
                             padding: 48, minHeight: 420,
                             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                             transition: 'border-color 0.4s ease, box-shadow 0.4s ease',
-                            borderColor: `${features[activeFeature].accent}25`,
-                            boxShadow: `0 24px 80px -16px ${features[activeFeature].accent}12`,
+                            borderColor: `${features[activeFeature].accent}30`,
+                            boxShadow: `0 24px 80px -16px ${features[activeFeature].accent}20`,
+                            position: 'relative',
                         }}>
                             {/* Accent glow */}
                             <div style={{
                                 position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%, -50%)',
                                 width: '70%', height: '70%', borderRadius: '50%',
-                                background: `radial-gradient(circle, ${features[activeFeature].accent}06 0%, transparent 70%)`,
+                                background: `radial-gradient(circle, ${features[activeFeature].accent}15 0%, transparent 70%)`,
                                 filter: 'blur(40px)', pointerEvents: 'none',
                                 transition: 'background 0.6s ease',
                             }} />
@@ -285,7 +286,7 @@ export default function FeaturesPage() {
                             {/* Large number */}
                             <span style={{
                                 fontFamily: 'var(--font-heading)', fontSize: 120, fontWeight: 900,
-                                color: `${features[activeFeature].accent}08`,
+                                color: `${features[activeFeature].accent}12`,
                                 lineHeight: 1, position: 'absolute', top: 24, right: 32,
                                 transition: 'color 0.4s ease',
                                 userSelect: 'none',
@@ -294,8 +295,8 @@ export default function FeaturesPage() {
                             {/* Icon */}
                             <div style={{
                                 width: 80, height: 80, borderRadius: 'var(--radius-xl)',
-                                background: `${features[activeFeature].accent}08`,
-                                border: `1px solid ${features[activeFeature].accent}18`,
+                                background: `${features[activeFeature].accent}15`,
+                                border: `1px solid ${features[activeFeature].accent}25`,
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                 marginBottom: 24, transition: 'all 0.4s ease',
                                 position: 'relative',
