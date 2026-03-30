@@ -1,330 +1,182 @@
 'use client';
 
-import { useRef, useCallback, useState, useEffect } from 'react';
+import { useRef, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Header, Footer } from '@/components';
-import Magnetic from '@/components/Magnetic';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const featuredAgent = {
     name: 'AI Vibe Marketer',
-    filename: 'ai-vibe-marketer.ts',
-    desc: 'Full-stack marketing agent that plans, creates, and optimizes campaigns across every channel. The AI Vibe Marketer handles everything from audience segmentation and content creation to real-time budget optimization and ROI tracking.',
-    jsdoc: '/** @description Orchestrates end-to-end marketing campaigns with multi-channel optimization, A/B testing, and real-time performance analytics. */',
-    command: '$ deploy_agent --name ai-vibe-marketer --mode production',
-    terminalLines: [
-        '$ openanalyst run ai-vibe-marketer',
-        '✓ Loading campaign configuration...',
-        '✓ Analyzing target audience (3,200 profiles)',
-        '✓ Generating ad creatives (4 variants)',
-        '✓ Deploying across 3 channels...',
-        '◼ Campaign live. Monitoring ROI...',
+    role: 'Full-Stack Marketing Agent',
+    desc: 'The flagship autonomous agent that plans, creates, and optimizes campaigns across every channel. From audience segmentation and content creation to real-time budget optimization and ROI tracking — all on autopilot.',
+    capabilities: ['Multi-channel orchestration', 'A/B testing & optimization', 'Content generation', 'Budget allocation', 'Performance analytics', 'Audience targeting'],
+    stats: [
+        { label: 'Avg ROI', value: '340%', color: '#10B981' },
+        { label: 'Campaigns', value: '10K+', color: '#FF6B00' },
+        { label: 'Channels', value: '8', color: '#3B82F6' },
     ],
 };
 
-const otherAgents = [
-    {
-        name: 'Content Strategist',
-        filename: 'content-strategist.ts',
-        desc: 'AI-powered content planning, creation, and distribution strategy.',
-        command: '$ deploy_agent --name content-strategist',
-        accent: '#3b82f6',
-    },
-    {
-        name: 'Market Researcher',
-        filename: 'market-researcher.ts',
-        desc: 'Comprehensive market research with competitor analysis and trend forecasting.',
-        command: '$ deploy_agent --name market-researcher',
-        accent: '#2ecc71',
-    },
-    {
-        name: 'Customer Insights',
-        filename: 'customer-insights.ts',
-        desc: 'Deep customer segmentation, behavior analysis, and predictive modeling.',
-        command: '$ deploy_agent --name customer-insights',
-        accent: '#f59e0b',
-    },
-    {
-        name: 'Ad Campaign Manager',
-        filename: 'ad-campaign-manager.ts',
-        desc: 'Automated ad campaign creation, A/B testing, and budget optimization.',
-        command: '$ deploy_agent --name ad-campaign-manager',
-        accent: '#8b5cf6',
-    },
-    {
-        name: 'SEO Specialist',
-        filename: 'seo-specialist.ts',
-        desc: 'AI-driven SEO optimization, keyword research, and content gap analysis.',
-        command: '$ deploy_agent --name seo-specialist',
-        accent: '#ec4899',
-    },
+const agents = [
+    { name: 'Content Strategist', desc: 'AI-powered content planning, creation, and distribution across all channels.', color: '#3B82F6', metric: '+4x content output', capabilities: ['Blog generation', 'Social copy', 'Email sequences'] },
+    { name: 'Market Researcher', desc: 'Real-time market research with competitor analysis and trend forecasting.', color: '#10B981', metric: '10x faster insights', capabilities: ['Competitor tracking', 'Trend detection', 'Market sizing'] },
+    { name: 'Customer Insights', desc: 'Deep customer segmentation, behavior analysis, and predictive modeling.', color: '#F59E0B', metric: '92% accuracy', capabilities: ['Behavioral clustering', 'Churn prediction', 'LTV modeling'] },
+    { name: 'Ad Campaign Manager', desc: 'Automated ad creation, A/B testing, and cross-platform budget optimization.', color: '#8B5CF6', metric: '-31% CPA', capabilities: ['Google Ads', 'Meta Ads', 'LinkedIn Ads'] },
+    { name: 'SEO Specialist', desc: 'AI-driven SEO optimization, keyword research, and content gap analysis.', color: '#EC4899', metric: '+47% traffic', capabilities: ['Keyword research', 'On-page SEO', 'Rank tracking'] },
 ];
 
 export default function SolutionsPage() {
     const pageRef = useRef<HTMLDivElement>(null);
-    const [typedLines, setTypedLines] = useState<string[]>([]);
-    const [currentLine, setCurrentLine] = useState('');
-    const [showCursor, setShowCursor] = useState(true);
 
     const handleCardHover = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         const card = e.currentTarget;
         const rect = card.getBoundingClientRect();
         const x = (e.clientX - rect.left) / rect.width - 0.5;
         const y = (e.clientY - rect.top) / rect.height - 0.5;
-        gsap.to(card, { rotateY: x * 6, rotateX: -y * 4, duration: 0.3, ease: 'power2.out' });
+        gsap.to(card, { rotateY: x * 5, rotateX: -y * 3, duration: 0.3, ease: 'power2.out' });
     }, []);
 
     const handleCardLeave = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         gsap.to(e.currentTarget, { rotateY: 0, rotateX: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)' });
     }, []);
 
-    // Typing animation for featured agent terminal
-    useEffect(() => {
-        let lineIndex = 0;
-        let charIndex = 0;
-        let timer: ReturnType<typeof setTimeout>;
-        const lines = featuredAgent.terminalLines;
-
-        const type = () => {
-            if (lineIndex >= lines.length) return;
-            const line = lines[lineIndex];
-            const speed = line.startsWith('$') ? 25 : 12;
-
-            if (charIndex <= line.length) {
-                setCurrentLine(line.slice(0, charIndex));
-                charIndex++;
-                timer = setTimeout(type, speed);
-            } else {
-                setTypedLines(prev => [...prev, line]);
-                setCurrentLine('');
-                lineIndex++;
-                charIndex = 0;
-                timer = setTimeout(type, line.startsWith('$') ? 400 : 120);
-            }
-        };
-
-        timer = setTimeout(type, 800);
-        const cursorInterval = setInterval(() => setShowCursor(prev => !prev), 530);
-
-        return () => {
-            clearTimeout(timer);
-            clearInterval(cursorInterval);
-        };
-    }, []);
-
     useGSAP(() => {
-        gsap.from('.solutions-hero', {
-            y: 40, opacity: 0, duration: 0.8, ease: 'power3.out',
-        });
+        gsap.from('.sol-hero-label', { y: 16, opacity: 0, duration: 0.5, delay: 0.2 });
+        gsap.from('.sol-hero-line', { y: 80, opacity: 0, stagger: 0.12, duration: 1, ease: 'power4.out', delay: 0.3 });
+        gsap.from('.sol-hero-sub', { y: 24, opacity: 0, duration: 0.7, delay: 0.8 });
 
-        gsap.from('.featured-agent', {
-            y: 60, opacity: 0, filter: 'blur(4px)', duration: 1, ease: 'power3.out',
-            scrollTrigger: { trigger: '.featured-agent', start: 'top 85%', toggleActions: 'play none none reverse' }
-        });
+        gsap.from('.sol-featured', { y: 60, opacity: 0, filter: 'blur(4px)', duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.sol-featured', start: 'top 85%' } });
 
-        const cards = gsap.utils.toArray<HTMLElement>('.agent-bento-card');
-        gsap.from(cards, {
-            y: 50, opacity: 0, scale: 0.95, stagger: 0.08, duration: 0.6, ease: 'back.out(1.2)',
-            scrollTrigger: { trigger: '.agents-bento', start: 'top 85%', toggleActions: 'play none none reverse' }
-        });
+        gsap.from('.sol-agent-card', { y: 50, opacity: 0, scale: 0.95, stagger: 0.08, duration: 0.6, ease: 'back.out(1.2)', scrollTrigger: { trigger: '.sol-agents-grid', start: 'top 85%' } });
+
+        gsap.from('.sol-cta-content', { y: 40, opacity: 0, duration: 0.8, scrollTrigger: { trigger: '.sol-cta', start: 'top 85%' } });
     }, { scope: pageRef });
 
     return (
-        <div ref={pageRef} style={{ minHeight: '100vh', backgroundColor: 'var(--background)', color: 'var(--foreground)' }}>
+        <div ref={pageRef} style={{ minHeight: '100vh' }}>
             <Header />
-            <main style={{ paddingTop: '120px', paddingBottom: '80px' }}>
-                <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 20px' }}>
-                    {/* Hero */}
-                    <div className="solutions-hero" style={{ textAlign: 'center', marginBottom: '60px' }}>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--syntax-comment)', marginBottom: '16px' }}>
-                            {'/** @section AI_AGENTS */'}
-                        </p>
-                        <h1 style={{
-                            fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem, 6vw, 4rem)', fontWeight: 800,
-                            lineHeight: 1.1, marginBottom: '20px',
-                        }}>
-                            Solutions by <span className="text-gradient">Agents</span>
-                        </h1>
-                        <p style={{ fontSize: '18px', color: 'var(--muted)', maxWidth: '550px', margin: '0 auto', fontFamily: 'var(--font-body)', lineHeight: 1.7 }}>
-                            Deploy specialized AI marketing agents tailored for your specific campaigns and growth goals.
-                        </p>
+
+            {/* ═══ HERO — Dark ═══ */}
+            <section className="dark-section" style={{ paddingTop: 160, paddingBottom: 80, background: 'var(--bg-dark-primary)', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '80px 80px', maskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)', WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)' }} />
+                <div style={{ position: 'absolute', top: '10%', right: '20%', width: 500, height: 500, borderRadius: '50%', background: 'rgba(255,107,0,0.04)', filter: 'blur(100px)', pointerEvents: 'none' }} />
+
+                <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 24px', textAlign: 'center', position: 'relative', zIndex: 2 }}>
+                    <div className="sol-hero-label" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px', borderRadius: 999, marginBottom: 32, border: '1px solid rgba(255,107,0,0.2)', background: 'rgba(255,107,0,0.06)' }}>
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF6B00', boxShadow: '0 0 8px rgba(255,107,0,0.5)' }} />
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#FF8533', textTransform: 'uppercase', letterSpacing: '0.1em' }}>AI Agents</span>
                     </div>
 
-                    {/* Featured Agent — Full Width Hero Card */}
-                    <div className="featured-agent" style={{ marginBottom: '40px' }}>
-                        <div className="terminal-card glow-border" style={{
-                            position: 'relative',
-                            overflow: 'hidden',
-                        }}>
-                            {/* Most Popular badge */}
-                            <div style={{
-                                position: 'absolute', top: '0', left: '50%', transform: 'translateX(-50%)',
-                                backgroundColor: 'var(--primary)', color: '#ffffff', fontSize: '10px',
-                                fontWeight: 700, padding: '4px 20px', borderRadius: '0 0 10px 10px',
-                                textTransform: 'uppercase', letterSpacing: '0.1em', zIndex: 3,
-                            }}>
-                                Most Popular
+                    <h1>
+                        {['Meet Your AI', 'Marketing Team'].map((line, i) => (
+                            <span key={i} style={{ display: 'block', overflow: 'hidden' }}>
+                                <span className="sol-hero-line" style={{
+                                    display: 'block', fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.8rem, 6vw, 5rem)',
+                                    fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.04em',
+                                    ...(i === 1 ? { background: 'var(--gradient-hero)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' } : { color: '#FAFAFA' }),
+                                }}>{line}</span>
+                            </span>
+                        ))}
+                    </h1>
+
+                    <p className="sol-hero-sub" style={{ maxWidth: 520, margin: '28px auto 0', fontSize: 'clamp(1rem, 1.4vw, 1.1rem)', color: 'var(--text-dark-secondary)', lineHeight: 1.8 }}>
+                        Deploy specialized AI marketing agents tailored for your campaigns and growth goals. Each agent is a complete specialist.
+                    </p>
+                </div>
+            </section>
+
+            {/* ═══ FEATURED AGENT — Light (Dossier Style) ═══ */}
+            <section className="light-section" style={{ padding: '100px 24px', background: 'var(--bg-surface)' }}>
+                <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+                    <div className="sol-featured" style={{
+                        display: 'grid', gridTemplateColumns: '1.3fr 0.7fr', gap: 0,
+                        borderRadius: 24, overflow: 'hidden', border: '1px solid var(--border-default)',
+                        boxShadow: '0 16px 48px rgba(0,0,0,0.06)',
+                    }}>
+                        {/* Left — Info */}
+                        <div style={{ padding: '48px 44px', background: 'var(--bg-white)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
+                                <span style={{ padding: '4px 12px', borderRadius: 999, background: 'rgba(255,107,0,0.08)', border: '1px solid rgba(255,107,0,0.15)', fontFamily: 'var(--font-mono)', fontSize: 10, color: '#FF6B00', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Most Popular</span>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-muted)' }}>
+                                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 6px rgba(16,185,129,0.5)' }} /> Active
+                                </span>
                             </div>
 
-                            <div className="terminal-card-header">
-                                <div className="terminal-dots"><span /><span /><span /></div>
-                                <span style={{ color: '#6b7280', fontSize: '11px', marginLeft: '8px' }}>{featuredAgent.filename}</span>
-                                <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#39ff14', boxShadow: '0 0 6px rgba(57,255,20,0.4)' }} />
-                                    <span style={{ fontSize: '10px', color: '#4a5568', fontFamily: 'var(--font-mono)' }}>production</span>
-                                </div>
+                            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: 6, letterSpacing: '-0.02em' }}>{featuredAgent.name}</h2>
+                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--orange)', marginBottom: 16, letterSpacing: '0.04em' }}>{featuredAgent.role}</p>
+                            <p style={{ fontSize: 15, color: 'var(--text-secondary)', lineHeight: 1.8, marginBottom: 28 }}>{featuredAgent.desc}</p>
+
+                            {/* Capabilities */}
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 28 }}>
+                                {featuredAgent.capabilities.map((cap) => (
+                                    <span key={cap} style={{ padding: '5px 12px', borderRadius: 999, background: 'var(--bg-surface)', border: '1px solid var(--border-default)', fontSize: 12, color: 'var(--text-secondary)', fontWeight: 500 }}>{cap}</span>
+                                ))}
                             </div>
 
-                            <div className="featured-inner-grid" style={{
-                                display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0',
-                            }}>
-                                {/* Left: Info */}
-                                <div style={{ padding: '32px', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
-                                    <h2 style={{
-                                        fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.5rem, 3vw, 2rem)',
-                                        fontWeight: 700, color: '#ffffff', marginBottom: '12px',
-                                    }}>
-                                        {featuredAgent.name}
-                                    </h2>
-                                    <p style={{
-                                        fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--syntax-comment)',
-                                        marginBottom: '16px', lineHeight: 1.8,
-                                    }}>
-                                        {featuredAgent.jsdoc}
-                                    </p>
-                                    <p style={{ fontSize: '14px', color: '#a89890', lineHeight: 1.7, marginBottom: '24px' }}>
-                                        {featuredAgent.desc}
-                                    </p>
-                                    <Magnetic>
-                                        <a href="https://app.openanalyst.com" style={{
-                                            display: 'inline-flex', alignItems: 'center', gap: '8px',
-                                            padding: '12px 24px', fontSize: '13px', fontFamily: 'var(--font-mono)', fontWeight: 600,
-                                            color: '#ffffff', backgroundColor: 'var(--primary)', borderRadius: '9999px',
-                                            textDecoration: 'none', transition: 'all 0.3s ease',
-                                        }}>
-                                            <span style={{ color: 'var(--cmd-prefix)', fontSize: '12px' }}>$</span>
-                                            deploy_agent
-                                        </a>
-                                    </Magnetic>
-                                </div>
+                            <a href="https://app.openanalyst.com" className="btn-primary" style={{ textDecoration: 'none', fontSize: 14, padding: '12px 28px' }}>
+                                Deploy Agent <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </a>
+                        </div>
 
-                                {/* Right: Typing terminal */}
-                                <div style={{ padding: '24px', backgroundColor: 'rgba(0,0,0,0.15)', minHeight: '240px' }}>
-                                    <div style={{ fontSize: '13px', lineHeight: 1.9, fontFamily: 'var(--font-mono)' }}>
-                                        {typedLines.map((line, i) => (
-                                            <div key={i} style={{
-                                                color: line.startsWith('$') ? '#39ff14' :
-                                                       line.startsWith('✓') ? '#98c379' :
-                                                       '#e5c07b',
-                                            }}>
-                                                {line}
-                                            </div>
-                                        ))}
-                                        {typedLines.length < featuredAgent.terminalLines.length && (
-                                            <div>
-                                                <span style={{
-                                                    color: currentLine.startsWith('$') ? '#39ff14' :
-                                                           currentLine.startsWith('✓') ? '#98c379' : '#d4d4d8',
-                                                }}>
-                                                    {currentLine}
-                                                </span>
-                                                <span style={{
-                                                    opacity: showCursor ? 1 : 0,
-                                                    color: 'var(--primary)',
-                                                    transition: 'opacity 0.1s',
-                                                    fontWeight: 700,
-                                                }}>▋</span>
-                                            </div>
-                                        )}
-                                    </div>
+                        {/* Right — Stats panel (dark invert) */}
+                        <div style={{ padding: '48px 36px', background: 'var(--bg-dark-primary)', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 24 }}>
+                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-dark-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Performance</p>
+                            {featuredAgent.stats.map((stat) => (
+                                <div key={stat.label} style={{ padding: '20px', borderRadius: 16, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                                    <div style={{ fontFamily: 'var(--font-heading)', fontSize: 28, fontWeight: 800, color: stat.color, marginBottom: 4, letterSpacing: '-0.02em' }}>{stat.value}</div>
+                                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-dark-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{stat.label}</div>
                                 </div>
-                            </div>
+                            ))}
                         </div>
                     </div>
+                </div>
+            </section>
 
-                    {/* Other Agents — Asymmetric Bento Grid */}
-                    <div className="agents-bento" style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(6, 1fr)',
-                        gap: '16px',
-                    }}>
-                        {otherAgents.map((agent, i) => {
-                            // Asymmetric: first 2 span 3 cols, last 3 span 2 cols
+            {/* ═══ OTHER AGENTS — Dark Bento Grid ═══ */}
+            <section className="dark-section" style={{ padding: '100px 24px', background: 'var(--bg-dark-primary)' }}>
+                <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+                    <div style={{ textAlign: 'center', marginBottom: 56 }}>
+                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#FF8533', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Specialist Agents</p>
+                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: '#FAFAFA', letterSpacing: '-0.03em' }}>
+                            Your <span className="text-gradient">complete</span> AI marketing team
+                        </h2>
+                    </div>
+
+                    <div className="sol-agents-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 16 }}>
+                        {agents.map((agent, i) => {
                             const isWide = i < 2;
                             return (
-                                <div key={agent.name} className="agent-bento-card" style={{
-                                    gridColumn: isWide ? 'span 3' : 'span 2',
-                                    perspective: '800px',
-                                }}>
-                                    <div
-                                        onMouseMove={handleCardHover}
-                                        onMouseLeave={handleCardLeave}
-                                        style={{ willChange: 'transform', transformStyle: 'preserve-3d', height: '100%' }}
-                                    >
+                                <div key={agent.name} className="sol-agent-card" style={{ gridColumn: isWide ? 'span 3' : 'span 2', perspective: 800 }}>
+                                    <div onMouseMove={handleCardHover} onMouseLeave={handleCardLeave} style={{ willChange: 'transform', transformStyle: 'preserve-3d', height: '100%' }}>
                                         <div style={{
-                                            padding: '24px',
-                                            borderRadius: '16px',
-                                            backgroundColor: 'var(--surface)',
-                                            border: `1px solid var(--border)`,
-                                            transition: 'all 0.3s ease',
-                                            height: '100%',
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            cursor: 'default',
-                                            position: 'relative',
-                                            overflow: 'hidden',
+                                            padding: 28, borderRadius: 20,
+                                            background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+                                            transition: 'all 0.3s ease', height: '100%',
+                                            display: 'flex', flexDirection: 'column', cursor: 'default',
                                         }}
-                                            onMouseEnter={(e) => {
-                                                (e.currentTarget as HTMLElement).style.borderColor = agent.accent;
-                                                (e.currentTarget as HTMLElement).style.boxShadow = `0 8px 32px ${agent.accent}15`;
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)';
-                                                (e.currentTarget as HTMLElement).style.boxShadow = 'none';
-                                            }}
+                                            onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${agent.color}40`; e.currentTarget.style.boxShadow = `0 8px 32px ${agent.color}15`; }}
+                                            onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.boxShadow = 'none'; }}
                                         >
-                                            {/* Accent dot */}
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-                                                <span style={{
-                                                    width: '10px', height: '10px', borderRadius: '50%',
-                                                    backgroundColor: agent.accent,
-                                                    boxShadow: `0 0 8px ${agent.accent}40`,
-                                                }} />
-                                                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--muted)' }}>{agent.filename}</span>
+                                            {/* Header */}
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+                                                <div style={{ width: 36, height: 36, borderRadius: 10, background: `${agent.color}15`, border: `1px solid ${agent.color}25`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={agent.color} strokeWidth="2"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z"/></svg>
+                                                </div>
+                                                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700, color: agent.color, padding: '3px 8px', borderRadius: 6, background: `${agent.color}10` }}>{agent.metric}</span>
                                             </div>
 
-                                            <h3 style={{
-                                                fontFamily: 'var(--font-heading)', fontSize: '18px', fontWeight: 700,
-                                                color: 'var(--foreground)', marginBottom: '8px',
-                                            }}>
-                                                {agent.name}
-                                            </h3>
-                                            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.6, marginBottom: '16px', fontFamily: 'var(--font-body)', flex: 1 }}>
-                                                {agent.desc}
-                                            </p>
+                                            <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 18, fontWeight: 700, color: '#FAFAFA', marginBottom: 8 }}>{agent.name}</h3>
+                                            <p style={{ fontSize: 13, color: 'var(--text-dark-secondary)', lineHeight: 1.7, marginBottom: 16, flex: 1 }}>{agent.desc}</p>
 
-                                            {/* Deploy command */}
-                                            <div style={{
-                                                backgroundColor: 'var(--terminal-bg)', borderRadius: '8px',
-                                                padding: '8px 12px', marginBottom: '12px',
-                                            }}>
-                                                <code style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--syntax-string)' }}>
-                                                    {agent.command}
-                                                </code>
+                                            {/* Capability tags */}
+                                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                                                {agent.capabilities.map((cap) => (
+                                                    <span key={cap} style={{ padding: '3px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', fontSize: 10, color: 'var(--text-dark-muted)', fontFamily: 'var(--font-mono)' }}>{cap}</span>
+                                                ))}
                                             </div>
-
-                                            <a href="https://app.openanalyst.com" style={{
-                                                display: 'inline-flex', alignItems: 'center', gap: '6px',
-                                                fontSize: '13px', fontFamily: 'var(--font-mono)', fontWeight: 600,
-                                                color: agent.accent, textDecoration: 'none', transition: 'gap 0.3s ease',
-                                            }}>
-                                                <span style={{ fontSize: '11px' }}>$</span>
-                                                deploy_agent
-                                                <span>&rarr;</span>
-                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -332,22 +184,33 @@ export default function SolutionsPage() {
                         })}
                     </div>
                 </div>
+            </section>
 
-                <style>{`
-                    @media (max-width: 768px) {
-                        .featured-inner-grid {
-                            grid-template-columns: 1fr !important;
-                        }
-                        .agents-bento {
-                            grid-template-columns: 1fr !important;
-                        }
-                        .agents-bento > * {
-                            grid-column: span 1 !important;
-                        }
-                    }
-                `}</style>
-            </main>
+            {/* ═══ CTA — Light ═══ */}
+            <section className="sol-cta light-section" style={{ padding: '100px 24px', background: 'var(--bg-surface)' }}>
+                <div className="sol-cta-content" style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
+                    <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: 16, letterSpacing: '-0.03em' }}>
+                        Put your AI team <span className="text-gradient">to work</span>
+                    </h2>
+                    <p style={{ fontSize: 16, color: 'var(--text-secondary)', marginBottom: 32, lineHeight: 1.7 }}>
+                        Deploy all agents with a single click. Start seeing results in hours, not weeks.
+                    </p>
+                    <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
+                        <a href="https://app.openanalyst.com" className="btn-primary" style={{ textDecoration: 'none' }}>Start Free Trial <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                        <a href="/contact" className="btn-outline" style={{ textDecoration: 'none' }}>Talk to Sales</a>
+                    </div>
+                </div>
+            </section>
+
             <Footer />
+
+            <style>{`
+                @media (max-width: 900px) {
+                    .sol-featured { grid-template-columns: 1fr !important; }
+                    .sol-agents-grid { grid-template-columns: 1fr !important; }
+                    .sol-agents-grid > * { grid-column: span 1 !important; }
+                }
+            `}</style>
         </div>
     );
 }
