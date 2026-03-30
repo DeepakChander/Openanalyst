@@ -24,7 +24,7 @@ const LOGOS: LogoItem[] = [
   { name: 'YouTube', color: '#FF0000', icon: `${SI}/youtube/FF0000` },
   { name: 'Shopify', color: '#7AB55C', icon: `${SI}/shopify/7AB55C` },
   { name: 'Notion', color: '#000000', icon: `${SI}/notion/FFFFFF` },
-  { name: 'Salesforce', color: '#00A1E0', icon: `${SI}/salesforce/00A1E0` },
+  { name: 'Salesforce', color: '#00A1E0', icon: 'https://upload.wikimedia.org/wikipedia/commons/f/f9/Salesforce.com_logo.svg' },
   { name: 'WhatsApp', color: '#25D366', icon: `${SI}/whatsapp/25D366` },
   { name: 'Zoom', color: '#0B5CFF', icon: `${SI}/zoom/0B5CFF` },
   { name: 'Airtable', color: '#18BFFF', icon: `${SI}/airtable/18BFFF` },
@@ -58,8 +58,8 @@ const LogoCard: React.FC<{
   }, []);
 
   const angle = (index / totalInRing) * 360;
-  const radius = ring === 'inner' ? (isMobile ? 80 : 160) : ring === 'outer' ? (isMobile ? 150 : 280) : (isMobile ? 220 : 400);
-  const orbitDuration = ring === 'inner' ? 50 : ring === 'outer' ? 70 : 100;
+  const radius = ring === 'inner' ? (isMobile ? 80 : 140) : ring === 'outer' ? (isMobile ? 140 : 240) : (isMobile ? 190 : 340);
+  const orbitDuration = ring === 'inner' ? 55 : ring === 'outer' ? 75 : 95;
   const direction = ring === 'inner' ? 1 : ring === 'outer' ? -1 : 1;
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -198,7 +198,7 @@ const LogoConstellation: React.FC = () => {
   useEffect(() => {
     setMounted(true);
     const updateSize = () => {
-      setContainerSize(window.innerWidth < 600 ? Math.min(320, window.innerWidth - 40) : Math.min(900, window.innerWidth - 80));
+      setContainerSize(window.innerWidth < 600 ? Math.min(320, window.innerWidth - 40) : Math.min(750, window.innerWidth - 80));
     };
     updateSize();
     window.addEventListener('resize', updateSize);
@@ -212,7 +212,7 @@ const LogoConstellation: React.FC = () => {
         position: 'relative',
         overflow: 'hidden',
         background: '#08080f',
-        padding: '100px 0',
+        padding: '80px 0 60px',
       }}
     >
       {/* Noise overlay */}
@@ -309,7 +309,7 @@ const LogoConstellation: React.FC = () => {
           />
           {/* Middle ring */}
           <motion.circle
-            cx="0" cy="0" r={containerSize < 400 ? 150 : 280}
+            cx="0" cy="0" r={containerSize < 400 ? 140 : 240}
             fill="none"
             stroke="rgba(255,255,255,0.04)"
             strokeWidth="1"
@@ -320,7 +320,7 @@ const LogoConstellation: React.FC = () => {
           />
           {/* Outer ring */}
           <motion.circle
-            cx="0" cy="0" r={containerSize < 400 ? 220 : 400}
+            cx="0" cy="0" r={containerSize < 400 ? 190 : 340}
             fill="none"
             stroke="rgba(255,255,255,0.04)"
             strokeWidth="1"
