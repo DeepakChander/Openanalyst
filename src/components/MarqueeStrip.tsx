@@ -68,11 +68,11 @@ const MarqueeStrip: React.FC<MarqueeStripProps> = ({
   const handleMouseEnter = () => tweenRef.current?.pause();
   const handleMouseLeave = () => tweenRef.current?.resume();
 
-  const borderColor = dark ? 'var(--border-dark)' : 'var(--border-light)';
+  const borderColor = dark ? 'rgba(255,255,255,0.08)' : 'var(--border)';
   const isLogoMode = logos && logos.length > 0;
 
-  const textColor = dark ? 'var(--text-muted)' : 'var(--text-dark)';
-  const dotColor = 'var(--rust)';
+  const textColor = dark ? 'var(--text-muted)' : 'var(--text-secondary)';
+  const dotColor = 'var(--orange)';
 
   const itemStyle: React.CSSProperties = {
     fontFamily: 'var(--font-body)',
@@ -132,7 +132,7 @@ const MarqueeStrip: React.FC<MarqueeStripProps> = ({
             fontFamily: 'var(--font-body)',
             fontSize: '18px',
             fontWeight: 600,
-            color: dark ? 'var(--text-light)' : 'var(--text-dark)',
+            color: dark ? '#FAFAFA' : 'var(--text-primary)',
             letterSpacing: '0.01em',
             flexShrink: 0,
             opacity: 0.9,

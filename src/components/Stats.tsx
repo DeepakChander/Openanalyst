@@ -36,7 +36,7 @@ function OdometerDigit({ value, delay }: { value: string; delay: number }) {
         );
     }, [visible, delay]);
 
-    return <span ref={ref} style={{ display: 'inline-block', opacity: 0 }}>{value}</span>;
+    return <span ref={ref} style={{ display: 'inline-block' }}>{value}</span>;
 }
 
 function AnimatedNumber({ value, suffix, color, delay }: { value: number; suffix: string; color: string; delay: number }) {
@@ -77,13 +77,13 @@ const Stats: React.FC = () => {
 
     useGSAP(() => {
         gsap.fromTo('.stats-heading-word', { y: 24, opacity: 0, filter: 'blur(4px)' }, {
-            y: 24, opacity: 0, filter: 'blur(4px)',
+            y: 0, opacity: 1, filter: 'blur(0px)',
             stagger: 0.05, duration: 0.5, ease: 'power3.out',
             scrollTrigger: { trigger: '.stats-heading', start: 'top 85%' },
         });
 
         gsap.fromTo('.stats-card', { y: 60, opacity: 0, scale: 0.9 }, {
-            y: 60, opacity: 0, scale: 0.9,
+            y: 0, opacity: 1, scale: 1,
             stagger: 0.12, duration: 0.8, ease: 'back.out(1.3)',
             scrollTrigger: { trigger: '.stats-grid', start: 'top 88%' },
         });
