@@ -7,447 +7,245 @@ import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ═══════════════════════════════════════
-   DATA
-   ═══════════════════════════════════════ */
+/* ═══ Pattern #4: Vertical tabs left + morphing preview right ═══ */
+
 const features = [
-    { id: 0, tab: 'Campaign Agent', name: 'AI-Vibe-Marketer', title: 'Full-stack marketing agent', desc: 'Deploy an autonomous agent that plans, creates, and optimizes campaigns across every channel — all on autopilot.', color: '#FF6B00', caps: ['Multi-channel campaigns', 'A/B testing', 'Performance tracking', 'Budget optimization'] },
-    { id: 1, tab: 'Segmentation', name: 'Customer Segmentation', title: 'Automatic audience clustering', desc: 'Segment your audience by behavior, demographics, and engagement patterns with zero manual work.', color: '#3B82F6', caps: ['Behavioral clustering', 'Demographic profiling', 'Engagement scoring', 'Predictive modeling'] },
-    { id: 2, tab: 'Research', name: 'Market Research', title: 'Real-time market intelligence', desc: 'Generate comprehensive research reports with competitor analysis, trend forecasting, and strategic insights.', color: '#10B981', caps: ['Competitor analysis', 'Trend forecasting', 'Market sizing', 'Opportunity mapping'] },
-    { id: 3, tab: 'AI Search', name: 'AI Search Optimization', title: 'Next-gen search intelligence', desc: 'Optimize your brand across AI search engines — ChatGPT, Perplexity, Gemini — for maximum discoverability.', color: '#8B5CF6', caps: ['AI search optimization', 'Structured data', 'Content gap analysis', 'Ranking intelligence'] },
-    { id: 4, tab: 'SEO Content', name: 'SEO Content Optimizer', title: 'Content ranking engine', desc: 'Create content that ranks with intelligent keyword research, competitive gap analysis, and real-time tracking.', color: '#F59E0B', caps: ['Keyword research', 'Content scoring', 'Gap analysis', 'Rank tracking'] },
+    {
+        id: 0, tab: 'Campaign Agent', title: 'AI-Vibe-Marketer',
+        subtitle: 'Full-stack marketing agent',
+        desc: 'Deploy an autonomous agent that plans, creates, and optimizes campaigns across every channel — all on autopilot.',
+        color: '#FF6B00',
+        caps: ['Multi-channel campaigns', 'A/B testing', 'Performance tracking', 'Budget optimization'],
+        preview: [
+            { ch: 'Email Campaign', stat: '2,400 sent', pct: 78 },
+            { ch: 'Social Ads', stat: '4 platforms', pct: 92 },
+            { ch: 'Retargeting', stat: '840 users', pct: 65 },
+            { ch: 'Google Ads', stat: '$2.4k spend', pct: 85 },
+        ],
+    },
+    {
+        id: 1, tab: 'Segmentation', title: 'Customer Segmentation',
+        subtitle: 'Automatic audience clustering',
+        desc: 'Segment your audience by behavior, demographics, and engagement patterns with zero manual work.',
+        color: '#3B82F6',
+        caps: ['Behavioral clustering', 'Demographic profiling', 'Engagement scoring', 'Predictive modeling'],
+        preview: [
+            { ch: 'High Intent', stat: '3,240', pct: 92 },
+            { ch: 'Engaged', stat: '12.4K', pct: 74 },
+            { ch: 'At Risk', stat: '180', pct: 28 },
+            { ch: 'New Users', stat: '2,800', pct: 56 },
+        ],
+    },
+    {
+        id: 2, tab: 'Research', title: 'Market Research',
+        subtitle: 'Real-time intelligence',
+        desc: 'Generate research reports with competitor analysis, trend forecasting, and strategic insights.',
+        color: '#10B981',
+        caps: ['Competitor analysis', 'Trend forecasting', 'Market sizing', 'Opportunity mapping'],
+        preview: [
+            { ch: 'Competitor Alert', stat: 'HIGH', pct: 95 },
+            { ch: 'Trend Detected', stat: 'RISING', pct: 88 },
+            { ch: 'Market Gap', stat: 'FOUND', pct: 72 },
+            { ch: 'Opportunity', stat: 'OPEN', pct: 81 },
+        ],
+    },
+    {
+        id: 3, tab: 'AI Search', title: 'AI Search Optimization',
+        subtitle: 'Next-gen search intelligence',
+        desc: 'Optimize your brand across AI search engines — ChatGPT, Perplexity, Gemini — for maximum discoverability.',
+        color: '#8B5CF6',
+        caps: ['AI search optimization', 'Structured data', 'Content gap analysis', 'Ranking intelligence'],
+        preview: [
+            { ch: 'ChatGPT #1', stat: '97%', pct: 97 },
+            { ch: 'Perplexity #2', stat: '89%', pct: 89 },
+            { ch: 'Gemini #1', stat: '94%', pct: 94 },
+            { ch: 'AI Visibility', stat: '+340%', pct: 85 },
+        ],
+    },
+    {
+        id: 4, tab: 'SEO Content', title: 'SEO Content Optimizer',
+        subtitle: 'Content ranking engine',
+        desc: 'Create content that ranks with intelligent keyword research, competitive gap analysis, and real-time tracking.',
+        color: '#F59E0B',
+        caps: ['Keyword research', 'Content scoring', 'Gap analysis', 'Rank tracking'],
+        preview: [
+            { ch: 'AI Marketing Guide', stat: '94/100', pct: 94 },
+            { ch: 'Campaign Tips', stat: '87/100', pct: 87 },
+            { ch: 'ROI Playbook', stat: '91/100', pct: 91 },
+            { ch: 'Strategy Doc', stat: '88/100', pct: 88 },
+        ],
+    },
 ];
 
-const TAB_DURATION = 8000; // 8 seconds per tab auto-rotation
+const TAB_DURATION = 7000;
 
-const featureImages = [
-    '/images/features/campaign-agent.png',
-    '/images/features/segmentation.png',
-    '/images/features/research.png',
-    '/images/features/ai-search.png',
-    '/images/features/seo-content.png',
-];
-
-/* ═══════════════════════════════════════
-   VIDEO PLACEHOLDER
-   ═══════════════════════════════════════ */
-function VideoPlaceholder({ color, label }: { color: string; label: string }) {
-    return (
-        <div style={{
-            width: '100%', height: '100%', borderRadius: 16, overflow: 'hidden',
-            background: 'var(--bg-dark-card)',
-            border: '1px solid var(--border-dark-default)',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-            position: 'relative',
-            boxShadow: `0 24px 64px -16px ${color}15, 0 0 0 1px rgba(255,255,255,0.03)`,
-        }}>
-            {/* Ambient color glow */}
-            <div style={{
-                position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%, -50%)',
-                width: '60%', height: '60%', borderRadius: '50%',
-                background: `radial-gradient(circle, ${color}12 0%, transparent 70%)`,
-                filter: 'blur(40px)', pointerEvents: 'none',
-            }} />
-
-            {/* Grid pattern */}
-            <div style={{
-                position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.3,
-                backgroundImage: `linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)`,
-                backgroundSize: '32px 32px',
-            }} />
-
-            {/* Play button */}
-            <div style={{
-                width: 64, height: 64, borderRadius: '50%',
-                background: `${color}15`, border: `1px solid ${color}30`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                marginBottom: 16, position: 'relative', zIndex: 1,
-                transition: 'all 0.3s var(--ease-spring)',
-                cursor: 'pointer',
-            }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill={color} stroke="none">
-                    <polygon points="8 5 20 12 8 19" />
-                </svg>
-            </div>
-
-            {/* Label */}
-            <span style={{
-                fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-dark-muted)',
-                letterSpacing: '0.06em', textTransform: 'uppercase', position: 'relative', zIndex: 1,
-            }}>
-                {label} Demo
-            </span>
-
-            {/* Bottom bar mimicking video timeline */}
-            <div style={{
-                position: 'absolute', bottom: 0, left: 0, right: 0, height: 3,
-                background: 'rgba(255,255,255,0.04)',
-            }}>
-                <div style={{
-                    width: '35%', height: '100%', borderRadius: '0 2px 2px 0',
-                    background: `linear-gradient(90deg, ${color}, ${color}80)`,
-                }} />
-            </div>
-        </div>
-    );
-}
-
-/* ═══════════════════════════════════════
-   MAIN COMPONENT
-   ═══════════════════════════════════════ */
 const Features: React.FC = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
     const [active, setActive] = useState(0);
-    const tabIndicatorRef = useRef<HTMLDivElement>(null);
-    const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
     const progressRef = useRef<HTMLDivElement>(null);
-    const autoTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-    const progressTweenRef = useRef<gsap.core.Tween | null>(null);
+    const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-    const switchTab = useCallback((idx: number) => {
-        if (idx === active) return;
-        setActive(idx);
-    }, [active]);
-
-    // Auto-rotate tabs with progress bar
-    useEffect(() => {
-        const startProgress = () => {
-            if (progressRef.current) {
-                progressTweenRef.current?.kill();
-                gsap.set(progressRef.current, { scaleX: 0 });
-                progressTweenRef.current = gsap.to(progressRef.current, {
-                    scaleX: 1, duration: TAB_DURATION / 1000, ease: 'none',
-                });
-            }
-        };
-
-        startProgress();
-        autoTimerRef.current = setInterval(() => {
+    // Auto-advance with progress
+    const startTimer = useCallback(() => {
+        if (timerRef.current) clearInterval(timerRef.current);
+        if (progressRef.current) {
+            gsap.killTweensOf(progressRef.current);
+            gsap.set(progressRef.current, { scaleY: 0 });
+            gsap.to(progressRef.current, { scaleY: 1, duration: TAB_DURATION / 1000, ease: 'none' });
+        }
+        timerRef.current = setInterval(() => {
             setActive(p => (p + 1) % features.length);
-            startProgress();
         }, TAB_DURATION);
-
-        return () => {
-            if (autoTimerRef.current) clearInterval(autoTimerRef.current);
-            progressTweenRef.current?.kill();
-        };
     }, []);
 
-    // Restart progress on manual tab switch
-    useEffect(() => {
-        if (autoTimerRef.current) clearInterval(autoTimerRef.current);
-        if (progressRef.current) {
-            progressTweenRef.current?.kill();
-            gsap.set(progressRef.current, { scaleX: 0 });
-            progressTweenRef.current = gsap.to(progressRef.current, {
-                scaleX: 1, duration: TAB_DURATION / 1000, ease: 'none',
-            });
-        }
-        autoTimerRef.current = setInterval(() => {
-            setActive(p => (p + 1) % features.length);
-        }, TAB_DURATION);
-
-        // Animate tab indicator
-        const btn = tabRefs.current[active];
-        const indicator = tabIndicatorRef.current;
-        if (btn && indicator) {
-            const parent = btn.parentElement;
-            if (parent) {
-                const parentRect = parent.getBoundingClientRect();
-                const btnRect = btn.getBoundingClientRect();
-                gsap.to(indicator, { x: btnRect.left - parentRect.left, width: btnRect.width, duration: 0.4, ease: 'power3.out' });
-            }
-        }
-
-        return () => { if (autoTimerRef.current) clearInterval(autoTimerRef.current); };
-    }, [active]);
+    useEffect(() => { startTimer(); return () => { if (timerRef.current) clearInterval(timerRef.current); }; }, [startTimer]);
+    useEffect(() => { startTimer(); }, [active, startTimer]);
 
     useGSAP(() => {
-        gsap.from('.feat-badge', { y: 20, opacity: 0, filter: 'blur(4px)', duration: 0.6, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' } });
-        gsap.from('.feat-heading', { y: 30, opacity: 0, filter: 'blur(6px)', duration: 0.8, ease: 'power4.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 78%' } });
-        gsap.from('.feat-sub', { y: 16, opacity: 0, duration: 0.5, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' } });
-        gsap.from('.feat-tabs-wrap', { y: 20, opacity: 0, duration: 0.6, delay: 0.2, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 72%' } });
-        gsap.from('.feat-content', { y: 40, opacity: 0, duration: 0.8, delay: 0.3, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 70%' } });
+        gsap.from('.feat-label', { y: 16, opacity: 0, duration: 0.5, scrollTrigger: { trigger: sectionRef.current, start: 'top 82%' } });
+        gsap.from('.feat-heading', { y: 30, opacity: 0, filter: 'blur(6px)', duration: 0.8, scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' } });
+        gsap.from('.feat-content-area', { y: 40, opacity: 0, duration: 0.8, delay: 0.2, scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' } });
     }, { scope: sectionRef });
 
     const f = features[active];
 
     return (
-        <section ref={sectionRef} id="features" className="dark-section" style={{
-            padding: '120px 24px 140px', background: 'var(--bg-dark-primary)',
+        <section ref={sectionRef} id="features" style={{
+            padding: 'var(--space-section) 24px',
+            background: 'var(--bg-white)',
             position: 'relative', overflow: 'hidden',
         }}>
-            {/* Background ambient glow */}
-            <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }} aria-hidden="true">
-                <div style={{
-                    position: 'absolute', width: '50vw', height: '50vw', maxWidth: 600, maxHeight: 600,
-                    top: '5%', right: '-8%', borderRadius: '50%',
-                    background: `${f.color}08`, filter: 'blur(100px)', transition: 'background 1.5s ease',
-                }} />
-                <div style={{
-                    position: 'absolute', width: '35vw', height: '35vw', maxWidth: 400, maxHeight: 400,
-                    bottom: '0', left: '-5%', borderRadius: '50%',
-                    background: 'rgba(255,107,0,0.03)', filter: 'blur(90px)',
-                }} />
-            </div>
-
-            <div style={{ maxWidth: 1140, margin: '0 auto', position: 'relative', zIndex: 2 }}>
+            <div className="container">
                 {/* Header */}
-                <div style={{ textAlign: 'center', marginBottom: 48 }}>
-                    <div className="feat-badge" style={{
-                        display: 'inline-flex', alignItems: 'center', gap: 6,
-                        padding: '4px 14px 4px 4px', borderRadius: 100,
-                        background: 'rgba(255,107,0,0.08)', border: '1px solid rgba(255,107,0,0.2)',
-                        marginBottom: 16, fontSize: 12, fontWeight: 600, color: '#FF8533',
-                    }}>
-                        <span style={{
-                            width: 20, height: 20, borderRadius: '50%', background: '#FF6B00',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        }}>
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#FFF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
-                        </span>
-                        Features
-                    </div>
+                <div style={{ textAlign: 'center', marginBottom: 56 }}>
+                    <p className="feat-label label-mono" style={{ marginBottom: 16 }}>Features</p>
                     <h2 className="feat-heading" style={{
                         fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4.5vw, 3rem)',
-                        fontWeight: 800, color: '#FAFAFA', lineHeight: 1.1, letterSpacing: '-0.03em',
-                        maxWidth: 580, margin: '0 auto 12px',
+                        fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.03em',
                     }}>
-                        Everything you need to <span className="text-gradient">dominate</span> marketing
+                        Everything you need to <span className="text-gradient">dominate</span>
                     </h2>
-                    <p className="feat-sub" style={{ fontSize: 15, color: 'var(--text-dark-secondary)', maxWidth: 460, margin: '0 auto', lineHeight: 1.7 }}>
-                        Deploy specialized AI agents that handle your entire marketing stack.
-                    </p>
                 </div>
 
-                {/* Tab bar */}
-                <div className="feat-tabs-wrap" style={{ marginBottom: 48 }}>
-                    <div className="feat-tabs-scroll" style={{ display: 'flex', justifyContent: 'center' }}>
-                        <div style={{
-                            position: 'relative', display: 'inline-flex',
-                            background: 'rgba(255,255,255,0.04)', borderRadius: 12, padding: 4,
-                            border: '1px solid rgba(255,255,255,0.06)',
-                        }}>
-                            {/* Sliding indicator */}
-                            <div ref={tabIndicatorRef} style={{
-                                position: 'absolute', top: 4, left: 0, height: 'calc(100% - 8px)',
-                                borderRadius: 9, background: 'rgba(255,255,255,0.08)',
-                                border: '1px solid rgba(255,255,255,0.06)',
-                            }} />
-                            {features.map((feat, i) => (
-                                <button
-                                    key={feat.id}
-                                    ref={el => { tabRefs.current[i] = el; }}
-                                    onClick={() => switchTab(i)}
-                                    style={{
-                                        position: 'relative', zIndex: 1,
-                                        padding: '8px 18px', fontSize: 13, fontWeight: 600,
-                                        color: active === i ? '#FAFAFA' : 'rgba(255,255,255,0.4)',
-                                        background: 'none', border: 'none', cursor: 'pointer',
-                                        transition: 'color 0.3s ease', fontFamily: 'var(--font-body)',
-                                        whiteSpace: 'nowrap',
-                                    }}
-                                >
-                                    {feat.tab}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Progress bar under tabs */}
-                    <div style={{
-                        maxWidth: 300, margin: '12px auto 0', height: 2, borderRadius: 1,
-                        background: 'rgba(255,255,255,0.06)',
-                    }}>
-                        <div ref={progressRef} style={{
-                            height: '100%', borderRadius: 1,
-                            background: `linear-gradient(90deg, ${f.color}, ${f.color}60)`,
-                            transformOrigin: 'left', transform: 'scaleX(0)',
-                            transition: 'background 0.3s ease',
-                        }} />
-                    </div>
-                </div>
-
-                {/* Content: left description + right video placeholder */}
-                <div className="feat-content feat-split" style={{
-                    display: 'grid', gridTemplateColumns: '0.85fr 1.15fr', gap: 48, alignItems: 'center',
+                {/* Vertical tabs (left) + Preview (right) */}
+                <div className="feat-content-area feat-layout" style={{
+                    display: 'grid', gridTemplateColumns: '280px 1fr', gap: 40, alignItems: 'start',
                 }}>
-                    {/* Left — text */}
-                    <div key={`text-${active}`} style={{
-                        animation: 'featFadeIn 0.5s var(--ease-spring) forwards',
-                    }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-                            <div style={{
-                                width: 36, height: 36, borderRadius: 10,
-                                background: `${f.color}15`, border: `1px solid ${f.color}25`,
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 700, color: f.color,
+                    {/* Left — Vertical tabs */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, position: 'relative' }}>
+                        {features.map((feat, i) => (
+                            <button key={feat.id} onClick={() => setActive(i)} style={{
+                                display: 'flex', alignItems: 'center', gap: 12,
+                                padding: '14px 16px', borderRadius: 'var(--radius-md)',
+                                background: active === i ? 'var(--bg-surface)' : 'transparent',
+                                border: `1px solid ${active === i ? 'var(--border)' : 'transparent'}`,
+                                cursor: 'pointer', textAlign: 'left',
+                                transition: 'all 0.3s var(--ease-out)',
+                                position: 'relative', overflow: 'hidden',
                             }}>
-                                0{f.id + 1}
-                            </div>
+                                {/* Progress fill for active tab */}
+                                {active === i && (
+                                    <div ref={active === i ? progressRef : undefined} style={{
+                                        position: 'absolute', left: 0, top: 0, bottom: 0, width: 3,
+                                        background: feat.color, borderRadius: 2,
+                                        transformOrigin: 'top', transform: 'scaleY(0)',
+                                    }} />
+                                )}
+                                <span style={{
+                                    width: 32, height: 32, borderRadius: 'var(--radius-sm)',
+                                    background: active === i ? `${feat.color}15` : 'var(--bg-surface)',
+                                    border: `1px solid ${active === i ? `${feat.color}25` : 'var(--border-subtle)'}`,
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700,
+                                    color: active === i ? feat.color : 'var(--text-muted)',
+                                    flexShrink: 0, transition: 'all 0.3s ease',
+                                }}>0{feat.id + 1}</span>
+                                <span style={{
+                                    fontSize: 14, fontWeight: active === i ? 600 : 500,
+                                    color: active === i ? 'var(--text-primary)' : 'var(--text-muted)',
+                                    transition: 'all 0.3s ease',
+                                }}>{feat.tab}</span>
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Right — Feature detail + preview */}
+                    <div key={active} style={{ animation: 'featSlide 0.5s var(--ease-out) forwards' }}>
+                        {/* Text content */}
+                        <div style={{ marginBottom: 28 }}>
                             <span style={{
                                 fontFamily: 'var(--font-mono)', fontSize: 11, color: f.color,
-                                letterSpacing: '0.08em', textTransform: 'uppercase',
-                            }}>
-                                {f.title}
-                            </span>
-                        </div>
-                        <h3 style={{
-                            fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.6rem, 2.5vw, 2.2rem)',
-                            fontWeight: 800, color: '#FAFAFA', marginBottom: 12, lineHeight: 1.1, letterSpacing: '-0.02em',
-                        }}>{f.name}</h3>
-                        <p style={{ fontSize: 15, color: 'var(--text-dark-secondary)', lineHeight: 1.7, marginBottom: 24 }}>{f.desc}</p>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                            {f.caps.map((cap, ci) => (
-                                <div key={ci} style={{
-                                    display: 'flex', alignItems: 'center', gap: 8,
-                                    padding: '8px 14px', borderRadius: 8,
-                                    background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
-                                    fontSize: 13, color: 'var(--text-dark-secondary)',
-                                    transition: 'all 0.3s ease',
-                                    cursor: 'default',
-                                }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.borderColor = `${f.color}40`;
-                                        e.currentTarget.style.transform = 'translateX(3px)';
-                                        e.currentTarget.style.color = '#FAFAFA';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)';
-                                        e.currentTarget.style.transform = 'translateX(0)';
-                                        e.currentTarget.style.color = 'var(--text-dark-secondary)';
-                                    }}
-                                >
-                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                        <path d="M3 8L6.5 11.5L13 4.5" stroke={f.color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                    {cap}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                                letterSpacing: '0.1em', textTransform: 'uppercase',
+                                display: 'block', marginBottom: 8,
+                            }}>{f.subtitle}</span>
+                            <h3 style={{
+                                fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+                                fontWeight: 800, color: 'var(--text-primary)', marginBottom: 10, letterSpacing: '-0.02em',
+                            }}>{f.title}</h3>
+                            <p style={{ fontSize: 15, color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: 20, maxWidth: 500 }}>{f.desc}</p>
 
-                    {/* Right — coded interactive visual */}
-                    <div key={`vis-${active}`} style={{
-                        height: 380, borderRadius: 20, overflow: 'hidden',
-                        background: 'var(--bg-dark-card)', border: '1px solid var(--border-dark-default)',
-                        boxShadow: `0 24px 64px -16px ${f.color}15`,
-                        animation: 'featFadeIn 0.6s var(--ease-spring) forwards',
-                        padding: 24, display: 'flex', flexDirection: 'column',
-                        position: 'relative',
-                    }}>
-                        {/* Ambient glow */}
-                        <div style={{ position: 'absolute', top: '20%', right: '10%', width: '60%', height: '60%', borderRadius: '50%', background: `radial-gradient(circle, ${f.color}08 0%, transparent 70%)`, filter: 'blur(40px)', pointerEvents: 'none' }} />
-
-                        {/* Header bar */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 16 }}>
-                            <div style={{ display: 'flex', gap: 4 }}>
-                                <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#FF5F57' }} />
-                                <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#FEBC2E' }} />
-                                <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#28C840' }} />
-                            </div>
-                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--text-dark-muted)', marginLeft: 6 }}>openanalyst — {f.tab.toLowerCase()}</span>
-                            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 4 }}>
-                                <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 6px rgba(16,185,129,0.5)' }} />
-                                <span style={{ fontSize: 8, color: '#10B981', fontFamily: 'var(--font-mono)' }}>Live</span>
+                            {/* Capabilities */}
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                                {f.caps.map((cap, ci) => (
+                                    <span key={ci} style={{
+                                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                                        padding: '6px 12px', borderRadius: 'var(--radius-full)',
+                                        background: 'var(--bg-surface)', border: '1px solid var(--border)',
+                                        fontSize: 12, color: 'var(--text-secondary)', fontWeight: 500,
+                                        transition: 'all 0.2s ease',
+                                    }}>
+                                        <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M3 8L6.5 11.5L13 4.5" stroke={f.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                                        {cap}
+                                    </span>
+                                ))}
                             </div>
                         </div>
 
-                        {/* Feature-specific visual */}
-                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8, position: 'relative', zIndex: 1 }}>
-                            {active === 0 && /* Campaign Agent — channel cards */
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                                    {[{ ch: 'Email Campaign', stat: '2,400 sent', pct: 78, c: '#FF6B00' }, { ch: 'Social Ads', stat: '4 platforms', pct: 92, c: '#3B82F6' }, { ch: 'Retargeting', stat: '840 users', pct: 65, c: '#10B981' }, { ch: 'Google Ads', stat: '$2.4k spend', pct: 85, c: '#F59E0B' }].map((ch, i) => (
-                                        <div key={i} style={{ padding: '10px 14px', borderRadius: 10, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                                                <span style={{ fontSize: 11, fontWeight: 600, color: '#FAFAFA' }}>{ch.ch}</span>
-                                                <span style={{ fontSize: 10, color: ch.c, fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{ch.stat}</span>
-                                            </div>
-                                            <div style={{ height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.06)' }}>
-                                                <div style={{ width: `${ch.pct}%`, height: '100%', borderRadius: 2, background: `linear-gradient(90deg, ${ch.c}, ${ch.c}99)`, transition: 'width 1s ease' }} />
-                                            </div>
+                        {/* Live preview panel */}
+                        <div style={{
+                            padding: 24, borderRadius: 'var(--radius-xl)',
+                            background: 'var(--bg-surface)', border: '1px solid var(--border)',
+                            boxShadow: 'var(--shadow-md)',
+                        }}>
+                            {/* Preview header */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+                                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 6px rgba(16,185,129,0.5)', animation: 'status-pulse 2s ease infinite' }} />
+                                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-primary)' }}>Live Preview</span>
+                                <span style={{ marginLeft: 'auto', fontSize: 10, color: f.color, fontFamily: 'var(--font-mono)', fontWeight: 600, padding: '2px 8px', borderRadius: 'var(--radius-sm)', background: `${f.color}10` }}>{f.tab}</span>
+                            </div>
+
+                            {/* Data rows */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                {f.preview.map((row, ri) => (
+                                    <div key={ri} style={{
+                                        display: 'flex', alignItems: 'center', gap: 12,
+                                        padding: '10px 14px', borderRadius: 'var(--radius-md)',
+                                        background: 'var(--bg-white)', border: '1px solid var(--border-subtle)',
+                                        transition: 'all 0.3s var(--ease-out)',
+                                    }}
+                                        onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${f.color}30`; e.currentTarget.style.transform = 'translateX(3px)'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-subtle)'; e.currentTarget.style.transform = 'translateX(0)'; }}
+                                    >
+                                        <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', flex: 1 }}>{row.ch}</span>
+                                        <span style={{ fontSize: 12, fontWeight: 700, color: f.color, fontFamily: 'var(--font-mono)' }}>{row.stat}</span>
+                                        <div style={{ width: 80, height: 5, borderRadius: 3, background: 'var(--border-subtle)' }}>
+                                            <div style={{ width: `${row.pct}%`, height: '100%', borderRadius: 3, background: `linear-gradient(90deg, ${f.color}, ${f.color}80)`, transition: 'width 0.8s var(--ease-out)' }} />
                                         </div>
-                                    ))}
-                                </div>
-                            }
-                            {active === 1 && /* Segmentation — cluster dots */
-                                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-                                    {[{ x: 25, y: 30, r: 45, c: '#3B82F6', l: 'High Intent', n: '3,240' }, { x: 65, y: 25, r: 35, c: '#10B981', l: 'Engaged', n: '12.4K' }, { x: 45, y: 70, r: 30, c: '#F59E0B', l: 'At Risk', n: '180' }, { x: 80, y: 65, r: 25, c: '#8B5CF6', l: 'New Users', n: '2,800' }].map((seg, i) => (
-                                        <div key={i} style={{ position: 'absolute', left: `${seg.x}%`, top: `${seg.y}%`, transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-                                            <div style={{ width: seg.r, height: seg.r, borderRadius: '50%', background: `${seg.c}18`, border: `1px solid ${seg.c}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
-                                                <span style={{ fontSize: 11, fontWeight: 800, color: seg.c, fontFamily: 'var(--font-heading)' }}>{seg.n}</span>
-                                            </div>
-                                            <span style={{ fontSize: 8, color: 'var(--text-dark-muted)', fontFamily: 'var(--font-mono)' }}>{seg.l}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            }
-                            {active === 2 && /* Research — insight cards */
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                                    {[{ t: 'Competitor Alert', d: 'Brand X launched new campaign targeting your audience', s: 'HIGH', sc: '#EF4444' }, { t: 'Trend Detected', d: 'AI marketing queries up 340% in your vertical', s: 'RISING', sc: '#10B981' }, { t: 'Market Gap', d: 'No competitor targeting "autonomous campaign" keywords', s: 'OPPORTUNITY', sc: '#F59E0B' }].map((ins, i) => (
-                                        <div key={i} style={{ padding: '12px 14px', borderRadius: 10, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-                                                <span style={{ fontSize: 12, fontWeight: 700, color: '#FAFAFA' }}>{ins.t}</span>
-                                                <span style={{ fontSize: 8, fontWeight: 700, color: ins.sc, padding: '2px 6px', borderRadius: 4, background: `${ins.sc}15`, fontFamily: 'var(--font-mono)' }}>{ins.s}</span>
-                                            </div>
-                                            <p style={{ fontSize: 10, color: 'var(--text-dark-secondary)', lineHeight: 1.5, margin: 0 }}>{ins.d}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            }
-                            {active === 3 && /* AI Search — ranking cards */
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                                    {[{ q: 'AI marketing automation platform', rank: '#1', engine: 'ChatGPT', score: 97 }, { q: 'best AI marketing tools 2026', rank: '#2', engine: 'Perplexity', score: 89 }, { q: 'autonomous campaign management', rank: '#1', engine: 'Gemini', score: 94 }].map((r, i) => (
-                                        <div key={i} style={{ padding: '12px 14px', borderRadius: 10, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                                                <span style={{ fontSize: 16, fontWeight: 900, color: '#10B981', fontFamily: 'var(--font-heading)' }}>{r.rank}</span>
-                                                <span style={{ fontSize: 11, fontWeight: 600, color: '#FAFAFA', flex: 1 }}>{r.q}</span>
-                                            </div>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                                <span style={{ fontSize: 8, color: 'var(--text-dark-muted)', fontFamily: 'var(--font-mono)' }}>{r.engine}</span>
-                                                <div style={{ flex: 1, height: 3, borderRadius: 2, background: 'rgba(255,255,255,0.06)' }}>
-                                                    <div style={{ width: `${r.score}%`, height: '100%', borderRadius: 2, background: 'linear-gradient(90deg, #10B981, #10B98180)' }} />
-                                                </div>
-                                                <span style={{ fontSize: 9, fontWeight: 700, color: '#10B981', fontFamily: 'var(--font-mono)' }}>{r.score}%</span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            }
-                            {active === 4 && /* SEO Content — content scores */
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                                    {[{ t: 'AI Marketing Guide', kw: 12, score: 94, status: 'Published' }, { t: 'Campaign Automation Tips', kw: 8, score: 87, status: 'Draft' }, { t: 'ROI Optimization Playbook', kw: 15, score: 91, status: 'Published' }].map((c, i) => (
-                                        <div key={i} style={{ padding: '12px 14px', borderRadius: 10, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                                                <span style={{ fontSize: 12, fontWeight: 700, color: '#FAFAFA' }}>{c.t}</span>
-                                                <span style={{ fontSize: 8, fontWeight: 600, color: c.status === 'Published' ? '#10B981' : '#F59E0B', padding: '2px 6px', borderRadius: 4, background: c.status === 'Published' ? 'rgba(16,185,129,0.1)' : 'rgba(245,158,11,0.1)', fontFamily: 'var(--font-mono)' }}>{c.status}</span>
-                                            </div>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                                                <span style={{ fontSize: 8, color: 'var(--text-dark-muted)', fontFamily: 'var(--font-mono)' }}>{c.kw} keywords</span>
-                                                <div style={{ flex: 1, height: 3, borderRadius: 2, background: 'rgba(255,255,255,0.06)' }}>
-                                                    <div style={{ width: `${c.score}%`, height: '100%', borderRadius: 2, background: `linear-gradient(90deg, #F59E0B, #F59E0B80)` }} />
-                                                </div>
-                                                <span style={{ fontSize: 10, fontWeight: 800, color: '#F59E0B', fontFamily: 'var(--font-heading)' }}>{c.score}</span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            }
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <style>{`
-                @keyframes featFadeIn {
+                @keyframes featSlide {
                     from { opacity: 0; transform: translateY(16px); }
                     to { opacity: 1; transform: translateY(0); }
                 }
-                @media (max-width: 900px) {
-                    .feat-split { grid-template-columns: 1fr !important; }
-                }
                 @media (max-width: 768px) {
-                    .feat-tabs-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+                    .feat-layout { grid-template-columns: 1fr !important; }
                 }
             `}</style>
         </section>

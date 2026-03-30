@@ -1,188 +1,117 @@
 'use client';
 
-import React, { useRef, useCallback } from 'react';
+import React, { useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+gsap.registerPlugin(ScrollTrigger);
 
-interface Platform {
-    name: string;
-    icon: string;
-    status: 'available' | 'coming-soon';
-    description: string;
-    features: string[];
-}
+/* ═══ Pattern #9: Platform cards with unique visual per platform ═══ */
 
-const platforms: Platform[] = [
+const platforms = [
     {
-        name: 'Web App',
-        icon: '◎',
-        status: 'available',
-        description: 'Full-featured web application accessible from any browser.',
-        features: ['All AI agents & skills', 'Real-time dashboard', 'Team collaboration', '27+ integrations'],
+        name: 'Web App', status: 'available',
+        desc: 'Full-featured web application accessible from any browser.',
+        features: ['All AI agents', 'Real-time dashboard', 'Team collaboration', '27+ integrations'],
+        icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>,
     },
     {
-        name: 'Desktop (macOS)',
-        icon: '◆',
-        status: 'coming-soon',
-        description: 'Native macOS application with system-level integrations.',
+        name: 'Desktop', status: 'coming-soon',
+        desc: 'Native macOS & Windows with system-level integrations.',
         features: ['Native notifications', 'Menu bar access', 'Offline mode', 'System shortcuts'],
+        icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>,
     },
     {
-        name: 'Mobile (iOS)',
-        icon: '●',
-        status: 'coming-soon',
-        description: 'On-the-go campaign management with push notifications.',
+        name: 'Mobile', status: 'coming-soon',
+        desc: 'On-the-go campaign management with push notifications.',
         features: ['Push notifications', 'Quick actions', 'Performance alerts', 'Voice commands'],
+        icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>,
     },
     {
-        name: 'CLI',
-        icon: '▲',
-        status: 'available',
-        description: 'Power-user terminal interface for automation workflows.',
+        name: 'CLI', status: 'available',
+        desc: 'Power-user terminal interface for automation workflows.',
         features: ['Scriptable workflows', 'CI/CD integration', 'BYOK support', 'Batch operations'],
+        icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>,
     },
 ];
 
 const PlatformAvailability: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const handleCardHover = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-        const card = e.currentTarget;
-        const rect = card.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-        gsap.to(card, { rotateY: x * 6, rotateX: -y * 4, duration: 0.4, ease: 'power2.out' });
-    }, []);
-
-    const handleCardLeave = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-        gsap.to(e.currentTarget, { rotateY: 0, rotateX: 0, duration: 0.6, ease: 'elastic.out(1, 0.5)' });
-    }, []);
-
     useGSAP(() => {
-        gsap.from('.platform-heading', {
-            y: 40, opacity: 0, duration: 0.8, ease: 'power3.out',
-            scrollTrigger: { trigger: containerRef.current, start: 'top 80%', toggleActions: 'play none none reverse' }
-        });
-
-        gsap.from('.platform-card', {
-            y: 60, opacity: 0, scale: 0.9, stagger: 0.12, duration: 0.8, ease: 'back.out(1.4)',
-            scrollTrigger: { trigger: '.platform-grid', start: 'top 85%', toggleActions: 'play none none reverse' }
+        gsap.from('.plat-label', { y: 16, opacity: 0, duration: 0.5, scrollTrigger: { trigger: containerRef.current, start: 'top 82%' } });
+        gsap.from('.plat-heading', { y: 30, opacity: 0, filter: 'blur(6px)', duration: 0.8, scrollTrigger: { trigger: containerRef.current, start: 'top 80%' } });
+        gsap.fromTo('.plat-card', { y: 50, opacity: 0, scale: 0.95 }, {
+            y: 0, opacity: 1, scale: 1, stagger: 0.1, duration: 0.7, ease: 'back.out(1.3)',
+            scrollTrigger: { trigger: '.plat-grid', start: 'top 85%' },
         });
     }, { scope: containerRef });
 
     return (
-        <section ref={containerRef} className="light-section" style={{
-            padding: '120px 0',
-            background: 'var(--bg-white)',
-            position: 'relative',
-            overflow: 'hidden',
+        <section ref={containerRef} style={{
+            padding: 'var(--space-section) 24px',
+            background: 'var(--bg-surface)',
+            position: 'relative', overflow: 'hidden',
         }}>
-            <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
-                <div className="platform-heading" style={{ textAlign: 'center', marginBottom: '56px' }}>
-                    <span style={{
-                        display: 'inline-block',
-                        fontFamily: 'var(--font-mono)', fontSize: '12px',
-                        color: 'var(--rust)', textTransform: 'uppercase',
-                        letterSpacing: '0.12em', marginBottom: '16px',
-                    }}>
-                        Platform
-                    </span>
-                    <h2 style={{
-                        fontFamily: 'var(--font-heading)',
-                        fontSize: 'clamp(2.5rem, 5vw, 4rem)',
-                        fontWeight: 800,
-                        color: 'var(--text-dark)',
-                        letterSpacing: '-0.03em',
-                        marginBottom: '12px',
-                    }}>
-                        Available everywhere
-                    </h2>
-                    <p style={{
-                        fontSize: '16px', color: 'var(--text-muted)',
-                        maxWidth: '480px', margin: '0 auto',
-                        fontFamily: 'var(--font-body)',
-                    }}>
-                        Access OpenAnalyst from your preferred platform.
-                    </p>
+            <div className="container">
+                <div style={{ textAlign: 'center', marginBottom: 56 }}>
+                    <p className="plat-label label-mono" style={{ marginBottom: 16 }}>Platform</p>
+                    <h2 className="plat-heading" style={{
+                        fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)',
+                        fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.03em',
+                    }}>Available <span className="text-gradient">everywhere</span></h2>
                 </div>
 
-                <div className="platform-grid" style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-                    gap: '16px',
+                <div className="plat-grid" style={{
+                    display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16,
+                    maxWidth: 1000, margin: '0 auto',
                 }}>
-                    {platforms.map((platform) => (
-                        <div key={platform.name} className="platform-card" style={{ perspective: '800px' }}>
-                            <div
-                                onMouseMove={handleCardHover}
-                                onMouseLeave={handleCardLeave}
-                                style={{
-                                    willChange: 'transform', transformStyle: 'preserve-3d', height: '100%',
-                                    borderRadius: '20px', overflow: 'hidden',
-                                    background: '#ffffff',
-                                    border: `1px solid ${platform.status === 'available' ? 'rgba(255,107,0,0.12)' : 'var(--border-light)'}`,
-                                    transition: 'all 0.3s ease',
-                                    boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
-                                }}
-                            >
-                                <div style={{ padding: '28px 24px', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                                        <div style={{
-                                            width: '48px', height: '48px', borderRadius: '14px',
-                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            fontSize: '20px',
-                                            background: 'rgba(255,107,0,0.08)',
-                                            color: 'var(--rust)',
-                                            border: '1px solid rgba(255,107,0,0.10)',
-                                        }}>
-                                            {platform.icon}
-                                        </div>
-                                        <span style={{
-                                            fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 700,
-                                            padding: '4px 12px', borderRadius: '9999px', textTransform: 'uppercase',
-                                            letterSpacing: '0.05em',
-                                            backgroundColor: platform.status === 'available' ? 'rgba(46,204,113,0.1)' : 'rgba(255,107,0,0.06)',
-                                            color: platform.status === 'available' ? '#16a34a' : 'var(--text-muted)',
-                                            border: `1px solid ${platform.status === 'available' ? 'rgba(46,204,113,0.2)' : 'rgba(255,107,0,0.08)'}`,
-                                        }}>
-                                            {platform.status === 'available' ? 'Available' : 'Coming Soon'}
-                                        </span>
-                                    </div>
-
-                                    <h3 style={{
-                                        fontFamily: 'var(--font-heading)', fontSize: '18px', fontWeight: 700,
-                                        color: 'var(--text-dark)', marginBottom: '8px',
-                                    }}>
-                                        {platform.name}
-                                    </h3>
-
-                                    <p style={{
-                                        fontSize: '13px', lineHeight: 1.65,
-                                        color: 'var(--text-muted)', marginBottom: '16px', flex: 1,
-                                    }}>
-                                        {platform.description}
-                                    </p>
-
-                                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                                        {platform.features.map((f, i) => (
-                                            <li key={i} style={{
-                                                display: 'flex', alignItems: 'center', gap: '8px',
-                                                fontSize: '12px', color: 'var(--text-muted)',
-                                            }}>
-                                                <span style={{ color: 'var(--rust)', fontSize: '10px' }}>✓</span>
-                                                {f}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
+                    {platforms.map((p) => (
+                        <div key={p.name} className="plat-card" style={{
+                            padding: '28px 24px', borderRadius: 'var(--radius-xl)',
+                            background: 'var(--bg-white)', border: '1px solid var(--border)',
+                            boxShadow: 'var(--shadow-sm)',
+                            display: 'flex', flexDirection: 'column',
+                            transition: 'all 0.4s var(--ease-out)',
+                        }}
+                            onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = 'var(--shadow-lg)'; e.currentTarget.style.borderColor = 'var(--orange-200)'; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; e.currentTarget.style.borderColor = 'var(--border)'; }}
+                        >
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                                <div style={{
+                                    width: 44, height: 44, borderRadius: 'var(--radius-md)',
+                                    background: 'var(--orange-light)', color: 'var(--orange)',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                }}>{p.icon}</div>
+                                <span style={{
+                                    fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700,
+                                    padding: '4px 10px', borderRadius: 'var(--radius-full)', textTransform: 'uppercase',
+                                    letterSpacing: '0.05em',
+                                    background: p.status === 'available' ? 'rgba(16,185,129,0.08)' : 'var(--bg-surface)',
+                                    color: p.status === 'available' ? '#10B981' : 'var(--text-muted)',
+                                    border: `1px solid ${p.status === 'available' ? 'rgba(16,185,129,0.15)' : 'var(--border)'}`,
+                                }}>{p.status === 'available' ? 'Available' : 'Coming Soon'}</span>
                             </div>
+                            <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 18, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 6 }}>{p.name}</h3>
+                            <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 16, flex: 1 }}>{p.desc}</p>
+                            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                                {p.features.map((f, fi) => (
+                                    <li key={fi} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: 'var(--text-muted)' }}>
+                                        <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M3 8L6.5 11.5L13 4.5" stroke="var(--orange)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                                        {f}
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
                     ))}
                 </div>
             </div>
+
+            <style>{`
+                @media (max-width: 900px) { .plat-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+                @media (max-width: 500px) { .plat-grid { grid-template-columns: 1fr !important; } }
+            `}</style>
         </section>
     );
 };
