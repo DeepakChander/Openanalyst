@@ -57,84 +57,101 @@ const hiringSteps = [
 export default function CareersPage() {
     const pageRef = useRef<HTMLDivElement>(null);
     const [openDept, setOpenDept] = useState<number | null>(0);
+    const deptRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+    const toggleDept = useCallback((index: number) => {
+        const el = deptRefs.current[index];
+        if (!el) return;
+        if (openDept === index) {
+            gsap.to(el, { height: 0, opacity: 0, duration: 0.3, ease: 'power2.inOut', onComplete: () => setOpenDept(null) });
+        } else {
+            if (openDept !== null && deptRefs.current[openDept]) {
+                gsap.to(deptRefs.current[openDept]!, { height: 0, opacity: 0, duration: 0.25, ease: 'power2.inOut' });
+            }
+            setOpenDept(index);
+            gsap.set(el, { height: 'auto', opacity: 1 });
+            const h = el.offsetHeight;
+            gsap.fromTo(el, { height: 0, opacity: 0 }, { height: h, opacity: 1, duration: 0.35, ease: 'power2.out' });
+        }
+    }, [openDept]);
 
     useGSAP(() => {
-        gsap.from('.car-hero-label', { y: 16, opacity: 0, duration: 0.5, delay: 0.2 });
-        gsap.from('.car-hero-line', { y: 80, opacity: 0, stagger: 0.12, duration: 1, ease: 'power4.out', delay: 0.3 });
-        gsap.from('.car-hero-sub', { y: 20, opacity: 0, duration: 0.6, delay: 0.8 });
-        gsap.from('.car-hero-stats > div', { y: 20, opacity: 0, stagger: 0.08, duration: 0.5, delay: 1 });
+        gsap.fromTo('.car-hero-label', { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, delay: 0.2 });
+        gsap.fromTo('.car-hero-heading', { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: 'power4.out', delay: 0.3 });
+        gsap.fromTo('.car-hero-sub', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, delay: 0.7 });
+        gsap.fromTo('.car-hero-stats > div', { y: 20, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.5, delay: 0.9 });
 
         gsap.utils.toArray<HTMLElement>('.car-reveal').forEach(el => {
-            gsap.from(el, { y: 40, opacity: 0, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
+            gsap.fromTo(el, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
         });
 
-        gsap.from('.car-value-card', { y: 60, opacity: 0, stagger: 0.1, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: '.car-values', start: 'top 85%' } });
+        gsap.fromTo('.car-value-card', { y: 60, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: '.car-values', start: 'top 85%' } });
         gsap.fromTo('.car-benefit', { y: 30, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.06, duration: 0.5, ease: 'power3.out', scrollTrigger: { trigger: '.car-benefits', start: 'top 90%', toggleActions: 'play none none none' } });
-        gsap.from('.car-step', { x: -30, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power3.out', scrollTrigger: { trigger: '.car-process', start: 'top 85%' } });
+        gsap.fromTo('.car-step', { x: -30, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.1, duration: 0.6, ease: 'power3.out', scrollTrigger: { trigger: '.car-process', start: 'top 85%' } });
     }, { scope: pageRef });
 
     return (
         <div ref={pageRef} style={{ minHeight: '100vh' }}>
             <Header />
 
-            {/* ═══ HERO — Dark ═══ */}
-            <section style={{ paddingTop: 160, paddingBottom: 80, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}>
-                <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '80px 80px', maskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)', WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)' }} />
-                <div style={{ position: 'absolute', top: '10%', right: '20%', width: 500, height: 500, borderRadius: '50%', background: 'rgba(255,107,0,0.04)', filter: 'blur(100px)', pointerEvents: 'none' }} />
+            {/* HERO — Light (with stat bar below heading) */}
+            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 80, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(0,0,0,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.015) 1px, transparent 1px)', backgroundSize: '60px 60px', maskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)', WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)' }} />
+                <div style={{ position: 'absolute', top: '15%', left: '8%', width: 80, height: 80, borderRadius: 20, background: 'rgba(255,107,0,0.04)', border: '1px solid rgba(255,107,0,0.08)', transform: 'rotate(12deg)', pointerEvents: 'none' }} />
+                <div style={{ position: 'absolute', top: '25%', right: '10%', width: 60, height: 60, borderRadius: 16, background: 'rgba(59,130,246,0.04)', border: '1px solid rgba(59,130,246,0.08)', transform: 'rotate(-8deg)', pointerEvents: 'none' }} />
+                <div style={{ position: 'absolute', bottom: '20%', left: '15%', width: 48, height: 48, borderRadius: 12, background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.08)', transform: 'rotate(20deg)', pointerEvents: 'none' }} />
 
                 <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 24px', textAlign: 'center', position: 'relative', zIndex: 2 }}>
                     <div className="car-hero-label" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px', borderRadius: 999, marginBottom: 32, border: '1px solid rgba(255,107,0,0.2)', background: 'rgba(255,107,0,0.06)' }}>
                         <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF6B00', boxShadow: '0 0 8px rgba(255,107,0,0.5)' }} />
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>We&apos;re Hiring</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#FF6B00', textTransform: 'uppercase', letterSpacing: '0.1em' }}>We&apos;re Hiring</span>
                     </div>
-                    <h1>
-                        {['Join the', 'Revolution'].map((line, i) => (
-                            <span key={i} style={{ display: 'block', overflow: 'hidden' }}>
-                                <span className="car-hero-line" style={{ display: 'block', fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.8rem, 6vw, 5rem)', fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.04em', ...(i === 1 ? { background: 'var(--gradient-hero)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' } : { color: 'var(--text-primary)' }) }}>{line}</span>
-                            </span>
-                        ))}
+
+                    <h1 className="car-hero-heading" style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.8rem, 6vw, 5rem)', fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.04em', color: 'var(--text-primary)', marginBottom: 0 }}>
+                        Join the <span style={{ background: 'linear-gradient(135deg, #FF6B00 0%, #FF8533 40%, #F59E0B 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Revolution</span>
                     </h1>
-                    <p className="car-hero-sub" style={{ maxWidth: 520, margin: '28px auto 40px', fontSize: 16, color: 'var(--text-dark-secondary)', lineHeight: 1.7 }}>
+
+                    <p className="car-hero-sub" style={{ maxWidth: 520, margin: '28px auto 40px', fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.7 }}>
                         We&apos;re building the future of AI marketing. Join a remote-first team shipping products used by thousands.
                     </p>
-                    <div className="car-hero-stats" style={{ display: 'flex', gap: 32, justifyContent: 'center', paddingTop: 28, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                    <div className="car-hero-stats" style={{ display: 'flex', gap: 32, justifyContent: 'center', paddingTop: 28, borderTop: '1px solid var(--border)' }}>
                         {[{ val: '100%', label: 'Remote' }, { val: '13+', label: 'Open Roles' }, { val: '12', label: 'Countries' }, { val: '4.9', label: 'Glassdoor' }].map((s, i) => (
                             <div key={i}>
-                                <div style={{ fontFamily: 'var(--font-heading)', fontSize: 22, fontWeight: 800, color: '#FF6B00' }}>{s.val}</div>
-                                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-dark-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: 4 }}>{s.label}</div>
+                                <div style={{ fontFamily: 'var(--font-heading)', fontSize: 22, fontWeight: 800, color: 'var(--orange)' }}>{s.val}</div>
+                                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: 4 }}>{s.label}</div>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* ═══ CULTURE VALUES — Light ═══ */}
+            {/* CULTURE VALUES — Light (first card dark accent) */}
             <section className="car-values light-section" style={{ padding: '120px 24px', background: 'var(--bg-surface)' }}>
                 <div style={{ maxWidth: 1100, margin: '0 auto' }}>
                     <div className="car-reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Culture</p>
+                        <p className="label-mono" style={{ color: 'var(--orange)', marginBottom: 12 }}>Culture</p>
                         <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>What makes us <span className="text-gradient">different</span></h2>
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
                         {values.map((v, i) => (
-                            <div key={i} className="car-value-card" style={{ padding: '36px 32px', borderRadius: 20, background: i === 0 ? 'var(--bg-dark-primary)' : 'var(--bg-white)', border: `1px solid ${i === 0 ? 'rgba(255,107,0,0.15)' : 'var(--border-default)'}`, position: 'relative', overflow: 'hidden' }}>
+                            <div key={i} className="car-value-card" style={{ padding: '36px 32px', borderRadius: 20, background: i === 0 ? 'var(--bg-dark)' : 'var(--bg-white)', border: `1px solid ${i === 0 ? 'rgba(255,107,0,0.15)' : 'var(--border)'}`, position: 'relative', overflow: 'hidden' }}>
                                 <span style={{ position: 'absolute', top: 12, right: 16, fontFamily: 'var(--font-mono)', fontSize: 10, color: i === 0 ? 'rgba(255,107,0,0.4)' : 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{v.tag}</span>
                                 <div style={{ width: 44, height: 44, borderRadius: 12, marginBottom: 18, background: i === 0 ? '#FF6B00' : 'var(--orange-light)', color: i === 0 ? '#fff' : 'var(--orange)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{v.icon}</div>
                                 <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 20, fontWeight: 700, color: i === 0 ? '#FAFAFA' : 'var(--text-primary)', marginBottom: 10 }}>{v.title}</h3>
-                                <p style={{ fontSize: 14, color: i === 0 ? 'var(--text-dark-secondary)' : 'var(--text-secondary)', lineHeight: 1.7 }}>{v.desc}</p>
+                                <p style={{ fontSize: 14, color: i === 0 ? 'var(--text-on-dark-secondary)' : 'var(--text-secondary)', lineHeight: 1.7 }}>{v.desc}</p>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* ═══ LIFE AT OPENANALYST — Photo Grid ═══ */}
-            <section style={{ padding: '80px 24px', background: 'var(--bg-warm)' }}>
+            {/* LIFE AT OPENANALYST — Light Photo Grid */}
+            <section className="light-section" style={{ padding: '80px 24px', background: 'var(--bg-white)' }}>
                 <div style={{ maxWidth: 1100, margin: '0 auto' }}>
                     <div className="car-reveal" style={{ textAlign: 'center', marginBottom: 40 }}>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Life at OpenAnalyst</p>
+                        <p className="label-mono" style={{ color: 'var(--orange)', marginBottom: 12 }}>Life at OpenAnalyst</p>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr 1fr', gridTemplateRows: '200px 200px', gap: 12 }}>
+                    <div className="car-photo-grid" style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr 1fr', gridTemplateRows: '200px 200px', gap: 12 }}>
                         {[
                             { src: '/images/culture/office.png', span: '1 / 2', row: '1 / 3' },
                             { src: '/images/culture/workshop.png', span: '2 / 3', row: '1 / 2' },
@@ -144,7 +161,7 @@ export default function CareersPage() {
                         ].map((photo, i) => (
                             <div key={i} className="car-reveal ai-img-container" style={{
                                 gridColumn: photo.span, gridRow: photo.row,
-                                borderRadius: 16, position: 'relative',
+                                borderRadius: 16, position: 'relative', border: '1px solid var(--border)', overflow: 'hidden',
                             }}>
                                 <img src={photo.src} alt="Life at OpenAnalyst" style={{
                                     width: '100%', height: '100%',
@@ -159,66 +176,66 @@ export default function CareersPage() {
                 </div>
             </section>
 
-            {/* ═══ OPEN POSITIONS — Dark ═══ */}
-            <section style={{ padding: '120px 24px', background: 'var(--bg-surface)' }}>
+            {/* OPEN POSITIONS — Light */}
+            <section className="light-section" style={{ padding: '120px 24px', background: 'var(--bg-surface)' }}>
                 <div style={{ maxWidth: 800, margin: '0 auto' }}>
                     <div className="car-reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Open Roles</p>
+                        <p className="label-mono" style={{ color: 'var(--orange)', marginBottom: 12 }}>Open Roles</p>
                         <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>Find your <span className="text-gradient">role</span></h2>
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                         {departments.map((dept, di) => (
-                            <div key={dept.name} className="car-reveal" style={{ borderRadius: 16, background: 'rgba(255,255,255,0.03)', border: `1px solid ${openDept === di ? dept.color + '40' : 'rgba(255,255,255,0.06)'}`, overflow: 'hidden', transition: 'border-color 0.3s ease' }}>
-                                <button onClick={() => setOpenDept(openDept === di ? null : di)} style={{
+                            <div key={dept.name} className="car-reveal" style={{ borderRadius: 16, background: 'var(--bg-white)', border: `1px solid ${openDept === di ? dept.color + '40' : 'var(--border)'}`, overflow: 'hidden', transition: 'border-color 0.3s ease' }}>
+                                <button onClick={() => toggleDept(di)} style={{
                                     width: '100%', padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                                     background: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left',
                                 }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                                         <span style={{ width: 8, height: 8, borderRadius: '50%', background: dept.color, boxShadow: `0 0 8px ${dept.color}40` }} />
                                         <span style={{ fontFamily: 'var(--font-heading)', fontSize: 16, fontWeight: 700, color: 'var(--text-primary)' }}>{dept.name}</span>
-                                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-dark-muted)', padding: '2px 8px', borderRadius: 6, background: 'rgba(255,255,255,0.04)' }}>{dept.roles.length} roles</span>
+                                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-muted)', padding: '2px 8px', borderRadius: 6, background: 'var(--bg-surface)' }}>{dept.roles.length} roles</span>
                                     </div>
                                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 16, color: dept.color, transition: 'transform 0.3s ease', transform: openDept === di ? 'rotate(45deg)' : 'rotate(0deg)' }}>+</span>
                                 </button>
-                                {openDept === di && (
+                                <div ref={(el) => { deptRefs.current[di] = el; }} style={{ height: openDept === di ? 'auto' : 0, opacity: openDept === di ? 1 : 0, overflow: 'hidden' }}>
                                     <div style={{ padding: '0 24px 20px', display: 'flex', flexDirection: 'column', gap: 8 }}>
                                         {dept.roles.map((role, ri) => (
                                             <a key={ri} href="mailto:careers@openanalyst.com" style={{
                                                 display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px',
-                                                borderRadius: 12, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)',
+                                                borderRadius: 12, background: 'var(--bg-surface)', border: '1px solid var(--border)',
                                                 textDecoration: 'none', transition: 'all 0.3s ease',
                                             }}
-                                                onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${dept.color}30`; e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}
-                                                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.04)'; e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; }}
+                                                onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${dept.color}30`; e.currentTarget.style.background = 'var(--bg-primary)'; }}
+                                                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--bg-surface)'; }}
                                             >
                                                 <div>
                                                     <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 3 }}>{role.title}</div>
-                                                    <div style={{ fontSize: 11, color: 'var(--text-dark-muted)', fontFamily: 'var(--font-mono)' }}>{role.location} · {role.type}</div>
+                                                    <div style={{ fontSize: 11, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>{role.location} · {role.type}</div>
                                                 </div>
                                                 <span style={{ fontSize: 13, color: dept.color, fontWeight: 600, fontFamily: 'var(--font-mono)' }}>Apply &rarr;</span>
                                             </a>
                                         ))}
                                     </div>
-                                )}
+                                </div>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* ═══ BENEFITS — Light ═══ */}
+            {/* BENEFITS — Light */}
             <section className="car-benefits light-section" style={{ padding: '120px 24px', background: 'var(--bg-white)' }}>
                 <div style={{ maxWidth: 1000, margin: '0 auto' }}>
                     <div className="car-reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Benefits</p>
+                        <p className="label-mono" style={{ color: 'var(--orange)', marginBottom: 12 }}>Benefits</p>
                         <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>Perks that <span className="text-gradient">matter</span></h2>
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
                         {benefits.map((b, i) => (
-                            <div key={i} className="car-benefit" style={{ padding: '28px 24px', borderRadius: 20, background: 'var(--bg-surface)', border: '1px solid var(--border-default)', transition: 'all 0.3s ease' }}
+                            <div key={i} className="car-benefit" style={{ padding: '28px 24px', borderRadius: 20, background: 'var(--bg-surface)', border: '1px solid var(--border)', transition: 'all 0.3s ease' }}
                                 onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(255,107,0,0.2)'; e.currentTarget.style.transform = 'translateY(-3px)'; }}
-                                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-default)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = 'translateY(0)'; }}
                             >
                                 <div style={{ width: 40, height: 40, borderRadius: 12, marginBottom: 14, background: 'var(--orange-light)', color: 'var(--orange)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{b.icon}</div>
                                 <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 16, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 6 }}>{b.title}</h3>
@@ -229,23 +246,23 @@ export default function CareersPage() {
                 </div>
             </section>
 
-            {/* ═══ HIRING PROCESS — Dark ═══ */}
-            <section className="car-process" style={{ padding: '120px 24px', background: 'var(--bg-white)' }}>
+            {/* HIRING PROCESS — Light */}
+            <section className="car-process light-section" style={{ padding: '120px 24px', background: 'var(--bg-surface)' }}>
                 <div style={{ maxWidth: 700, margin: '0 auto' }}>
                     <div className="car-reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Process</p>
+                        <p className="label-mono" style={{ color: 'var(--orange)', marginBottom: 12 }}>Process</p>
                         <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>How we <span className="text-gradient">hire</span></h2>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                         {hiringSteps.map((step, i) => (
-                            <div key={i} className="car-step" style={{ display: 'flex', alignItems: 'flex-start', gap: 20, padding: '24px 20px', borderRadius: 16, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                            <div key={i} className="car-step" style={{ display: 'flex', alignItems: 'flex-start', gap: 20, padding: '24px 20px', borderRadius: 16, background: 'var(--bg-white)', border: '1px solid var(--border)' }}>
                                 <span style={{ fontFamily: 'var(--font-heading)', fontSize: 28, fontWeight: 900, color: 'rgba(255,107,0,0.15)', lineHeight: 1, flexShrink: 0 }}>{step.num}</span>
                                 <div style={{ flex: 1 }}>
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
                                         <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 16, fontWeight: 700, color: 'var(--text-primary)' }}>{step.title}</h3>
-                                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-dark-muted)', padding: '2px 8px', borderRadius: 6, background: 'rgba(255,255,255,0.04)' }}>{step.dur}</span>
+                                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-muted)', padding: '2px 8px', borderRadius: 6, background: 'var(--bg-surface)' }}>{step.dur}</span>
                                     </div>
-                                    <p style={{ fontSize: 13, color: 'var(--text-dark-secondary)', lineHeight: 1.6 }}>{step.desc}</p>
+                                    <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>{step.desc}</p>
                                 </div>
                             </div>
                         ))}
@@ -253,8 +270,8 @@ export default function CareersPage() {
                 </div>
             </section>
 
-            {/* ═══ CTA — Light ═══ */}
-            <section className="light-section" style={{ padding: '100px 24px', background: 'var(--bg-surface)' }}>
+            {/* CTA — Light */}
+            <section className="light-section" style={{ padding: '100px 24px', background: 'var(--bg-white)' }}>
                 <div className="car-reveal" style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
                     <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: 16, letterSpacing: '-0.03em' }}>
                         Ready to build the <span className="text-gradient">future</span>?
@@ -279,9 +296,14 @@ export default function CareersPage() {
                     .car-values > div > div:last-child { grid-template-columns: 1fr !important; }
                     .car-benefits > div > div:last-child { grid-template-columns: 1fr !important; }
                     .car-hero-stats { flex-wrap: wrap !important; gap: 20px !important; }
+                    .car-photo-grid { grid-template-columns: 1fr 1fr !important; grid-template-rows: auto !important; }
+                    .car-photo-grid > * { grid-column: span 1 !important; grid-row: span 1 !important; }
+                    .car-photo-grid > *:first-child { grid-column: 1 / -1 !important; }
                 }
                 @media (max-width: 480px) {
                     .car-hero-stats > div { flex: 0 0 45% !important; text-align: center; }
+                    .car-photo-grid { grid-template-columns: 1fr !important; }
+                    .car-photo-grid > *:first-child { grid-column: span 1 !important; }
                 }
             `}</style>
         </div>

@@ -1,11 +1,12 @@
-import type { Metadata } from 'next';
+'use client';
+
+import { useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
 import { Header, Footer } from '@/components';
 
-export const metadata: Metadata = {
-    title: "Changelog - Product Updates & Release Notes",
-    description: "Stay up to date with OpenAnalyst product updates, new features, AI agent improvements, and platform enhancements.",
-    alternates: { canonical: "https://openanalyst.com/changelog/" },
-};
+gsap.registerPlugin(ScrollTrigger);
 
 const releases = [
     {
@@ -27,33 +28,56 @@ const releases = [
 ];
 
 export default function ChangelogPage() {
+    const pageRef = useRef<HTMLDivElement>(null);
+
+    useGSAP(() => {
+        gsap.fromTo('.cl-hero-version', { x: -20, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, delay: 0.2 });
+        gsap.fromTo('.cl-hero-heading', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, delay: 0.3, ease: 'power4.out' });
+        gsap.fromTo('.cl-hero-sub', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, delay: 0.6 });
+
+        gsap.fromTo('.cl-release', { y: 40, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.15, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: '.cl-timeline', start: 'top 85%' } });
+    }, { scope: pageRef });
+
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div ref={pageRef} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             <Header />
 
-            {/* Dark hero */}
-            <section style={{ paddingTop: 160, paddingBottom: 60, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}>
+            {/* ═══ HERO — Light (left-aligned with version badge) ═══ */}
+            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 60, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}>
+                {/* Diagonal decorative lines */}
+                <div style={{ position: 'absolute', top: 0, right: 0, width: '40%', height: '100%', pointerEvents: 'none', opacity: 0.03 }}>
+                    {[0, 1, 2, 3, 4].map((i) => (
+                        <div key={i} style={{ position: 'absolute', top: -100 + i * 60, right: -200 + i * 80, width: 600, height: 1, background: 'var(--text-primary)', transform: 'rotate(-35deg)' }} />
+                    ))}
+                </div>
+                <div style={{ position: 'absolute', bottom: '10%', left: '5%', width: 200, height: 200, borderRadius: '50%', background: 'rgba(255,107,0,0.03)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+
                 <div style={{ maxWidth: 700, margin: '0 auto', padding: '0 24px', textAlign: 'center', position: 'relative', zIndex: 2 }}>
-                    <p className="label-mono" style={{ marginBottom: 16 }}>Changelog</p>
-                    <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.03em', marginBottom: 16 }}>
-                        What&apos;s <span className="text-gradient">new</span>
+                    <div className="cl-hero-version" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '8px 18px', borderRadius: 999, marginBottom: 28, background: 'var(--bg-white)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}>
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 8px rgba(16,185,129,0.5)' }} />
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Latest: v2.0.0</span>
+                    </div>
+
+                    <h1 className="cl-hero-heading" style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.03em', marginBottom: 16 }}>
+                        What&apos;s <span style={{ background: 'linear-gradient(135deg, #FF6B00 0%, #FF8533 40%, #F59E0B 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>new</span>
                     </h1>
-                    <p style={{ fontSize: 16, color: 'var(--text-secondary)', maxWidth: 480, margin: '0 auto', lineHeight: 1.7 }}>
+
+                    <p className="cl-hero-sub" style={{ fontSize: 16, color: 'var(--text-secondary)', maxWidth: 480, margin: '0 auto', lineHeight: 1.7 }}>
                         Product updates, new features, and improvements.
                     </p>
                 </div>
             </section>
 
-            {/* Timeline — Light */}
+            {/* ═══ Timeline — Light ═══ */}
             <main style={{ flex: 1, padding: '80px 24px 100px', background: 'var(--bg-surface)' }}>
-                <div style={{ maxWidth: 700, margin: '0 auto' }}>
+                <div className="cl-timeline" style={{ maxWidth: 700, margin: '0 auto' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
                         {releases.map((release, i) => (
-                            <div key={i} style={{ position: 'relative', borderLeft: '2px solid var(--border-default)', paddingLeft: 32, paddingBottom: i < releases.length - 1 ? 48 : 0 }}>
+                            <div key={i} className="cl-release" style={{ position: 'relative', borderLeft: '2px solid var(--border)', paddingLeft: 32, paddingBottom: i < releases.length - 1 ? 48 : 0 }}>
                                 {/* Dot */}
                                 <span style={{
                                     position: 'absolute', left: -6, top: 8, width: 10, height: 10, borderRadius: '50%',
-                                    background: release.isLatest ? '#FF6B00' : 'var(--border-default)',
+                                    background: release.isLatest ? '#FF6B00' : 'var(--border)',
                                     boxShadow: release.isLatest ? '0 0 12px rgba(255,107,0,0.4)' : 'none',
                                 }} />
 
@@ -79,7 +103,14 @@ export default function ChangelogPage() {
                     </div>
                 </div>
             </main>
+
             <Footer />
+
+            <style>{`
+                @media (max-width: 600px) {
+                    .cl-release { paddingLeft: 20px !important; }
+                }
+            `}</style>
         </div>
     );
 }
