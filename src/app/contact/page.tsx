@@ -215,40 +215,118 @@ export default function ContactPage() {
                 </div>
             </section>
 
-            {/* ═══ GLOBAL PRESENCE — Dark map section ═══ */}
+            {/* ═══ GLOBAL PRESENCE — CSS 3D Rotating Globe ═══ */}
             <section className="ct-map-section dark-section" style={{ padding: '80px 24px', background: 'var(--bg-dark)', position: 'relative', overflow: 'hidden' }}>
-                <div style={{ maxWidth: 1000, margin: '0 auto' }}>
-                    <div style={{ textAlign: 'center', marginBottom: 40 }}>
-                        <p className="label-mono" style={{ color: '#FF8533', marginBottom: 12 }}>Global Presence</p>
-                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 800, color: '#FAFAFA', marginBottom: 0, letterSpacing: '-0.02em' }}>
-                            Serving teams in <span className="text-gradient">150+ countries</span>
-                        </h2>
+                {/* Ambient glow */}
+                <div style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%, -50%)', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,107,0,0.06) 0%, transparent 60%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+
+                <div style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center' }}>
+                    <p className="label-mono" style={{ color: '#FF8533', marginBottom: 12 }}>Global Presence</p>
+                    <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 800, color: '#FAFAFA', marginBottom: 48, letterSpacing: '-0.02em' }}>
+                        Serving teams in <span className="text-gradient">150+ countries</span>
+                    </h2>
+
+                    {/* 3D Globe — Pure CSS */}
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 48 }}>
+                        <div style={{ position: 'relative', width: 320, height: 320 }}>
+                            {/* Globe sphere */}
+                            <div style={{
+                                position: 'absolute', inset: 0, borderRadius: '50%',
+                                background: 'radial-gradient(circle at 35% 35%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 40%, rgba(0,0,0,0.3) 100%)',
+                                border: '1px solid rgba(255,255,255,0.08)',
+                                boxShadow: 'inset 0 0 60px rgba(0,0,0,0.4), 0 0 40px rgba(255,107,0,0.05)',
+                            }} />
+
+                            {/* Latitude lines rotating */}
+                            {[0.3, 0.45, 0.55, 0.7].map((pos, i) => (
+                                <div key={`lat-${i}`} style={{
+                                    position: 'absolute', left: '10%', right: '10%',
+                                    top: `${pos * 100}%`, height: 1,
+                                    background: 'rgba(255,255,255,0.06)',
+                                    borderRadius: '50%',
+                                    transform: `scaleX(${1 - Math.abs(pos - 0.5) * 1.5})`,
+                                }} />
+                            ))}
+
+                            {/* Longitude arcs rotating */}
+                            <div style={{
+                                position: 'absolute', inset: 20, borderRadius: '50%',
+                                border: '1px solid rgba(255,255,255,0.04)',
+                                transform: 'rotateY(30deg)',
+                                animation: 'spin 20s linear infinite',
+                            }} />
+                            <div style={{
+                                position: 'absolute', inset: 30, borderRadius: '50%',
+                                border: '1px solid rgba(255,255,255,0.05)',
+                                transform: 'rotateY(60deg)',
+                                animation: 'spin 25s linear infinite reverse',
+                            }} />
+                            <div style={{
+                                position: 'absolute', inset: 15, borderRadius: '50%',
+                                border: '1px solid rgba(255,255,255,0.03)',
+                                transform: 'rotateY(90deg)',
+                                animation: 'spin 30s linear infinite',
+                            }} />
+
+                            {/* City dots orbiting on the globe surface */}
+                            {[
+                                { name: 'SF', x: 18, y: 38, color: '#FF6B00', size: 10 },
+                                { name: 'NYC', x: 28, y: 36, color: '#FF6B00', size: 7 },
+                                { name: 'London', x: 47, y: 30, color: '#3B82F6', size: 9 },
+                                { name: 'Mumbai', x: 65, y: 48, color: '#10B981', size: 8 },
+                                { name: 'Singapore', x: 72, y: 58, color: '#8B5CF6', size: 7 },
+                                { name: 'Tokyo', x: 82, y: 35, color: '#F59E0B', size: 8 },
+                                { name: 'Sydney', x: 84, y: 72, color: '#EC4899', size: 7 },
+                                { name: 'Dubai', x: 58, y: 42, color: '#14B8A6', size: 6 },
+                                { name: 'Berlin', x: 50, y: 28, color: '#6366F1', size: 6 },
+                                { name: 'São Paulo', x: 30, y: 68, color: '#F97316', size: 7 },
+                            ].map((city, i) => (
+                                <div key={i} style={{
+                                    position: 'absolute',
+                                    left: `${city.x}%`, top: `${city.y}%`,
+                                    transform: 'translate(-50%, -50%)',
+                                }}>
+                                    {/* Pulse ring */}
+                                    <div style={{
+                                        position: 'absolute', inset: -6, borderRadius: '50%',
+                                        border: `1px solid ${city.color}40`,
+                                        animation: `status-pulse 3s ease-in-out infinite ${i * 0.3}s`,
+                                    }} />
+                                    {/* Dot */}
+                                    <div style={{
+                                        width: city.size, height: city.size, borderRadius: '50%',
+                                        background: city.color,
+                                        boxShadow: `0 0 ${city.size}px ${city.color}60`,
+                                    }} />
+                                </div>
+                            ))}
+
+                            {/* Connection arcs */}
+                            <svg viewBox="0 0 320 320" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+                                <path d="M 58 122 Q 120 80 150 96" fill="none" stroke="#FF6B00" strokeWidth="0.8" opacity="0.3" />
+                                <path d="M 150 96 Q 180 100 208 153" fill="none" stroke="#10B981" strokeWidth="0.8" opacity="0.25" />
+                                <path d="M 208 153 Q 240 140 262 112" fill="none" stroke="#F59E0B" strokeWidth="0.8" opacity="0.25" />
+                                <path d="M 58 122 Q 160 200 208 153" fill="none" stroke="#8B5CF6" strokeWidth="0.6" opacity="0.2" />
+                                <path d="M 150 96 Q 190 120 230 186" fill="none" stroke="#3B82F6" strokeWidth="0.6" opacity="0.2" />
+                            </svg>
+                        </div>
                     </div>
 
-                    {/* World map image — full width, cropped to hide watermark */}
-                    <div className="ai-img-container" style={{
-                        borderRadius: 'var(--radius-xl)', overflow: 'hidden',
-                        border: '1px solid rgba(255,255,255,0.06)',
-                        boxShadow: '0 24px 80px -16px rgba(255,107,0,0.1)',
-                    }}>
-                        <img src="/images/misc/world-map.png" alt="OpenAnalyst global presence — 150+ countries" style={{
-                            width: '100%', height: 'auto', display: 'block',
-                        }} />
-                    </div>
-
-                    {/* Location + stats strip below map */}
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: 48, marginTop: 32, flexWrap: 'wrap' }}>
+                    {/* City legend */}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px 32px' }}>
                         {[
-                            { city: 'San Francisco', label: 'HQ', color: '#FF6B00' },
-                            { city: 'London', label: 'Europe', color: '#3B82F6' },
-                            { city: 'Mumbai', label: 'South Asia', color: '#10B981' },
-                            { city: 'Singapore', label: 'SE Asia', color: '#8B5CF6' },
-                            { city: 'São Paulo', label: 'LATAM', color: '#F59E0B' },
+                            { city: 'San Francisco', color: '#FF6B00' },
+                            { city: 'London', color: '#3B82F6' },
+                            { city: 'Mumbai', color: '#10B981' },
+                            { city: 'Singapore', color: '#8B5CF6' },
+                            { city: 'Tokyo', color: '#F59E0B' },
+                            { city: 'São Paulo', color: '#F97316' },
+                            { city: 'Dubai', color: '#14B8A6' },
+                            { city: 'Sydney', color: '#EC4899' },
                         ].map((loc, i) => (
-                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                <span style={{ width: 8, height: 8, borderRadius: '50%', background: loc.color, boxShadow: `0 0 8px ${loc.color}50` }} />
-                                <span style={{ fontSize: 13, fontWeight: 600, color: '#FAFAFA' }}>{loc.city}</span>
-                                <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-mono)' }}>{loc.label}</span>
+                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                <span style={{ width: 6, height: 6, borderRadius: '50%', background: loc.color, boxShadow: `0 0 6px ${loc.color}50` }} />
+                                <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', fontWeight: 500 }}>{loc.city}</span>
                             </div>
                         ))}
                     </div>

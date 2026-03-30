@@ -149,7 +149,8 @@
       "WebFetch(domain:www.apple.com)",
       "Bash(find \"C:\\\\Users\\\\hp\\\\Desktop\\\\OpenAnalyst.com\\\\src\\\\components\" -name \"*.tsx\" -exec wc -l {} +)",
       "WebFetch(domain:stripesessions.com)",
-      "Bash(find src/app -name \"page.tsx\" -exec wc -l {} +)"
+      "Bash(find src/app -name \"page.tsx\" -exec wc -l {} +)",
+      "Bash(git revert:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
