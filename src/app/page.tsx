@@ -63,11 +63,11 @@ const MARQUEE_ITEMS = [
 
 export default function Home() {
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#FFFFFF', color: '#1A1A1A' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       <Header />
       <main>
         <Hero />
-        <MarqueeStrip items={MARQUEE_ITEMS} dark={true} />
+        <MarqueeStrip items={MARQUEE_ITEMS} dark={false} />
         <Stats />
         <Features />
         <LogoConstellation />
