@@ -48,6 +48,7 @@ const ProductShowcase: React.FC = () => {
                     {/* Background image */}
                     <img src="/images/misc/product-showcase.png" alt="OpenAnalyst Product Demo" style={{
                         position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover',
+                        objectPosition: 'center 40%', transform: 'scale(1.06)', transformOrigin: 'center 40%',
                     }} />
 
                     {/* Dark overlay for play button contrast */}

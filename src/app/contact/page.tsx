@@ -196,15 +196,95 @@ export default function ContactPage() {
                 </div>
             </section>
 
-            {/* ═══ GLOBAL PRESENCE — Dark ═══ */}
+            {/* ═══ GLOBAL PRESENCE — Dark (Pure Code Map) ═══ */}
             <section className="dark-section" style={{ padding: '80px 24px', background: 'var(--bg-dark-primary)', position: 'relative', overflow: 'hidden' }}>
                 <div style={{ maxWidth: 1000, margin: '0 auto', textAlign: 'center' }}>
                     <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#FF8533', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Global Presence</p>
                     <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800, color: '#FAFAFA', marginBottom: 32, letterSpacing: '-0.02em' }}>
                         Serving teams in <span className="text-gradient">150+ countries</span>
                     </h2>
-                    <div style={{ borderRadius: 20, overflow: 'hidden', border: '1px solid var(--border-dark-default)' }}>
-                        <img src="/images/misc/world-map.png" alt="OpenAnalyst global presence" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                    {/* SVG World Map with dot matrix + city nodes + connection arcs */}
+                    <div style={{ borderRadius: 20, overflow: 'hidden', border: '1px solid var(--border-dark-default)', background: '#111115', padding: '40px 32px', position: 'relative' }}>
+                        <svg viewBox="0 0 1000 500" style={{ width: '100%', height: 'auto' }} aria-label="World map showing OpenAnalyst global presence">
+                            {/* Dot matrix world map — simplified continental outlines */}
+                            <defs>
+                                <radialGradient id="city-glow" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stopColor="#FF6B00" stopOpacity="0.8" />
+                                    <stop offset="50%" stopColor="#FF6B00" stopOpacity="0.3" />
+                                    <stop offset="100%" stopColor="#FF6B00" stopOpacity="0" />
+                                </radialGradient>
+                                <filter id="glow-filter">
+                                    <feGaussianBlur stdDeviation="3" result="blur" />
+                                    <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+                                </filter>
+                            </defs>
+
+                            {/* North America dots */}
+                            {[[120,100],[140,90],[160,95],[180,100],[200,105],[150,110],[170,115],[190,120],[130,120],[150,130],[170,130],[190,130],[210,120],[210,130],[230,125],[250,130],[160,140],[180,140],[200,140],[220,140],[240,140],[140,150],[160,155],[180,155],[200,150],[220,150],[180,165],[200,165],[220,160],[240,155],[260,150],[200,175],[220,175],[240,170],[260,165],[220,185],[240,185],[260,180],[200,190],[180,185]].map(([x,y], i) => (
+                                <circle key={`na-${i}`} cx={x} cy={y} r="1.8" fill="rgba(255,255,255,0.15)" />
+                            ))}
+
+                            {/* South America dots */}
+                            {[[280,240],[290,250],[300,260],[280,260],[270,270],[280,280],[290,280],[300,275],[270,290],[280,300],[290,310],[280,320],[270,330],[280,340],[290,350],[280,360],[270,370],[275,380],[280,390],[285,395]].map(([x,y], i) => (
+                                <circle key={`sa-${i}`} cx={x} cy={y} r="1.8" fill="rgba(255,255,255,0.12)" />
+                            ))}
+
+                            {/* Europe dots */}
+                            {[[460,90],[475,85],[490,90],[505,95],[450,100],[465,100],[480,100],[495,100],[510,100],[445,110],[460,110],[475,110],[490,110],[505,110],[520,110],[455,120],[470,120],[485,120],[500,120],[515,120],[465,130],[480,130],[495,130],[510,130],[475,140],[490,140],[505,140]].map(([x,y], i) => (
+                                <circle key={`eu-${i}`} cx={x} cy={y} r="1.8" fill="rgba(255,255,255,0.18)" />
+                            ))}
+
+                            {/* Africa dots */}
+                            {[[480,170],[495,175],[510,170],[470,185],[485,185],[500,185],[515,185],[475,200],[490,200],[505,200],[480,215],[495,215],[510,215],[485,230],[500,230],[490,245],[505,245],[495,260],[510,260],[500,275],[505,290],[510,305],[505,320],[500,335]].map(([x,y], i) => (
+                                <circle key={`af-${i}`} cx={x} cy={y} r="1.8" fill="rgba(255,255,255,0.12)" />
+                            ))}
+
+                            {/* Asia dots */}
+                            {[[560,90],[580,85],[600,90],[620,95],[640,90],[660,95],[680,100],[700,95],[720,100],[560,105],[580,105],[600,105],[620,110],[640,110],[660,110],[680,110],[700,110],[720,110],[740,105],[580,120],[600,120],[620,120],[640,120],[660,120],[680,120],[700,120],[720,120],[740,120],[600,135],[620,135],[640,135],[660,135],[680,135],[700,135],[620,150],[640,150],[660,150],[680,150],[700,150],[720,150],[640,165],[660,165],[680,165],[700,165],[720,165],[660,180],[680,180],[700,180],[720,180],[680,195],[700,195]].map(([x,y], i) => (
+                                <circle key={`as-${i}`} cx={x} cy={y} r="1.8" fill="rgba(255,255,255,0.15)" />
+                            ))}
+
+                            {/* Australia dots */}
+                            {[[760,290],[780,290],[800,290],[820,290],[770,305],[790,305],[810,305],[830,305],[780,320],[800,320],[820,320],[790,335],[810,335],[800,350]].map(([x,y], i) => (
+                                <circle key={`au-${i}`} cx={x} cy={y} r="1.8" fill="rgba(255,255,255,0.12)" />
+                            ))}
+
+                            {/* Connection arcs (curved lines between cities) */}
+                            <path d="M 180 155 Q 330 40 475 110" fill="none" stroke="#FF6B00" strokeWidth="1" opacity="0.35" />
+                            <path d="M 475 110 Q 580 60 680 165" fill="none" stroke="#FF6B00" strokeWidth="1" opacity="0.3" />
+                            <path d="M 680 165 Q 750 200 800 300" fill="none" stroke="#FF6B00" strokeWidth="1" opacity="0.25" />
+                            <path d="M 180 155 Q 400 350 680 165" fill="none" stroke="#FF6B00" strokeWidth="0.8" opacity="0.2" />
+
+                            {/* City nodes with glow */}
+                            {[
+                                { x: 180, y: 155, label: 'San Francisco', anchor: 'end' },
+                                { x: 475, y: 110, label: 'London', anchor: 'middle' },
+                                { x: 680, y: 165, label: 'Mumbai', anchor: 'start' },
+                                { x: 800, y: 300, label: 'Singapore', anchor: 'start' },
+                            ].map((city, i) => (
+                                <g key={i}>
+                                    {/* Glow */}
+                                    <circle cx={city.x} cy={city.y} r="16" fill="url(#city-glow)">
+                                        <animate attributeName="r" values="14;18;14" dur="3s" repeatCount="indefinite" />
+                                        <animate attributeName="opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite" />
+                                    </circle>
+                                    {/* Core dot */}
+                                    <circle cx={city.x} cy={city.y} r="4" fill="#FF6B00" filter="url(#glow-filter)" />
+                                    <circle cx={city.x} cy={city.y} r="2" fill="#FFFFFF" />
+                                    {/* Label */}
+                                    <text
+                                        x={city.anchor === 'end' ? city.x - 12 : city.anchor === 'start' ? city.x + 12 : city.x}
+                                        y={city.y + (city.label === 'London' ? -14 : 5)}
+                                        fill="rgba(255,255,255,0.7)"
+                                        fontSize="11"
+                                        fontFamily="var(--font-body)"
+                                        textAnchor={city.anchor as 'start' | 'middle' | 'end'}
+                                    >
+                                        {city.label}
+                                    </text>
+                                </g>
+                            ))}
+                        </svg>
                     </div>
                 </div>
             </section>

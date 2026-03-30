@@ -142,12 +142,12 @@ export default function CareersPage() {
                             { src: '/images/culture/event.png', span: '2 / 3', row: '2 / 3' },
                             { src: '/images/culture/workshop2.png', span: '3 / 4', row: '2 / 3' },
                         ].map((photo, i) => (
-                            <div key={i} className="car-reveal" style={{
+                            <div key={i} className="car-reveal ai-img-container" style={{
                                 gridColumn: photo.span, gridRow: photo.row,
-                                borderRadius: 16, overflow: 'hidden', position: 'relative',
+                                borderRadius: 16, position: 'relative',
                             }}>
                                 <img src={photo.src} alt="Life at OpenAnalyst" style={{
-                                    width: '100%', height: '100%', objectFit: 'cover',
+                                    width: '100%', height: '100%',
                                     transition: 'transform 0.6s var(--ease-spring)',
                                 }}
                                     onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.04)'; }}

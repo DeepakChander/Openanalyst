@@ -201,8 +201,8 @@ export default function FeaturesPage() {
                                 </div>
 
                                 {/* Video placeholder */}
-                                <div className="fp-panel-visual" style={{ order: isReversed ? 1 : 2, height: 400, borderRadius: 20, overflow: 'hidden', border: `1px solid ${isDark ? 'var(--border-dark-default)' : 'var(--border-default)'}`, boxShadow: `0 24px 64px -16px ${feature.accent}15` }}>
-                                    <img src={featureIllustrations[i]} alt={feature.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                <div className="fp-panel-visual ai-img-container" style={{ order: isReversed ? 1 : 2, height: 400, borderRadius: 20, overflow: 'hidden', border: `1px solid ${isDark ? 'var(--border-dark-default)' : 'var(--border-default)'}`, boxShadow: `0 24px 64px -16px ${feature.accent}15` }}>
+                                    <img src={featureIllustrations[i]} alt={feature.title} style={{ width: '100%', height: '100%' }} />
                                 </div>
                             </div>
                         </section>

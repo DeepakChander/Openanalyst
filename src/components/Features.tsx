@@ -328,14 +328,14 @@ const Features: React.FC = () => {
                     </div>
 
                     {/* Right — feature image */}
-                    <div key={`img-${active}`} style={{
+                    <div key={`img-${active}`} className="ai-img-container" style={{
                         height: 380, borderRadius: 20, overflow: 'hidden',
                         border: '1px solid var(--border-dark-default)',
                         boxShadow: `0 24px 64px -16px ${f.color}15`,
                         animation: 'featFadeIn 0.6s var(--ease-spring) forwards',
                     }}>
                         <img src={featureImages[active]} alt={f.tab} style={{
-                            width: '100%', height: '100%', objectFit: 'cover',
+                            width: '100%', height: '100%',
                         }} />
                     </div>
                 </div>

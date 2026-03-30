@@ -121,8 +121,8 @@ export default function ResourcesPage() {
                                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-default)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
                             >
                                 {/* Thumbnail */}
-                                <div style={{ height: 160, overflow: 'hidden' }}>
-                                    <img src={r.img} alt={r.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s var(--ease-spring)' }}
+                                <div className="ai-img-container" style={{ height: 160 }}>
+                                    <img src={r.img} alt={r.title} style={{ width: '100%', height: '100%', transition: 'transform 0.5s var(--ease-spring)' }}
                                         onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; }}
                                         onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
                                     />

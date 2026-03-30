@@ -727,10 +727,15 @@ body {
   border-radius: 4px;
 }
 
-/* Crop watermark from AI-generated images — clips bottom-right corner */
-.img-crop-watermark {
-  object-position: center top;
+/* AI image container — crops bottom 5% to hide watermarks cleanly */
+.ai-img-container {
+  overflow: hidden;
+}
+.ai-img-container img {
   object-fit: cover;
+  object-position: center 40%;
+  transform: scale(1.06);
+  transform-origin: center 40%;
 }
 
 /* Screen reader only utility */
