@@ -78,19 +78,19 @@ export default function CareersPage() {
             <Header />
 
             {/* ═══ HERO — Dark ═══ */}
-            <section className="dark-section" style={{ paddingTop: 160, paddingBottom: 80, background: 'var(--bg-dark-primary)', position: 'relative', overflow: 'hidden' }}>
+            <section style={{ paddingTop: 160, paddingBottom: 80, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}>
                 <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '80px 80px', maskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)', WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)' }} />
                 <div style={{ position: 'absolute', top: '10%', right: '20%', width: 500, height: 500, borderRadius: '50%', background: 'rgba(255,107,0,0.04)', filter: 'blur(100px)', pointerEvents: 'none' }} />
 
                 <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 24px', textAlign: 'center', position: 'relative', zIndex: 2 }}>
                     <div className="car-hero-label" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px', borderRadius: 999, marginBottom: 32, border: '1px solid rgba(255,107,0,0.2)', background: 'rgba(255,107,0,0.06)' }}>
                         <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF6B00', boxShadow: '0 0 8px rgba(255,107,0,0.5)' }} />
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#FF8533', textTransform: 'uppercase', letterSpacing: '0.1em' }}>We&apos;re Hiring</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>We&apos;re Hiring</span>
                     </div>
                     <h1>
                         {['Join the', 'Revolution'].map((line, i) => (
                             <span key={i} style={{ display: 'block', overflow: 'hidden' }}>
-                                <span className="car-hero-line" style={{ display: 'block', fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.8rem, 6vw, 5rem)', fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.04em', ...(i === 1 ? { background: 'var(--gradient-hero)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' } : { color: '#FAFAFA' }) }}>{line}</span>
+                                <span className="car-hero-line" style={{ display: 'block', fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.8rem, 6vw, 5rem)', fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.04em', ...(i === 1 ? { background: 'var(--gradient-hero)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' } : { color: 'var(--text-primary)' }) }}>{line}</span>
                             </span>
                         ))}
                     </h1>
@@ -129,10 +129,10 @@ export default function CareersPage() {
             </section>
 
             {/* ═══ LIFE AT OPENANALYST — Photo Grid ═══ */}
-            <section className="dark-section" style={{ padding: '80px 24px', background: 'var(--bg-dark-elevated)' }}>
+            <section style={{ padding: '80px 24px', background: 'var(--bg-warm)' }}>
                 <div style={{ maxWidth: 1100, margin: '0 auto' }}>
                     <div className="car-reveal" style={{ textAlign: 'center', marginBottom: 40 }}>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#FF8533', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Life at OpenAnalyst</p>
+                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Life at OpenAnalyst</p>
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr 1fr', gridTemplateRows: '200px 200px', gap: 12 }}>
                         {[
@@ -160,11 +160,11 @@ export default function CareersPage() {
             </section>
 
             {/* ═══ OPEN POSITIONS — Dark ═══ */}
-            <section className="dark-section" style={{ padding: '120px 24px', background: 'var(--bg-dark-primary)' }}>
+            <section style={{ padding: '120px 24px', background: 'var(--bg-surface)' }}>
                 <div style={{ maxWidth: 800, margin: '0 auto' }}>
                     <div className="car-reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#FF8533', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Open Roles</p>
-                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: '#FAFAFA', letterSpacing: '-0.03em' }}>Find your <span className="text-gradient">role</span></h2>
+                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Open Roles</p>
+                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>Find your <span className="text-gradient">role</span></h2>
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -176,7 +176,7 @@ export default function CareersPage() {
                                 }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                                         <span style={{ width: 8, height: 8, borderRadius: '50%', background: dept.color, boxShadow: `0 0 8px ${dept.color}40` }} />
-                                        <span style={{ fontFamily: 'var(--font-heading)', fontSize: 16, fontWeight: 700, color: '#FAFAFA' }}>{dept.name}</span>
+                                        <span style={{ fontFamily: 'var(--font-heading)', fontSize: 16, fontWeight: 700, color: 'var(--text-primary)' }}>{dept.name}</span>
                                         <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-dark-muted)', padding: '2px 8px', borderRadius: 6, background: 'rgba(255,255,255,0.04)' }}>{dept.roles.length} roles</span>
                                     </div>
                                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 16, color: dept.color, transition: 'transform 0.3s ease', transform: openDept === di ? 'rotate(45deg)' : 'rotate(0deg)' }}>+</span>
@@ -193,7 +193,7 @@ export default function CareersPage() {
                                                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.04)'; e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; }}
                                             >
                                                 <div>
-                                                    <div style={{ fontSize: 14, fontWeight: 600, color: '#FAFAFA', marginBottom: 3 }}>{role.title}</div>
+                                                    <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 3 }}>{role.title}</div>
                                                     <div style={{ fontSize: 11, color: 'var(--text-dark-muted)', fontFamily: 'var(--font-mono)' }}>{role.location} · {role.type}</div>
                                                 </div>
                                                 <span style={{ fontSize: 13, color: dept.color, fontWeight: 600, fontFamily: 'var(--font-mono)' }}>Apply &rarr;</span>
@@ -230,11 +230,11 @@ export default function CareersPage() {
             </section>
 
             {/* ═══ HIRING PROCESS — Dark ═══ */}
-            <section className="car-process dark-section" style={{ padding: '120px 24px', background: 'var(--bg-dark-elevated)' }}>
+            <section className="car-process" style={{ padding: '120px 24px', background: 'var(--bg-white)' }}>
                 <div style={{ maxWidth: 700, margin: '0 auto' }}>
                     <div className="car-reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#FF8533', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Process</p>
-                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: '#FAFAFA', letterSpacing: '-0.03em' }}>How we <span className="text-gradient">hire</span></h2>
+                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Process</p>
+                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>How we <span className="text-gradient">hire</span></h2>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                         {hiringSteps.map((step, i) => (
@@ -242,7 +242,7 @@ export default function CareersPage() {
                                 <span style={{ fontFamily: 'var(--font-heading)', fontSize: 28, fontWeight: 900, color: 'rgba(255,107,0,0.15)', lineHeight: 1, flexShrink: 0 }}>{step.num}</span>
                                 <div style={{ flex: 1 }}>
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-                                        <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 16, fontWeight: 700, color: '#FAFAFA' }}>{step.title}</h3>
+                                        <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 16, fontWeight: 700, color: 'var(--text-primary)' }}>{step.title}</h3>
                                         <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-dark-muted)', padding: '2px 8px', borderRadius: 6, background: 'rgba(255,255,255,0.04)' }}>{step.dur}</span>
                                     </div>
                                     <p style={{ fontSize: 13, color: 'var(--text-dark-secondary)', lineHeight: 1.6 }}>{step.desc}</p>
