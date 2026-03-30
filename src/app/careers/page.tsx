@@ -241,10 +241,16 @@ export default function CareersPage() {
             <Footer />
 
             <style>{`
+                @media (max-width: 1024px) {
+                    .car-benefits > div > div:last-child { grid-template-columns: repeat(2, 1fr) !important; }
+                }
                 @media (max-width: 768px) {
                     .car-values > div > div:last-child { grid-template-columns: 1fr !important; }
                     .car-benefits > div > div:last-child { grid-template-columns: 1fr !important; }
                     .car-hero-stats { flex-wrap: wrap !important; gap: 20px !important; }
+                }
+                @media (max-width: 480px) {
+                    .car-hero-stats > div { flex: 0 0 45% !important; text-align: center; }
                 }
             `}</style>
         </div>

@@ -318,6 +318,12 @@ const HowItWorks: React.FC = () => {
             </div>
 
             <style>{`
+                @media (max-width: 1024px) {
+                    #how-it-works > div:nth-child(3) {
+                        grid-template-columns: repeat(2, 1fr) !important;
+                        gap: 16px !important;
+                    }
+                }
                 @media (max-width: 900px) {
                     #how-it-works > div:nth-child(3) {
                         grid-template-columns: 1fr !important;

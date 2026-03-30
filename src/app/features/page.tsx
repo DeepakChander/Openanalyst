@@ -206,10 +206,12 @@ export default function FeaturesPage() {
             <Footer />
 
             <style>{`
+                @media (max-width: 1024px) {
+                    .fp-stats > div { grid-template-columns: repeat(2, 1fr) !important; }
+                }
                 @media (max-width: 900px) {
                     .fp-panel > div { grid-template-columns: 1fr !important; gap: 40px !important; }
                     .fp-panel-text, .fp-panel-visual { order: unset !important; }
-                    .fp-stats > div { grid-template-columns: repeat(2, 1fr) !important; }
                 }
                 @media (max-width: 600px) {
                     .fp-stats > div { grid-template-columns: 1fr !important; }

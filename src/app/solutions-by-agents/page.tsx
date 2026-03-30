@@ -205,10 +205,13 @@ export default function SolutionsPage() {
             <Footer />
 
             <style>{`
+                @media (max-width: 1024px) {
+                    .sol-agents-grid { grid-template-columns: repeat(2, 1fr) !important; }
+                    .sol-agents-grid > * { grid-column: span 1 !important; }
+                }
                 @media (max-width: 900px) {
                     .sol-featured { grid-template-columns: 1fr !important; }
                     .sol-agents-grid { grid-template-columns: 1fr !important; }
-                    .sol-agents-grid > * { grid-column: span 1 !important; }
                 }
             `}</style>
         </div>
