@@ -253,150 +253,51 @@ export default function FeaturesPage() {
                 </div>
             </section>
 
-            {/* ═══ STICKY WALKTHROUGH — Light ═══ */}
-            <section id="features" className="section" style={{ background: 'var(--bg-white)', padding: '0 24px' }}>
-                <div className="container" style={{
-                    display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80,
-                    alignItems: 'start', paddingTop: 'var(--space-section)', paddingBottom: 'var(--space-section)',
-                }}>
-                    {/* Left — Sticky visual */}
-                    <div className="fp-sticky-visual" style={{
-                        position: 'sticky', top: 140,
-                        height: 'fit-content',
-                    }}>
-                        <div style={{
-                            borderRadius: 'var(--radius-2xl)', overflow: 'hidden',
-                            background: 'var(--bg-surface)', border: '1px solid var(--border)',
-                            padding: 48, minHeight: 420,
-                            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                            transition: 'border-color 0.4s ease, box-shadow 0.4s ease',
-                            borderColor: `${features[activeFeature].accent}30`,
-                            boxShadow: `0 24px 80px -16px ${features[activeFeature].accent}20`,
-                            position: 'relative',
-                        }}>
-                            {/* Accent glow */}
-                            <div style={{
-                                position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%, -50%)',
-                                width: '70%', height: '70%', borderRadius: '50%',
-                                background: `radial-gradient(circle, ${features[activeFeature].accent}15 0%, transparent 70%)`,
-                                filter: 'blur(40px)', pointerEvents: 'none',
-                                transition: 'background 0.6s ease',
-                            }} />
-
-                            {/* Large number */}
-                            <span style={{
-                                fontFamily: 'var(--font-heading)', fontSize: 120, fontWeight: 900,
-                                color: `${features[activeFeature].accent}12`,
-                                lineHeight: 1, position: 'absolute', top: 24, right: 32,
-                                transition: 'color 0.4s ease',
-                                userSelect: 'none',
-                            }}>{features[activeFeature].id}</span>
-
-                            {/* Icon */}
-                            <div style={{
-                                width: 80, height: 80, borderRadius: 'var(--radius-xl)',
-                                background: `${features[activeFeature].accent}15`,
-                                border: `1px solid ${features[activeFeature].accent}25`,
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                marginBottom: 24, transition: 'all 0.4s ease',
-                                position: 'relative',
-                            }}>
-                                <div style={{ transform: 'scale(1.4)' }}>
-                                    {features[activeFeature].icon}
-                                </div>
-                            </div>
-
-                            {/* Title */}
-                            <h3 style={{
-                                fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.5rem, 2.5vw, 2rem)',
-                                fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-primary)',
-                                marginBottom: 8, textAlign: 'center', position: 'relative',
-                                transition: 'color 0.3s ease',
-                            }}>{features[activeFeature].title}</h3>
-
-                            <span className="label-mono" style={{
-                                color: features[activeFeature].accent,
-                                fontSize: 11, position: 'relative',
-                            }}>{features[activeFeature].subtitle}</span>
-
-                            {/* Progress dots */}
-                            <div style={{
-                                display: 'flex', gap: 8, marginTop: 32, position: 'relative',
-                            }}>
-                                {features.map((f, i) => (
-                                    <div key={i} style={{
-                                        width: i === activeFeature ? 24 : 8, height: 8,
-                                        borderRadius: 'var(--radius-full)',
-                                        background: i === activeFeature ? f.accent : 'var(--border)',
-                                        transition: 'all 0.4s var(--ease-out)',
-                                    }} />
-                                ))}
-                            </div>
-                        </div>
+            {/* ═══ FEATURE PANELS — Alternating full-width blocks ═══ */}
+            <section id="features" style={{ background: 'var(--bg-white)', paddingBottom: 'var(--space-section-sm)' }}>
+                <div style={{ padding: '0 24px' }}>
+                    {/* Section heading */}
+                    <div style={{ textAlign: 'center', marginBottom: 48 }}>
+                        <p className="label-mono" style={{ marginBottom: 12 }}>Core Features</p>
+                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text-primary)' }}>
+                            Built for the future <span className="text-gradient">of marketing</span>
+                        </h2>
                     </div>
 
-                    {/* Right — Scrolling feature blocks in CARDS */}
-                    <div className="fp-scroll-column" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                    {/* 2x2 Feature grid */}
+                    <div className="fp-feature-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, maxWidth: 1000, margin: '0 auto' }}>
                         {features.map((f, i) => (
                             <div key={f.id} className="fp-feature-block" style={{
                                 padding: '32px 28px', borderRadius: 'var(--radius-xl)',
-                                background: 'var(--bg-surface)', border: `1px solid var(--border)`,
-                                boxShadow: 'var(--shadow-sm)',
+                                background: i === 0 ? 'var(--bg-dark)' : 'var(--bg-surface)',
+                                border: `1px solid ${i === 0 ? 'rgba(255,107,0,0.15)' : 'var(--border)'}`,
+                                boxShadow: 'var(--shadow-md)',
                                 transition: 'all 0.3s var(--ease-out)',
-                                borderLeftWidth: 3, borderLeftColor: `${f.accent}40`,
+                                position: 'relative', overflow: 'hidden',
                             }}
-                                onMouseEnter={(e) => { e.currentTarget.style.borderLeftColor = f.accent; e.currentTarget.style.boxShadow = `0 8px 32px ${f.accent}10`; }}
-                                onMouseLeave={(e) => { e.currentTarget.style.borderLeftColor = `${f.accent}40`; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; }}
+                                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = `0 12px 40px ${f.accent}12`; }}
+                                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'var(--shadow-md)'; }}
                             >
-                                {/* Number + subtitle */}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                                    <span style={{
-                                        fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700,
-                                        color: f.accent, background: `${f.accent}10`,
-                                        padding: '3px 8px', borderRadius: 'var(--radius-sm)',
-                                    }}>{f.id}</span>
-                                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: f.accent, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{f.subtitle}</span>
+                                {/* Faded number */}
+                                <span style={{ position: 'absolute', top: 16, right: 20, fontFamily: 'var(--font-heading)', fontSize: 56, fontWeight: 900, color: i === 0 ? 'rgba(255,107,0,0.08)' : `${f.accent}06`, lineHeight: 1, pointerEvents: 'none' }}>{f.id}</span>
+
+                                {/* Icon */}
+                                <div style={{ width: 44, height: 44, borderRadius: 'var(--radius-md)', background: i === 0 ? 'rgba(255,107,0,0.15)' : `${f.accent}10`, border: `1px solid ${i === 0 ? 'rgba(255,107,0,0.25)' : f.accent + '20'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16, color: i === 0 ? '#FF6B00' : f.accent }}>
+                                    {f.icon}
                                 </div>
 
-                                <h3 style={{
-                                    fontFamily: 'var(--font-heading)', fontSize: 20,
-                                    fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.2,
-                                    color: 'var(--text-primary)', marginBottom: 8,
-                                }}>{f.title}</h3>
+                                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: i === 0 ? '#FF8533' : f.accent, letterSpacing: '0.08em', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>{f.subtitle}</span>
+                                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 20, fontWeight: 800, color: i === 0 ? '#FAFAFA' : 'var(--text-primary)', marginBottom: 8, letterSpacing: '-0.01em' }}>{f.title}</h3>
+                                <p style={{ fontSize: 14, color: i === 0 ? 'rgba(255,255,255,0.6)' : 'var(--text-secondary)', lineHeight: 1.7, marginBottom: 16 }}>{f.description}</p>
 
-                                <p style={{
-                                    fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7,
-                                    marginBottom: 16,
-                                }}>{f.description}</p>
-
-                                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                                     {f.details.map((detail, j) => (
-                                        <li key={j} style={{
-                                            display: 'flex', alignItems: 'center', gap: 8,
-                                            fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.5,
-                                        }}>
-                                            <span style={{
-                                                width: 16, height: 16, borderRadius: 'var(--radius-sm)',
-                                                background: `${f.accent}08`, border: `1px solid ${f.accent}15`,
-                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                flexShrink: 0, marginTop: 2,
-                                            }}>
-                                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={f.accent} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                                    <polyline points="20 6 9 17 4 12" />
-                                                </svg>
-                                            </span>
+                                        <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: i === 0 ? 'rgba(255,255,255,0.5)' : 'var(--text-muted)' }}>
+                                            <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M3 8L6.5 11.5L13 4.5" stroke={f.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                                             {detail}
-                                        </li>
+                                        </div>
                                     ))}
-                                </ul>
-
-                                {/* Divider between blocks */}
-                                {i < features.length - 1 && (
-                                    <div style={{
-                                        marginTop: 48, height: 1,
-                                        background: 'linear-gradient(90deg, var(--border) 0%, transparent 100%)',
-                                    }} />
-                                )}
+                                </div>
                             </div>
                         ))}
                     </div>
