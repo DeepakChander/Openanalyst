@@ -29,12 +29,10 @@ export default function IntegrationsPage() {
     return (
         <div style={{ minHeight: '100vh', backgroundColor: 'var(--background)', color: 'var(--foreground)', display: 'flex', flexDirection: 'column' }}>
             <Header />
-            <main style={{ flex: 1, paddingTop: '128px', paddingBottom: '80px' }}>
+            <main style={{ flex: 1, paddingTop: '128px', paddingBottom: '80px', background: 'var(--bg-primary)' }}>
                 <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 16px' }}>
                     <div style={{ textAlign: 'center', marginBottom: 64 }}>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>
-                            Ecosystem
-                        </p>
+                        <p className="label-mono" style={{ marginBottom: 16 }}>Ecosystem</p>
                         <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 800, marginBottom: 16, fontFamily: 'var(--font-heading)', color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>
                             Connected to <span className="text-gradient">everything</span>
                         </h1>

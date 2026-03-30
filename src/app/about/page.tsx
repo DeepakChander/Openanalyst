@@ -1,35 +1,40 @@
 'use client';
 
-import { useRef, useState, useEffect, useMemo, useCallback, Suspense } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { Header, Footer } from '@/components';
-import { Canvas, useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
+import { Header, Footer, Magnetic } from '@/components';
 
 gsap.registerPlugin(ScrollTrigger);
 
 /* ═══════════ DATA ═══════════ */
 const values = [
-    { title: 'Innovation', desc: 'We don\'t follow the marketing playbook — we rewrite it. Our AI agents evolve daily, learning from millions of data points.', num: '01', highlight: 'AI-first thinking in everything we build', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg> },
-    { title: 'Simplicity', desc: 'The most powerful technology disappears into the workflow. Launch a campaign in 3 clicks, not 30 steps.', num: '02', highlight: 'Complex problems, elegant solutions', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> },
-    { title: 'Trust', desc: 'Your data never trains our models. SOC 2 Type II certified, GDPR compliant, integrity checks on every campaign.', num: '03', highlight: 'Security is the foundation', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> },
-    { title: 'Impact', desc: 'We optimize for revenue, not impressions. Every AI agent is measured by the actual business growth it creates.', num: '04', highlight: 'Real growth, not vanity metrics', icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg> },
+    { title: 'Innovation', desc: 'We don\'t follow the marketing playbook — we rewrite it. Our AI agents evolve daily, learning from millions of data points.', highlight: 'AI-first thinking in everything we build' },
+    { title: 'Simplicity', desc: 'The most powerful technology disappears into the workflow. Launch a campaign in 3 clicks, not 30 steps.', highlight: 'Complex problems, elegant solutions' },
+    { title: 'Trust', desc: 'Your data never trains our models. SOC 2 Type II certified, GDPR compliant, integrity checks on every campaign.', highlight: 'Security is the foundation' },
+    { title: 'Impact', desc: 'We optimize for revenue, not impressions. Every AI agent is measured by the actual business growth it creates.', highlight: 'Real growth, not vanity metrics' },
 ];
+
+const valueIcons = {
+    Innovation: 'M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83',
+    Simplicity: 'M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z M9 12l2 2 4-4',
+    Trust: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z',
+    Impact: 'M3 3v18h18 M19 9l-5 5-4-4-3 3',
+};
 
 const metrics = [
     { value: 10, suffix: 'K+', label: 'Campaigns Deployed' },
     { value: 42, suffix: '', label: 'AI Agents' },
-    { value: 99.9, suffix: '%', label: 'Uptime SLA' },
+    { value: 99.9, suffix: '%', label: 'Uptime SLA', decimals: 1 },
     { value: 150, suffix: '+', label: 'Countries Served' },
 ];
 
 const milestones = [
-    { year: '2024', quarter: 'Q1', event: 'Founded', desc: 'OpenAnalyst was born from a vision to democratize AI-powered marketing.', color: '#FF6B00' },
-    { year: '2024', quarter: 'Q3', event: 'First 1,000 Users', desc: 'Reached our first major milestone with early adopters worldwide.', color: '#F59E0B' },
-    { year: '2025', quarter: 'Q1', event: '27 Integrations', desc: 'Connected to the entire marketing stack — Gmail, Slack, HubSpot, and more.', color: '#8B5CF6' },
-    { year: '2025', quarter: 'Q3', event: '10K+ Campaigns', desc: 'AI agents planned, launched, and optimized over 10,000 campaigns.', color: '#3B82F6' },
+    { quarter: 'Q1 2024', event: 'Founded', desc: 'OpenAnalyst was born from a vision to democratize AI-powered marketing.' },
+    { quarter: 'Q3 2024', event: 'First 1,000 Users', desc: 'Reached our first major milestone with early adopters worldwide.' },
+    { quarter: 'Q1 2025', event: '27 Integrations', desc: 'Connected to the entire marketing stack — Gmail, Slack, HubSpot, and more.' },
+    { quarter: 'Q3 2025', event: '10K+ Campaigns', desc: 'AI agents planned, launched, and optimized over 10,000 campaigns.' },
 ];
 
 const teamPhotos = [
@@ -40,352 +45,974 @@ const teamPhotos = [
 ];
 
 const cultureItems = [
-    { title: 'Remote-First', desc: 'Great talent isn\'t bound by geography.', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg> },
-    { title: 'Ship Fast', desc: 'Weekly releases, daily deployments.', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg> },
-    { title: 'Transparency', desc: 'Open books, open roadmap.', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> },
-    { title: 'Customer First', desc: 'Every feature starts with a problem.', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg> },
-    { title: 'Learn & Grow', desc: '$5K annual learning budget.', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg> },
-    { title: 'Play to Win', desc: 'Growth is a team sport.', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> },
+    { title: 'Remote-First', desc: 'Great talent isn\'t bound by geography.', iconPath: 'M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20 M2 12h20' },
+    { title: 'Ship Fast', desc: 'Weekly releases, daily deployments.', iconPath: 'M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z' },
+    { title: 'Transparency', desc: 'Open books, open roadmap.', iconPath: 'M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z' },
+    { title: 'Customer First', desc: 'Every feature starts with a problem.', iconPath: 'M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z' },
+    { title: 'Learn & Grow', desc: '$5K annual learning budget.', iconPath: 'M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20' },
+    { title: 'Play to Win', desc: 'Growth is a team sport.', iconPath: 'M6 9H4.5a2.5 2.5 0 0 1 0-5H6 M18 9h1.5a2.5 2.5 0 0 0 0-5H18 M4 22h16 M18 2H6v7a6 6 0 0 0 12 0V2Z' },
 ];
 
-/* ═══════════ 3D PARTICLE CLOUD ═══════════ */
-function ParticleCloud() {
-    const ref = useRef<THREE.Points>(null);
-    const [positions, colors] = useMemo(() => {
-        const count = 600;
-        const pos = new Float32Array(count * 3);
-        const col = new Float32Array(count * 3);
-        for (let i = 0; i < count; i++) {
-            const theta = Math.random() * Math.PI * 2;
-            const phi = Math.acos(2 * Math.random() - 1);
-            const r = 1 + Math.random() * 3;
-            pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-            pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-            pos[i * 3 + 2] = r * Math.cos(phi);
-            const hue = 0.05 + Math.random() * 0.08;
-            const color = new THREE.Color().setHSL(hue, 0.9, 0.5 + Math.random() * 0.3);
-            col[i * 3] = color.r; col[i * 3 + 1] = color.g; col[i * 3 + 2] = color.b;
-        }
-        return [pos, col];
-    }, []);
-
-    useFrame(({ clock }) => {
-        if (ref.current) {
-            ref.current.rotation.y = clock.getElapsedTime() * 0.04;
-            ref.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.02) * 0.1;
-        }
-    });
-
-    return (
-        <points ref={ref}>
-            <bufferGeometry>
-                <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-                <bufferAttribute attach="attributes-color" args={[colors, 3]} />
-            </bufferGeometry>
-            <pointsMaterial size={0.02} vertexColors transparent opacity={0.6} sizeAttenuation blending={THREE.AdditiveBlending} depthWrite={false} />
-        </points>
-    );
-}
-
-/* ═══════════ ANIMATED COUNTER ═══════════ */
-function AnimatedCounter({ value, suffix = '', decimals = 0 }: { value: number; suffix?: string; decimals?: number }) {
+/* ═══════════ COUNT UP COMPONENT ═══════════ */
+function CountUp({ value, suffix = '', decimals = 0 }: { value: number; suffix?: string; decimals?: number }) {
     const ref = useRef<HTMLSpanElement>(null);
-    const [visible, setVisible] = useState(false);
+    const counted = useRef(false);
+
     useEffect(() => {
         const el = ref.current;
         if (!el) return;
-        const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.5 });
+        const obs = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting && !counted.current) {
+                counted.current = true;
+                const obj = { val: 0 };
+                gsap.to(obj, {
+                    val: value,
+                    duration: 2,
+                    ease: 'power2.out',
+                    onUpdate: () => {
+                        if (ref.current) {
+                            ref.current.textContent = obj.val.toFixed(decimals) + suffix;
+                        }
+                    },
+                });
+            }
+        }, { threshold: 0.5 });
         obs.observe(el);
         return () => obs.disconnect();
-    }, []);
-    useEffect(() => {
-        if (!visible || !ref.current) return;
-        const obj = { val: 0 };
-        gsap.to(obj, { val: value, duration: 2.5, ease: 'power2.out', onUpdate: () => { if (ref.current) ref.current.textContent = (decimals > 0 ? obj.val.toFixed(decimals) : Math.round(obj.val)) + suffix; } });
-    }, [visible, value, suffix, decimals]);
+    }, [value, suffix, decimals]);
+
     return <span ref={ref}>0{suffix}</span>;
 }
 
-/* ═══════════ PHOTO CARD ═══════════ */
-function PhotoCard({ photo, index }: { photo: typeof teamPhotos[0]; index: number }) {
-    const [hovered, setHovered] = useState(false);
+/* ═══════════ TEXT SCRAMBLE HOOK ═══════════ */
+function useTextScramble() {
+    const ref = useRef<HTMLSpanElement>(null);
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*';
+
+    const scramble = useCallback(() => {
+        const el = ref.current;
+        if (!el) return;
+        const original = el.dataset.text || el.textContent || '';
+        let iteration = 0;
+        const interval = setInterval(() => {
+            el.textContent = original
+                .split('')
+                .map((char, index) => {
+                    if (index < iteration) return original[index];
+                    return chars[Math.floor(Math.random() * chars.length)];
+                })
+                .join('');
+            iteration += 1 / 2;
+            if (iteration >= original.length) {
+                el.textContent = original;
+                clearInterval(interval);
+            }
+        }, 40);
+    }, []);
+
+    return { ref, scramble };
+}
+
+/* ═══════════ SVG ICON WITH STROKE DRAW ═══════════ */
+function StrokeIcon({ pathData, size = 24, className = '' }: { pathData: string; size?: number; className?: string }) {
+    const paths = pathData.split(' M').map((p, i) => i === 0 ? p : 'M' + p);
     return (
-        <div className="about-gallery-item" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-            style={{
-                position: 'relative', borderRadius: 20, overflow: 'hidden', cursor: 'pointer',
-                height: index === 0 ? 500 : 370, gridRow: index === 0 ? 'span 2' : undefined,
-                transition: 'transform 0.5s var(--ease-spring), box-shadow 0.5s ease',
-                transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
-                boxShadow: hovered ? '0 20px 60px rgba(0,0,0,0.15)' : '0 4px 20px rgba(0,0,0,0.06)',
-            }}>
-            <img src={photo.src} alt={photo.label} style={{
-                width: '100%', height: '100%', objectFit: 'cover',
-                filter: hovered ? 'brightness(1.02)' : 'brightness(0.9) saturate(0.85)',
-                transition: 'all 0.7s var(--ease-spring)', transform: hovered ? 'scale(1.04)' : 'scale(1)',
-            }} />
-            <div style={{ position: 'absolute', inset: 0, background: hovered ? 'linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.7) 100%)' : 'linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.5) 100%)', transition: 'all 0.5s ease' }} />
-            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, #FF6B00, #F59E0B)', transform: hovered ? 'scaleX(1)' : 'scaleX(0)', transformOrigin: 'left', transition: 'transform 0.5s var(--ease-spring)' }} />
-            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '24px 28px', transform: hovered ? 'translateY(0)' : 'translateY(6px)', transition: 'transform 0.4s ease' }}>
-                <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: 18, fontWeight: 700, color: '#fff', marginBottom: 3 }}>{photo.label}</h4>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'rgba(255,255,255,0.6)', opacity: hovered ? 1 : 0, transition: 'opacity 0.3s ease 0.1s' }}>{photo.desc}</p>
-            </div>
-        </div>
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={className}
+        >
+            {paths.map((d, i) => (
+                <path
+                    key={i}
+                    d={d}
+                    style={{
+                        strokeDasharray: 100,
+                        strokeDashoffset: 100,
+                        transition: 'stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
+                    }}
+                />
+            ))}
+        </svg>
     );
 }
 
 /* ═══════════ MAIN PAGE ═══════════ */
 export default function AboutPage() {
-    const pageRef = useRef<HTMLDivElement>(null);
+    const mainRef = useRef<HTMLDivElement>(null);
+    const heroRef = useRef<HTMLElement>(null);
+    const missionRef = useRef<HTMLElement>(null);
+    const valuesRef = useRef<HTMLElement>(null);
+    const metricsRef = useRef<HTMLElement>(null);
+    const milestonesRef = useRef<HTMLElement>(null);
+    const galleryRef = useRef<HTMLElement>(null);
+    const cultureRef = useRef<HTMLElement>(null);
+    const ctaRef = useRef<HTMLElement>(null);
+    const { ref: scrambleRef, scramble } = useTextScramble();
 
     useGSAP(() => {
-        // Hero
-        const heroTl = gsap.timeline({ defaults: { ease: 'power4.out' } });
-        heroTl.from('.about-hero-label', { y: 20, opacity: 0, duration: 0.6 })
-            .from('.about-hero-line', { y: '110%', duration: 1.2, stagger: 0.07 }, '-=0.3')
-            .from('.about-hero-sub', { y: 24, opacity: 0, duration: 0.8 }, '-=0.6')
-            .from('.about-hero-stat', { y: 16, opacity: 0, duration: 0.5, stagger: 0.08 }, '-=0.4');
+        /* ── Hero: clip-path wipe reveal ── */
+        const heroLines = heroRef.current?.querySelectorAll('.about-hero-line');
+        if (heroLines) {
+            gsap.set(heroLines, { clipPath: 'inset(0 100% 0 0)' });
+            gsap.to(heroLines, {
+                clipPath: 'inset(0 0% 0 0)',
+                duration: 1.2,
+                stagger: 0.2,
+                ease: 'power4.out',
+                delay: 0.3,
+            });
+        }
 
-        // Section headings
-        gsap.utils.toArray<HTMLElement>('.about-sec-head').forEach(el => {
-            gsap.fromTo(el, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%' } });
-        });
+        const heroSub = heroRef.current?.querySelector('.about-hero-sub');
+        if (heroSub) {
+            gsap.from(heroSub, { opacity: 0, y: 30, duration: 1, delay: 1, ease: 'power3.out' });
+        }
 
-        // Mission cards
-        gsap.fromTo('.about-mission-l', { clipPath: 'inset(0 100% 0 0)', opacity: 0 }, { clipPath: 'inset(0 0% 0 0)', opacity: 1, duration: 1, ease: 'power3.inOut', scrollTrigger: { trigger: '.about-mission-section', start: 'top 78%' } });
-        gsap.fromTo('.about-mission-r', { clipPath: 'inset(0 0 0 100%)', opacity: 0 }, { clipPath: 'inset(0 0 0 0%)', opacity: 1, duration: 1, ease: 'power3.inOut', scrollTrigger: { trigger: '.about-mission-section', start: 'top 78%' } });
+        /* ── Mission/Vision: fade in from sides ── */
+        const missionCards = missionRef.current?.querySelectorAll('.about-mv-card');
+        if (missionCards) {
+            missionCards.forEach((card, i) => {
+                gsap.from(card, {
+                    scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none none' },
+                    opacity: 0,
+                    x: i === 0 ? -60 : 60,
+                    duration: 0.9,
+                    ease: 'power3.out',
+                });
+            });
+        }
 
-        // Metrics
-        gsap.fromTo('.about-metric', { y: 40, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.7, ease: 'back.out(1.2)', scrollTrigger: { trigger: '.about-metrics-section', start: 'top 85%' } });
+        /* ── Values: stagger in ── */
+        const valueCards = valuesRef.current?.querySelectorAll('.about-value-card');
+        if (valueCards) {
+            gsap.from(valueCards, {
+                scrollTrigger: { trigger: valuesRef.current, start: 'top 80%', toggleActions: 'play none none none' },
+                opacity: 0,
+                y: 40,
+                duration: 0.7,
+                stagger: 0.12,
+                ease: 'power3.out',
+            });
+        }
 
-        // Values
-        gsap.fromTo('.about-value-card', { y: 60, opacity: 0, rotateX: 10 }, { y: 0, opacity: 1, rotateX: 0, stagger: 0.12, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: '.about-values-section', start: 'top 80%' } });
+        /* ── Metrics: scale up ── */
+        const metricItems = metricsRef.current?.querySelectorAll('.about-metric');
+        if (metricItems) {
+            gsap.from(metricItems, {
+                scrollTrigger: { trigger: metricsRef.current, start: 'top 80%', toggleActions: 'play none none none' },
+                opacity: 0,
+                scale: 0.8,
+                duration: 0.7,
+                stagger: 0.1,
+                ease: 'back.out(1.4)',
+            });
+        }
 
-        // Gallery
-        gsap.utils.toArray<HTMLElement>('.about-gallery-item').forEach((el, i) => {
-            gsap.fromTo(el, { clipPath: 'inset(100% 0 0 0)', opacity: 0 }, { clipPath: 'inset(0% 0 0 0)', opacity: 1, duration: 1, ease: 'power3.inOut', delay: i * 0.15, scrollTrigger: { trigger: '.about-gallery-section', start: 'top 80%' } });
-        });
+        /* ── Timeline: draw line + dots ── */
+        const timelineLine = milestonesRef.current?.querySelector('.about-timeline-line-fill');
+        if (timelineLine) {
+            gsap.from(timelineLine, {
+                scrollTrigger: { trigger: milestonesRef.current, start: 'top 75%', toggleActions: 'play none none none' },
+                scaleX: 0,
+                transformOrigin: 'left center',
+                duration: 1.5,
+                ease: 'power3.inOut',
+            });
+        }
+        const timelineDots = milestonesRef.current?.querySelectorAll('.about-timeline-dot');
+        if (timelineDots) {
+            gsap.from(timelineDots, {
+                scrollTrigger: { trigger: milestonesRef.current, start: 'top 75%', toggleActions: 'play none none none' },
+                opacity: 0,
+                scale: 0,
+                duration: 0.5,
+                stagger: 0.2,
+                delay: 0.5,
+                ease: 'back.out(2)',
+            });
+        }
+        const timelineCards = milestonesRef.current?.querySelectorAll('.about-timeline-card');
+        if (timelineCards) {
+            gsap.from(timelineCards, {
+                scrollTrigger: { trigger: milestonesRef.current, start: 'top 75%', toggleActions: 'play none none none' },
+                opacity: 0,
+                y: 30,
+                duration: 0.6,
+                stagger: 0.2,
+                delay: 0.7,
+                ease: 'power3.out',
+            });
+        }
 
-        // Timeline
-        gsap.fromTo('.about-tl-line', { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: { trigger: '.about-timeline-section', start: 'top 60%', end: 'bottom 50%', scrub: 1 } });
-        gsap.utils.toArray<HTMLElement>('.about-tl-item').forEach((el, i) => {
-            gsap.fromTo(el, { x: i % 2 === 0 ? -50 : 50, y: 20, opacity: 0 }, { x: 0, y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%' } });
-        });
+        /* ── Gallery: fade in ── */
+        const galleryItems = galleryRef.current?.querySelectorAll('.about-gallery-item');
+        if (galleryItems) {
+            gsap.from(galleryItems, {
+                scrollTrigger: { trigger: galleryRef.current, start: 'top 80%', toggleActions: 'play none none none' },
+                opacity: 0,
+                y: 40,
+                duration: 0.7,
+                stagger: 0.1,
+                ease: 'power3.out',
+            });
+        }
 
-        // Culture
-        gsap.fromTo('.about-culture-card', { rotateY: -90, opacity: 0 }, { rotateY: 0, opacity: 1, stagger: 0.08, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: '.about-culture-section', start: 'top 82%' } });
+        /* ── Culture hexagons ── */
+        const hexItems = cultureRef.current?.querySelectorAll('.about-hex-item');
+        if (hexItems) {
+            gsap.from(hexItems, {
+                scrollTrigger: { trigger: cultureRef.current, start: 'top 80%', toggleActions: 'play none none none' },
+                opacity: 0,
+                scale: 0.6,
+                rotation: -15,
+                duration: 0.7,
+                stagger: 0.1,
+                ease: 'back.out(1.5)',
+            });
+        }
 
-        // CTA
-        gsap.fromTo('.about-cta-content', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: '.about-cta-section', start: 'top 85%' } });
-    }, { scope: pageRef });
+        /* ── CTA: slide up ── */
+        const ctaContent = ctaRef.current?.querySelector('.about-cta-inner');
+        if (ctaContent) {
+            gsap.from(ctaContent, {
+                scrollTrigger: { trigger: ctaRef.current, start: 'top 85%', toggleActions: 'play none none none' },
+                opacity: 0,
+                y: 50,
+                duration: 0.9,
+                ease: 'power3.out',
+            });
+        }
+    }, { scope: mainRef });
 
     return (
-        <div ref={pageRef} style={{ minHeight: '100vh' }}>
+        <>
             <Header />
+            <main ref={mainRef}>
 
-            {/* ═══ HERO — Dark ═══ */}
-            <section className="dark-section" style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden', paddingTop: 120, paddingBottom: 80, background: 'var(--bg-dark-primary)' }}>
-                <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '80px 80px', maskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)', WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)' }} />
-                <div style={{ position: 'absolute', top: '-10%', right: '10%', width: 600, height: 600, borderRadius: '50%', background: 'rgba(255,107,0,0.05)', filter: 'blur(100px)', pointerEvents: 'none' }} />
-
-                <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 2, textAlign: 'center' }}>
-                    <div className="about-hero-label" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px', borderRadius: 999, marginBottom: 32, border: '1px solid rgba(255,107,0,0.2)', background: 'rgba(255,107,0,0.06)' }}>
-                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF6B00', boxShadow: '0 0 8px rgba(255,107,0,0.5)' }} />
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#FF8533', textTransform: 'uppercase', letterSpacing: '0.1em' }}>About OpenAnalyst</span>
-                    </div>
-
-                    <h1 style={{ marginBottom: 28 }}>
-                        {['We Build the', 'Future of', 'AI Marketing'].map((line, i) => (
-                            <span key={i} style={{ display: 'block', overflow: 'hidden' }}>
-                                <span className="about-hero-line" style={{ display: 'block', fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.8rem, 5.5vw, 4.5rem)', fontWeight: 800, lineHeight: 1.08, letterSpacing: '-0.04em', ...(i === 2 ? { background: 'var(--gradient-hero)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' } : { color: '#FAFAFA' }) }}>{line}</span>
-                            </span>
-                        ))}
-                    </h1>
-
-                    <p className="about-hero-sub" style={{ maxWidth: 520, margin: '0 auto 48px', fontSize: 'clamp(1rem, 1.4vw, 1.1rem)', color: 'var(--text-dark-secondary)', lineHeight: 1.8 }}>
-                        Born from a belief that every business deserves an AI-powered marketing team. We build intelligent agents that plan, launch, and optimize campaigns.
-                    </p>
-
-                    <div style={{ display: 'flex', gap: 40, justifyContent: 'center', paddingTop: 28, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-                        {[{ val: 'Est. 2024', label: 'Founded' }, { val: '30+', label: 'Team' }, { val: '10K+', label: 'Campaigns' }].map((s, i) => (
-                            <div key={i} className="about-hero-stat">
-                                <div style={{ fontFamily: 'var(--font-heading)', fontSize: 20, fontWeight: 800, color: '#FF6B00', letterSpacing: '-0.02em' }}>{s.val}</div>
-                                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-dark-muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 4 }}>{s.label}</div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* ═══ MISSION & VISION — Light ═══ */}
-            <section className="about-mission-section light-section" style={{ padding: '120px 24px', background: 'var(--bg-surface)' }}>
-                <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-                    <div className="about-sec-head" style={{ textAlign: 'center', marginBottom: 56 }}>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Purpose</p>
-                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text-primary)' }}>Why we <span className="text-gradient">exist</span></h2>
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-                        <div className="about-mission-l" style={{ padding: '48px 40px', borderRadius: 24, background: 'var(--bg-white)', border: '1px solid var(--border-default)', overflow: 'hidden' }}>
-                            <div style={{ width: 48, height: 48, borderRadius: 14, marginBottom: 24, background: 'var(--orange-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-                            </div>
-                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--orange)', marginBottom: 14, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Our Mission</p>
-                            <p style={{ fontSize: 18, color: 'var(--text-primary)', lineHeight: 1.8 }}>To democratize marketing excellence through AI agents that act as your expert marketing team, available 24/7 — making world-class marketing accessible to every business.</p>
+                {/* ══════════ SECTION 1: HERO — Pattern #11 ══════════ */}
+                <section
+                    ref={heroRef}
+                    style={{
+                        minHeight: '100vh',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        padding: '140px 24px 80px',
+                        background: 'var(--bg-primary)',
+                        position: 'relative',
+                        overflow: 'hidden',
+                    }}
+                >
+                    {/* Subtle grid background */}
+                    <div style={{
+                        position: 'absolute',
+                        inset: 0,
+                        backgroundImage: 'linear-gradient(var(--border-subtle) 1px, transparent 1px), linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px)',
+                        backgroundSize: '80px 80px',
+                        opacity: 0.5,
+                    }} />
+                    <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+                        <div className="label-mono about-hero-line" style={{ marginBottom: '32px' }}>
+                            About OpenAnalyst
                         </div>
-                        <div className="about-mission-r" style={{ padding: '48px 40px', borderRadius: 24, background: 'var(--bg-dark-primary)', border: '1px solid var(--border-dark-default)', overflow: 'hidden' }}>
-                            <div style={{ width: 48, height: 48, borderRadius: 14, marginBottom: 24, background: 'rgba(255,107,0,0.15)', border: '1px solid rgba(255,107,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF8533" strokeWidth="1.5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                        <h1
+                            className="about-hero-line"
+                            style={{
+                                fontFamily: 'var(--font-heading)',
+                                fontSize: 'clamp(3.5rem, 10vw, 7.5rem)',
+                                fontWeight: 900,
+                                lineHeight: 0.92,
+                                letterSpacing: '-0.04em',
+                                color: 'var(--text-primary)',
+                                marginBottom: '16px',
+                                maxWidth: '1100px',
+                            }}
+                        >
+                            We build
+                        </h1>
+                        <h1
+                            className="about-hero-line"
+                            style={{
+                                fontFamily: 'var(--font-heading)',
+                                fontSize: 'clamp(3.5rem, 10vw, 7.5rem)',
+                                fontWeight: 300,
+                                lineHeight: 0.92,
+                                letterSpacing: '-0.04em',
+                                color: 'var(--text-primary)',
+                                marginBottom: '16px',
+                                maxWidth: '1100px',
+                            }}
+                        >
+                            <span className="text-gradient" style={{ fontWeight: 900 }}>AI agents</span>{' '}
+                            <span style={{ fontStyle: 'italic' }}>that</span>
+                        </h1>
+                        <h1
+                            className="about-hero-line"
+                            style={{
+                                fontFamily: 'var(--font-heading)',
+                                fontSize: 'clamp(3.5rem, 10vw, 7.5rem)',
+                                fontWeight: 900,
+                                lineHeight: 0.92,
+                                letterSpacing: '-0.04em',
+                                color: 'var(--text-primary)',
+                                maxWidth: '1100px',
+                            }}
+                        >
+                            market for you
+                        </h1>
+                        <p
+                            className="about-hero-sub"
+                            style={{
+                                fontFamily: 'var(--font-body)',
+                                fontSize: 'var(--text-xl)',
+                                color: 'var(--text-secondary)',
+                                maxWidth: '560px',
+                                lineHeight: 1.7,
+                                marginTop: '40px',
+                            }}
+                        >
+                            We&apos;re on a mission to give every business access to the marketing
+                            intelligence that was once reserved for the Fortune 500.
+                        </p>
+                    </div>
+                </section>
+
+                {/* ══════════ SECTION 2: MISSION / VISION ══════════ */}
+                <section
+                    ref={missionRef}
+                    className="section"
+                    style={{ background: 'var(--bg-primary)' }}
+                >
+                    <div className="container">
+                        <div className="label-mono" style={{ marginBottom: '48px', textAlign: 'center' }}>
+                            What Drives Us
+                        </div>
+                        <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+                            gap: '24px',
+                        }}>
+                            {/* Mission Card */}
+                            <div
+                                className="about-mv-card"
+                                style={{
+                                    background: 'var(--bg-white)',
+                                    borderRadius: 'var(--radius-xl)',
+                                    padding: '48px 40px',
+                                    border: '1px solid var(--border)',
+                                    boxShadow: 'var(--shadow-sm)',
+                                }}
+                            >
+                                <div style={{
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: 'var(--text-xs)',
+                                    fontWeight: 600,
+                                    textTransform: 'uppercase' as const,
+                                    letterSpacing: '0.12em',
+                                    color: 'var(--orange)',
+                                    marginBottom: '20px',
+                                }}>
+                                    Our Mission
+                                </div>
+                                <h3 className="heading-3" style={{ marginBottom: '16px' }}>
+                                    Democratize marketing intelligence
+                                </h3>
+                                <p className="body-lg">
+                                    Every business deserves enterprise-grade marketing. Our AI agents
+                                    plan, execute, and optimize campaigns so founders and teams can
+                                    focus on building great products.
+                                </p>
                             </div>
-                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#FF8533', marginBottom: 14, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Our Vision</p>
-                            <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.8)', lineHeight: 1.8 }}>A world where AI handles the complexity of marketing while humans focus on creativity, strategy, and building real connections with their audience.</p>
+                            {/* Vision Card */}
+                            <div
+                                className="about-mv-card"
+                                style={{
+                                    background: 'var(--bg-cream)',
+                                    borderRadius: 'var(--radius-xl)',
+                                    padding: '48px 40px',
+                                    border: '1px solid var(--border-subtle)',
+                                    boxShadow: 'var(--shadow-sm)',
+                                }}
+                            >
+                                <div style={{
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: 'var(--text-xs)',
+                                    fontWeight: 600,
+                                    textTransform: 'uppercase' as const,
+                                    letterSpacing: '0.12em',
+                                    color: 'var(--orange)',
+                                    marginBottom: '20px',
+                                }}>
+                                    Our Vision
+                                </div>
+                                <h3 className="heading-3" style={{ marginBottom: '16px' }}>
+                                    A world where great products find their people
+                                </h3>
+                                <p className="body-lg">
+                                    We envision a future where AI handles the complexity of
+                                    multi-channel marketing, freeing humans to create and connect
+                                    in ways that truly matter.
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* ═══ METRICS — Dark ═══ */}
-            <section className="about-metrics-section dark-section" style={{ padding: '100px 24px', background: 'var(--bg-dark-primary)' }}>
-                <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    {metrics.map((m, i) => (
-                        <div key={i} style={{ display: 'contents' }}>
-                            {i > 0 && <div style={{ width: 1, height: 64, background: 'linear-gradient(180deg, transparent, rgba(255,255,255,0.08), transparent)', flexShrink: 0 }} />}
-                            <div className="about-metric" style={{ flex: 1, textAlign: 'center', padding: '0 20px' }}>
-                                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 2, marginBottom: 8 }}>
-                                    <span style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 900, fontFamily: 'var(--font-heading)', letterSpacing: '-0.04em', lineHeight: 1, background: 'var(--orange-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-                                        <AnimatedCounter value={m.value} suffix={m.suffix} decimals={m.value === 99.9 ? 1 : 0} />
+                {/* ══════════ SECTION 3: VALUES — Pattern #12 Asymmetric Bento ══════════ */}
+                <section
+                    ref={valuesRef}
+                    className="section"
+                    style={{ background: 'var(--bg-warm)' }}
+                >
+                    <div className="container">
+                        <div className="label-mono" style={{ marginBottom: '16px' }}>Our Values</div>
+                        <h2 className="heading-2" style={{ marginBottom: '48px', maxWidth: '500px' }}>
+                            What we believe shapes what we build
+                        </h2>
+                        <div className="about-values-grid">
+                            {values.map((v, i) => (
+                                <div
+                                    key={v.title}
+                                    className={`about-value-card about-value-card-${i}`}
+                                    onMouseEnter={(e) => {
+                                        const paths = e.currentTarget.querySelectorAll('.about-value-icon path');
+                                        paths.forEach((p) => {
+                                            (p as HTMLElement).style.strokeDashoffset = '0';
+                                        });
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        const paths = e.currentTarget.querySelectorAll('.about-value-icon path');
+                                        paths.forEach((p) => {
+                                            (p as HTMLElement).style.strokeDashoffset = '100';
+                                        });
+                                    }}
+                                    style={{
+                                        background: 'var(--bg-white)',
+                                        borderRadius: 'var(--radius-xl)',
+                                        padding: i === 0 ? '48px 40px' : '36px 32px',
+                                        border: '1px solid var(--border)',
+                                        boxShadow: 'var(--shadow-sm)',
+                                        transition: 'box-shadow var(--dur-normal) var(--ease-out), transform var(--dur-normal) var(--ease-out)',
+                                        cursor: 'default',
+                                    }}
+                                >
+                                    <div style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '16px',
+                                        marginBottom: '16px',
+                                    }}>
+                                        <div style={{
+                                            width: '48px',
+                                            height: '48px',
+                                            borderRadius: 'var(--radius-md)',
+                                            background: 'var(--orange-50)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: 'var(--orange)',
+                                            flexShrink: 0,
+                                        }}>
+                                            <StrokeIcon
+                                                pathData={valueIcons[v.title as keyof typeof valueIcons]}
+                                                size={22}
+                                                className="about-value-icon"
+                                            />
+                                        </div>
+                                        <h3 style={{
+                                            fontFamily: 'var(--font-heading)',
+                                            fontSize: i === 0 ? 'var(--text-2xl)' : 'var(--text-xl)',
+                                            fontWeight: 700,
+                                            color: 'var(--text-primary)',
+                                        }}>
+                                            {v.title}
+                                        </h3>
+                                    </div>
+                                    <p style={{
+                                        fontSize: 'var(--text-base)',
+                                        lineHeight: 1.7,
+                                        color: 'var(--text-secondary)',
+                                        marginBottom: '12px',
+                                    }}>
+                                        {v.desc}
+                                    </p>
+                                    <span style={{
+                                        fontFamily: 'var(--font-mono)',
+                                        fontSize: 'var(--text-xs)',
+                                        color: 'var(--orange)',
+                                        letterSpacing: '0.04em',
+                                    }}>
+                                        {v.highlight}
                                     </span>
                                 </div>
-                                <div style={{ fontFamily: 'var(--font-heading)', fontSize: 14, fontWeight: 700, color: '#FAFAFA' }}>{m.label}</div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
+                {/* ══════════ SECTION 4: METRICS — Pattern #13 Dark Odometer ══════════ */}
+                <section
+                    ref={metricsRef}
+                    className="section dark-section"
+                    style={{
+                        background: 'var(--bg-dark)',
+                        color: 'var(--text-on-dark)',
+                    }}
+                >
+                    <div className="container">
+                        <div className="label-mono" style={{ marginBottom: '16px', textAlign: 'center' }}>
+                            By the Numbers
+                        </div>
+                        <h2 className="heading-2" style={{
+                            textAlign: 'center',
+                            marginBottom: '64px',
+                            color: 'var(--text-on-dark)',
+                        }}>
+                            Scaled globally, <span className="text-gradient">measured relentlessly</span>
+                        </h2>
+                        <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(4, 1fr)',
+                            gap: '32px',
+                        }}
+                            className="about-metrics-grid"
+                        >
+                            {metrics.map((m) => (
+                                <div
+                                    key={m.label}
+                                    className="about-metric"
+                                    style={{
+                                        textAlign: 'center',
+                                        padding: '40px 16px',
+                                        borderRadius: 'var(--radius-xl)',
+                                        background: 'var(--bg-dark-elevated)',
+                                        border: '1px solid var(--border-dark)',
+                                    }}
+                                >
+                                    <div style={{
+                                        fontFamily: 'var(--font-heading)',
+                                        fontSize: 'clamp(3rem, 6vw, 4.5rem)',
+                                        fontWeight: 900,
+                                        letterSpacing: '-0.03em',
+                                        lineHeight: 1,
+                                        marginBottom: '12px',
+                                        fontVariantNumeric: 'tabular-nums',
+                                    }}>
+                                        <span className="text-gradient">
+                                            <CountUp value={m.value} suffix={m.suffix} decimals={m.decimals || 0} />
+                                        </span>
+                                    </div>
+                                    <div style={{
+                                        fontFamily: 'var(--font-mono)',
+                                        fontSize: 'var(--text-xs)',
+                                        color: 'var(--text-on-dark-secondary)',
+                                        textTransform: 'uppercase' as const,
+                                        letterSpacing: '0.1em',
+                                    }}>
+                                        {m.label}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
+                {/* ══════════ SECTION 5: MILESTONES — Pattern #14 Horizontal Timeline ══════════ */}
+                <section
+                    ref={milestonesRef}
+                    className="section"
+                    style={{ background: 'var(--bg-primary)' }}
+                >
+                    <div className="container">
+                        <div className="label-mono" style={{ marginBottom: '16px' }}>Our Journey</div>
+                        <h2 className="heading-2" style={{ marginBottom: '64px', maxWidth: '500px' }}>
+                            From idea to <span className="text-gradient">10,000+ campaigns</span>
+                        </h2>
+
+                        <div className="about-timeline-wrap" style={{ position: 'relative' }}>
+                            {/* Horizontal line */}
+                            <div style={{
+                                position: 'absolute',
+                                top: '24px',
+                                left: '0',
+                                right: '0',
+                                height: '2px',
+                                background: 'var(--border)',
+                                borderRadius: '1px',
+                            }}>
+                                <div
+                                    className="about-timeline-line-fill"
+                                    style={{
+                                        position: 'absolute',
+                                        inset: 0,
+                                        background: 'var(--gradient-orange)',
+                                        borderRadius: '1px',
+                                    }}
+                                />
+                            </div>
+
+                            <div className="about-timeline-grid" style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(4, 1fr)',
+                                gap: '24px',
+                                position: 'relative',
+                            }}>
+                                {milestones.map((m, i) => (
+                                    <div key={i} style={{ paddingTop: '0' }}>
+                                        {/* Dot */}
+                                        <div
+                                            className="about-timeline-dot"
+                                            style={{
+                                                width: '14px',
+                                                height: '14px',
+                                                borderRadius: '50%',
+                                                background: 'var(--orange)',
+                                                border: '3px solid var(--bg-primary)',
+                                                boxShadow: '0 0 0 2px var(--orange)',
+                                                marginBottom: '24px',
+                                                position: 'relative',
+                                                zIndex: 2,
+                                            }}
+                                        />
+                                        {/* Content */}
+                                        <div className="about-timeline-card" style={{
+                                            background: 'var(--bg-white)',
+                                            borderRadius: 'var(--radius-lg)',
+                                            padding: '24px',
+                                            border: '1px solid var(--border)',
+                                            boxShadow: 'var(--shadow-sm)',
+                                        }}>
+                                            <div style={{
+                                                fontFamily: 'var(--font-mono)',
+                                                fontSize: 'var(--text-xs)',
+                                                color: 'var(--orange)',
+                                                letterSpacing: '0.08em',
+                                                fontWeight: 600,
+                                                marginBottom: '8px',
+                                            }}>
+                                                {m.quarter}
+                                            </div>
+                                            <h4 style={{
+                                                fontFamily: 'var(--font-heading)',
+                                                fontSize: 'var(--text-lg)',
+                                                fontWeight: 700,
+                                                marginBottom: '8px',
+                                                color: 'var(--text-primary)',
+                                            }}>
+                                                {m.event}
+                                            </h4>
+                                            <p style={{
+                                                fontSize: 'var(--text-sm)',
+                                                color: 'var(--text-secondary)',
+                                                lineHeight: 1.6,
+                                            }}>
+                                                {m.desc}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
-                    ))}
-                </div>
-            </section>
+                    </div>
+                </section>
 
-            {/* ═══ VALUES — Light ═══ */}
-            <section className="about-values-section light-section" style={{ padding: '120px 24px', background: 'var(--bg-surface)' }}>
-                <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-                    <div className="about-sec-head" style={{ textAlign: 'center', marginBottom: 56 }}>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Our Values</p>
-                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text-primary)' }}>What drives <span className="text-gradient">everything</span> we do</h2>
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, perspective: 1000 }}>
-                        {values.map((v, i) => (
-                            <div key={i} className="about-value-card" style={{ padding: '40px 36px', borderRadius: 24, background: i === 0 ? 'var(--bg-dark-primary)' : 'var(--bg-white)', border: `1px solid ${i === 0 ? 'rgba(255,107,0,0.15)' : 'var(--border-default)'}`, position: 'relative', overflow: 'hidden' }}>
-                                <span style={{ position: 'absolute', top: 16, right: 20, fontFamily: 'var(--font-heading)', fontSize: 56, fontWeight: 900, color: i === 0 ? 'rgba(255,107,0,0.06)' : 'rgba(0,0,0,0.03)', lineHeight: 1, pointerEvents: 'none' }}>{v.num}</span>
-                                <div style={{ width: 44, height: 44, borderRadius: 12, marginBottom: 20, background: i === 0 ? '#FF6B00' : 'var(--orange-light)', color: i === 0 ? '#fff' : 'var(--orange)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{v.icon}</div>
-                                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 22, fontWeight: 700, color: i === 0 ? '#fff' : 'var(--text-primary)', marginBottom: 10 }}>{v.title}</h3>
-                                <p style={{ fontSize: 15, color: i === 0 ? 'rgba(255,255,255,0.6)' : 'var(--text-secondary)', lineHeight: 1.75, marginBottom: 18 }}>{v.desc}</p>
-                                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 14px', borderRadius: 999, background: i === 0 ? 'rgba(255,107,0,0.12)' : 'var(--orange-light)', border: `1px solid ${i === 0 ? 'rgba(255,107,0,0.25)' : 'rgba(255,107,0,0.1)'}` }}>
-                                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#FF6B00' }} />
-                                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: i === 0 ? '#FF8533' : 'var(--orange)', letterSpacing: '0.03em' }}>{v.highlight}</span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* ═══ TEAM GALLERY — Dark ═══ */}
-            <section className="about-gallery-section dark-section" style={{ padding: '120px 24px', background: 'var(--bg-dark-primary)' }}>
-                <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-                    <div className="about-sec-head" style={{ textAlign: 'center', marginBottom: 56 }}>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#FF8533', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Our Team</p>
-                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)', fontWeight: 800, letterSpacing: '-0.03em', color: '#FAFAFA' }}>Meet the <span className="text-gradient">people</span> behind the AI</h2>
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gridTemplateRows: 'auto auto', gap: 16 }}>
-                        {teamPhotos.map((photo, i) => <PhotoCard key={i} photo={photo} index={i} />)}
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: 56, marginTop: 48, paddingTop: 36, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-                        {[{ val: '30+', label: 'Team Members' }, { val: '8', label: 'Countries' }, { val: '4.9/5', label: 'Glassdoor' }, { val: '95%', label: 'Retention' }].map((s, i) => (
-                            <div key={i} style={{ textAlign: 'center' }}>
-                                <div style={{ fontFamily: 'var(--font-heading)', fontSize: 26, fontWeight: 800, color: '#FF6B00' }}>{s.val}</div>
-                                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-dark-muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: 4 }}>{s.label}</div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* ═══ TIMELINE — Light ═══ */}
-            <section className="about-timeline-section light-section" style={{ padding: '120px 24px', background: 'var(--bg-surface)' }}>
-                <div style={{ maxWidth: 900, margin: '0 auto' }}>
-                    <div className="about-sec-head" style={{ textAlign: 'center', marginBottom: 64 }}>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Our Journey</p>
-                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text-primary)' }}>How we got <span className="text-gradient">here</span></h2>
-                    </div>
-                    <div style={{ position: 'relative', paddingLeft: 48 }}>
-                        <div style={{ position: 'absolute', left: 15, top: 0, bottom: 0, width: 2, background: 'var(--border-default)' }}>
-                            <div className="about-tl-line" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '100%', background: 'linear-gradient(180deg, var(--orange), rgba(255,107,0,0.15))', transformOrigin: 'top' }} />
+                {/* ══════════ SECTION 6: TEAM GALLERY ══════════ */}
+                <section
+                    ref={galleryRef}
+                    className="section"
+                    style={{ background: 'var(--bg-warm)' }}
+                >
+                    <div className="container">
+                        <div className="label-mono" style={{ marginBottom: '16px', textAlign: 'center' }}>
+                            Our People
                         </div>
-                        {milestones.map((m, i) => (
-                            <div key={i} className="about-tl-item" style={{ position: 'relative', marginBottom: i < milestones.length - 1 ? 48 : 0 }}>
-                                <div style={{ position: 'absolute', left: -41, top: 8, width: 14, height: 14, borderRadius: '50%', background: m.color, border: '3px solid var(--bg-surface)', boxShadow: `0 0 0 2px ${m.color}33` }} />
-                                <div style={{ padding: '28px 32px', borderRadius: 20, background: 'var(--bg-white)', border: '1px solid var(--border-default)' }}>
-                                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: m.color, padding: '3px 10px', borderRadius: 999, border: `1px solid ${m.color}25`, background: `${m.color}08`, letterSpacing: '0.06em', fontWeight: 600 }}>{m.year} {m.quarter}</span>
-                                    <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 20, fontWeight: 700, color: 'var(--text-primary)', marginTop: 14, marginBottom: 8 }}>{m.event}</h3>
-                                    <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7 }}>{m.desc}</p>
+                        <h2 className="heading-2" style={{ textAlign: 'center', marginBottom: '48px' }}>
+                            The faces behind the platform
+                        </h2>
+                        <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(4, 1fr)',
+                            gap: '20px',
+                        }}
+                            className="about-gallery-grid"
+                        >
+                            {teamPhotos.map((photo) => (
+                                <div
+                                    key={photo.label}
+                                    className="about-gallery-item"
+                                    style={{
+                                        borderRadius: 'var(--radius-xl)',
+                                        overflow: 'hidden',
+                                        position: 'relative',
+                                        aspectRatio: '3/4',
+                                        background: 'var(--bg-surface)',
+                                        border: '1px solid var(--border)',
+                                    }}
+                                >
+                                    <img
+                                        src={photo.src}
+                                        alt={photo.label}
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'cover',
+                                            display: 'block',
+                                        }}
+                                        loading="lazy"
+                                    />
+                                    <div style={{
+                                        position: 'absolute',
+                                        bottom: 0,
+                                        left: 0,
+                                        right: 0,
+                                        padding: '32px 20px 20px',
+                                        background: 'linear-gradient(to top, rgba(0,0,0,0.7), transparent)',
+                                    }}>
+                                        <div style={{
+                                            fontFamily: 'var(--font-heading)',
+                                            fontWeight: 700,
+                                            fontSize: 'var(--text-base)',
+                                            color: '#fff',
+                                            marginBottom: '4px',
+                                        }}>
+                                            {photo.label}
+                                        </div>
+                                        <div style={{
+                                            fontSize: 'var(--text-xs)',
+                                            color: 'rgba(255,255,255,0.7)',
+                                        }}>
+                                            {photo.desc}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* ═══ CULTURE — Dark with 3D ═══ */}
-            <section className="about-culture-section dark-section" style={{ padding: '120px 24px', background: 'var(--bg-dark-elevated)', position: 'relative', overflow: 'hidden' }}>
-                <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.4 }}>
-                    <Suspense fallback={null}>
-                        <Canvas camera={{ position: [0, 0, 5], fov: 50 }} style={{ width: '100%', height: '100%' }} gl={{ alpha: true }}>
-                            <ParticleCloud />
-                        </Canvas>
-                    </Suspense>
-                </div>
-                <div style={{ maxWidth: 1000, margin: '0 auto', position: 'relative', zIndex: 1 }}>
-                    <div className="about-sec-head" style={{ textAlign: 'center', marginBottom: 56 }}>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#FF8533', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Culture</p>
-                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)', fontWeight: 800, letterSpacing: '-0.03em', color: '#FFFFFF' }}>How we <span className="text-gradient">work</span></h2>
+                {/* ══════════ SECTION 7: CULTURE — Pattern #16 Hexagonal Honeycomb ══════════ */}
+                <section
+                    ref={cultureRef}
+                    className="section"
+                    style={{ background: 'var(--bg-primary)' }}
+                >
+                    <div className="container">
+                        <div className="label-mono" style={{ marginBottom: '16px', textAlign: 'center' }}>
+                            Our Culture
+                        </div>
+                        <h2 className="heading-2" style={{ textAlign: 'center', marginBottom: '64px' }}>
+                            How we work together
+                        </h2>
+                        <div className="about-hex-grid">
+                            {cultureItems.map((item) => (
+                                <div key={item.title} className="about-hex-item">
+                                    <div className="about-hex-shape">
+                                        <div className="about-hex-content">
+                                            <svg
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="var(--orange)"
+                                                strokeWidth="1.5"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                style={{ marginBottom: '12px' }}
+                                            >
+                                                <path d={item.iconPath} />
+                                            </svg>
+                                            <h4 style={{
+                                                fontFamily: 'var(--font-heading)',
+                                                fontWeight: 700,
+                                                fontSize: 'var(--text-base)',
+                                                color: 'var(--text-primary)',
+                                                marginBottom: '6px',
+                                            }}>
+                                                {item.title}
+                                            </h4>
+                                            <p style={{
+                                                fontSize: 'var(--text-xs)',
+                                                color: 'var(--text-secondary)',
+                                                lineHeight: 1.5,
+                                            }}>
+                                                {item.desc}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, perspective: 1000 }}>
-                        {cultureItems.map((item, i) => (
-                            <div key={i} className="about-culture-card" style={{ padding: '32px 24px', borderRadius: 20, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(8px)', cursor: 'default' }}>
-                                <div style={{ width: 40, height: 40, borderRadius: 12, marginBottom: 14, background: 'rgba(255,107,0,0.1)', color: '#FF8533', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{item.icon}</div>
-                                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 17, fontWeight: 700, color: '#FFFFFF', marginBottom: 8 }}>{item.title}</h3>
-                                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.7 }}>{item.desc}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+                </section>
 
-            {/* ═══ CTA — Light ═══ */}
-            <section className="about-cta-section light-section" style={{ padding: '120px 24px', background: 'var(--bg-surface)' }}>
-                <div className="about-cta-content" style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center', padding: '64px 48px', borderRadius: 32, background: 'var(--bg-white)', border: '1px solid var(--border-default)', boxShadow: '0 8px 40px rgba(0,0,0,0.04)', position: 'relative' }}>
-                    <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: 100, height: 3, borderRadius: '0 0 3px 3px', background: 'linear-gradient(90deg, #FF6B00, #F59E0B)' }} />
-                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Join Us</p>
-                    <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text-primary)', marginBottom: 20 }}>Ready to build the <span className="text-gradient">future</span>?</h2>
-                    <p style={{ fontSize: 16, color: 'var(--text-secondary)', maxWidth: 440, margin: '0 auto 36px', lineHeight: 1.7 }}>We&apos;re looking for exceptional people who want to push the boundaries of AI marketing.</p>
-                    <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
-                        <a href="/careers" className="btn-primary" style={{ textDecoration: 'none' }}>View Open Positions <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-                        <a href="/contact" className="btn-outline" style={{ textDecoration: 'none' }}>Get in Touch</a>
+                {/* ══════════ SECTION 8: CTA — Magnetic + Scramble ══════════ */}
+                <section
+                    ref={ctaRef}
+                    className="section"
+                    style={{
+                        background: 'var(--bg-warm)',
+                        textAlign: 'center',
+                    }}
+                >
+                    <div className="container about-cta-inner">
+                        <div className="label-mono" style={{ marginBottom: '16px' }}>
+                            Ready to Start?
+                        </div>
+                        <h2 className="heading-1" style={{ marginBottom: '20px', maxWidth: '700px', margin: '0 auto 20px' }}>
+                            Let AI handle your marketing
+                        </h2>
+                        <p className="body-lg" style={{ maxWidth: '520px', margin: '0 auto 40px' }}>
+                            Join thousands of businesses using OpenAnalyst to plan, launch,
+                            and optimize campaigns automatically.
+                        </p>
+                        <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                            <Magnetic strength={0.2}>
+                                <a
+                                    href="https://app.openanalyst.com"
+                                    className="btn-primary"
+                                    onMouseEnter={scramble}
+                                    style={{ fontSize: 'var(--text-base)', padding: '16px 40px' }}
+                                >
+                                    <span ref={scrambleRef} data-text="Start Free Trial">
+                                        Start Free Trial
+                                    </span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M5 12h14M12 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                            </Magnetic>
+                            <Magnetic strength={0.15}>
+                                <a href="/careers" className="btn-outline" style={{ fontSize: 'var(--text-base)', padding: '16px 40px' }}>
+                                    We&apos;re Hiring
+                                </a>
+                            </Magnetic>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
+            </main>
             <Footer />
 
             <style>{`
-                @media (max-width: 768px) {
-                    section > div > div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
-                    section > div > div[style*="grid-template-columns: 1.2fr"] { grid-template-columns: 1fr !important; }
-                    section > div > div[style*="grid-template-columns: repeat(3"] { grid-template-columns: 1fr !important; }
-                    div[style*="gap: 56px"][style*="border-top"] { flex-wrap: wrap !important; gap: 24px 32px !important; }
-                    div[style*="gap: 40px"][style*="border-top"] { flex-wrap: wrap !important; gap: 20px !important; justify-content: center !important; }
-                    .about-metrics-section > div { flex-wrap: wrap !important; }
-                    .about-metric { flex: 0 0 50% !important; margin-bottom: 24px !important; }
+                /* ── Values Bento Grid (Asymmetric) ── */
+                .about-values-grid {
+                    display: grid;
+                    grid-template-columns: 1.4fr 1fr;
+                    grid-template-rows: auto auto;
+                    gap: 20px;
                 }
-                @media (max-width: 480px) { .about-metric { flex: 0 0 100% !important; } }
-                @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+                .about-value-card-0 {
+                    grid-column: 1;
+                    grid-row: 1 / 3;
+                }
+                .about-value-card-1 {
+                    grid-column: 2;
+                    grid-row: 1;
+                }
+                .about-value-card-2 {
+                    grid-column: 2;
+                    grid-row: 2;
+                }
+                .about-value-card-3 {
+                    grid-column: 1 / 3;
+                    grid-row: 3;
+                }
+                .about-value-card:hover {
+                    box-shadow: var(--shadow-lg) !important;
+                    transform: translateY(-4px);
+                }
+
+                /* ── Hex Grid ── */
+                .about-hex-grid {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 16px;
+                    max-width: 720px;
+                    margin: 0 auto;
+                }
+                .about-hex-item {
+                    display: flex;
+                    justify-content: center;
+                }
+                .about-hex-item:nth-child(4),
+                .about-hex-item:nth-child(5),
+                .about-hex-item:nth-child(6) {
+                    /* offset 2nd row for honeycomb */
+                }
+                .about-hex-shape {
+                    width: 200px;
+                    height: 220px;
+                    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+                    background: var(--bg-white);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: transform var(--dur-normal) var(--ease-out), background var(--dur-normal) ease;
+                }
+                .about-hex-shape:hover {
+                    transform: scale(1.05);
+                    background: var(--orange-light);
+                }
+                .about-hex-content {
+                    text-align: center;
+                    padding: 32px 20px;
+                }
+
+                /* ── Timeline responsive ── */
+                @media (max-width: 768px) {
+                    .about-timeline-grid {
+                        grid-template-columns: repeat(2, 1fr) !important;
+                    }
+                    .about-metrics-grid {
+                        grid-template-columns: repeat(2, 1fr) !important;
+                    }
+                    .about-gallery-grid {
+                        grid-template-columns: repeat(2, 1fr) !important;
+                    }
+                    .about-values-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                    .about-value-card-0,
+                    .about-value-card-1,
+                    .about-value-card-2,
+                    .about-value-card-3 {
+                        grid-column: 1 !important;
+                        grid-row: auto !important;
+                    }
+                    .about-hex-grid {
+                        grid-template-columns: repeat(2, 1fr) !important;
+                    }
+                    .about-hex-shape {
+                        width: 160px;
+                        height: 180px;
+                    }
+                }
+                @media (max-width: 480px) {
+                    .about-timeline-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                    .about-metrics-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                    .about-gallery-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                    .about-hex-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                    .about-hex-shape {
+                        width: 180px;
+                        height: 200px;
+                    }
+                }
             `}</style>
-        </div>
+        </>
     );
 }

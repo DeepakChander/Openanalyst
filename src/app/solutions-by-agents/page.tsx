@@ -44,30 +44,31 @@ export default function SolutionsPage() {
     }, []);
 
     useGSAP(() => {
-        gsap.from('.sol-hero-label', { y: 16, opacity: 0, duration: 0.5, delay: 0.2 });
-        gsap.from('.sol-hero-line', { y: 80, opacity: 0, stagger: 0.12, duration: 1, ease: 'power4.out', delay: 0.3 });
-        gsap.from('.sol-hero-sub', { y: 24, opacity: 0, duration: 0.7, delay: 0.8 });
+        gsap.fromTo('.sol-hero-label', { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, delay: 0.2 });
+        gsap.fromTo('.sol-hero-line', { y: 80, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.12, duration: 1, ease: 'power4.out', delay: 0.3 });
+        gsap.fromTo('.sol-hero-sub', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, delay: 0.8 });
 
-        gsap.from('.sol-featured', { y: 60, opacity: 0, filter: 'blur(4px)', duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.sol-featured', start: 'top 85%' } });
+        gsap.fromTo('.sol-featured', { y: 60, opacity: 0, filter: 'blur(4px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.sol-featured', start: 'top 85%' } });
 
-        gsap.from('.sol-agent-card', { y: 50, opacity: 0, scale: 0.95, stagger: 0.08, duration: 0.6, ease: 'back.out(1.2)', scrollTrigger: { trigger: '.sol-agents-grid', start: 'top 85%' } });
+        gsap.fromTo('.sol-agent-card', { y: 50, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, scale: 1, stagger: 0.08, duration: 0.6, ease: 'back.out(1.2)', scrollTrigger: { trigger: '.sol-agents-grid', start: 'top 85%' } });
 
-        gsap.from('.sol-cta-content', { y: 40, opacity: 0, duration: 0.8, scrollTrigger: { trigger: '.sol-cta', start: 'top 85%' } });
+        gsap.fromTo('.sol-cta-content', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, scrollTrigger: { trigger: '.sol-cta', start: 'top 85%' } });
     }, { scope: pageRef });
 
     return (
         <div ref={pageRef} style={{ minHeight: '100vh' }}>
             <Header />
 
-            {/* ═══ HERO — Dark ═══ */}
-            <section className="dark-section" style={{ paddingTop: 160, paddingBottom: 80, background: 'var(--bg-dark-primary)', position: 'relative', overflow: 'hidden' }}>
-                <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '80px 80px', maskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)', WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)' }} />
+            {/* ═══ HERO — Light ═══ */}
+            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 80, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}>
+                {/* Decorative grid */}
+                <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px)', backgroundSize: '80px 80px', maskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)', WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)' }} />
                 <div style={{ position: 'absolute', top: '10%', right: '20%', width: 500, height: 500, borderRadius: '50%', background: 'rgba(255,107,0,0.04)', filter: 'blur(100px)', pointerEvents: 'none' }} />
 
                 <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 24px', textAlign: 'center', position: 'relative', zIndex: 2 }}>
                     <div className="sol-hero-label" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px', borderRadius: 999, marginBottom: 32, border: '1px solid rgba(255,107,0,0.2)', background: 'rgba(255,107,0,0.06)' }}>
                         <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF6B00', boxShadow: '0 0 8px rgba(255,107,0,0.5)' }} />
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#FF8533', textTransform: 'uppercase', letterSpacing: '0.1em' }}>AI Agents</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#FF6B00', textTransform: 'uppercase', letterSpacing: '0.1em' }}>AI Agents</span>
                     </div>
 
                     <h1>
@@ -76,13 +77,13 @@ export default function SolutionsPage() {
                                 <span className="sol-hero-line" style={{
                                     display: 'block', fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.8rem, 6vw, 5rem)',
                                     fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.04em',
-                                    ...(i === 1 ? { background: 'var(--gradient-hero)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' } : { color: '#FAFAFA' }),
+                                    ...(i === 1 ? { background: 'linear-gradient(135deg, #FF6B00 0%, #FF8533 40%, #F59E0B 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' } : { color: 'var(--text-primary)' }),
                                 }}>{line}</span>
                             </span>
                         ))}
                     </h1>
 
-                    <p className="sol-hero-sub" style={{ maxWidth: 520, margin: '28px auto 0', fontSize: 'clamp(1rem, 1.4vw, 1.1rem)', color: 'var(--text-dark-secondary)', lineHeight: 1.8 }}>
+                    <p className="sol-hero-sub" style={{ maxWidth: 520, margin: '28px auto 0', fontSize: 'clamp(1rem, 1.4vw, 1.1rem)', color: 'var(--text-secondary)', lineHeight: 1.8 }}>
                         Deploy specialized AI marketing agents tailored for your campaigns and growth goals. Each agent is a complete specialist.
                     </p>
                 </div>
@@ -93,8 +94,8 @@ export default function SolutionsPage() {
                 <div style={{ maxWidth: 1100, margin: '0 auto' }}>
                     <div className="sol-featured" style={{
                         display: 'grid', gridTemplateColumns: '1.3fr 0.7fr', gap: 0,
-                        borderRadius: 24, overflow: 'hidden', border: '1px solid var(--border-default)',
-                        boxShadow: '0 16px 48px rgba(0,0,0,0.06)',
+                        borderRadius: 24, overflow: 'hidden', border: '1px solid var(--border)',
+                        boxShadow: 'var(--shadow-lg)',
                     }}>
                         {/* Left — Info */}
                         <div style={{ padding: '48px 44px', background: 'var(--bg-white)' }}>
@@ -112,7 +113,7 @@ export default function SolutionsPage() {
                             {/* Capabilities */}
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 28 }}>
                                 {featuredAgent.capabilities.map((cap) => (
-                                    <span key={cap} style={{ padding: '5px 12px', borderRadius: 999, background: 'var(--bg-surface)', border: '1px solid var(--border-default)', fontSize: 12, color: 'var(--text-secondary)', fontWeight: 500 }}>{cap}</span>
+                                    <span key={cap} style={{ padding: '5px 12px', borderRadius: 999, background: 'var(--bg-surface)', border: '1px solid var(--border)', fontSize: 12, color: 'var(--text-secondary)', fontWeight: 500 }}>{cap}</span>
                                 ))}
                             </div>
 
@@ -122,12 +123,12 @@ export default function SolutionsPage() {
                         </div>
 
                         {/* Right — Stats panel (dark invert) */}
-                        <div style={{ padding: '48px 36px', background: 'var(--bg-dark-primary)', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 24 }}>
-                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-dark-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Performance</p>
+                        <div style={{ padding: '48px 36px', background: 'var(--bg-dark)', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 24 }}>
+                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-on-dark-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Performance</p>
                             {featuredAgent.stats.map((stat) => (
                                 <div key={stat.label} style={{ padding: '20px', borderRadius: 16, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
                                     <div style={{ fontFamily: 'var(--font-heading)', fontSize: 28, fontWeight: 800, color: stat.color, marginBottom: 4, letterSpacing: '-0.02em' }}>{stat.value}</div>
-                                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-dark-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{stat.label}</div>
+                                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-on-dark-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{stat.label}</div>
                                 </div>
                             ))}
                         </div>
@@ -135,12 +136,12 @@ export default function SolutionsPage() {
                 </div>
             </section>
 
-            {/* ═══ OTHER AGENTS — Dark Bento Grid ═══ */}
-            <section className="dark-section" style={{ padding: '100px 24px', background: 'var(--bg-dark-primary)' }}>
+            {/* ═══ OTHER AGENTS — Light Bento Grid ═══ */}
+            <section className="light-section" style={{ padding: '100px 24px', background: 'var(--bg-white)' }}>
                 <div style={{ maxWidth: 1100, margin: '0 auto' }}>
                     <div style={{ textAlign: 'center', marginBottom: 56 }}>
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#FF8533', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Specialist Agents</p>
-                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: '#FAFAFA', letterSpacing: '-0.03em' }}>
+                        <p className="label-mono" style={{ color: 'var(--orange)', marginBottom: 12 }}>Specialist Agents</p>
+                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>
                             Your <span className="text-gradient">complete</span> AI marketing team
                         </h2>
                     </div>
@@ -153,28 +154,26 @@ export default function SolutionsPage() {
                                     <div onMouseMove={handleCardHover} onMouseLeave={handleCardLeave} style={{ willChange: 'transform', transformStyle: 'preserve-3d', height: '100%' }}>
                                         <div style={{
                                             padding: 28, borderRadius: 20,
-                                            background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+                                            background: 'var(--bg-surface)', border: '1px solid var(--border)',
                                             transition: 'all 0.3s ease', height: '100%',
                                             display: 'flex', flexDirection: 'column', cursor: 'default',
                                         }}
                                             onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${agent.color}40`; e.currentTarget.style.boxShadow = `0 8px 32px ${agent.color}15`; }}
-                                            onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.boxShadow = 'none'; }}
+                                            onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.boxShadow = 'none'; }}
                                         >
                                             {/* Header */}
                                             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-                                                <div style={{ width: 36, height: 36, borderRadius: 10, background: `${agent.color}15`, border: `1px solid ${agent.color}25`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={agent.color} strokeWidth="2"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z"/></svg>
-                                                </div>
+                                                <div style={{ width: 10, height: 10, borderRadius: '50%', background: agent.color, boxShadow: `0 0 8px ${agent.color}40`, flexShrink: 0 }} />
                                                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700, color: agent.color, padding: '3px 8px', borderRadius: 6, background: `${agent.color}10` }}>{agent.metric}</span>
                                             </div>
 
-                                            <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 18, fontWeight: 700, color: '#FAFAFA', marginBottom: 8 }}>{agent.name}</h3>
-                                            <p style={{ fontSize: 13, color: 'var(--text-dark-secondary)', lineHeight: 1.7, marginBottom: 16, flex: 1 }}>{agent.desc}</p>
+                                            <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 18, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 8 }}>{agent.name}</h3>
+                                            <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: 16, flex: 1 }}>{agent.desc}</p>
 
                                             {/* Capability tags */}
                                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                                                 {agent.capabilities.map((cap) => (
-                                                    <span key={cap} style={{ padding: '3px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', fontSize: 10, color: 'var(--text-dark-muted)', fontFamily: 'var(--font-mono)' }}>{cap}</span>
+                                                    <span key={cap} style={{ padding: '3px 10px', borderRadius: 999, background: 'var(--bg-white)', border: '1px solid var(--border)', fontSize: 10, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>{cap}</span>
                                                 ))}
                                             </div>
                                         </div>

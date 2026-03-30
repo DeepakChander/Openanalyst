@@ -2,8 +2,11 @@
 
 import { useState, useRef } from 'react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Header, Footer } from '@/components';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function ContactPage() {
     const [name, setName] = useState('');
@@ -16,11 +19,12 @@ export default function ContactPage() {
     const successRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
-        gsap.from('.ct-hero-label', { y: 16, opacity: 0, duration: 0.5, delay: 0.2 });
-        gsap.from('.ct-hero-line', { y: 80, opacity: 0, stagger: 0.12, duration: 1, ease: 'power4.out', delay: 0.3 });
-        gsap.from('.ct-hero-sub', { y: 20, opacity: 0, duration: 0.6, delay: 0.8 });
-        gsap.from('.ct-left', { y: 40, opacity: 0, duration: 0.7, ease: 'power3.out', delay: 0.4 });
-        gsap.from('.ct-right', { y: 40, opacity: 0, duration: 0.7, ease: 'power3.out', delay: 0.5 });
+        gsap.fromTo('.ct-hero-badge', { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, delay: 0.2, ease: 'back.out(1.4)' });
+        gsap.fromTo('.ct-hero-heading', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, delay: 0.35, ease: 'power4.out' });
+        gsap.fromTo('.ct-hero-sub', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, delay: 0.6 });
+        gsap.fromTo('.ct-left', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: '.ct-left', start: 'top 88%' } });
+        gsap.fromTo('.ct-right', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: '.ct-right', start: 'top 88%' } });
+        gsap.fromTo('.ct-map-section', { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: '.ct-map-section', start: 'top 88%' } });
     }, { scope: pageRef });
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -37,7 +41,7 @@ export default function ContactPage() {
             if (!response.ok) throw new Error('Something went wrong.');
             setIsSubmitted(true);
             if (successRef.current) {
-                gsap.from(successRef.current, { scale: 0.8, y: 20, opacity: 0, duration: 0.6, ease: 'back.out(1.4)' });
+                gsap.fromTo(successRef.current, { scale: 0.8, y: 20, opacity: 0 }, { scale: 1, y: 0, opacity: 1, duration: 0.6, ease: 'back.out(1.4)' });
             }
         } catch {
             setError('Something went wrong. Please try again.');
@@ -46,41 +50,35 @@ export default function ContactPage() {
         }
     };
 
-    const inputStyle = (focused: boolean): React.CSSProperties => ({
+    const inputStyle: React.CSSProperties = {
         width: '100%', padding: '18px 16px 8px',
-        backgroundColor: 'var(--bg-white)', border: `1px solid ${focused ? 'var(--orange)' : 'var(--border-default)'}`,
+        backgroundColor: 'var(--bg-white)', border: '1px solid var(--border)',
         borderRadius: 12, color: 'var(--text-primary)', fontSize: 14,
         fontFamily: 'var(--font-body)', outline: 'none',
         transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
-        boxShadow: focused ? '0 0 0 3px rgba(255,107,0,0.08)' : 'none',
-    });
+    };
 
     return (
         <div ref={pageRef} style={{ minHeight: '100vh' }}>
             <Header />
 
-            {/* ═══ HERO — Dark ═══ */}
-            <section className="dark-section" style={{ paddingTop: 160, paddingBottom: 60, background: 'var(--bg-dark-primary)', position: 'relative', overflow: 'hidden' }}>
-                <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '80px 80px', maskImage: 'radial-gradient(ellipse 50% 60% at 50% 50%, black 0%, transparent 70%)', WebkitMaskImage: 'radial-gradient(ellipse 50% 60% at 50% 50%, black 0%, transparent 70%)' }} />
-                <div style={{ position: 'absolute', top: '20%', left: '40%', width: 500, height: 500, borderRadius: '50%', background: 'rgba(255,107,0,0.04)', filter: 'blur(100px)', pointerEvents: 'none' }} />
+            {/* ═══ HERO — Light (left-aligned with decorative circle) ═══ */}
+            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 60, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ position: 'absolute', top: -100, right: -100, width: 500, height: 500, borderRadius: '50%', border: '1px solid rgba(255,107,0,0.08)', pointerEvents: 'none' }} />
+                <div style={{ position: 'absolute', top: -50, right: -50, width: 400, height: 400, borderRadius: '50%', border: '1px solid rgba(255,107,0,0.05)', pointerEvents: 'none' }} />
+                <div style={{ position: 'absolute', top: '30%', left: '10%', width: 300, height: 300, borderRadius: '50%', background: 'rgba(255,107,0,0.03)', filter: 'blur(80px)', pointerEvents: 'none' }} />
 
                 <div style={{ maxWidth: 700, margin: '0 auto', padding: '0 24px', textAlign: 'center', position: 'relative', zIndex: 2 }}>
-                    <div className="ct-hero-label" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px', borderRadius: 999, marginBottom: 32, border: '1px solid rgba(255,107,0,0.2)', background: 'rgba(255,107,0,0.06)' }}>
-                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF6B00', boxShadow: '0 0 8px rgba(255,107,0,0.5)' }} />
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#FF8533', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Contact</span>
+                    <div className="ct-hero-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 20px', borderRadius: 999, marginBottom: 28, background: 'var(--orange-light)', border: '1px solid rgba(255,107,0,0.15)' }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13L2 4"/></svg>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#FF6B00', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600 }}>Contact</span>
                     </div>
-                    <h1>
-                        {['Get in', 'Touch'].map((line, i) => (
-                            <span key={i} style={{ display: 'block', overflow: 'hidden' }}>
-                                <span className="ct-hero-line" style={{
-                                    display: 'block', fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.8rem, 6vw, 5rem)',
-                                    fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.04em',
-                                    ...(i === 1 ? { background: 'var(--gradient-hero)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' } : { color: '#FAFAFA' }),
-                                }}>{line}</span>
-                            </span>
-                        ))}
+
+                    <h1 className="ct-hero-heading" style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.8rem, 6vw, 5rem)', fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.04em', color: 'var(--text-primary)', marginBottom: 0 }}>
+                        Get in <span style={{ background: 'linear-gradient(135deg, #FF6B00 0%, #FF8533 40%, #F59E0B 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Touch</span>
                     </h1>
-                    <p className="ct-hero-sub" style={{ maxWidth: 480, margin: '24px auto 0', fontSize: 16, color: 'var(--text-dark-secondary)', lineHeight: 1.7 }}>
+
+                    <p className="ct-hero-sub" style={{ maxWidth: 480, margin: '24px auto 0', fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.7 }}>
                         Have questions about our AI marketing agents? We&apos;d love to hear from you.
                     </p>
                 </div>
@@ -92,7 +90,7 @@ export default function ContactPage() {
                     <div className="contact-split-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.3fr', gap: 32, alignItems: 'start' }}>
                         {/* Left — Info */}
                         <div className="ct-left">
-                            <div style={{ padding: 36, borderRadius: 20, background: 'var(--bg-white)', border: '1px solid var(--border-default)' }}>
+                            <div style={{ padding: 36, borderRadius: 20, background: 'var(--bg-white)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}>
                                 <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 22, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 12 }}>Let&apos;s talk</h3>
                                 <p style={{ fontSize: 15, color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: 32 }}>
                                     Whether you&apos;re exploring AI marketing or ready to deploy, we&apos;re here to help.
@@ -116,7 +114,7 @@ export default function ContactPage() {
                                         </div>
                                     ))}
 
-                                    <div style={{ borderTop: '1px solid var(--border-default)', paddingTop: 20, marginTop: 8 }}>
+                                    <div style={{ borderTop: '1px solid var(--border)', paddingTop: 20, marginTop: 8 }}>
                                         <p style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Follow us</p>
                                         <div style={{ display: 'flex', gap: 8 }}>
                                             {[
@@ -126,13 +124,13 @@ export default function ContactPage() {
                                             ].map((social) => (
                                                 <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" style={{
                                                     width: 40, height: 40, borderRadius: 12,
-                                                    background: 'var(--bg-surface)', border: '1px solid var(--border-default)',
+                                                    background: 'var(--bg-surface)', border: '1px solid var(--border)',
                                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                                                     fontSize: 13, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)',
                                                     textDecoration: 'none', transition: 'all 0.3s ease', fontWeight: 600,
                                                 }}
                                                     onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#FF6B00'; e.currentTarget.style.color = '#FF6B00'; }}
-                                                    onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-default)'; e.currentTarget.style.color = 'var(--text-muted)'; }}
+                                                    onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-muted)'; }}
                                                 >{social.label}</a>
                                             ))}
                                         </div>
@@ -143,7 +141,7 @@ export default function ContactPage() {
 
                         {/* Right — Form */}
                         <div className="ct-right">
-                            <div style={{ padding: 36, borderRadius: 20, background: 'var(--bg-white)', border: '1px solid var(--border-default)', position: 'relative', overflow: 'hidden' }}>
+                            <div style={{ padding: 36, borderRadius: 20, background: 'var(--bg-white)', border: '1px solid var(--border)', position: 'relative', overflow: 'hidden', boxShadow: 'var(--shadow-sm)' }}>
                                 <form onSubmit={handleSubmit} style={{ opacity: isSubmitted ? 0.15 : 1, filter: isSubmitted ? 'blur(2px)' : 'none', transition: 'all 0.4s ease', pointerEvents: isSubmitted ? 'none' : 'auto' }}>
                                     {[
                                         { id: 'name', label: 'Your name', type: 'text', value: name, onChange: setName },
@@ -151,23 +149,23 @@ export default function ContactPage() {
                                     ].map((field) => (
                                         <div key={field.id} className="floating-field" style={{ marginBottom: 24, position: 'relative' }}>
                                             <input type={field.type} id={field.id} value={field.value} onChange={(e) => field.onChange(e.target.value)} required placeholder=" "
-                                                style={inputStyle(false)}
+                                                style={inputStyle}
                                                 onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--orange)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(255,107,0,0.08)'; }}
-                                                onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--border-default)'; e.currentTarget.style.boxShadow = 'none'; }}
+                                                onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.boxShadow = 'none'; }}
                                             />
                                             <label htmlFor={field.id} style={{ position: 'absolute', left: 16, top: 14, fontSize: 13, color: 'var(--text-muted)', pointerEvents: 'none', transition: 'all 0.2s ease' }}>{field.label}</label>
                                         </div>
                                     ))}
                                     <div className="floating-field" style={{ marginBottom: 24, position: 'relative' }}>
                                         <textarea id="message" rows={4} value={message} onChange={(e) => setMessage(e.target.value)} required placeholder=" "
-                                            style={{ ...inputStyle(false), resize: 'vertical' }}
+                                            style={{ ...inputStyle, resize: 'vertical' }}
                                             onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--orange)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(255,107,0,0.08)'; }}
-                                            onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--border-default)'; e.currentTarget.style.boxShadow = 'none'; }}
+                                            onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.boxShadow = 'none'; }}
                                         />
                                         <label htmlFor="message" style={{ position: 'absolute', left: 16, top: 14, fontSize: 13, color: 'var(--text-muted)', pointerEvents: 'none', transition: 'all 0.2s ease' }}>Your message</label>
                                     </div>
 
-                                    {error && <p style={{ color: 'var(--error)', fontSize: 13, marginBottom: 12, fontFamily: 'var(--font-mono)' }}>{error}</p>}
+                                    {error && <p style={{ color: '#EF4444', fontSize: 13, marginBottom: 12, fontFamily: 'var(--font-mono)' }}>{error}</p>}
 
                                     <button type="submit" disabled={isSubmitting} className="btn-primary" style={{
                                         width: '100%', justifyContent: 'center', fontSize: 15, padding: '14px',
@@ -196,17 +194,16 @@ export default function ContactPage() {
                 </div>
             </section>
 
-            {/* ═══ GLOBAL PRESENCE — Dark (Pure Code Map) ═══ */}
-            <section className="dark-section" style={{ padding: '80px 24px', background: 'var(--bg-dark-primary)', position: 'relative', overflow: 'hidden' }}>
+            {/* ═══ GLOBAL PRESENCE — Dark (max 1 dark section) ═══ */}
+            <section className="dark-section ct-map-section" style={{ padding: '80px 24px', background: 'var(--bg-dark)', position: 'relative', overflow: 'hidden' }}>
                 <div style={{ maxWidth: 1000, margin: '0 auto', textAlign: 'center' }}>
-                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#FF8533', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>Global Presence</p>
+                    <p className="label-mono" style={{ color: '#FF8533', marginBottom: 12 }}>Global Presence</p>
                     <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800, color: '#FAFAFA', marginBottom: 32, letterSpacing: '-0.02em' }}>
                         Serving teams in <span className="text-gradient">150+ countries</span>
                     </h2>
                     {/* SVG World Map with dot matrix + city nodes + connection arcs */}
-                    <div style={{ borderRadius: 20, overflow: 'hidden', border: '1px solid var(--border-dark-default)', background: '#111115', padding: '40px 32px', position: 'relative' }}>
+                    <div style={{ borderRadius: 20, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)', background: '#111115', padding: '40px 32px', position: 'relative' }}>
                         <svg viewBox="0 0 1000 500" style={{ width: '100%', height: 'auto' }} aria-label="World map showing OpenAnalyst global presence">
-                            {/* Dot matrix world map — simplified continental outlines */}
                             <defs>
                                 <radialGradient id="city-glow" cx="50%" cy="50%" r="50%">
                                     <stop offset="0%" stopColor="#FF6B00" stopOpacity="0.8" />
@@ -249,7 +246,7 @@ export default function ContactPage() {
                                 <circle key={`au-${i}`} cx={x} cy={y} r="1.8" fill="rgba(255,255,255,0.12)" />
                             ))}
 
-                            {/* Connection arcs (curved lines between cities) */}
+                            {/* Connection arcs */}
                             <path d="M 180 155 Q 330 40 475 110" fill="none" stroke="#FF6B00" strokeWidth="1" opacity="0.35" />
                             <path d="M 475 110 Q 580 60 680 165" fill="none" stroke="#FF6B00" strokeWidth="1" opacity="0.3" />
                             <path d="M 680 165 Q 750 200 800 300" fill="none" stroke="#FF6B00" strokeWidth="1" opacity="0.25" />
@@ -257,28 +254,25 @@ export default function ContactPage() {
 
                             {/* City nodes with glow */}
                             {[
-                                { x: 180, y: 155, label: 'San Francisco', anchor: 'end' },
-                                { x: 475, y: 110, label: 'London', anchor: 'middle' },
-                                { x: 680, y: 165, label: 'Mumbai', anchor: 'start' },
-                                { x: 800, y: 300, label: 'Singapore', anchor: 'start' },
+                                { x: 180, y: 155, label: 'San Francisco', anchor: 'end' as const },
+                                { x: 475, y: 110, label: 'London', anchor: 'middle' as const },
+                                { x: 680, y: 165, label: 'Mumbai', anchor: 'start' as const },
+                                { x: 800, y: 300, label: 'Singapore', anchor: 'start' as const },
                             ].map((city, i) => (
                                 <g key={i}>
-                                    {/* Glow */}
                                     <circle cx={city.x} cy={city.y} r="16" fill="url(#city-glow)">
                                         <animate attributeName="r" values="14;18;14" dur="3s" repeatCount="indefinite" />
                                         <animate attributeName="opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite" />
                                     </circle>
-                                    {/* Core dot */}
                                     <circle cx={city.x} cy={city.y} r="4" fill="#FF6B00" filter="url(#glow-filter)" />
                                     <circle cx={city.x} cy={city.y} r="2" fill="#FFFFFF" />
-                                    {/* Label */}
                                     <text
                                         x={city.anchor === 'end' ? city.x - 12 : city.anchor === 'start' ? city.x + 12 : city.x}
                                         y={city.y + (city.label === 'London' ? -14 : 5)}
                                         fill="rgba(255,255,255,0.7)"
                                         fontSize="11"
                                         fontFamily="var(--font-body)"
-                                        textAnchor={city.anchor as 'start' | 'middle' | 'end'}
+                                        textAnchor={city.anchor}
                                     >
                                         {city.label}
                                     </text>
