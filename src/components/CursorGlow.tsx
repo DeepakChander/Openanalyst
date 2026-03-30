@@ -18,9 +18,16 @@ const CursorGlow: React.FC = () => {
             gsap.to(glow, {
                 x: e.clientX,
                 y: e.clientY,
-                duration: 0.8,
+                duration: 0.6,
                 ease: 'power2.out',
             });
+
+            // Detect if cursor is over a dark section
+            const el = document.elementFromPoint(e.clientX, e.clientY);
+            const isDark = el?.closest('.dark-section, .section-dark, .section-dark-elevated, [data-theme="dark"]');
+            glow.style.background = isDark
+                ? 'radial-gradient(circle, rgba(255,107,0,0.07) 0%, transparent 70%)'
+                : 'radial-gradient(circle, rgba(255,107,0,0.035) 0%, transparent 70%)';
         };
 
         const handleMouseEnter = () => {

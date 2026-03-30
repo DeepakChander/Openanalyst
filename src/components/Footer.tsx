@@ -10,7 +10,7 @@ import { useGSAP } from '@gsap/react';
 /* ───────────────────── SVG Social Icons (colorful) ───────────────────── */
 const XIcon = () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="#000000" />
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="#FFFFFF" />
     </svg>
 );
 
@@ -374,7 +374,7 @@ const Footer: React.FC = () => {
     const ctaWords = ["Let's", 'build', 'something', 'extraordinary.'];
 
     const socials = [
-        { label: 'X (Twitter)', href: 'https://x.com/OpenAnalystInc', icon: <XIcon />, color: '#000000', hoverBg: 'rgba(0,0,0,0.15)' },
+        { label: 'X (Twitter)', href: 'https://x.com/OpenAnalystInc', icon: <XIcon />, color: '#FFFFFF', hoverBg: 'rgba(255,255,255,0.1)' },
         { label: 'Instagram', href: 'https://www.instagram.com/openanalystinc/', icon: <InstagramIcon />, color: '#E4405F', hoverBg: 'rgba(228,64,95,0.15)' },
         { label: 'LinkedIn', href: 'https://www.linkedin.com/in/openanalyst-inc/', icon: <LinkedInIcon />, color: '#0A66C2', hoverBg: 'rgba(10,102,194,0.15)' },
     ];

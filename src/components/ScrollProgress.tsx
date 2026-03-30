@@ -30,17 +30,17 @@ export default function ScrollProgress() {
   return (
     <div
       ref={barRef}
-      className="scroll-progress"
       style={{
         position: 'fixed',
         top: 0,
         left: 0,
         width: '100%',
         height: '2px',
-        background: 'var(--rust)',
+        background: 'linear-gradient(90deg, #FF6B00, #FF8533, #F59E0B)',
         transformOrigin: 'left',
         transform: 'scaleX(0)',
         zIndex: 10001,
+        willChange: 'transform',
       }}
     />
   );

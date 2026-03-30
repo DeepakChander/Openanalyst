@@ -25,12 +25,12 @@ const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
         const tl = gsap.timeline();
 
-        // Wipe in from top
+        // Wipe in from top — dark slices with orange accent on middle
         tl.set(slices, { scaleY: 0, transformOrigin: 'top center' });
         tl.to(slices, {
             scaleY: 1,
-            duration: 0.4,
-            stagger: 0.06,
+            duration: 0.35,
+            stagger: 0.05,
             ease: 'power4.inOut',
         });
 
@@ -38,10 +38,10 @@ const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) =
         tl.set(slices, { transformOrigin: 'bottom center' });
         tl.to(slices, {
             scaleY: 0,
-            duration: 0.4,
-            stagger: 0.06,
+            duration: 0.35,
+            stagger: 0.05,
             ease: 'power4.inOut',
-        }, '+=0.1');
+        }, '+=0.08');
     }, [pathname]);
 
     return (
@@ -52,10 +52,12 @@ const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) =
                     <div
                         key={i}
                         ref={(el) => { if (el) slicesRef.current[i] = el; }}
-                        className="page-transition-slice"
                         style={{
                             flex: 1,
                             height: '100%',
+                            background: i === Math.floor(SLICE_COUNT / 2)
+                                ? 'linear-gradient(180deg, #0A0A0B 0%, #111113 40%, #FF6B00 100%)'
+                                : '#0A0A0B',
                             transform: 'scaleY(0)',
                         }}
                     />

@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, Bricolage_Grotesque, JetBrains_Mono } from "next/fon
 import Script from "next/script";
 import AgentationProvider from "@/components/AgentationProvider";
 import SmoothScroll from "@/components/SmoothScroll";
+import PageTransition from "@/components/PageTransition";
 import NoiseOverlay from "@/components/NoiseOverlay";
 import CursorGlow from "@/components/CursorGlow";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -224,8 +225,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           />
         </noscript>
         <SmoothScroll>
-          <ScrollToTop />
-          {children}
+          <PageTransition>
+            <ScrollToTop />
+            {children}
+          </PageTransition>
         </SmoothScroll>
         <ScrollProgress />
         <CursorGlow />

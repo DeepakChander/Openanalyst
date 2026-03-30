@@ -65,7 +65,7 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <MarqueeStrip items={MARQUEE_ITEMS} dark={false} />
+        <MarqueeStrip items={MARQUEE_ITEMS} dark={true} />
         <Stats />
         <Features />
         <LogoConstellation />

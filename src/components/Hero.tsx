@@ -1,319 +1,336 @@
 'use client';
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState, useEffect, useCallback, Suspense } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import dynamic from 'next/dynamic';
 
 gsap.registerPlugin(useGSAP);
 
-const HeroBackground = dynamic(() => import('./HeroScene').then(m => ({ default: m.default })), { ssr: false });
-const DashboardMockup = dynamic(() => import('./HeroScene').then(m => ({ default: m.DashboardMockup })), { ssr: false });
+const WORDS = ['Campaigns', 'Analytics', 'Content', 'Ads', 'SEO'];
 
+/* Lazy-load the 3D constellation (heavy, Three.js) */
+const AgentConstellationScene = dynamic(
+    () => import('./AgentConstellation'),
+    { ssr: false }
+);
+
+/* ── Interactive dot grid (canvas) — dark variant ── */
+function DotGrid() {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const mouseRef = useRef({ x: -1000, y: -1000 });
+    const rafRef = useRef<number>(0);
+    const dotsRef = useRef<{ x: number; y: number; baseX: number; baseY: number; size: number }[]>([]);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        const gap = 40;
+        const baseSize = 1;
+        const influenceRadius = 130;
+
+        const resize = () => {
+            const dpr = Math.min(window.devicePixelRatio, 2);
+            const rect = canvas.parentElement?.getBoundingClientRect();
+            if (!rect) return;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            canvas.style.width = rect.width + 'px';
+            canvas.style.height = rect.height + 'px';
+            ctx.scale(dpr, dpr);
+            dotsRef.current = [];
+            for (let x = gap / 2; x < rect.width; x += gap) {
+                for (let y = gap / 2; y < rect.height; y += gap) {
+                    dotsRef.current.push({ x, y, baseX: x, baseY: y, size: baseSize });
+                }
+            }
+        };
+
+        resize();
+        window.addEventListener('resize', resize);
+
+        const handleMouseMove = (e: MouseEvent) => {
+            const rect = canvas.getBoundingClientRect();
+            mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+        };
+        const handleMouseLeave = () => { mouseRef.current = { x: -1000, y: -1000 }; };
+
+        canvas.addEventListener('mousemove', handleMouseMove);
+        canvas.addEventListener('mouseleave', handleMouseLeave);
+
+        const draw = () => {
+            const rect = canvas.parentElement?.getBoundingClientRect();
+            if (!rect) return;
+            ctx.clearRect(0, 0, rect.width, rect.height);
+            const mx = mouseRef.current.x;
+            const my = mouseRef.current.y;
+
+            for (const dot of dotsRef.current) {
+                const dx = mx - dot.baseX;
+                const dy = my - dot.baseY;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < influenceRadius) {
+                    const force = (1 - dist / influenceRadius) * 0.6;
+                    dot.x += (dot.baseX - dx * force * 0.3 - dot.x) * 0.15;
+                    dot.y += (dot.baseY - dy * force * 0.3 - dot.y) * 0.15;
+                    dot.size += ((baseSize + force * 3) - dot.size) * 0.15;
+                } else {
+                    dot.x += (dot.baseX - dot.x) * 0.08;
+                    dot.y += (dot.baseY - dot.y) * 0.08;
+                    dot.size += (baseSize - dot.size) * 0.08;
+                }
+
+                const alpha = dist < influenceRadius ? 0.06 + (1 - dist / influenceRadius) * 0.2 : 0.03;
+                ctx.beginPath();
+                ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 107, 0, ${alpha})`;
+                ctx.fill();
+            }
+            rafRef.current = requestAnimationFrame(draw);
+        };
+        rafRef.current = requestAnimationFrame(draw);
+
+        return () => {
+            cancelAnimationFrame(rafRef.current);
+            window.removeEventListener('resize', resize);
+            canvas.removeEventListener('mousemove', handleMouseMove);
+            canvas.removeEventListener('mouseleave', handleMouseLeave);
+        };
+    }, []);
+
+    return <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'auto' }} />;
+}
 
 const Hero: React.FC = () => {
     const heroRef = useRef<HTMLElement>(null);
-    const [animReady, setAnimReady] = useState(false);
+    const [currentWord, setCurrentWord] = useState(0);
+    const wordRef = useRef<HTMLSpanElement>(null);
+    const lineRef = useRef<HTMLDivElement>(null);
+    const spotlightRef = useRef<HTMLDivElement>(null);
 
+    /* Spotlight cursor tracking */
+    useEffect(() => {
+        const hero = heroRef.current;
+        if (!hero) return;
+        const handleMove = (e: MouseEvent) => {
+            if (!spotlightRef.current) return;
+            const rect = hero.getBoundingClientRect();
+            spotlightRef.current.style.setProperty('--spot-x', `${e.clientX - rect.left}px`);
+            spotlightRef.current.style.setProperty('--spot-y', `${e.clientY - rect.top}px`);
+            spotlightRef.current.style.opacity = '1';
+        };
+        const handleLeave = () => { if (spotlightRef.current) spotlightRef.current.style.opacity = '0'; };
+        hero.addEventListener('mousemove', handleMove);
+        hero.addEventListener('mouseleave', handleLeave);
+        return () => { hero.removeEventListener('mousemove', handleMove); hero.removeEventListener('mouseleave', handleLeave); };
+    }, []);
+
+    /* Word cycling with blur transition */
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (!wordRef.current) return;
+            gsap.to(wordRef.current, {
+                y: -12, opacity: 0, filter: 'blur(4px)', duration: 0.3, ease: 'power2.in',
+                onComplete: () => {
+                    setCurrentWord(prev => (prev + 1) % WORDS.length);
+                    if (wordRef.current) {
+                        gsap.fromTo(wordRef.current,
+                            { y: 12, opacity: 0, filter: 'blur(4px)' },
+                            { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.4, ease: 'power2.out' }
+                        );
+                    }
+                }
+            });
+        }, 2400);
+        return () => clearInterval(interval);
+    }, []);
+
+    /* Entrance animations */
     useGSAP(() => {
         const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (prefersReduced) { setAnimReady(true); return; }
-
-        const tl = gsap.timeline({
-            defaults: { ease: 'power3.out' },
-            onStart: () => setAnimReady(true),
-            delay: 0.2,
-        });
-
-        // Badge
-        tl.from('.hero-badge', { scale: 0.92, opacity: 0, duration: 0.5 }, 0);
-
-        // Headline words — clip-mask reveal
-        tl.from('.hero-word', {
-            y: '110%',
-            opacity: 0,
-            duration: 0.85,
-            stagger: 0.08,
-            ease: 'power4.out',
-        }, 0.1);
-
-        // Subheadline
-        tl.from('.hero-sub', { y: 14, opacity: 0, duration: 0.5 }, 0.55);
-
-        // CTAs
-        tl.from('.hero-cta-primary', { scale: 0.9, opacity: 0, duration: 0.45, ease: 'back.out(1.5)' }, 0.7);
-        tl.from('.hero-cta-secondary', { scale: 0.9, opacity: 0, duration: 0.45, ease: 'back.out(1.5)' }, 0.8);
-
-        // Social proof
-        tl.from('.hero-proof', { opacity: 0, y: 8, duration: 0.4 }, 0.9);
-
-        // Logos
-        tl.from('.hero-logos', { opacity: 0, duration: 0.5 }, 1.05);
-
+        if (prefersReduced) return;
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, delay: 0.2 });
+        tl.from('.h-badge', { opacity: 0, y: 16, filter: 'blur(6px)', duration: 0.6 }, 0);
+        tl.from('.h-line', { opacity: 0, y: 50, filter: 'blur(8px)', stagger: 0.1, duration: 0.8, ease: 'power4.out' }, 0.1);
+        tl.from('.h-sub', { opacity: 0, y: 16, filter: 'blur(4px)', duration: 0.6 }, 0.5);
+        tl.from('.h-cta-wrap', { opacity: 0, y: 16, duration: 0.5 }, 0.65);
+        tl.from('.h-proof', { opacity: 0, duration: 0.5 }, 0.8);
+        tl.from('.h-constellation', { opacity: 0, scale: 0.85, filter: 'blur(10px)', duration: 1.2, ease: 'power2.out' }, 0.3);
+        if (lineRef.current) {
+            gsap.fromTo(lineRef.current, { scaleX: 0 }, { scaleX: 1, duration: 0.8, delay: 1, ease: 'power3.inOut' });
+        }
     }, { scope: heroRef });
 
-    useEffect(() => {
-        const fb = setTimeout(() => { if (!animReady) setAnimReady(true); }, 2500);
-        return () => clearTimeout(fb);
-    }, [animReady]);
-
-    const avatars = [
-        { src: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Sarah&backgroundColor=ffd5dc' },
-        { src: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Alex&backgroundColor=c0aede' },
-        { src: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Jordan&backgroundColor=b6e3f4' },
-        { src: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Morgan&backgroundColor=d1f4d1' },
-        { src: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Riley&backgroundColor=ffeab6' },
-    ];
-
-    const logos: { name: string; icon: React.ReactNode }[] = [
-        { name: 'Google', icon: (
-            <svg viewBox="0 0 48 48" width="18" height="18">
-                <path d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z" fill="#FFC107"/>
-                <path d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z" fill="#FF3D00"/>
-                <path d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z" fill="#4CAF50"/>
-                <path d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.001-.001 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z" fill="#1976D2"/>
-            </svg>
-        )},
-        { name: 'Meta', icon: (
-            <svg viewBox="0 0 48 48" width="18" height="18">
-                <linearGradient id="metaGrad" x1="6.228" y1="4.896" x2="42.077" y2="43.432" gradientUnits="userSpaceOnUse">
-                    <stop offset="0" stopColor="#0064E1"/>
-                    <stop offset=".4" stopColor="#0064E1"/>
-                    <stop offset=".83" stopColor="#0073EE"/>
-                    <stop offset="1" stopColor="#0082FB"/>
-                </linearGradient>
-                <path d="M24 4C12.954 4 4 12.954 4 24s8.954 20 20 20 20-8.954 20-20S35.046 4 24 4z" fill="url(#metaGrad)"/>
-                <path d="M29.2 15.4c-1.6 0-3 .8-4.2 2.1-.5.6-1 1.3-1.4 2.1-.4-.8-.9-1.5-1.4-2.1-1.2-1.3-2.6-2.1-4.2-2.1-3.2 0-5.6 3.2-5.6 7.6 0 5.2 4.4 10.6 9.2 13.2.6.3 1.3.5 2 .5s1.4-.2 2-.5c4.8-2.6 9.2-8 9.2-13.2 0-4.4-2.4-7.6-5.6-7.6z" fill="#fff"/>
-            </svg>
-        )},
-        { name: 'HubSpot', icon: (
-            <svg viewBox="0 0 48 48" width="18" height="18">
-                <path d="M34.4 15.2v-4.6c1.2-.7 2-2 2-3.4 0-2.2-1.8-4-4-4s-4 1.8-4 4c0 1.4.8 2.7 2 3.4v4.6c-1.7.4-3.3 1.3-4.5 2.5l-12-9.3c.1-.3.1-.6.1-1 0-2.2-1.8-4-4-4s-4 1.8-4 4 1.8 4 4 4c.8 0 1.6-.3 2.2-.7l11.8 9.2c-.6 1.2-1 2.6-1 4 0 1.4.4 2.8 1 4l-3.4 3.4c-.3-.1-.6-.1-.9-.1-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3c0-.3 0-.6-.1-.9l3.4-3.4c1.7 1.2 3.8 2 6.1 2 5.8 0 10.4-4.7 10.4-10.4 0-4.6-3-8.6-7.1-10z" fill="#FF7A59"/>
-            </svg>
-        )},
-        { name: 'Slack', icon: (
-            <svg viewBox="0 0 48 48" width="18" height="18">
-                <path d="M14 28.5c0 2.485-2.017 4.5-4.5 4.5S5 30.985 5 28.5 7.017 24 9.5 24H14v4.5z" fill="#E01E5A"/>
-                <path d="M16.5 28.5c0-2.485 2.017-4.5 4.5-4.5s4.5 2.015 4.5 4.5v11c0 2.485-2.017 4.5-4.5 4.5s-4.5-2.015-4.5-4.5v-11z" fill="#E01E5A"/>
-                <path d="M21 14c-2.483 0-4.5-2.015-4.5-4.5S18.517 5 21 5s4.5 2.015 4.5 4.5V14H21z" fill="#36C5F0"/>
-                <path d="M21 16.5c2.483 0 4.5 2.017 4.5 4.5s-2.017 4.5-4.5 4.5H9.5C7.017 25.5 5 23.485 5 21s2.017-4.5 4.5-4.5H21z" fill="#36C5F0"/>
-                <path d="M34 19.5c0-2.483 2.015-4.5 4.5-4.5S43 17.017 43 19.5 40.985 24 38.5 24H34v-4.5z" fill="#2EB67D"/>
-                <path d="M31.5 19.5c0 2.483-2.015 4.5-4.5 4.5s-4.5-2.017-4.5-4.5v-11C22.5 6.015 24.515 4 27 4s4.5 2.015 4.5 4.5v11z" fill="#2EB67D"/>
-                <path d="M27 34c2.485 0 4.5 2.017 4.5 4.5S29.485 43 27 43s-4.5-2.017-4.5-4.5V34H27z" fill="#ECB22E"/>
-                <path d="M27 31.5c-2.485 0-4.5-2.017-4.5-4.5s2.015-4.5 4.5-4.5h11.5c2.485 0 4.5 2.017 4.5 4.5s-2.015 4.5-4.5 4.5H27z" fill="#ECB22E"/>
-            </svg>
-        )},
-        { name: 'Shopify', icon: (
-            <svg viewBox="0 0 48 48" width="18" height="18">
-                <path d="M37.216 8.342c-.024-.178-.152-.306-.33-.33a3.216 3.216 0 0 0-.728-.052s-2.458-.052-3.258-.052c-.624-.624-1.378-1.222-2.128-1.222h-.052c-.35-.35-.728-.572-1.128-.702-.402-1.22-1.074-2.284-1.906-2.778-.596-.364-1.228-.416-1.724-.416-1.58.052-2.998 1.168-4.078 3.144-.754 1.382-1.326 3.144-1.482 4.5l-3.414 1.048S16.35 11.55 16.2 12c-.154.416 0 0 0 0l-2.892 22.142L28.4 37l9.362-2.34S37.24 8.52 37.216 8.342zM26.504 10.506l-3.854 1.196c.442-1.626 1.222-3.248 2.678-3.882.442.91.884 2.166 1.176 2.686zM24.286 6.268c1.742.052 2.886 2.166 3.354 3.518-.052 0-2.184.676-4.55 1.404.858-3.31 1.196-4.37 1.196-4.922z" fill="#95BF47"/>
-                <path d="M36.888 8.012c-.176 0-.352.024-.528.05 0 0-2.458-.052-3.258-.052-.624-.624-1.378-1.222-2.128-1.222h-.052c-.052-.052-.102-.102-.154-.154 0 0-1.092.39-2.834 1.014.442-1.626 1.222-3.248 2.678-3.882.052 0 .104.052.156.052.856.416 1.56 1.248 2.062 2.31.546.176 1.196.546 1.95 1.612.208.026.35.05.444.102.026.052.026.078.05.13-.152-.026-.31-.026-.386.04z" fill="#5E8E3E"/>
-                <path d="M28.4 37l-15.092 3.142L16.2 12S28.4 37 28.4 37z" fill="#95BF47"/>
-                <path d="M28.4 37l9.362-2.34S34.87 11.76 34.87 11.55c-.154-.416-.308-.624-.624-.754-.104-.052-.206-.078-.336-.078s-2.458-.052-3.258-.052c-.416-.416-.91-.832-1.404-1.066l-.024 27.4H28.4z" fill="#5E8E3E"/>
-                <path d="M23.778 17.026c0 .73 1.612 1.38 3.596 2.336 2.726 1.3 3.232 3.362 3.128 4.87-.182 2.596-2.388 4.102-4.766 4.232-2.83.156-4.506-1.222-4.506-1.222l.598-2.544s1.664 1.222 3.024 1.118c.884-.066 1.326-.65 1.274-1.144-.078-1.066-2.05-1.482-3.622-2.752-1.118-.91-1.638-2.336-1.482-3.934.232-2.362 2.258-4.81 6.448-4.81.988 0 1.924.338 1.924.338l-.806 2.88s-.936-.442-1.95-.416c-1.69.04-1.86 1.196-1.86 1.508v.54z" fill="#fff"/>
-            </svg>
-        )},
-    ];
-
     return (
-        <section id="hero-section" ref={heroRef} style={{
-            position: 'relative',
+        <section id="hero-section" ref={heroRef} className="dark-section" style={{
+            position: 'relative', overflow: 'hidden',
+            background: 'var(--bg-dark-primary)',
             minHeight: '100vh',
-            overflow: 'hidden',
-            background: '#FFFFFF',
-            display: 'flex',
-            alignItems: 'center',
         }}>
-            {/* Animated gradient background */}
-            <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-                <HeroBackground />
+            {/* Perspective grid lines */}
+            <div style={{
+                position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none',
+                backgroundImage: 'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
+                backgroundSize: '80px 80px',
+                maskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)',
+                WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)',
+            }} aria-hidden="true" />
+
+            {/* Aurora background orbs */}
+            <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }} aria-hidden="true">
+                <div className="hero-aurora-1" style={{
+                    position: 'absolute', width: '50vw', height: '50vw', maxWidth: 700, maxHeight: 700,
+                    top: '-10%', left: '-5%', borderRadius: '50%',
+                    background: 'rgba(255, 107, 0, 0.06)', filter: 'blur(100px)',
+                }} />
+                <div className="hero-aurora-2" style={{
+                    position: 'absolute', width: '40vw', height: '40vw', maxWidth: 560, maxHeight: 560,
+                    top: '20%', right: '-5%', borderRadius: '50%',
+                    background: 'rgba(139, 92, 246, 0.04)', filter: 'blur(90px)',
+                }} />
+                <div className="hero-aurora-3" style={{
+                    position: 'absolute', width: '35vw', height: '35vw', maxWidth: 480, maxHeight: 480,
+                    bottom: '-10%', left: '30%', borderRadius: '50%',
+                    background: 'rgba(20, 184, 166, 0.03)', filter: 'blur(100px)',
+                }} />
             </div>
 
-            {/* Grid noise texture */}
-            <div style={{
-                position: 'absolute', inset: 0, zIndex: 1,
-                backgroundImage: `radial-gradient(circle at 1px 1px, rgba(0,0,0,0.03) 1px, transparent 0)`,
-                backgroundSize: '24px 24px',
-                pointerEvents: 'none',
+            {/* Interactive dot grid */}
+            <div style={{ position: 'absolute', inset: 0, zIndex: 1 }} aria-hidden="true"><DotGrid /></div>
+
+            {/* Spotlight cursor glow */}
+            <div ref={spotlightRef} style={{
+                position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none', opacity: 0,
+                background: 'radial-gradient(600px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(255,107,0,0.06), transparent 40%)',
+                transition: 'opacity 0.5s ease',
             }} />
 
-            {/* Main content */}
+            {/* Main Grid */}
             <div className="hero-grid" style={{
-                position: 'relative',
-                zIndex: 10,
-                width: '100%',
-                maxWidth: '1240px',
-                margin: '0 auto',
-                padding: '120px 32px 80px',
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '60px',
-                alignItems: 'center',
+                position: 'relative', zIndex: 10, maxWidth: 1200, margin: '0 auto',
+                padding: '160px 28px 100px', display: 'grid', gridTemplateColumns: '1.1fr 0.9fr',
+                gap: 48, alignItems: 'center',
             }}>
-                {/* LEFT — Text content */}
-                <div>
-                    {/* Badge */}
-                    <div className="hero-badge" style={{
-                        display: 'inline-flex', alignItems: 'center', gap: '8px',
-                        padding: '6px 16px', borderRadius: '9999px',
-                        border: '1px solid rgba(255,107,0,0.15)',
-                        background: 'rgba(255,255,255,0.9)',
-                        backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
-                        marginBottom: '28px', fontSize: '13px',
-                        fontFamily: 'var(--font-body)', fontWeight: 600, color: '#FF6B00',
-                        boxShadow: '0 2px 12px rgba(255,107,0,0.06)',
+                {/* LEFT — Content */}
+                <div style={{ maxWidth: 540 }}>
+                    {/* Announcement badge */}
+                    <div className="h-badge" style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 8,
+                        padding: '5px 14px 5px 6px', borderRadius: 100,
+                        background: 'rgba(255,107,0,0.08)', border: '1px solid rgba(255,107,0,0.2)',
+                        marginBottom: 28, fontSize: 12.5, fontWeight: 600, color: '#FF8533',
                     }}>
                         <span style={{
-                            width: '6px', height: '6px', borderRadius: '50%',
-                            background: '#FF6B00', display: 'inline-block',
-                            boxShadow: '0 0 8px rgba(255,107,0,0.5)',
-                        }} />
-                        AI-Powered Marketing Agents
+                            width: 22, height: 22, borderRadius: '50%',
+                            background: '#FF6B00', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            boxShadow: '0 0 12px rgba(255,107,0,0.4)',
+                        }}>
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
+                        </span>
+                        v2.0 — The Agentic Era is here
                     </div>
 
                     {/* Headline */}
                     <h1 style={{
                         fontFamily: 'var(--font-heading)', fontWeight: 800,
-                        fontSize: 'clamp(2.5rem, 5.5vw, 4.2rem)',
-                        lineHeight: 1.1, letterSpacing: '-0.03em',
-                        color: '#1A1A1A', marginBottom: '24px',
+                        fontSize: 'clamp(2.4rem, 4.2vw, 3.8rem)', lineHeight: 1.08,
+                        letterSpacing: '-0.035em', marginBottom: 24,
                     }}>
-                        {['Your', 'AI'].map((word, i) => (
-                            <span key={i} style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom', marginRight: '0.3em' }}>
-                                <span className="hero-word" style={{ display: 'inline-block' }}>{word}</span>
+                        <span className="h-line" style={{ display: 'block', color: '#FAFAFA' }}>AI agents for</span>
+                        <span className="h-line" style={{ display: 'block', position: 'relative', color: '#FAFAFA' }}>
+                            your{' '}
+                            <span style={{ position: 'relative', display: 'inline-block' }}>
+                                <span ref={wordRef} className="text-gradient-shimmer" style={{ display: 'inline-block' }}>{WORDS[currentWord]}</span>
+                                <div ref={lineRef} style={{
+                                    position: 'absolute', bottom: -2, left: 0, right: 0, height: 3,
+                                    background: 'linear-gradient(90deg, #FF6B00, #F59E0B)', borderRadius: 2, transformOrigin: 'left',
+                                }} />
                             </span>
-                        ))}
-                        <span style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom' }}>
-                            <span className="hero-word" style={{
-                                display: 'inline-block',
-                                background: 'linear-gradient(135deg, #FF6B00, #FF8C3A)',
-                                WebkitBackgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                                backgroundClip: 'text',
-                            }}>Marketing</span>
-                        </span>
-                        <br />
-                        <span style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom' }}>
-                            <span className="hero-word" style={{ display: 'inline-block' }}>Agent</span>
                         </span>
                     </h1>
 
-                    {/* Subheadline */}
-                    <p className="hero-sub" style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 'clamp(16px, 1.3vw, 18px)',
-                        color: '#666666', lineHeight: 1.7,
-                        maxWidth: '460px', marginBottom: '32px',
+                    {/* Subtitle */}
+                    <p className="h-sub" style={{
+                        fontSize: 'clamp(15px, 1.15vw, 16.5px)', color: 'var(--text-dark-secondary)',
+                        lineHeight: 1.7, maxWidth: 440, marginBottom: 36,
                     }}>
-                        AI agents that plan, create, and optimize your campaigns across every channel — on autopilot. See results in days, not months.
+                        Autonomous agents that plan, create, and optimize your marketing across every channel. Measurable results in days, not months.
                     </p>
 
-                    {/* CTAs */}
-                    <div className="hero-ctas" style={{
-                        display: 'flex', flexWrap: 'wrap', gap: '12px',
-                        marginBottom: '36px',
-                    }}>
-                        <a href="https://app.openanalyst.com" className="hero-cta-primary btn-primary" style={{
-                            fontSize: '15px', padding: '14px 30px', borderRadius: '50px',
-                        }}>
-                            Start Free Trial
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M5 12h14M12 5l7 7-7 7" />
-                            </svg>
+                    {/* CTA Buttons */}
+                    <div className="h-cta-wrap" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16, marginBottom: 36 }}>
+                        <a href="https://app.openanalyst.com" className="btn-primary hero-cta-glow" style={{ fontSize: 14, padding: '13px 28px' }}>
+                            Start free trial
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                         </a>
-                        <a href="#how-it-works" className="hero-cta-secondary btn-outline" style={{
-                            fontSize: '15px', padding: '14px 30px', borderRadius: '50px',
-                            display: 'inline-flex', alignItems: 'center', gap: '8px',
-                        }}>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <circle cx="12" cy="12" r="10" />
-                                <polygon points="10 8 16 12 10 16 10 8" fill="#FF6B00" stroke="none" />
-                            </svg>
-                            Watch Demo
+                        <a href="#how-it-works" style={{
+                            fontSize: 14, fontWeight: 500, color: 'var(--text-dark-secondary)',
+                            textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6,
+                            transition: 'color 0.2s ease',
+                        }}
+                            onMouseEnter={(e) => { e.currentTarget.style.color = '#FF6B00'; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-dark-secondary)'; }}
+                        >
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polygon points="10 8 16 12 10 16" fill="currentColor" stroke="none" /></svg>
+                            See how it works
                         </a>
                     </div>
 
-                    {/* Social Proof */}
-                    <div className="hero-proof" style={{
-                        display: 'flex', alignItems: 'center',
-                        gap: '14px', fontSize: '13px', fontFamily: 'var(--font-body)',
-                        color: '#999', marginBottom: '32px',
-                    }}>
+                    {/* Social proof */}
+                    <div className="h-proof" style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 13, color: 'var(--text-dark-muted)' }}>
                         <div style={{ display: 'flex' }}>
-                            {avatars.map((a, i) => (
-                                <img
-                                    key={i}
-                                    src={a.src}
-                                    alt=""
-                                    width={32}
-                                    height={32}
+                            {['Maren', 'Kael', 'Priya'].map((s, i) => (
+                                <img key={s} src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${s}&backgroundColor=${['ffd5dc', 'c0aede', 'b6e3f4'][i]}`}
+                                    alt="" width={28} height={28}
                                     style={{
-                                        width: '32px', height: '32px', borderRadius: '50%',
-                                        border: '2px solid #FFFFFF',
-                                        marginLeft: i > 0 ? '-8px' : '0',
-                                        zIndex: 5 - i,
-                                        position: 'relative',
-                                        objectFit: 'cover',
-                                        background: '#F0F0F0',
+                                        width: 28, height: 28, borderRadius: '50%',
+                                        border: '2px solid var(--bg-dark-primary)',
+                                        marginLeft: i > 0 ? -8 : 0, zIndex: 3 - i, position: 'relative',
+                                        background: 'var(--bg-dark-surface)',
                                     }}
                                 />
                             ))}
                         </div>
-                        <span>
-                            Trusted by <strong style={{ color: '#1A1A1A' }}>2,400+</strong> teams
-                            <span style={{ margin: '0 8px', opacity: 0.3 }}>|</span>
-                            <span style={{ color: '#FF6B00' }}>&#9733;</span> 4.9/5
+                        <span><strong style={{ color: '#FAFAFA', fontWeight: 600 }}>2,400+</strong> teams</span>
+                        <span style={{ width: 1, height: 14, background: 'var(--border-dark-default)' }} />
+                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+                            <strong style={{ color: '#FAFAFA', fontWeight: 600 }}>4.9</strong>/5
                         </span>
-                    </div>
-
-                    {/* Integration logos */}
-                    <div className="hero-logos" style={{
-                        display: 'flex', alignItems: 'center', gap: '16px',
-                    }}>
-                        <span style={{
-                            fontFamily: 'var(--font-body)', fontSize: '11px',
-                            color: '#bbb', textTransform: 'uppercase',
-                            letterSpacing: '0.06em', fontWeight: 500, whiteSpace: 'nowrap',
-                        }}>Works with</span>
-                        <div style={{
-                            display: 'flex', alignItems: 'center', gap: '12px',
-                        }}>
-                            {logos.map((l, i) => (
-                                <div key={i} title={l.name} style={{
-                                    width: '30px', height: '30px', borderRadius: '8px',
-                                    background: '#F5F5F5',
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    border: '1px solid rgba(0,0,0,0.06)',
-                                    transition: 'box-shadow 0.2s ease',
-                                }}>
-                                    {l.icon}
-                                </div>
-                            ))}
-                            <span style={{
-                                fontSize: '11px', color: '#999',
-                                fontFamily: 'var(--font-body)',
-                            }}>+45 more</span>
-                        </div>
                     </div>
                 </div>
 
-                {/* RIGHT — Dashboard mockup (hidden on mobile) */}
-                <div className="hero-dashboard-mobile-hide" style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                {/* RIGHT — 3D Agent Constellation */}
+                <div className="h-constellation hero-dashboard-mobile-hide" style={{
+                    position: 'relative', height: 520,
                 }}>
-                    <DashboardMockup />
+                    <Suspense fallback={
+                        <div style={{
+                            width: '100%', height: '100%', display: 'flex',
+                            alignItems: 'center', justifyContent: 'center',
+                        }}>
+                            <div style={{
+                                width: 48, height: 48, borderRadius: '50%',
+                                border: '2px solid rgba(255,107,0,0.2)',
+                                borderTopColor: '#FF6B00',
+                                animation: 'spin 1s linear infinite',
+                            }} />
+                        </div>
+                    }>
+                        <AgentConstellationScene />
+                    </Suspense>
                 </div>
             </div>
 
-            {/* Bottom fade */}
+            {/* Bottom fade to next section */}
             <div style={{
-                position: 'absolute',
-                bottom: 0, left: 0, right: 0,
-                height: '80px',
-                background: 'linear-gradient(to top, #FFFFFF, transparent)',
-                zIndex: 2,
-                pointerEvents: 'none',
+                position: 'absolute', bottom: 0, left: 0, right: 0, height: 120,
+                background: 'linear-gradient(transparent, var(--bg-dark-primary))',
+                pointerEvents: 'none', zIndex: 5,
             }} />
         </section>
     );
