@@ -76,13 +76,13 @@ const Stats: React.FC = () => {
     const sectionRef = useRef<HTMLElement>(null);
 
     useGSAP(() => {
-        gsap.from('.stats-heading-word', {
+        gsap.fromTo('.stats-heading-word', { y: 24, opacity: 0, filter: 'blur(4px)' }, {
             y: 24, opacity: 0, filter: 'blur(4px)',
             stagger: 0.05, duration: 0.5, ease: 'power3.out',
             scrollTrigger: { trigger: '.stats-heading', start: 'top 85%' },
         });
 
-        gsap.from('.stats-card', {
+        gsap.fromTo('.stats-card', { y: 60, opacity: 0, scale: 0.9 }, {
             y: 60, opacity: 0, scale: 0.9,
             stagger: 0.12, duration: 0.8, ease: 'back.out(1.3)',
             scrollTrigger: { trigger: '.stats-grid', start: 'top 88%' },

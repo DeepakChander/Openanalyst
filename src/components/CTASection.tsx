@@ -24,13 +24,13 @@ const CTASection: React.FC = () => {
             scrollTrigger: { trigger: '.cta-text-block', start: 'top 75%' },
         });
         // Reveal line
-        gsap.from('.cta-reveal', {
-            y: 30, opacity: 0, filter: 'blur(6px)', duration: 0.7, ease: 'power3.out', delay: 0.8,
+        gsap.fromTo('.cta-reveal', { y: 30, opacity: 0, filter: 'blur(6px)' }, {
+            y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.7, ease: 'power3.out', delay: 0.8,
             scrollTrigger: { trigger: '.cta-text-block', start: 'top 75%' },
         });
         // Buttons
-        gsap.from('.cta-buttons', {
-            y: 20, opacity: 0, duration: 0.6, delay: 1.2,
+        gsap.fromTo('.cta-buttons', { y: 20, opacity: 0 }, {
+            y: 0, opacity: 1, duration: 0.6, delay: 1.2,
             scrollTrigger: { trigger: '.cta-text-block', start: 'top 75%' },
         });
     }, { scope: sectionRef });

@@ -21,9 +21,9 @@ const Testimonials: React.FC = () => {
     const scrollRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
-        gsap.from('.test-label', { y: 16, opacity: 0, duration: 0.5, scrollTrigger: { trigger: sectionRef.current, start: 'top 82%' } });
-        gsap.from('.test-heading', { y: 30, opacity: 0, filter: 'blur(6px)', duration: 0.8, scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' } });
-        gsap.from('.test-scroll', { y: 40, opacity: 0, duration: 0.8, delay: 0.2, scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' } });
+        gsap.fromTo('.test-label', { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, scrollTrigger: { trigger: sectionRef.current, start: 'top 82%' } });
+        gsap.fromTo('.test-heading', { y: 30, opacity: 0, filter: 'blur(6px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' } });
+        gsap.fromTo('.test-scroll', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, delay: 0.2, scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' } });
     }, { scope: sectionRef });
 
     return (

@@ -79,8 +79,8 @@ const ProductShowcase: React.FC = () => {
     const sectionRef = useRef<HTMLElement>(null);
 
     useGSAP(() => {
-        gsap.from('.ps-label', { y: 16, opacity: 0, duration: 0.5, scrollTrigger: { trigger: sectionRef.current, start: 'top 82%' } });
-        gsap.from('.ps-heading', { y: 30, opacity: 0, filter: 'blur(6px)', duration: 0.8, scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' } });
+        gsap.fromTo('.ps-label', { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, scrollTrigger: { trigger: sectionRef.current, start: 'top 82%' } });
+        gsap.fromTo('.ps-heading', { y: 30, opacity: 0, filter: 'blur(6px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' } });
 
         // Scroll-driven laptop rotation
         gsap.fromTo('.ps-laptop', { rotateX: 25, scale: 0.85, opacity: 0 }, {
@@ -89,8 +89,8 @@ const ProductShowcase: React.FC = () => {
         });
 
         // Callout labels appear after laptop settles
-        gsap.from('.ps-callout', {
-            opacity: 0, scale: 0.8, stagger: 0.15, duration: 0.5, ease: 'back.out(1.5)',
+        gsap.fromTo('.ps-callout', { opacity: 0, scale: 0.8 }, {
+            opacity: 1, scale: 1, stagger: 0.15, duration: 0.5, ease: 'back.out(1.5)',
             scrollTrigger: { trigger: '.ps-laptop-wrap', start: 'top 50%' },
         });
     }, { scope: sectionRef });

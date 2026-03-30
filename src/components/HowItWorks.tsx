@@ -46,8 +46,8 @@ const HowItWorks: React.FC = () => {
 
     useGSAP(() => {
         // Heading
-        gsap.from('.hiw-label', { y: 16, opacity: 0, duration: 0.5, scrollTrigger: { trigger: sectionRef.current, start: 'top 82%' } });
-        gsap.from('.hiw-title-word', { y: 20, opacity: 0, filter: 'blur(4px)', stagger: 0.05, duration: 0.5, scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' } });
+        gsap.fromTo('.hiw-label', { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, scrollTrigger: { trigger: sectionRef.current, start: 'top 82%' } });
+        gsap.fromTo('.hiw-title-word', { y: 20, opacity: 0, filter: 'blur(4px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', stagger: 0.05, duration: 0.5, scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' } });
 
         // SVG line draws with scroll
         if (lineRef.current) {
@@ -69,8 +69,8 @@ const HowItWorks: React.FC = () => {
         });
 
         // Step dots scale in
-        gsap.from('.hiw-dot', {
-            scale: 0, duration: 0.4, ease: 'back.out(2)', stagger: 0.2,
+        gsap.fromTo('.hiw-dot', { scale: 0 }, {
+            scale: 1, duration: 0.4, ease: 'back.out(2)', stagger: 0.2,
             scrollTrigger: { trigger: '.hiw-timeline', start: 'top 75%' },
         });
     }, { scope: sectionRef });

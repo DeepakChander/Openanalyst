@@ -40,8 +40,8 @@ const PlatformAvailability: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
-        gsap.from('.plat-label', { y: 16, opacity: 0, duration: 0.5, scrollTrigger: { trigger: containerRef.current, start: 'top 82%' } });
-        gsap.from('.plat-heading', { y: 30, opacity: 0, filter: 'blur(6px)', duration: 0.8, scrollTrigger: { trigger: containerRef.current, start: 'top 80%' } });
+        gsap.fromTo('.plat-label', { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, scrollTrigger: { trigger: containerRef.current, start: 'top 82%' } });
+        gsap.fromTo('.plat-heading', { y: 30, opacity: 0, filter: 'blur(6px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, scrollTrigger: { trigger: containerRef.current, start: 'top 80%' } });
         gsap.fromTo('.plat-card', { y: 50, opacity: 0, scale: 0.95 }, {
             y: 0, opacity: 1, scale: 1, stagger: 0.1, duration: 0.7, ease: 'back.out(1.3)',
             scrollTrigger: { trigger: '.plat-grid', start: 'top 85%' },
