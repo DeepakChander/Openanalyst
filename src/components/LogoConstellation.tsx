@@ -58,8 +58,8 @@ const LogoCard: React.FC<{
   }, []);
 
   const angle = (index / totalInRing) * 360;
-  const radius = ring === 'inner' ? (isMobile ? 80 : 140) : ring === 'outer' ? (isMobile ? 140 : 240) : (isMobile ? 190 : 340);
-  const orbitDuration = ring === 'inner' ? 55 : ring === 'outer' ? 75 : 95;
+  const radius = ring === 'inner' ? (isMobile ? 70 : 110) : ring === 'outer' ? (isMobile ? 120 : 190) : (isMobile ? 160 : 270);
+  const orbitDuration = ring === 'inner' ? 50 : ring === 'outer' ? 70 : 90;
   const direction = ring === 'inner' ? 1 : ring === 'outer' ? -1 : 1;
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -111,10 +111,10 @@ const LogoCard: React.FC<{
       <motion.div
         style={{
           position: 'absolute',
-          width: 64,
-          height: 64,
-          marginLeft: -32,
-          marginTop: -32,
+          width: 52,
+          height: 52,
+          marginLeft: -26,
+          marginTop: -26,
           transform: `translateX(${radius}px)`,
         }}
       >
@@ -137,9 +137,9 @@ const LogoCard: React.FC<{
             animate={isHovered ? { scale: 1.15 } : { scale: 1 }}
             transition={{ type: 'spring', stiffness: 400, damping: 15 }}
             style={{
-              width: 64,
-              height: 64,
-              borderRadius: 16,
+              width: 52,
+              height: 52,
+              borderRadius: 14,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -198,7 +198,7 @@ const LogoConstellation: React.FC = () => {
   useEffect(() => {
     setMounted(true);
     const updateSize = () => {
-      setContainerSize(window.innerWidth < 600 ? Math.min(320, window.innerWidth - 40) : Math.min(750, window.innerWidth - 80));
+      setContainerSize(window.innerWidth < 600 ? Math.min(280, window.innerWidth - 40) : 580);
     };
     updateSize();
     window.addEventListener('resize', updateSize);
@@ -212,7 +212,7 @@ const LogoConstellation: React.FC = () => {
         position: 'relative',
         overflow: 'hidden',
         background: '#08080f',
-        padding: '80px 0 60px',
+        padding: '60px 0 40px',
       }}
     >
       {/* Noise overlay */}
@@ -298,7 +298,7 @@ const LogoConstellation: React.FC = () => {
         >
           {/* Inner ring */}
           <motion.circle
-            cx="0" cy="0" r={containerSize < 400 ? 80 : 140}
+            cx="0" cy="0" r={containerSize < 400 ? 70 : 110}
             fill="none"
             stroke="rgba(255,255,255,0.06)"
             strokeWidth="1"
@@ -309,7 +309,7 @@ const LogoConstellation: React.FC = () => {
           />
           {/* Middle ring */}
           <motion.circle
-            cx="0" cy="0" r={containerSize < 400 ? 140 : 240}
+            cx="0" cy="0" r={containerSize < 400 ? 120 : 190}
             fill="none"
             stroke="rgba(255,255,255,0.04)"
             strokeWidth="1"
@@ -320,7 +320,7 @@ const LogoConstellation: React.FC = () => {
           />
           {/* Outer ring */}
           <motion.circle
-            cx="0" cy="0" r={containerSize < 400 ? 190 : 340}
+            cx="0" cy="0" r={containerSize < 400 ? 160 : 270}
             fill="none"
             stroke="rgba(255,255,255,0.04)"
             strokeWidth="1"
@@ -331,7 +331,7 @@ const LogoConstellation: React.FC = () => {
           />
           {/* Glow ring for inner */}
           <motion.circle
-            cx="0" cy="0" r={containerSize < 400 ? 80 : 140}
+            cx="0" cy="0" r={containerSize < 400 ? 70 : 110}
             fill="none"
             stroke="rgba(255,107,0,0.08)"
             strokeWidth="2"
