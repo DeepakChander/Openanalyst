@@ -12,12 +12,12 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
     return (
-        <div style={{ minHeight: '100vh', backgroundColor: '#FFFFFF', color: '#1A1A1A', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             <Header />
-            <main style={{ flex: 1, paddingTop: '128px', paddingBottom: '80px', maxWidth: '800px', margin: '0 auto', padding: '128px 20px 80px', width: '100%', boxSizing: 'border-box' }}>
-                <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, marginBottom: '16px', color: '#1A1A1A', letterSpacing: '-0.02em' }}>PRIVACY POLICY</h1>
-                <p style={{ color: '#FF6B00', fontSize: '1.125rem', fontWeight: 600, marginBottom: '8px' }}>OpenAnalyst Inc.</p>
-                <p style={{ color: '#8A8A8A', marginBottom: '32px', fontSize: '14px' }}>Last Updated: December 19, 2025</p>
+            <main style={{ flex: 1, paddingTop: '128px', paddingBottom: '80px', maxWidth: '800px', margin: '0 auto', padding: '128px 20px 80px', width: '100%', boxSizing: 'border-box', background: 'var(--bg-white)' }}>
+                <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, marginBottom: '16px', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>PRIVACY POLICY</h1>
+                <p style={{ color: 'var(--orange)', fontSize: '1.125rem', fontWeight: 600, marginBottom: '8px' }}>OpenAnalyst Inc.</p>
+                <p style={{ color: 'var(--text-muted)', marginBottom: '32px', fontSize: '14px' }}>Last Updated: December 19, 2025</p>
 
                 <div style={{ color: '#4A4A4A', lineHeight: 1.8, fontSize: 'clamp(14px, 2vw, 16px)' }}>
                     <p>OpenAnalyst Inc. (&ldquo;OpenAnalyst&rdquo;, &ldquo;we&rdquo;, &ldquo;our&rdquo; or &ldquo;us&rdquo;) values your privacy and is committed to protecting your personal information. This Privacy Policy (&ldquo;Policy&rdquo;) explains how we collect, use, disclose, and safeguard your information when you access or use our website, mobile application, platform, and all related services (collectively, the &ldquo;Services&rdquo;).</p>

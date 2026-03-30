@@ -31,29 +31,17 @@ export default function IntegrationsPage() {
             <Header />
             <main style={{ flex: 1, paddingTop: '128px', paddingBottom: '80px' }}>
                 <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 16px' }}>
-                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--syntax-comment)', marginBottom: '16px', textAlign: 'center' }}>
-                        {'// INTEGRATIONS'}
-                    </p>
-                    <h1 style={{
-                        fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
-                        fontWeight: 700,
-                        marginBottom: '32px',
-                        textAlign: 'center',
-                        fontFamily: 'var(--font-heading)',
-                    }}>
-                        Integrations
-                    </h1>
-                    <p style={{
-                        fontSize: '1.1rem',
-                        color: 'var(--muted)',
-                        textAlign: 'center',
-                        marginBottom: '64px',
-                        maxWidth: '672px',
-                        margin: '0 auto 64px',
-                        fontFamily: 'var(--font-body)',
-                    }}>
-                        Connect OpenAnalyst with your favorite tools and workflows.
-                    </p>
+                    <div style={{ textAlign: 'center', marginBottom: 64 }}>
+                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>
+                            Ecosystem
+                        </p>
+                        <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 800, marginBottom: 16, fontFamily: 'var(--font-heading)', color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>
+                            Connected to <span className="text-gradient">everything</span>
+                        </h1>
+                        <p style={{ fontSize: 16, color: 'var(--text-muted)', maxWidth: 520, margin: '0 auto', lineHeight: 1.7 }}>
+                            27+ native integrations that sync your entire marketing stack in real-time.
+                        </p>
+                    </div>
                     <IntegrationsSection />
                 </div>
             </main>
