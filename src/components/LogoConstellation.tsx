@@ -23,16 +23,22 @@ const LOGOS: LogoItem[] = [
   { name: 'TikTok', color: '#FF0050', icon: `${SI}/tiktok/FF0050` },
   { name: 'YouTube', color: '#FF0000', icon: `${SI}/youtube/FF0000` },
   { name: 'Shopify', color: '#7AB55C', icon: `${SI}/shopify/7AB55C` },
+  { name: 'Notion', color: '#000000', icon: `${SI}/notion/FFFFFF` },
+  { name: 'Salesforce', color: '#00A1E0', icon: `${SI}/salesforce/00A1E0` },
+  { name: 'WhatsApp', color: '#25D366', icon: `${SI}/whatsapp/25D366` },
+  { name: 'Zoom', color: '#0B5CFF', icon: `${SI}/zoom/0B5CFF` },
+  { name: 'Airtable', color: '#18BFFF', icon: `${SI}/airtable/18BFFF` },
 ];
 
-// Inner ring: first 5, Outer ring: last 5
+// Inner ring: first 5, Middle ring: next 5, Outer ring: last 5
 const INNER_LOGOS = LOGOS.slice(0, 5);
-const OUTER_LOGOS = LOGOS.slice(5);
+const OUTER_LOGOS = LOGOS.slice(5, 10);
+const THIRD_LOGOS = LOGOS.slice(10, 15);
 
 const LogoCard: React.FC<{
   logo: LogoItem;
   index: number;
-  ring: 'inner' | 'outer';
+  ring: 'inner' | 'outer' | 'third';
   totalInRing: number;
   isInView: boolean;
 }> = ({ logo, index, ring, totalInRing, isInView }) => {
@@ -52,9 +58,9 @@ const LogoCard: React.FC<{
   }, []);
 
   const angle = (index / totalInRing) * 360;
-  const radius = ring === 'inner' ? (isMobile ? 80 : 140) : (isMobile ? 140 : 240);
-  const orbitDuration = ring === 'inner' ? 60 : 90;
-  const direction = ring === 'inner' ? 1 : -1;
+  const radius = ring === 'inner' ? (isMobile ? 80 : 160) : ring === 'outer' ? (isMobile ? 150 : 280) : (isMobile ? 220 : 400);
+  const orbitDuration = ring === 'inner' ? 50 : ring === 'outer' ? 70 : 100;
+  const direction = ring === 'inner' ? 1 : ring === 'outer' ? -1 : 1;
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -192,7 +198,7 @@ const LogoConstellation: React.FC = () => {
   useEffect(() => {
     setMounted(true);
     const updateSize = () => {
-      setContainerSize(window.innerWidth < 600 ? Math.min(320, window.innerWidth - 40) : 560);
+      setContainerSize(window.innerWidth < 600 ? Math.min(320, window.innerWidth - 40) : Math.min(900, window.innerWidth - 80));
     };
     updateSize();
     window.addEventListener('resize', updateSize);
@@ -301,9 +307,20 @@ const LogoConstellation: React.FC = () => {
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
           />
+          {/* Middle ring */}
+          <motion.circle
+            cx="0" cy="0" r={containerSize < 400 ? 150 : 280}
+            fill="none"
+            stroke="rgba(255,255,255,0.04)"
+            strokeWidth="1"
+            strokeDasharray="4 12"
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.8, delay: 0.3 }}
+          />
           {/* Outer ring */}
           <motion.circle
-            cx="0" cy="0" r={containerSize < 400 ? 140 : 240}
+            cx="0" cy="0" r={containerSize < 400 ? 220 : 400}
             fill="none"
             stroke="rgba(255,255,255,0.04)"
             strokeWidth="1"
@@ -411,6 +428,16 @@ const LogoConstellation: React.FC = () => {
                 index={i}
                 ring="outer"
                 totalInRing={OUTER_LOGOS.length}
+                isInView={isInView}
+              />
+            ))}
+            {THIRD_LOGOS.map((logo, i) => (
+              <LogoCard
+                key={logo.name}
+                logo={logo}
+                index={i}
+                ring="third"
+                totalInRing={THIRD_LOGOS.length}
                 isInView={isInView}
               />
             ))}
