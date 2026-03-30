@@ -40,11 +40,13 @@ export default function ResourcesPage() {
     const filtered = activeTab === 'All' ? resources : resources.filter((r) => r.category === activeTab);
 
     useGSAP(() => {
-        gsap.from('.res-hero-label', { y: 16, opacity: 0, duration: 0.5, delay: 0.2 });
-        gsap.from('.res-hero-line', { y: 80, opacity: 0, stagger: 0.12, duration: 1, ease: 'power4.out', delay: 0.3 });
-        gsap.from('.res-hero-sub', { y: 20, opacity: 0, duration: 0.6, delay: 0.8 });
+        gsap.fromTo('.res-hero-decoration', { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 1, delay: 0.1, ease: 'power3.out' });
+        gsap.fromTo('.res-hero-heading', { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: 'power4.out', delay: 0.25 });
+        gsap.fromTo('.res-hero-sub', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, delay: 0.6 });
+        gsap.fromTo('.res-hero-tabs', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, delay: 0.8 });
+
         gsap.utils.toArray<HTMLElement>('.res-reveal').forEach((el) => {
-            gsap.from(el, { y: 40, opacity: 0, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%', once: true } });
+            gsap.fromTo(el, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%', once: true } });
         });
     }, { scope: pageRef });
 
@@ -70,55 +72,50 @@ export default function ResourcesPage() {
         <div ref={pageRef} style={{ minHeight: '100vh' }}>
             <Header />
 
-            {/* ═══ HERO — Dark ═══ */}
-            <section className="dark-section" style={{ paddingTop: 160, paddingBottom: 60, background: 'var(--bg-dark-primary)', position: 'relative', overflow: 'hidden' }}>
-                <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '80px 80px', maskImage: 'radial-gradient(ellipse 50% 60% at 50% 50%, black 0%, transparent 70%)', WebkitMaskImage: 'radial-gradient(ellipse 50% 60% at 50% 50%, black 0%, transparent 70%)' }} />
-                <div style={{ position: 'absolute', top: '10%', left: '30%', width: 500, height: 500, borderRadius: '50%', background: 'rgba(255,107,0,0.04)', filter: 'blur(100px)', pointerEvents: 'none' }} />
+            {/* ═══ HERO — Light (asymmetric with large gradient circle) ═══ */}
+            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 60, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}>
+                {/* Large decorative gradient ring */}
+                <div className="res-hero-decoration" style={{ position: 'absolute', top: -200, left: '50%', transform: 'translateX(-50%)', width: 700, height: 700, borderRadius: '50%', border: '2px solid rgba(255,107,0,0.06)', pointerEvents: 'none' }} />
+                <div className="res-hero-decoration" style={{ position: 'absolute', top: -160, left: '50%', transform: 'translateX(-50%)', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,107,0,0.04) 0%, transparent 70%)', pointerEvents: 'none' }} />
+
                 <div style={{ maxWidth: 700, margin: '0 auto', padding: '0 24px', textAlign: 'center', position: 'relative', zIndex: 2 }}>
-                    <div className="res-hero-label" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px', borderRadius: 999, marginBottom: 32, border: '1px solid rgba(255,107,0,0.2)', background: 'rgba(255,107,0,0.06)' }}>
-                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF6B00', boxShadow: '0 0 8px rgba(255,107,0,0.5)' }} />
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#FF8533', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Resources</span>
-                    </div>
-                    <h1>
-                        <span style={{ display: 'block', overflow: 'hidden' }}>
-                            <span className="res-hero-line" style={{ display: 'block', fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.8rem, 6vw, 5rem)', fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.04em', background: 'var(--gradient-hero)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Resources</span>
-                        </span>
+                    <h1 className="res-hero-heading" style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(3rem, 7vw, 5.5rem)', fontWeight: 800, lineHeight: 1, letterSpacing: '-0.04em', marginBottom: 20 }}>
+                        <span style={{ background: 'linear-gradient(135deg, #FF6B00 0%, #FF8533 40%, #F59E0B 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Resources</span>
                     </h1>
-                    <p className="res-hero-sub" style={{ maxWidth: 520, margin: '24px auto 0', fontSize: 16, color: 'var(--text-dark-secondary)', lineHeight: 1.7 }}>
+
+                    <p className="res-hero-sub" style={{ maxWidth: 520, margin: '0 auto 40px', fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.7 }}>
                         Guides, case studies, and insights to help you get the most out of AI-powered marketing.
                     </p>
+
+                    {/* Category tabs inline in hero */}
+                    <div className="res-hero-tabs" style={{ display: 'inline-flex', gap: 6, padding: 4, borderRadius: 12, background: 'var(--bg-white)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}>
+                        {categories.map((cat) => (
+                            <button key={cat} onClick={() => setActiveTab(cat)} style={{
+                                padding: '8px 20px', borderRadius: 9, border: 'none',
+                                background: activeTab === cat ? 'var(--orange)' : 'transparent',
+                                color: activeTab === cat ? '#fff' : 'var(--text-muted)',
+                                fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600,
+                                cursor: 'pointer', transition: 'all 0.3s var(--ease-spring)',
+                            }}>{cat}</button>
+                        ))}
+                    </div>
                 </div>
             </section>
 
             {/* ═══ CONTENT — Light ═══ */}
             <section className="light-section" style={{ padding: '80px 24px 100px', background: 'var(--bg-surface)' }}>
                 <div style={{ maxWidth: 1000, margin: '0 auto' }}>
-                    {/* Category tabs */}
-                    <div className="res-reveal" style={{ marginBottom: 40, display: 'flex', justifyContent: 'center' }}>
-                        <div style={{ display: 'inline-flex', gap: 6, padding: 4, borderRadius: 12, background: 'var(--bg-white)', border: '1px solid var(--border-default)' }}>
-                            {categories.map((cat) => (
-                                <button key={cat} onClick={() => setActiveTab(cat)} style={{
-                                    padding: '8px 20px', borderRadius: 9, border: 'none',
-                                    background: activeTab === cat ? 'var(--orange)' : 'transparent',
-                                    color: activeTab === cat ? '#fff' : 'var(--text-muted)',
-                                    fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600,
-                                    cursor: 'pointer', transition: 'all 0.3s var(--ease-spring)',
-                                }}>{cat}</button>
-                            ))}
-                        </div>
-                    </div>
-
                     {/* Resource cards */}
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16, marginBottom: 80 }}>
                         {filtered.map((r, i) => (
                             <div key={i} style={{
                                 borderRadius: 20, overflow: 'hidden',
-                                background: 'var(--bg-white)', border: '1px solid var(--border-default)',
+                                background: 'var(--bg-white)', border: '1px solid var(--border)',
                                 transition: 'all 0.3s var(--ease-spring)', cursor: 'default',
                                 display: 'flex', flexDirection: 'column',
                             }}
                                 onMouseEnter={(e) => { e.currentTarget.style.borderColor = catColor(r.category); e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = `0 8px 24px ${catColor(r.category)}12`; }}
-                                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-default)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
+                                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
                             >
                                 {/* Thumbnail */}
                                 <div className="ai-img-container" style={{ height: 160 }}>
@@ -128,15 +125,15 @@ export default function ResourcesPage() {
                                     />
                                 </div>
                                 <div style={{ padding: '20px 24px 24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-                                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 999, background: `${catColor(r.category)}10`, color: catColor(r.category), textTransform: 'uppercase', letterSpacing: '0.04em' }}>{r.category}</span>
-                                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-muted)' }}>{r.date}</span>
-                                </div>
-                                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 17, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 10, lineHeight: 1.3 }}>{r.title}</h3>
-                                <p style={{ color: 'var(--text-muted)', fontSize: 13, lineHeight: 1.7, flex: 1 }}>{r.desc}</p>
-                                <div style={{ marginTop: 16 }}>
-                                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600, color: 'var(--orange)' }}>Read more &rarr;</span>
-                                </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 999, background: `${catColor(r.category)}10`, color: catColor(r.category), textTransform: 'uppercase', letterSpacing: '0.04em' }}>{r.category}</span>
+                                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-muted)' }}>{r.date}</span>
+                                    </div>
+                                    <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 17, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 10, lineHeight: 1.3 }}>{r.title}</h3>
+                                    <p style={{ color: 'var(--text-muted)', fontSize: 13, lineHeight: 1.7, flex: 1 }}>{r.desc}</p>
+                                    <div style={{ marginTop: 16 }}>
+                                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600, color: 'var(--orange)' }}>Read more &rarr;</span>
+                                    </div>
                                 </div>
                             </div>
                         ))}
@@ -145,13 +142,13 @@ export default function ResourcesPage() {
                     {/* FAQ */}
                     <div className="res-reveal">
                         <div style={{ textAlign: 'center', marginBottom: 40 }}>
-                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12, fontWeight: 600 }}>FAQ</p>
+                            <p className="label-mono" style={{ color: 'var(--orange)', marginBottom: 12 }}>FAQ</p>
                             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>Frequently Asked Questions</h2>
                         </div>
                         <div style={{ maxWidth: 700, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
                             {faqs.map((faq, i) => (
                                 <div key={i} style={{
-                                    borderRadius: 16, background: 'var(--bg-white)', border: `1px solid ${openFaq === i ? 'var(--orange)' : 'var(--border-default)'}`,
+                                    borderRadius: 16, background: 'var(--bg-white)', border: `1px solid ${openFaq === i ? 'var(--orange)' : 'var(--border)'}`,
                                     overflow: 'hidden', transition: 'border-color 0.3s ease',
                                 }}>
                                     <button onClick={() => toggleFaq(i)} style={{
@@ -172,7 +169,7 @@ export default function ResourcesPage() {
                     </div>
 
                     {/* CTA */}
-                    <div className="res-reveal" style={{ textAlign: 'center', padding: '56px 24px', borderRadius: 24, background: 'var(--bg-white)', border: '1px solid var(--border-default)', marginTop: 80 }}>
+                    <div className="res-reveal" style={{ textAlign: 'center', padding: '56px 24px', borderRadius: 24, background: 'var(--bg-white)', border: '1px solid var(--border)', marginTop: 80, boxShadow: 'var(--shadow-sm)' }}>
                         <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: 12 }}>
                             Ready to transform your marketing?
                         </h3>
@@ -187,6 +184,12 @@ export default function ResourcesPage() {
             </section>
 
             <Footer />
+
+            <style>{`
+                @media (max-width: 600px) {
+                    .res-hero-tabs { flex-wrap: wrap !important; }
+                }
+            `}</style>
         </div>
     );
 }
