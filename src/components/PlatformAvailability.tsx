@@ -74,9 +74,9 @@ const PlatformAvailability: React.FC = () => {
     }, { scope: containerRef });
 
     return (
-        <section ref={containerRef} style={{
+        <section ref={containerRef} className="light-section" style={{
             padding: '120px 0',
-            background: 'var(--bg-cream)',
+            background: 'var(--bg-white)',
             position: 'relative',
             overflow: 'hidden',
         }}>
