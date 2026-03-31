@@ -53,23 +53,24 @@ void main() {
   float n2 = fbm(p + vec2(n1 * 1.5 + t * 0.5, n1 * 1.2));
   float n3 = fbm(p + vec2(n2 * 1.3, n2 * 0.9 + t * 0.3));
 
-  // Warm orange/amber color palette
-  vec3 c1 = vec3(0.12, 0.04, 0.0);   // deep brown
-  vec3 c2 = vec3(0.4, 0.15, 0.02);   // warm brown
-  vec3 c3 = vec3(0.8, 0.35, 0.05);   // orange
-  vec3 c4 = vec3(1.0, 0.6, 0.1);     // bright amber
+  // Brighter warm orange/amber palette
+  vec3 c1 = vec3(0.15, 0.06, 0.01);  // deep warm
+  vec3 c2 = vec3(0.5, 0.2, 0.04);    // warm brown
+  vec3 c3 = vec3(0.9, 0.4, 0.08);    // bright orange
+  vec3 c4 = vec3(1.0, 0.7, 0.2);     // golden amber
 
   vec3 col = mix(c1, c2, n1);
-  col = mix(col, c3, n2 * 0.6);
-  col = mix(col, c4, n3 * 0.3);
+  col = mix(col, c3, n2 * 0.7);
+  col = mix(col, c4, n3 * 0.4);
 
-  // Add subtle light streaks
-  float streak = pow(n3, 3.0) * 1.5;
-  col += vec3(streak * 0.8, streak * 0.4, streak * 0.1);
+  // Brighter light streaks
+  float streak = pow(n3, 2.5) * 2.0;
+  col += vec3(streak * 1.0, streak * 0.5, streak * 0.15);
 
-  // Vignette
-  float vig = 1.0 - length((uv - 0.5) * 1.5);
-  col *= smoothstep(0.0, 0.7, vig);
+  // Softer vignette (less darkening)
+  float vig = 1.0 - length((uv - 0.5) * 1.2);
+  col *= smoothstep(0.0, 0.8, vig);
+  col *= 1.3;
 
   fragColor = vec4(col, 1.0);
 }`;
