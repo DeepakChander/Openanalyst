@@ -89,9 +89,9 @@ const wrap = (min: number, max: number, v: number) => {
 function PreviewCard({ feature, isActive }: { feature: typeof features[0]; isActive: boolean }) {
     return (
         <div style={{
-            padding: 28, borderRadius: 24,
+            padding: 28, borderRadius: 20,
             background: 'var(--bg-white)', border: '1px solid var(--border)',
-            boxShadow: isActive ? '0 20px 60px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04)' : 'none',
+            boxShadow: isActive ? '0 12px 40px rgba(0,0,0,0.06)' : 'none',
             height: '100%', display: 'flex', flexDirection: 'column',
         }}>
             {/* Header */}
@@ -224,25 +224,27 @@ const Features: React.FC = () => {
                     display: 'flex', flexDirection: 'column', gap: 0,
                 }}>
                     <div style={{
-                        position: 'relative', overflow: 'hidden', borderRadius: 40,
+                        position: 'relative', overflow: 'hidden', borderRadius: 28,
                         display: 'flex', flexDirection: 'row',
-                        minHeight: 560, border: '1px solid var(--border)',
-                        background: 'var(--bg-surface)',
+                        minHeight: 540, border: '1px solid var(--border)',
+                        background: 'var(--bg-white)',
+                        boxShadow: '0 4px 40px rgba(0,0,0,0.06)',
                     }}>
                         {/* Left — Scrolling tabs */}
                         <div style={{
-                            width: 300, minWidth: 300,
+                            width: 280, minWidth: 280,
                             position: 'relative', zIndex: 30,
                             display: 'flex', flexDirection: 'column',
                             alignItems: 'flex-start', justifyContent: 'center',
                             overflow: 'hidden',
-                            padding: '40px 0 40px 32px',
-                            background: features[currentIndex].color,
-                            transition: 'background 0.6s ease',
+                            padding: '40px 0 40px 28px',
+                            background: '#0F172A',
                         }}>
+                            {/* Colored accent glow */}
+                            <div style={{ position: 'absolute', top: '30%', left: '-20%', width: 300, height: 300, borderRadius: '50%', background: `radial-gradient(circle, ${features[currentIndex].color}20 0%, transparent 70%)`, transition: 'background 0.6s ease', pointerEvents: 'none' }} />
                             {/* Fade edges */}
-                            <div style={{ position: 'absolute', inset: '0 0 auto 0', height: 60, background: `linear-gradient(to bottom, ${features[currentIndex].color}, transparent)`, zIndex: 40, transition: 'background 0.6s ease' }} />
-                            <div style={{ position: 'absolute', inset: 'auto 0 0 0', height: 60, background: `linear-gradient(to top, ${features[currentIndex].color}, transparent)`, zIndex: 40, transition: 'background 0.6s ease' }} />
+                            <div style={{ position: 'absolute', inset: '0 0 auto 0', height: 50, background: 'linear-gradient(to bottom, #0F172A, transparent)', zIndex: 40 }} />
+                            <div style={{ position: 'absolute', inset: 'auto 0 0 0', height: 50, background: 'linear-gradient(to top, #0F172A, transparent)', zIndex: 40 }} />
 
                             <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', zIndex: 20 }}>
                                 {features.map((feature, index) => {
@@ -267,8 +269,8 @@ const Features: React.FC = () => {
                                                 style={{
                                                     display: 'flex', alignItems: 'center', gap: 12,
                                                     padding: '12px 20px', borderRadius: 999,
-                                                    background: isActive ? '#fff' : 'transparent',
-                                                    border: isActive ? '1px solid #fff' : '1px solid rgba(255,255,255,0.2)',
+                                                    background: isActive ? 'rgba(255,255,255,0.1)' : 'transparent',
+                                                    border: isActive ? `1px solid ${feature.color}60` : '1px solid rgba(255,255,255,0.08)',
                                                     cursor: 'pointer', textAlign: 'left',
                                                     transition: 'all 0.4s ease',
                                                     position: 'relative', zIndex: isActive ? 10 : 1,
@@ -276,15 +278,15 @@ const Features: React.FC = () => {
                                             >
                                                 <span style={{
                                                     width: 28, height: 28, borderRadius: 8,
-                                                    background: isActive ? `${feature.color}15` : 'rgba(255,255,255,0.15)',
+                                                    background: isActive ? `${feature.color}25` : 'rgba(255,255,255,0.06)',
                                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                                                     fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700,
-                                                    color: isActive ? feature.color : 'rgba(255,255,255,0.7)',
+                                                    color: isActive ? feature.color : 'rgba(255,255,255,0.4)',
                                                     flexShrink: 0, transition: 'all 0.3s ease',
                                                 }}>0{feature.id + 1}</span>
                                                 <span style={{
                                                     fontSize: 13, fontWeight: isActive ? 600 : 400,
-                                                    color: isActive ? feature.color : 'rgba(255,255,255,0.6)',
+                                                    color: isActive ? '#fff' : 'rgba(255,255,255,0.35)',
                                                     whiteSpace: 'nowrap', textTransform: 'uppercase',
                                                     letterSpacing: '0.04em',
                                                     transition: 'all 0.3s ease',
@@ -300,11 +302,11 @@ const Features: React.FC = () => {
                         <div style={{
                             flex: 1, position: 'relative',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            padding: '32px 40px',
+                            padding: '28px 36px',
                             overflow: 'hidden',
-                            borderLeft: '1px solid var(--border)',
+                            background: 'var(--bg-primary)',
                         }}>
-                            <div style={{ position: 'relative', width: '100%', maxWidth: 520, minHeight: 460 }}>
+                            <div style={{ position: 'relative', width: '100%', maxWidth: 500, minHeight: 440 }}>
                                 {features.map((feature, index) => {
                                     const status = getCardStatus(index);
                                     const isActive = status === 'active';
@@ -345,20 +347,18 @@ const Features: React.FC = () => {
                 @media (max-width: 900px) {
                     .feat-carousel > div:first-child {
                         flex-direction: column !important;
-                        border-radius: 24px !important;
+                        border-radius: 20px !important;
                     }
                     .feat-carousel > div:first-child > div:first-child {
                         width: 100% !important;
                         min-width: unset !important;
-                        min-height: 280px !important;
-                        padding: 32px 16px !important;
-                        border-radius: 24px 24px 0 0 !important;
+                        min-height: 260px !important;
+                        padding: 28px 16px !important;
+                        border-radius: 20px 20px 0 0 !important;
                     }
                     .feat-carousel > div:first-child > div:last-child {
-                        padding: 24px 16px !important;
-                        min-height: 500px !important;
-                        border-left: none !important;
-                        border-top: 1px solid var(--border) !important;
+                        padding: 20px 16px !important;
+                        min-height: 480px !important;
                     }
                 }
             `}</style>
