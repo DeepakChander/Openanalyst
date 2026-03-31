@@ -144,26 +144,13 @@ const Hero: React.FC = () => {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         const tl = gsap.timeline();
 
-        tl.fromTo('.hero-word',
-            { y: 80, opacity: 0, filter: 'blur(8px)' },
-            { y: 0, opacity: 1, filter: 'blur(0px)', stagger: 0.08, duration: 1, ease: 'power4.out' },
-        0.5);
-        tl.fromTo('.hero-cycling',
-            { y: 40, opacity: 0, scale: 0.9 },
-            { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.4)' },
-        1.1);
-        tl.fromTo('.hero-subtitle',
-            { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.7 },
-        1.4);
-        tl.fromTo('.hero-cta',
-            { y: 16, opacity: 0 },
-            { y: 0, opacity: 1, stagger: 0.1, duration: 0.5 },
-        1.7);
-        tl.fromTo('.hero-proof',
-            { y: 12, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.5 },
-        2.0);
+        /* No opacity animations — elements are always visible.
+           Only subtle y-translate for entrance feel. */
+        gsap.from('.hero-word', { y: 30, duration: 0.8, stagger: 0.06, ease: 'power3.out', delay: 0.2 });
+        gsap.from('.hero-cycling', { y: 20, duration: 0.6, ease: 'power3.out', delay: 0.7 });
+        gsap.from('.hero-subtitle', { y: 15, duration: 0.5, delay: 0.9 });
+        gsap.from('.hero-cta', { y: 10, duration: 0.4, stagger: 0.08, delay: 1.1 });
+        gsap.from('.hero-proof', { y: 10, duration: 0.4, delay: 1.3 });
     }, { scope: heroRef });
 
     return (
