@@ -11,183 +11,95 @@ const WORD_COLORS: Record<string, string> = {
     Campaigns: '#FF6B00', Analytics: '#8B5CF6', Content: '#10B981', Ads: '#3B82F6', SEO: '#F59E0B',
 };
 
-const defaultShaderSource = `#version 300 es
-precision highp float;
-out vec4 fragColor;
-uniform vec2 resolution;
-uniform float time;
+/* WebGL shader code removed — CSS animation used instead for compatibility */
 
-float hash(vec2 p) {
-  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
-}
+/* ═══ CSS Animated Background — works everywhere, no WebGL needed ═══ */
+function AnimatedBackground() {
+    return (
+        <div className="hero-bg-wrap" style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
+            {/* Base dark gradient */}
+            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 120% 80% at 50% 40%, #1a0e00 0%, #0a0500 50%, #000000 100%)' }} />
 
-float noise(vec2 p) {
-  vec2 i = floor(p);
-  vec2 f = fract(p);
-  f = f * f * (3.0 - 2.0 * f);
-  return mix(
-    mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
-    mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x),
-    f.y
-  );
-}
+            {/* Animated orange orbs */}
+            <div className="hero-orb hero-orb-1" />
+            <div className="hero-orb hero-orb-2" />
+            <div className="hero-orb hero-orb-3" />
+            <div className="hero-orb hero-orb-4" />
 
-float fbm(vec2 p) {
-  float v = 0.0;
-  float a = 0.5;
-  for (int i = 0; i < 6; i++) {
-    v += a * noise(p);
-    p = p * 2.0 + vec2(1.7, 9.2);
-    a *= 0.5;
-  }
-  return v;
-}
+            {/* Light streak overlay */}
+            <div className="hero-streak" />
 
-void main() {
-  vec2 uv = gl_FragCoord.xy / resolution.xy;
-  vec2 p = uv * 3.0;
+            {/* Grain texture */}
+            <div style={{ position: 'absolute', inset: 0, opacity: 0.04, mixBlendMode: 'overlay', backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '128px 128px' }} />
 
-  float t = time * 0.15;
-
-  float n1 = fbm(p + vec2(t, t * 0.7));
-  float n2 = fbm(p + vec2(n1 * 1.5 + t * 0.5, n1 * 1.2));
-  float n3 = fbm(p + vec2(n2 * 1.3, n2 * 0.9 + t * 0.3));
-
-  // Vivid warm orange/amber palette
-  vec3 c1 = vec3(0.08, 0.03, 0.0);   // near black warm
-  vec3 c2 = vec3(0.6, 0.22, 0.03);   // warm orange
-  vec3 c3 = vec3(1.0, 0.45, 0.08);   // vivid orange
-  vec3 c4 = vec3(1.0, 0.75, 0.25);   // bright golden
-
-  vec3 col = mix(c1, c2, n1 * 1.2);
-  col = mix(col, c3, n2 * 0.8);
-  col = mix(col, c4, pow(n3, 1.5) * 0.6);
-
-  // Bright horizontal light streaks
-  float streak = pow(n3 * n2, 1.8) * 3.0;
-  col += vec3(streak * 1.2, streak * 0.6, streak * 0.15);
-
-  // Hot spots — bright orange glows
-  float hot = pow(max(n2 - 0.4, 0.0) * 2.0, 2.0);
-  col += vec3(hot * 0.8, hot * 0.3, hot * 0.05);
-
-  // Light vignette keeping center bright
-  float vig = 1.0 - length((uv - vec2(0.5, 0.45)) * vec2(1.0, 1.3));
-  col *= smoothstep(-0.1, 0.7, vig);
-  col *= 1.8;
-
-  fragColor = vec4(col, 1.0);
-}`;
-
-const vertexSrc = `#version 300 es
-precision highp float;
-in vec4 position;
-void main(){gl_Position=position;}`;
-
-/* ═══ Full WebGL Shader Background — exact reference implementation ═══ */
-function ShaderCanvas() {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const rafRef = useRef<number>(0);
-
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-        const gl = canvas.getContext('webgl2');
-        if (!gl) return;
-
-        let dpr = Math.max(1, 0.5 * window.devicePixelRatio);
-        let mouseCoords = [0, 0];
-        let mouseMove = [0, 0];
-        let active = false;
-
-        // Resize
-        const resize = () => {
-            canvas.width = window.innerWidth * dpr;
-            canvas.height = window.innerHeight * dpr;
-            gl.viewport(0, 0, canvas.width, canvas.height);
-        };
-        resize();
-
-        // Compile shader
-        const compile = (type: number, source: string) => {
-            const shader = gl.createShader(type)!;
-            gl.shaderSource(shader, source);
-            gl.compileShader(shader);
-            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                console.error('Shader error:', gl.getShaderInfoLog(shader));
-            }
-            return shader;
-        };
-
-        const vs = compile(gl.VERTEX_SHADER, vertexSrc);
-        const fs = compile(gl.FRAGMENT_SHADER, defaultShaderSource);
-
-        const program = gl.createProgram()!;
-        gl.attachShader(program, vs);
-        gl.attachShader(program, fs);
-        gl.linkProgram(program);
-
-        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-            console.error('Program error:', gl.getProgramInfoLog(program));
-            return;
-        }
-
-        // Buffer
-        const buffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, 1, -1, -1, 1, 1, 1, -1]), gl.STATIC_DRAW);
-
-        const posAttr = gl.getAttribLocation(program, 'position');
-        gl.enableVertexAttribArray(posAttr);
-        gl.vertexAttribPointer(posAttr, 2, gl.FLOAT, false, 0, 0);
-
-        const uResolution = gl.getUniformLocation(program, 'resolution');
-        const uTime = gl.getUniformLocation(program, 'time');
-
-        // Pointer events
-        const mapCoords = (x: number, y: number): [number, number] => [x * dpr, canvas.height - y * dpr];
-
-        canvas.addEventListener('pointerdown', (e) => {
-            active = true;
-            mouseCoords = mapCoords(e.clientX, e.clientY);
-        });
-        canvas.addEventListener('pointerup', () => { active = false; });
-        canvas.addEventListener('pointerleave', () => { active = false; });
-        canvas.addEventListener('pointermove', (e) => {
-            if (active) {
-                mouseCoords = mapCoords(e.clientX, e.clientY);
-                mouseMove = [mouseMove[0] + e.movementX, mouseMove[1] + e.movementY];
-            }
-        });
-
-        // Render loop
-        const render = (now: number) => {
-            if (gl.isContextLost()) return;
-            gl.clearColor(0, 0, 0, 1);
-            gl.clear(gl.COLOR_BUFFER_BIT);
-            gl.useProgram(program);
-            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-            gl.uniform2f(uResolution, canvas.width, canvas.height);
-            gl.uniform1f(uTime, now * 1e-3);
-            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-            rafRef.current = requestAnimationFrame(render);
-        };
-
-        rafRef.current = requestAnimationFrame(render);
-        window.addEventListener('resize', resize);
-
-        return () => {
-            cancelAnimationFrame(rafRef.current);
-            window.removeEventListener('resize', resize);
-            gl.deleteProgram(program);
-            gl.deleteShader(vs);
-            gl.deleteShader(fs);
-        };
-    }, []);
-
-    return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{ touchAction: 'none' }} />;
+            <style>{`
+                .hero-orb {
+                    position: absolute;
+                    border-radius: 50%;
+                    filter: blur(80px);
+                    will-change: transform;
+                }
+                .hero-orb-1 {
+                    width: 600px; height: 600px;
+                    background: radial-gradient(circle, rgba(255,107,0,0.25) 0%, rgba(255,80,0,0.1) 40%, transparent 70%);
+                    top: 10%; left: 20%;
+                    animation: heroFloat1 12s ease-in-out infinite;
+                }
+                .hero-orb-2 {
+                    width: 500px; height: 500px;
+                    background: radial-gradient(circle, rgba(255,140,30,0.2) 0%, rgba(200,80,0,0.08) 40%, transparent 70%);
+                    top: 30%; right: 10%;
+                    animation: heroFloat2 15s ease-in-out infinite;
+                }
+                .hero-orb-3 {
+                    width: 400px; height: 400px;
+                    background: radial-gradient(circle, rgba(255,180,50,0.15) 0%, transparent 60%);
+                    bottom: 10%; left: 35%;
+                    animation: heroFloat3 18s ease-in-out infinite;
+                }
+                .hero-orb-4 {
+                    width: 300px; height: 300px;
+                    background: radial-gradient(circle, rgba(255,100,0,0.18) 0%, transparent 60%);
+                    top: 50%; left: 10%;
+                    animation: heroFloat1 20s ease-in-out infinite reverse;
+                }
+                .hero-streak {
+                    position: absolute;
+                    inset: 0;
+                    background: linear-gradient(
+                        105deg,
+                        transparent 20%,
+                        rgba(255,120,20,0.04) 35%,
+                        rgba(255,160,40,0.08) 42%,
+                        rgba(255,120,20,0.04) 50%,
+                        transparent 65%
+                    );
+                    animation: heroStreak 8s ease-in-out infinite;
+                }
+                @keyframes heroFloat1 {
+                    0%, 100% { transform: translate(0, 0) scale(1); }
+                    33% { transform: translate(40px, -30px) scale(1.1); }
+                    66% { transform: translate(-20px, 20px) scale(0.95); }
+                }
+                @keyframes heroFloat2 {
+                    0%, 100% { transform: translate(0, 0) scale(1); }
+                    33% { transform: translate(-30px, 20px) scale(1.05); }
+                    66% { transform: translate(25px, -25px) scale(0.97); }
+                }
+                @keyframes heroFloat3 {
+                    0%, 100% { transform: translate(0, 0) scale(1); }
+                    50% { transform: translate(30px, -20px) scale(1.08); }
+                }
+                @keyframes heroStreak {
+                    0%, 100% { opacity: 0.6; transform: translateX(-5%); }
+                    50% { opacity: 1; transform: translateX(5%); }
+                }
+                @media (prefers-reduced-motion: reduce) {
+                    .hero-orb, .hero-streak { animation: none !important; }
+                }
+            `}</style>
+        </div>
+    );
 }
 
 /* ── Cycling word ── */
@@ -256,8 +168,8 @@ const Hero: React.FC = () => {
 
     return (
         <section id="hero-section" ref={heroRef} className="relative overflow-hidden min-h-screen flex items-center bg-black">
-            {/* Shader background */}
-            <ShaderCanvas />
+            {/* Animated CSS background */}
+            <AnimatedBackground />
 
             {/* Content */}
             <div className="relative z-10 max-w-[900px] mx-auto px-6 py-40 text-center">
