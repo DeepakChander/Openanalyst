@@ -12,25 +12,25 @@ const steps = [
         num: '01', title: 'Connect', subtitle: 'Your Stack',
         desc: 'Link Gmail, Slack, HubSpot, and 24 more tools in 60 seconds.',
         color: '#FF6B00',
-        icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>,
+        icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 9.5a2 2 0 0 1 2-2H9V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2.5h2.5a2 2 0 0 1 2 2V12H17a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2.5v2.5a2 2 0 0 1-2 2H15V18a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v2.5H6.5a2 2 0 0 1-2-2V18H7a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H4.5V9.5z"/></svg>,
     },
     {
         num: '02', title: 'Set', subtitle: 'Your Goals',
         desc: 'Tell agents what to optimize — revenue, leads, or custom KPIs.',
         color: '#8B5CF6',
-        icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>,
+        icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm0-6a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>,
     },
     {
         num: '03', title: 'Agents', subtitle: 'Activate',
         desc: '42 AI agents start working immediately — planning, creating, optimizing.',
         color: '#10B981',
-        icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
+        icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>,
     },
     {
         num: '04', title: 'Watch', subtitle: 'Results Grow',
         desc: 'Real-time ROI tracking and continuous optimization. 340% avg ROI.',
         color: '#F59E0B',
-        icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>,
+        icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg>,
     },
 ];
 
