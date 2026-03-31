@@ -86,7 +86,7 @@ const HowItWorks: React.FC = () => {
 
     return (
         <section id="how-it-works" ref={sectionRef} style={{
-            background: 'var(--bg-primary)',
+            background: '#0A0A0A',
             position: 'relative',
             minHeight: '300vh',
         }}>
@@ -97,106 +97,141 @@ const HowItWorks: React.FC = () => {
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     position: 'relative', flexShrink: 0,
                 }}>
-                    <div style={{ position: 'relative', width: 320, height: 400 }}>
-                        {/* Glowing orb */}
+                    <div style={{ position: 'relative', width: 380, height: 480 }}>
+                        {/* Background grid pattern */}
                         <div style={{
-                            position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)',
-                            width: 240, height: 120, borderRadius: '50%',
-                            background: 'radial-gradient(ellipse, rgba(255,107,0,0.12) 0%, transparent 70%)',
-                            filter: 'blur(40px)',
+                            position: 'absolute', inset: -40, opacity: 0.06, pointerEvents: 'none',
+                            backgroundImage: 'linear-gradient(rgba(255,107,0,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,0,0.5) 1px, transparent 1px)',
+                            backgroundSize: '40px 40px',
+                            maskImage: 'radial-gradient(ellipse 70% 60% at 50% 55%, black 0%, transparent 70%)',
+                            WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 50% 55%, black 0%, transparent 70%)',
+                        }} />
+
+                        {/* Large ambient glow */}
+                        <div style={{
+                            position: 'absolute', bottom: -20, left: '50%', transform: 'translateX(-50%)',
+                            width: 320, height: 180, borderRadius: '50%',
+                            background: 'radial-gradient(ellipse, rgba(255,107,0,0.2) 0%, transparent 70%)',
+                            filter: 'blur(50px)',
                         }} />
 
                         {/* Central diamond shape */}
                         <div style={{
-                            position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%) rotate(45deg)',
-                            width: 80, height: 80, borderRadius: 16,
+                            position: 'absolute', bottom: 70, left: '50%', transform: 'translateX(-50%) rotate(45deg)',
+                            width: 90, height: 90, borderRadius: 18,
                             border: '2px solid #FF6B00',
-                            background: 'rgba(255,107,0,0.08)',
+                            background: 'linear-gradient(135deg, rgba(255,107,0,0.15) 0%, rgba(255,107,0,0.05) 100%)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            boxShadow: '0 0 40px rgba(255,107,0,0.2), inset 0 0 20px rgba(255,107,0,0.1)',
                         }}>
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="#FF6B00" style={{ transform: 'rotate(-45deg)' }}>
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="#FF6B00" style={{ transform: 'rotate(-45deg)', filter: 'drop-shadow(0 0 6px rgba(255,107,0,0.5))' }}>
                                 <path d={iconPaths[activeStep]} />
                             </svg>
                         </div>
 
                         {/* Orbiting ellipse rings */}
                         <div style={{
-                            position: 'absolute', bottom: 10, left: '50%', transform: 'translateX(-50%)',
-                            width: 260, height: 60, borderRadius: '50%',
-                            border: '1px solid rgba(255,107,0,0.25)',
+                            position: 'absolute', bottom: 30, left: '50%', transform: 'translateX(-50%)',
+                            width: 280, height: 65, borderRadius: '50%',
+                            border: '1px solid rgba(255,107,0,0.3)',
                         }} />
                         <div style={{
-                            position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)',
-                            width: 300, height: 70, borderRadius: '50%',
-                            border: '1px solid rgba(255,107,0,0.12)',
+                            position: 'absolute', bottom: 18, left: '50%', transform: 'translateX(-50%)',
+                            width: 340, height: 80, borderRadius: '50%',
+                            border: '1px solid rgba(255,107,0,0.15)',
+                        }} />
+                        <div style={{
+                            position: 'absolute', bottom: 8, left: '50%', transform: 'translateX(-50%)',
+                            width: 380, height: 90, borderRadius: '50%',
+                            border: '1px solid rgba(255,107,0,0.07)',
                         }} />
 
                         {/* Vertical connection lines */}
                         <div style={{
-                            position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
-                            width: 1, height: 260,
-                            background: 'linear-gradient(to bottom, rgba(255,107,0,0.4), rgba(255,107,0,0.08))',
+                            position: 'absolute', top: -10, left: '50%', transform: 'translateX(-50%)',
+                            width: 1, height: 310,
+                            background: 'linear-gradient(to bottom, rgba(255,107,0,0.6), rgba(255,107,0,0.1))',
                         }} />
-                        {/* Diagonal lines */}
-                        <div style={{
-                            position: 'absolute', top: 20, left: '50%', transformOrigin: 'bottom center',
-                            width: 1, height: 240, transform: 'translateX(-50%) rotate(-25deg)',
-                            background: 'linear-gradient(to bottom, rgba(255,107,0,0.2), transparent)',
-                        }} />
-                        <div style={{
-                            position: 'absolute', top: 20, left: '50%', transformOrigin: 'bottom center',
-                            width: 1, height: 240, transform: 'translateX(-50%) rotate(25deg)',
-                            background: 'linear-gradient(to bottom, rgba(255,107,0,0.2), transparent)',
-                        }} />
+                        {/* Diagonal lines - multiple */}
+                        {[-35, -18, 18, 35].map((angle, idx) => (
+                            <div key={idx} style={{
+                                position: 'absolute', top: 0, left: '50%', transformOrigin: 'bottom center',
+                                width: 1, height: 290, transform: `translateX(-50%) rotate(${angle}deg)`,
+                                background: `linear-gradient(to bottom, rgba(255,107,0,${idx % 2 === 0 ? 0.3 : 0.15}), transparent)`,
+                            }} />
+                        ))}
 
-                        {/* Floating icon boxes */}
+                        {/* Floating icon boxes - 6 total */}
                         {steps.map((step, i) => {
                             const positions = [
-                                { top: 20, left: '50%', ml: -20 },
-                                { top: 80, left: '25%', ml: -20 },
-                                { top: 80, left: '75%', ml: -20 },
-                                { top: 140, left: '50%', ml: -20 },
+                                { top: 10, left: '50%', ml: -22 },
+                                { top: 80, left: '20%', ml: -22 },
+                                { top: 80, left: '80%', ml: -22 },
+                                { top: 150, left: '50%', ml: -22 },
                             ];
                             const pos = positions[i];
                             return (
                                 <div key={i} style={{
                                     position: 'absolute', top: pos.top, left: pos.left, marginLeft: pos.ml,
-                                    width: 40, height: 40, borderRadius: 8,
-                                    background: activeStep === i ? 'rgba(255,107,0,0.1)' : 'var(--bg-white)',
-                                    border: `1px solid ${activeStep === i ? '#FF6B00' : 'var(--border)'}`,
+                                    width: 44, height: 44, borderRadius: 10,
+                                    background: activeStep === i ? 'rgba(255,107,0,0.15)' : 'rgba(255,255,255,0.03)',
+                                    border: `1px solid ${activeStep === i ? '#FF6B00' : 'rgba(255,255,255,0.08)'}`,
                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    transition: 'all 0.5s ease',
-                                    boxShadow: activeStep === i ? '0 0 20px rgba(255,107,0,0.3)' : 'none',
+                                    transition: 'all 0.5s cubic-bezier(0.16,1,0.3,1)',
+                                    boxShadow: activeStep === i ? '0 0 24px rgba(255,107,0,0.35), 0 0 60px rgba(255,107,0,0.1)' : 'none',
+                                    backdropFilter: 'blur(8px)',
                                 }}>
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill={activeStep === i ? '#FF6B00' : 'rgba(0,0,0,0.2)'} style={{ transition: 'fill 0.5s ease' }}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill={activeStep === i ? '#FF6B00' : 'rgba(255,255,255,0.25)'} style={{ transition: 'fill 0.5s ease' }}>
                                         <path d={iconPaths[i]} />
                                     </svg>
                                 </div>
                             );
                         })}
 
+                        {/* Extra decorative icons */}
+                        {[
+                            { top: 45, left: '35%', ml: -16, path: 'M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z' },
+                            { top: 45, left: '65%', ml: -16, path: 'M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z' },
+                            { top: 120, left: '30%', ml: -16, path: 'M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z' },
+                            { top: 120, left: '70%', ml: -16, path: 'M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z' },
+                        ].map((item, idx) => (
+                            <div key={`extra-${idx}`} style={{
+                                position: 'absolute', top: item.top, left: item.left, marginLeft: item.ml,
+                                width: 32, height: 32, borderRadius: 7,
+                                background: 'rgba(255,255,255,0.02)',
+                                border: '1px solid rgba(255,255,255,0.05)',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                backdropFilter: 'blur(4px)',
+                            }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(255,255,255,0.15)">
+                                    <path d={item.path} />
+                                </svg>
+                            </div>
+                        ))}
+
                         {/* Horizontal dashed line */}
                         <div style={{
-                            position: 'absolute', top: 200, left: -40, right: -40,
+                            position: 'absolute', top: 230, left: -50, right: -50,
                             height: 1, borderTop: '1px dashed rgba(255,107,0,0.25)',
                         }} />
                         {/* Diamond endpoints */}
                         <div style={{
-                            position: 'absolute', top: 196, left: -48,
+                            position: 'absolute', top: 226, left: -58,
                             width: 10, height: 10, transform: 'rotate(45deg)',
-                            background: '#FF6B00',
+                            background: '#FF6B00', boxShadow: '0 0 8px rgba(255,107,0,0.5)',
                         }} />
                         <div style={{
-                            position: 'absolute', top: 196, right: -48,
+                            position: 'absolute', top: 226, right: -58,
                             width: 10, height: 10, transform: 'rotate(45deg)',
-                            background: '#FF6B00',
+                            background: '#FF6B00', boxShadow: '0 0 8px rgba(255,107,0,0.5)',
                         }} />
 
                         {/* Step indicator */}
                         <div style={{
-                            position: 'absolute', bottom: -50, left: '50%', transform: 'translateX(-50%)',
+                            position: 'absolute', bottom: -30, left: '50%', transform: 'translateX(-50%)',
                             fontFamily: 'var(--font-mono)', fontSize: 11, color: '#FF6B00',
                             letterSpacing: '0.1em', textTransform: 'uppercase', whiteSpace: 'nowrap',
+                            textShadow: '0 0 10px rgba(255,107,0,0.3)',
                         }}>
                             Step {steps[activeStep].num} of 04
                         </div>
@@ -214,7 +249,7 @@ const HowItWorks: React.FC = () => {
                         }}>How It Works</p>
                         <h2 style={{
                             fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)',
-                            fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.03em',
+                            fontWeight: 800, color: '#fff', letterSpacing: '-0.03em',
                             lineHeight: 1.1,
                         }}>
                             From zero to <span style={{
@@ -236,7 +271,7 @@ const HowItWorks: React.FC = () => {
                             <div style={{
                                 position: 'absolute', left: 0, top: 6,
                                 width: 14, height: 14, borderRadius: '50%',
-                                background: activeStep === i ? '#FF6B00' : 'rgba(0,0,0,0.1)',
+                                background: activeStep === i ? '#FF6B00' : 'rgba(255,255,255,0.1)',
                                 transition: 'all 0.4s ease',
                                 boxShadow: activeStep === i ? '0 0 12px rgba(255,107,0,0.5)' : 'none',
                             }} />
@@ -246,26 +281,26 @@ const HowItWorks: React.FC = () => {
                                 <div style={{
                                     position: 'absolute', left: 6, top: 24,
                                     width: 1, height: 'calc(40vh - 10px)',
-                                    borderLeft: '1px dashed rgba(0,0,0,0.1)',
+                                    borderLeft: '1px dashed rgba(255,255,255,0.08)',
                                 }} />
                             )}
 
                             <p style={{
                                 fontFamily: 'var(--font-mono)', fontSize: 12,
-                                color: 'var(--text-muted)', marginBottom: 8,
+                                color: 'rgba(255,255,255,0.35)', marginBottom: 8,
                                 letterSpacing: '0.05em',
                             }}>Step {step.num}</p>
 
                             <h3 style={{
                                 fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.4rem, 2.5vw, 1.8rem)',
-                                fontWeight: 800, color: activeStep === i ? 'var(--text-primary)' : 'var(--text-muted)',
+                                fontWeight: 800, color: activeStep === i ? '#fff' : 'rgba(255,255,255,0.4)',
                                 letterSpacing: '-0.02em', marginBottom: 16,
                                 transition: 'color 0.4s ease',
                                 lineHeight: 1.2,
                             }}>{step.title}</h3>
 
                             <p style={{
-                                fontSize: 15, color: activeStep === i ? 'var(--text-secondary)' : 'var(--text-faint)',
+                                fontSize: 15, color: activeStep === i ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.25)',
                                 lineHeight: 1.7, maxWidth: 500,
                                 transition: 'color 0.4s ease',
                             }}>{step.desc}</p>
