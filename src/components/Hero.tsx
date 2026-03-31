@@ -171,7 +171,7 @@ const Hero: React.FC = () => {
                     {['AI', 'agents', 'that', 'run'].map((word, i) => (
                         <span key={i} className="hero-word inline-block mr-[0.25em]" style={{
                             fontWeight: ['AI', 'agents'].includes(word) ? 800 : 400,
-                            color: word === 'AI' ? '#FF6B00' : '#FAFAFA',
+                            color: word === 'AI' ? '#FF6B00' : 'var(--text-primary)',
                         }}>{word}</span>
                     ))}
                     <br />
