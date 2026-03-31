@@ -1,10 +1,8 @@
 'use client';
 
-import React, { useRef, useState, useEffect, useMemo, Suspense } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
 
 gsap.registerPlugin(useGSAP);
 
@@ -17,96 +15,170 @@ const WORD_COLORS: Record<string, string> = {
     SEO: '#F59E0B',
 };
 
-/* ── 3D Neural Mesh — Lives BEHIND the text as ambient depth ── */
-function NeuralMesh() {
-    const meshRef = useRef<THREE.Mesh>(null);
-    const pointsRef = useRef<THREE.Points>(null);
-    const linesRef = useRef<THREE.LineSegments>(null);
+/* ═══════════════════════════════════════════════
+   WebGL Shader Background — Animated cosmic flow
+   ═══════════════════════════════════════════════ */
 
-    const { nodePositions, linePositions, particlePositions } = useMemo(() => {
-        const nodes: number[] = [];
-        const lines: number[] = [];
-        const particles = new Float32Array(200 * 3);
+const SHADER_SOURCE = `#version 300 es
+precision highp float;
+out vec4 O;
+uniform vec2 resolution;
+uniform float time;
+uniform vec2 touch;
+#define FC gl_FragCoord.xy
+#define T time
+#define R resolution
+#define MN min(R.x,R.y)
 
-        // Create nodes in a soft cloud shape
-        const nodeCount = 40;
-        for (let i = 0; i < nodeCount; i++) {
-            const theta = Math.random() * Math.PI * 2;
-            const phi = Math.acos(2 * Math.random() - 1);
-            const r = 2 + Math.random() * 2;
-            nodes.push(
-                r * Math.sin(phi) * Math.cos(theta),
-                r * Math.sin(phi) * Math.sin(theta) * 0.6, // flatten Y
-                r * Math.cos(phi) * 0.5
-            );
+float rnd(vec2 p) {
+  p=fract(p*vec2(12.9898,78.233));
+  p+=dot(p,p+34.56);
+  return fract(p.x*p.y);
+}
+
+float noise(in vec2 p) {
+  vec2 i=floor(p), f=fract(p), u=f*f*(3.-2.*f);
+  float a=rnd(i),b=rnd(i+vec2(1,0)),c=rnd(i+vec2(0,1)),d=rnd(i+1.);
+  return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);
+}
+
+float fbm(vec2 p) {
+  float t=.0, a=1.; mat2 m=mat2(1.,-.5,.2,1.2);
+  for (int i=0; i<5; i++) { t+=a*noise(p); p*=2.*m; a*=.5; }
+  return t;
+}
+
+float clouds(vec2 p) {
+  float d=1., t=.0;
+  for (float i=.0; i<3.; i++) {
+    float a=d*fbm(i*10.+p.x*.2+.2*(1.+i)*p.y+d+i*i+p);
+    t=mix(t,d,a); d=a; p*=2./(i+1.);
+  }
+  return t;
+}
+
+void main(void) {
+  vec2 uv=(FC-.5*R)/MN, st=uv*vec2(2,1);
+  vec3 col=vec3(0);
+  float bg=clouds(vec2(st.x+T*.5,-st.y));
+  uv*=1.-.3*(sin(T*.2)*.5+.5);
+  for (float i=1.; i<12.; i++) {
+    uv+=.1*cos(i*vec2(.1+.01*i,.8)+i*i+T*.5+.1*uv.x);
+    vec2 p=uv;
+    float d=length(p);
+    col+=.00125/d*(cos(sin(i)*vec3(1,2,3))+1.);
+    float b=noise(i+p+bg*1.731);
+    col+=.002*b/length(max(p,vec2(b*p.x*.02,p.y)));
+    col=mix(col,vec3(bg*.25,bg*.137,bg*.05),d);
+  }
+  O=vec4(col,1);
+}`;
+
+const VERTEX_SOURCE = `#version 300 es
+precision highp float;
+in vec4 position;
+void main(){gl_Position=position;}`;
+
+function ShaderBackground() {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const rafRef = useRef<number>(0);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReduced) return;
+
+        const gl = canvas.getContext('webgl2');
+        if (!gl) return;
+
+        const dpr = Math.max(1, 0.5 * window.devicePixelRatio);
+
+        const resize = () => {
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            gl.viewport(0, 0, canvas.width, canvas.height);
+        };
+        resize();
+
+        // Compile shaders
+        const vs = gl.createShader(gl.VERTEX_SHADER)!;
+        gl.shaderSource(vs, VERTEX_SOURCE);
+        gl.compileShader(vs);
+
+        const fs = gl.createShader(gl.FRAGMENT_SHADER)!;
+        gl.shaderSource(fs, SHADER_SOURCE);
+        gl.compileShader(fs);
+
+        if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
+            console.error('Shader error:', gl.getShaderInfoLog(fs));
+            return;
         }
 
-        // Connect nearby nodes
-        for (let i = 0; i < nodeCount; i++) {
-            for (let j = i + 1; j < nodeCount; j++) {
-                const dx = nodes[i * 3] - nodes[j * 3];
-                const dy = nodes[i * 3 + 1] - nodes[j * 3 + 1];
-                const dz = nodes[i * 3 + 2] - nodes[j * 3 + 2];
-                const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-                if (dist < 2.5) {
-                    lines.push(nodes[i * 3], nodes[i * 3 + 1], nodes[i * 3 + 2]);
-                    lines.push(nodes[j * 3], nodes[j * 3 + 1], nodes[j * 3 + 2]);
-                }
-            }
+        const program = gl.createProgram()!;
+        gl.attachShader(program, vs);
+        gl.attachShader(program, fs);
+        gl.linkProgram(program);
+
+        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+            console.error('Program error:', gl.getProgramInfoLog(program));
+            return;
         }
 
-        // Scattered particles
-        for (let i = 0; i < 200; i++) {
-            particles[i * 3] = (Math.random() - 0.5) * 12;
-            particles[i * 3 + 1] = (Math.random() - 0.5) * 8;
-            particles[i * 3 + 2] = (Math.random() - 0.5) * 4;
-        }
+        // Buffer
+        const buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, 1, -1, -1, 1, 1, 1, -1]), gl.STATIC_DRAW);
 
-        return {
-            nodePositions: new Float32Array(nodes),
-            linePositions: new Float32Array(lines),
-            particlePositions: particles,
+        const position = gl.getAttribLocation(program, 'position');
+        gl.enableVertexAttribArray(position);
+        gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+
+        const resolutionLoc = gl.getUniformLocation(program, 'resolution');
+        const timeLoc = gl.getUniformLocation(program, 'time');
+        const touchLoc = gl.getUniformLocation(program, 'touch');
+
+        let mouseX = 0, mouseY = 0;
+        const handleMouse = (e: MouseEvent) => {
+            mouseX = e.clientX * dpr;
+            mouseY = canvas.height - e.clientY * dpr;
+        };
+        canvas.addEventListener('mousemove', handleMouse);
+
+        const render = (now: number) => {
+            gl.clearColor(0, 0, 0, 1);
+            gl.clear(gl.COLOR_BUFFER_BIT);
+            gl.useProgram(program);
+            gl.uniform2f(resolutionLoc, canvas.width, canvas.height);
+            gl.uniform1f(timeLoc, now * 0.001);
+            gl.uniform2f(touchLoc, mouseX, mouseY);
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+            rafRef.current = requestAnimationFrame(render);
+        };
+
+        rafRef.current = requestAnimationFrame(render);
+        window.addEventListener('resize', resize);
+
+        return () => {
+            cancelAnimationFrame(rafRef.current);
+            window.removeEventListener('resize', resize);
+            canvas.removeEventListener('mousemove', handleMouse);
+            gl.deleteProgram(program);
+            gl.deleteShader(vs);
+            gl.deleteShader(fs);
         };
     }, []);
 
-    useFrame(({ clock, pointer }) => {
-        const t = clock.getElapsedTime();
-        if (meshRef.current) {
-            meshRef.current.rotation.y = t * 0.03 + pointer.x * 0.1;
-            meshRef.current.rotation.x = Math.sin(t * 0.02) * 0.05 + pointer.y * 0.05;
-        }
-    });
-
     return (
-        <group ref={meshRef}>
-            {/* Connection lines */}
-            <lineSegments ref={linesRef}>
-                <bufferGeometry>
-                    <bufferAttribute attach="attributes-position" args={[linePositions, 3]} />
-                </bufferGeometry>
-                <lineBasicMaterial color="#FF6B00" transparent opacity={0.06} />
-            </lineSegments>
-
-            {/* Node points */}
-            <points>
-                <bufferGeometry>
-                    <bufferAttribute attach="attributes-position" args={[nodePositions, 3]} />
-                </bufferGeometry>
-                <pointsMaterial color="#FF6B00" size={0.06} transparent opacity={0.2} sizeAttenuation />
-            </points>
-
-            {/* Ambient particles */}
-            <points ref={pointsRef}>
-                <bufferGeometry>
-                    <bufferAttribute attach="attributes-position" args={[particlePositions, 3]} />
-                </bufferGeometry>
-                <pointsMaterial color="#FF6B00" size={0.02} transparent opacity={0.08} sizeAttenuation blending={THREE.AdditiveBlending} depthWrite={false} />
-            </points>
-        </group>
+        <canvas ref={canvasRef} style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%',
+            background: '#000', touchAction: 'none',
+        }} />
     );
 }
 
-/* ── Animated word with color transition ── */
+/* ── Cycling word with color ── */
 function CyclingWord({ words }: { words: string[] }) {
     const [index, setIndex] = useState(0);
     const wordRef = useRef<HTMLSpanElement>(null);
@@ -135,10 +207,7 @@ function CyclingWord({ words }: { words: string[] }) {
 
     return (
         <span style={{ position: 'relative', display: 'inline-block' }}>
-            <span ref={wordRef} style={{
-                display: 'inline-block', color,
-                transition: 'color 0.3s ease',
-            }}>{word}</span>
+            <span ref={wordRef} style={{ display: 'inline-block', color }}>{word}</span>
             <span style={{
                 position: 'absolute', bottom: -4, left: 0, right: 0,
                 height: 4, borderRadius: 2,
@@ -157,79 +226,46 @@ const Hero: React.FC = () => {
 
         const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-        // Staggered word-by-word headline reveal with IRREGULAR timing
         tl.from('.hero-word', {
             y: 80, opacity: 0, filter: 'blur(8px)', rotateX: 40,
             stagger: { each: 0.08, from: 'start' },
             duration: 1, ease: 'power4.out',
-        }, 0.3);
+        }, 0.5);
 
         tl.from('.hero-cycling', {
             y: 40, opacity: 0, scale: 0.9, duration: 0.8, ease: 'back.out(1.4)',
-        }, 0.9);
+        }, 1.1);
 
         tl.from('.hero-subtitle', {
             y: 20, opacity: 0, filter: 'blur(4px)', duration: 0.7,
-        }, 1.2);
+        }, 1.4);
 
         tl.from('.hero-cta', {
             y: 16, opacity: 0, stagger: 0.1, duration: 0.5,
-        }, 1.5);
+        }, 1.7);
 
         tl.from('.hero-proof', {
             y: 12, opacity: 0, duration: 0.5,
-        }, 1.8);
-
-        tl.from('.hero-mesh-container', {
-            opacity: 0, scale: 0.9, duration: 1.5, ease: 'power2.out',
-        }, 0.1);
+        }, 2.0);
 
     }, { scope: heroRef });
 
     return (
         <section id="hero-section" ref={heroRef} style={{
             position: 'relative', overflow: 'hidden',
-            background: 'var(--bg-primary)',
-            minHeight: '100vh',
-            display: 'flex', alignItems: 'center',
+            minHeight: '100vh', display: 'flex', alignItems: 'center',
         }}>
-            {/* ── 3D mesh lives BEHIND everything ── */}
-            <div className="hero-mesh-container hide-mobile" style={{
-                position: 'absolute', inset: 0, zIndex: 1,
-                opacity: 0.5,
-            }}>
-                <Suspense fallback={null}>
-                    <Canvas camera={{ position: [0, 0, 6], fov: 50 }} gl={{ alpha: true, antialias: true }} style={{ width: '100%', height: '100%' }}>
-                        <ambientLight intensity={0.3} />
-                        <pointLight position={[5, 5, 5]} intensity={0.4} color="#FF6B00" />
-                        <NeuralMesh />
-                    </Canvas>
-                </Suspense>
-            </div>
+            {/* WebGL Shader Background */}
+            <ShaderBackground />
 
-            {/* ── Warm radial gradient for depth ── */}
-            <div style={{
-                position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
-                background: 'radial-gradient(ellipse 80% 60% at 50% 40%, transparent 0%, var(--bg-primary) 70%)',
-            }} />
-
-            {/* ── Subtle dot grid ── */}
-            <div style={{
-                position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none', opacity: 0.4,
-                backgroundImage: 'radial-gradient(circle, rgba(255,107,0,0.08) 1px, transparent 1px)',
-                backgroundSize: '48px 48px',
-                maskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)',
-                WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)',
-            }} />
-
-            {/* ── Main Content — Centered ── */}
+            {/* Content overlay */}
             <div style={{
                 position: 'relative', zIndex: 10,
                 maxWidth: 900, margin: '0 auto',
                 padding: '160px 24px 100px',
                 textAlign: 'center',
             }}>
-                {/* Headline — word-by-word with variable weights */}
+                {/* Headline */}
                 <h1 style={{
                     fontFamily: 'var(--font-heading)',
                     fontSize: 'clamp(3rem, 7vw, 5rem)',
@@ -242,13 +278,13 @@ const Hero: React.FC = () => {
                         <span key={i} className="hero-word" style={{
                             display: 'inline-block', marginRight: '0.25em',
                             fontWeight: ['AI', 'agents'].includes(word) ? 800 : 400,
-                            color: word === 'AI' ? 'var(--orange)' : 'var(--text-primary)',
+                            color: word === 'AI' ? '#FF6B00' : '#FAFAFA',
                         }}>{word}</span>
                     ))}
                     <br />
                     <span className="hero-word" style={{
                         display: 'inline-block', marginRight: '0.25em',
-                        fontWeight: 400, color: 'var(--text-primary)',
+                        fontWeight: 400, color: '#FAFAFA',
                     }}>your</span>
                     <span className="hero-cycling" style={{ display: 'inline-block' }}>
                         <CyclingWord words={WORDS} />
@@ -257,10 +293,10 @@ const Hero: React.FC = () => {
 
                 {/* Subtitle */}
                 <p className="hero-subtitle" style={{
-                    fontSize: 'clamp(16px, 1.8vw, 19px)',
-                    color: 'var(--text-secondary)',
+                    fontSize: 'clamp(16px, 1.8vw, 20px)',
+                    color: 'rgba(255,255,255,0.7)',
                     lineHeight: 1.7,
-                    maxWidth: 520, margin: '28px auto 40px',
+                    maxWidth: 560, margin: '28px auto 40px',
                 }}>
                     Autonomous agents that plan, create, and optimize your marketing
                     across every channel. Measurable results in days, not months.
@@ -268,11 +304,27 @@ const Hero: React.FC = () => {
 
                 {/* CTAs */}
                 <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 14, marginBottom: 48 }}>
-                    <a href="https://app.openanalyst.com" className="hero-cta btn-primary" style={{ fontSize: 15, padding: '15px 32px' }}>
+                    <a href="https://app.openanalyst.com" className="hero-cta" style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 8,
+                        padding: '15px 32px', fontSize: 16, fontWeight: 600,
+                        color: '#000', background: 'linear-gradient(135deg, #FF6B00, #F59E0B)',
+                        borderRadius: 'var(--radius-full)', textDecoration: 'none',
+                        transition: 'all 0.3s var(--ease-out)',
+                        boxShadow: '0 4px 24px rgba(255,107,0,0.3)',
+                    }}>
                         Start free trial
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                     </a>
-                    <a href="#how-it-works" className="hero-cta btn-outline" style={{ fontSize: 15, padding: '15px 32px' }}>
+                    <a href="#how-it-works" className="hero-cta" style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 8,
+                        padding: '15px 32px', fontSize: 16, fontWeight: 500,
+                        color: 'rgba(255,255,255,0.8)',
+                        background: 'rgba(255,255,255,0.06)',
+                        border: '1px solid rgba(255,255,255,0.12)',
+                        borderRadius: 'var(--radius-full)', textDecoration: 'none',
+                        backdropFilter: 'blur(12px)',
+                        transition: 'all 0.3s var(--ease-out)',
+                    }}>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polygon points="10 8 16 12 10 16" fill="currentColor" stroke="none" /></svg>
                         See how it works
                     </a>
@@ -281,7 +333,7 @@ const Hero: React.FC = () => {
                 {/* Social proof */}
                 <div className="hero-proof" style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    gap: 16, fontSize: 14, color: 'var(--text-muted)',
+                    gap: 16, fontSize: 14, color: 'rgba(255,255,255,0.5)',
                 }}>
                     <div style={{ display: 'flex' }}>
                         {['Maren', 'Kael', 'Priya'].map((s, i) => (
@@ -290,28 +342,21 @@ const Hero: React.FC = () => {
                                 alt="" width={32} height={32}
                                 style={{
                                     width: 32, height: 32, borderRadius: '50%',
-                                    border: '2px solid var(--bg-primary)',
+                                    border: '2px solid rgba(0,0,0,0.5)',
                                     marginLeft: i > 0 ? -10 : 0, zIndex: 3 - i,
-                                    position: 'relative', background: 'var(--bg-surface)',
+                                    position: 'relative', background: '#222',
                                 }}
                             />
                         ))}
                     </div>
-                    <span><strong style={{ color: 'var(--text-primary)', fontWeight: 600 }}>2,400+</strong> teams</span>
-                    <span style={{ width: 1, height: 16, background: 'var(--border)' }} />
+                    <span><strong style={{ color: '#FAFAFA', fontWeight: 600 }}>2,400+</strong> teams</span>
+                    <span style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.15)' }} />
                     <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
-                        <strong style={{ color: 'var(--text-primary)', fontWeight: 600 }}>4.9</strong>/5
+                        <strong style={{ color: '#FAFAFA', fontWeight: 600 }}>4.9</strong>/5
                     </span>
                 </div>
             </div>
-
-            {/* ── Bottom gradient fade ── */}
-            <div style={{
-                position: 'absolute', bottom: 0, left: 0, right: 0, height: 120, zIndex: 5,
-                background: 'linear-gradient(transparent, var(--bg-primary))',
-                pointerEvents: 'none',
-            }} />
         </section>
     );
 };
