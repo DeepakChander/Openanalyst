@@ -12,25 +12,25 @@ const steps = [
         num: '01', title: 'Connect', subtitle: 'Your Stack',
         desc: 'Link Gmail, Slack, HubSpot, and 24 more tools in 60 seconds.',
         color: '#FF6B00',
-        icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4M4.22 4.22l2.83 2.83m8.48 8.48l2.83 2.83M1 12h4m14 0h4M4.22 19.78l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>,
+        icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>,
     },
     {
         num: '02', title: 'Set', subtitle: 'Your Goals',
         desc: 'Tell agents what to optimize — revenue, leads, or custom KPIs.',
         color: '#8B5CF6',
-        icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>,
+        icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>,
     },
     {
         num: '03', title: 'Agents', subtitle: 'Activate',
         desc: '42 AI agents start working immediately — planning, creating, optimizing.',
         color: '#10B981',
-        icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z"/></svg>,
+        icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
     },
     {
         num: '04', title: 'Watch', subtitle: 'Results Grow',
         desc: 'Real-time ROI tracking and continuous optimization. 340% avg ROI.',
         color: '#F59E0B',
-        icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>,
+        icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>,
     },
 ];
 
@@ -72,21 +72,21 @@ const HowItWorks: React.FC = () => {
                             {/* Connector line */}
                             {i > 0 && (
                                 <div className="hiw-line" style={{
-                                    position: 'absolute', top: 20, left: '-50%', right: '50%', height: 2,
-                                    background: `linear-gradient(90deg, ${steps[i - 1].color}30, ${step.color}30)`,
+                                    position: 'absolute', top: 24, left: '-50%', right: '50%', height: 2,
+                                    background: `linear-gradient(90deg, ${steps[i - 1].color}40, ${step.color}40)`,
                                     transformOrigin: 'left', zIndex: 0,
                                 }} />
                             )}
 
                             {/* Dot with icon */}
                             <div className="hiw-dot" style={{
-                                width: 42, height: 42, borderRadius: '50%',
+                                width: 48, height: 48, borderRadius: '50%',
                                 background: hovered === i ? step.color : 'var(--bg-white)',
-                                border: `2px solid ${hovered === i ? step.color : step.color + '25'}`,
+                                border: `2px solid ${hovered === i ? step.color : step.color + '30'}`,
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                marginBottom: 16, position: 'relative', zIndex: 1,
+                                marginBottom: 20, position: 'relative', zIndex: 1,
                                 transition: 'all 0.3s var(--ease-out)',
-                                boxShadow: hovered === i ? `0 0 16px ${step.color}30` : 'var(--shadow-sm)',
+                                boxShadow: hovered === i ? `0 4px 20px ${step.color}35` : '0 2px 8px rgba(0,0,0,0.06)',
                                 color: hovered === i ? '#fff' : step.color,
                             }}>
                                 {step.icon}
