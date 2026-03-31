@@ -24,7 +24,6 @@ const Testimonials = dynamic(() => import('@/components/Testimonials'), { ssr: t
 const PlatformAvailability = dynamic(() => import('@/components/PlatformAvailability'), { ssr: true });
 const ProductShowcase = dynamic(() => import('@/components/ProductShowcase'), { ssr: true });
 const LogoConstellation = dynamic(() => import('@/components/LogoConstellation'), { ssr: true });
-const SideRuler = dynamic(() => import('@/components/SideRuler'), { ssr: true });
 
 const MARQUEE_ITEMS = [
   {
@@ -65,7 +64,6 @@ export default function Home() {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       <Header />
-      <SideRuler />
       <main>
         <Hero />
         <MarqueeStrip items={MARQUEE_ITEMS} dark={false} />
