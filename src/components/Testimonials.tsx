@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -38,60 +38,48 @@ const testimonials = [
         name: 'Daniel Okafor', title: 'Content Director', company: 'BrightPath',
         avatar: 'https://api.dicebear.com/9.x/notionists/svg?seed=Daniel&backgroundColor=ec4899',
     },
-    {
-        quote: 'Setup took 60 seconds, results started in days. The campaign agent is genuinely smarter than most agencies we\'ve worked with.',
-        name: 'Lisa Andersen', title: 'Marketing VP', company: 'NorthStar SaaS',
-        avatar: 'https://api.dicebear.com/9.x/notionists/svg?seed=Lisa&backgroundColor=06b6d4',
-    },
 ];
+
+function TestimonialCard({ t }: { t: typeof testimonials[0] }) {
+    return (
+        <div className="test-card" style={{
+            flexShrink: 0, width: 380,
+            padding: '28px 24px', borderRadius: 14,
+            background: '#0A0A0A',
+            border: '1px solid rgba(255,255,255,0.08)',
+            display: 'flex', flexDirection: 'column',
+            justifyContent: 'space-between',
+            minHeight: 220,
+        }}>
+            <p style={{
+                fontSize: 15, color: 'rgba(250,249,245,0.85)',
+                lineHeight: 1.55, marginBottom: 24,
+            }}>
+                {t.quote}
+            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <img src={t.avatar} alt={t.name} width={42} height={42}
+                    style={{ width: 42, height: 42, borderRadius: '50%', background: '#1a1a1a', border: '2px solid rgba(255,255,255,0.1)' }}
+                />
+                <div>
+                    <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 14, color: 'rgba(250,249,245,0.95)', margin: 0 }}>{t.name}</p>
+                    <p style={{ fontSize: 12, color: 'rgba(135,132,119,0.8)', margin: 0 }}>{t.title} · {t.company}</p>
+                </div>
+            </div>
+        </div>
+    );
+}
 
 const Testimonials: React.FC = () => {
     const sectionRef = useRef<HTMLElement>(null);
-    const trackRef = useRef<HTMLDivElement>(null);
-    const isDragging = useRef(false);
-    const startX = useRef(0);
-    const scrollLeft = useRef(0);
 
     useGSAP(() => {
         gsap.fromTo('.test-label', { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, scrollTrigger: { trigger: sectionRef.current, start: 'top 82%' } });
         gsap.fromTo('.test-heading', { y: 30, opacity: 0, filter: 'blur(6px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' } });
-        gsap.fromTo('.test-card', { y: 50, opacity: 0 }, {
-            y: 0, opacity: 1, stagger: 0.08, duration: 0.7, ease: 'power3.out',
-            scrollTrigger: { trigger: '.test-track', start: 'top 88%' },
-        });
     }, { scope: sectionRef });
 
-    // Drag to scroll
-    useEffect(() => {
-        const track = trackRef.current;
-        if (!track) return;
-
-        const onDown = (e: PointerEvent) => {
-            isDragging.current = true;
-            startX.current = e.pageX - track.offsetLeft;
-            scrollLeft.current = track.scrollLeft;
-            track.style.cursor = 'grabbing';
-        };
-        const onUp = () => {
-            isDragging.current = false;
-            track.style.cursor = 'grab';
-        };
-        const onMove = (e: PointerEvent) => {
-            if (!isDragging.current) return;
-            e.preventDefault();
-            const x = e.pageX - track.offsetLeft;
-            track.scrollLeft = scrollLeft.current - (x - startX.current) * 1.5;
-        };
-
-        track.addEventListener('pointerdown', onDown);
-        window.addEventListener('pointerup', onUp);
-        track.addEventListener('pointermove', onMove);
-        return () => {
-            track.removeEventListener('pointerdown', onDown);
-            window.removeEventListener('pointerup', onUp);
-            track.removeEventListener('pointermove', onMove);
-        };
-    }, []);
+    // Duplicate cards for seamless infinite loop
+    const cards = [...testimonials, ...testimonials];
 
     return (
         <section id="testimonials" ref={sectionRef} style={{
@@ -112,93 +100,41 @@ const Testimonials: React.FC = () => {
                 </div>
             </div>
 
-            {/* Horizontal carousel */}
-            <div className="test-track" ref={trackRef} style={{
-                display: 'flex', gap: 16, overflowX: 'auto', overflowY: 'hidden',
-                padding: '8px 24px 32px',
-                scrollSnapType: 'x mandatory',
-                WebkitOverflowScrolling: 'touch',
-                cursor: 'grab',
-                scrollbarWidth: 'none',
+            {/* Auto-scrolling carousel */}
+            <div className="test-carousel-mask" style={{
+                maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+                overflow: 'hidden',
             }}>
-                <div style={{ flexShrink: 0, width: 'max(0px, calc((100vw - 1200px) / 2))' }} />
-
-                {testimonials.map((t, i) => (
-                    <div key={i} className="test-card" style={{
-                        flexShrink: 0, width: 'clamp(300px, 34vw, 380px)',
-                        scrollSnapAlign: 'center',
-                        padding: '28px 24px', borderRadius: 14,
-                        background: '#0A0A0A',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        display: 'flex', flexDirection: 'column',
-                        transition: 'transform 0.35s cubic-bezier(0.16,1,0.3,1), border-color 0.35s ease',
-                    }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'translateY(-4px)';
-                            e.currentTarget.style.borderColor = 'rgba(255,107,0,0.25)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'translateY(0)';
-                            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
-                        }}
-                    >
-                        {/* Quote */}
-                        <p style={{
-                            fontSize: 15, color: 'rgba(250,249,245,0.9)',
-                            lineHeight: 1.6, marginBottom: 24, flex: 1,
-                        }}>
-                            {t.quote}
-                        </p>
-
-                        {/* Author */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                            <img
-                                src={t.avatar}
-                                alt={t.name}
-                                width={42} height={42}
-                                style={{
-                                    width: 42, height: 42, borderRadius: '50%',
-                                    background: '#1a1a1a',
-                                    border: '2px solid rgba(255,255,255,0.1)',
-                                }}
-                            />
-                            <div>
-                                <p style={{
-                                    fontFamily: 'var(--font-heading)', fontWeight: 600,
-                                    fontSize: 14, color: 'rgba(250,249,245,0.95)', margin: 0,
-                                }}>{t.name}</p>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 2 }}>
-                                    <p style={{ fontSize: 12, color: 'rgba(135,132,119,0.8)', margin: 0 }}>
-                                        {t.title}
-                                    </p>
-                                    <span style={{ fontSize: 12, color: 'rgba(135,132,119,0.4)' }}>·</span>
-                                    <p style={{ fontSize: 12, color: 'rgba(135,132,119,0.8)', margin: 0 }}>
-                                        {t.company}
-                                    </p>
-                                </div>
-                            </div>
-                            {/* LinkedIn-style icon */}
-                            <svg width="16" height="16" viewBox="0 0 10 11" fill="none" style={{ marginLeft: 'auto', opacity: 0.2 }}>
-                                <path d="M1.498.795v.65c0 .078.032.153.087.209a.296.296 0 00.209.086h6.089L.086 9.537a.296.296 0 000 .417l.46.46a.296.296 0 00.418 0L8.76 2.617v6.09c0 .078.031.153.086.208a.296.296 0 00.209.087h.65a.296.296 0 00.295-.295V.795A.296.296 0 009.705.5H1.793a.296.296 0 00-.295.295z" fill="currentColor" />
-                            </svg>
-                        </div>
-                    </div>
-                ))}
-
-                <div style={{ flexShrink: 0, width: 'max(0px, calc((100vw - 1200px) / 2))' }} />
-            </div>
-
-            {/* Scroll hint */}
-            <div style={{ textAlign: 'center', marginTop: 4 }}>
-                <span style={{ fontSize: 11, color: 'var(--text-faint)', fontFamily: 'var(--font-mono)', letterSpacing: '0.06em' }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ verticalAlign: -2, marginRight: 4 }}><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-                    DRAG TO SCROLL
-                </span>
+                <div className="test-carousel-track" style={{
+                    display: 'flex', gap: 16,
+                    width: 'max-content',
+                    paddingTop: 8, paddingBottom: 8,
+                }}>
+                    {cards.map((t, i) => (
+                        <TestimonialCard key={i} t={t} />
+                    ))}
+                </div>
             </div>
 
             <style>{`
-                .test-track::-webkit-scrollbar { display: none; }
-                .test-card { user-select: none; }
+                .test-carousel-track {
+                    animation: testScroll 40s linear infinite;
+                }
+                .test-carousel-track:hover {
+                    animation-play-state: paused;
+                }
+                @keyframes testScroll {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-50%); }
+                }
+                .test-card {
+                    transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), border-color 0.3s ease;
+                }
+                .test-card:hover {
+                    transform: translateY(-4px) !important;
+                    border-color: rgba(255,107,0,0.3) !important;
+                }
             `}</style>
         </section>
     );
