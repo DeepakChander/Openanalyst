@@ -24,7 +24,7 @@ const Testimonials = dynamic(() => import('@/components/Testimonials'), { ssr: t
 const PlatformAvailability = dynamic(() => import('@/components/PlatformAvailability'), { ssr: true });
 const ProductShowcase = dynamic(() => import('@/components/ProductShowcase'), { ssr: true });
 const LogoConstellation = dynamic(() => import('@/components/LogoConstellation'), { ssr: true });
-const SideRuler = dynamic(() => import('@/components/SideRuler'), { ssr: false });
+const SideRuler = dynamic(() => import('@/components/SideRuler'), { ssr: true });
 
 const MARQUEE_ITEMS = [
   {
