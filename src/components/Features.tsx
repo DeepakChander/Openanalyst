@@ -213,7 +213,7 @@ const Features: React.FC = () => {
                     <p className="feat-label label-mono" style={{ marginBottom: 16 }}>Features</p>
                     <h2 className="feat-heading" style={{
                         fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4.5vw, 3rem)',
-                        fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.03em',
+                        fontWeight: 800, color: '#0A0A0A', letterSpacing: '-0.03em',
                     }}>
                         Everything you need to <span className="text-gradient">dominate</span>
                     </h2>
@@ -223,10 +223,10 @@ const Features: React.FC = () => {
                 <div className="feat-carousel" style={{
                     display: 'flex', flexDirection: 'column', gap: 0,
                 }}>
-                    <div style={{
+                    <div className="feat-container" style={{
                         position: 'relative', overflow: 'hidden', borderRadius: 28,
                         display: 'flex', flexDirection: 'row',
-                        minHeight: 540, border: '1px solid var(--border)',
+                        minHeight: 540,
                         background: 'var(--bg-white)',
                         boxShadow: '0 4px 40px rgba(0,0,0,0.06)',
                     }}>
@@ -344,6 +344,47 @@ const Features: React.FC = () => {
 
             {/* Mobile responsive */}
             <style>{`
+                .feat-container {
+                    border: 1.5px solid transparent;
+                    background-clip: padding-box;
+                }
+                .feat-container::before {
+                    content: '';
+                    position: absolute;
+                    inset: -1.5px;
+                    border-radius: 29.5px;
+                    padding: 1.5px;
+                    background: linear-gradient(
+                        var(--feat-border-angle, 0deg),
+                        #FF6B00 0%,
+                        #8B5CF6 25%,
+                        #10B981 50%,
+                        #3B82F6 75%,
+                        #FF6B00 100%
+                    );
+                    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                    -webkit-mask-composite: xor;
+                    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                    mask-composite: exclude;
+                    animation: featBorderRotate 4s linear infinite;
+                    pointer-events: none;
+                    z-index: 50;
+                    opacity: 0.5;
+                    transition: opacity 0.3s ease;
+                }
+                .feat-container:hover::before {
+                    opacity: 1;
+                }
+                @keyframes featBorderRotate {
+                    0% { --feat-border-angle: 0deg; }
+                    100% { --feat-border-angle: 360deg; }
+                }
+                @property --feat-border-angle {
+                    syntax: '<angle>';
+                    initial-value: 0deg;
+                    inherits: false;
+                }
+
                 @media (max-width: 900px) {
                     .feat-carousel > div:first-child {
                         flex-direction: column !important;
