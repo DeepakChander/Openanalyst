@@ -167,17 +167,15 @@ const Hero: React.FC = () => {
     }, { scope: heroRef });
 
     return (
-        <section id="hero-section" ref={heroRef} className="relative overflow-hidden min-h-screen flex items-center bg-black">
-            {/* Animated CSS background */}
-            <AnimatedBackground />
+        <section id="hero-section" ref={heroRef} className="relative overflow-hidden min-h-screen flex items-center" style={{ background: 'var(--bg-primary)' }}>
 
             {/* Content */}
             <div className="relative z-10 max-w-[900px] mx-auto px-6 py-40 text-center">
                 {/* Trust badge */}
                 <div className="mb-8 hero-cta">
-                    <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-orange-500/10 backdrop-blur-md border border-orange-300/20 rounded-full text-sm">
-                        <span className="text-amber-300">✨</span>
-                        <span className="text-orange-200/90 font-medium">Trusted by 2,400+ marketing teams</span>
+                    <div className="inline-flex items-center gap-2 px-5 py-2.5 border rounded-full text-sm" style={{ background: 'var(--orange-50)', borderColor: 'rgba(255,107,0,0.2)' }}>
+                        <span style={{ color: 'var(--orange)' }}>✨</span>
+                        <span style={{ color: 'var(--orange)', fontWeight: 600 }}>Trusted by 2,400+ marketing teams</span>
                     </div>
                 </div>
 
@@ -190,44 +188,44 @@ const Hero: React.FC = () => {
                         }}>{word}</span>
                     ))}
                     <br />
-                    <span className="hero-word inline-block mr-[0.25em]" style={{ fontWeight: 400, color: '#FAFAFA' }}>your</span>
+                    <span className="hero-word inline-block mr-[0.25em]" style={{ fontWeight: 400, color: 'var(--text-primary)' }}>your</span>
                     <span className="hero-cycling inline-block">
                         <CyclingWord words={WORDS} />
                     </span>
                 </h1>
 
                 {/* Subtitle */}
-                <p className="hero-subtitle text-orange-100/70 leading-relaxed max-w-[560px] mx-auto mt-7 mb-10" style={{ fontSize: 'clamp(16px, 1.8vw, 20px)' }}>
+                <p className="hero-subtitle leading-relaxed max-w-[560px] mx-auto mt-7 mb-10" style={{ fontSize: 'clamp(16px, 1.8vw, 20px)', color: 'var(--text-secondary)' }}>
                     Autonomous agents that plan, create, and optimize your marketing across every channel. Measurable results in days.
                 </p>
 
                 {/* CTAs */}
                 <div className="flex flex-wrap justify-center gap-4 mb-12">
-                    <a href="https://app.openanalyst.com" className="hero-cta px-8 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-black rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-orange-500/25 no-underline inline-flex items-center gap-2">
+                    <a href="https://app.openanalyst.com" className="hero-cta btn-primary no-underline inline-flex items-center gap-2" style={{ fontSize: 16, padding: '15px 32px' }}>
                         Start free trial
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                     </a>
-                    <a href="#how-it-works" className="hero-cta px-8 py-4 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-300/20 hover:border-orange-300/40 text-orange-100 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 backdrop-blur-sm no-underline inline-flex items-center gap-2">
+                    <a href="#how-it-works" className="hero-cta btn-outline no-underline inline-flex items-center gap-2" style={{ fontSize: 16, padding: '15px 32px' }}>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polygon points="10 8 16 12 10 16" fill="currentColor" stroke="none" /></svg>
                         See how it works
                     </a>
                 </div>
 
                 {/* Social proof */}
-                <div className="hero-proof flex items-center justify-center gap-4 text-sm text-white/40">
+                <div className="hero-proof flex items-center justify-center gap-4 text-sm" style={{ color: 'var(--text-muted)' }}>
                     <div className="flex">
                         {['Maren', 'Kael', 'Priya'].map((s, i) => (
                             <img key={s} src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${s}&backgroundColor=${['ffd5dc', 'c0aede', 'b6e3f4'][i]}`}
                                 alt="" width={32} height={32}
-                                className="rounded-full border-2 border-black/50 relative" style={{ width: 32, height: 32, marginLeft: i > 0 ? -10 : 0, zIndex: 3 - i, background: '#222' }}
+                                className="rounded-full relative" style={{ width: 32, height: 32, marginLeft: i > 0 ? -10 : 0, zIndex: 3 - i, background: 'var(--bg-surface)', border: '2px solid var(--bg-primary)' }}
                             />
                         ))}
                     </div>
-                    <span><strong className="text-white font-semibold">2,400+</strong> teams</span>
-                    <span className="w-px h-4 bg-white/15" />
+                    <span><strong style={{ color: 'var(--text-primary)', fontWeight: 600 }}>2,400+</strong> teams</span>
+                    <span style={{ width: 1, height: 16, background: 'var(--border)' }} />
                     <span className="flex items-center gap-1">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
-                        <strong className="text-white font-semibold">4.9</strong>/5
+                        <strong style={{ color: 'var(--text-primary)', fontWeight: 600 }}>4.9</strong>/5
                     </span>
                 </div>
             </div>
