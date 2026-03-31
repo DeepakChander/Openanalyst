@@ -1,13 +1,11 @@
 'use client';
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
-
-/* ═══ Pattern #3: Scroll-pinned dashboard that self-assembles ═══ */
 
 const metrics = [
     { value: 50, suffix: '+', label: 'AI Agents', color: '#FF6B00' },
@@ -16,27 +14,33 @@ const metrics = [
     { value: 10, suffix: 'K+', label: 'Campaigns', color: '#3B82F6' },
 ];
 
-function OdometerDigit({ value, delay }: { value: string; delay: number }) {
-    const ref = useRef<HTMLSpanElement>(null);
-    const [visible, setVisible] = useState(false);
+/* ── Spotlight Glow Card — pointer-tracking border glow ── */
+function SpotlightCard({ children, color, className = '' }: { children: React.ReactNode; color: string; className?: string }) {
+    const cardRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const el = ref.current;
-        if (!el) return;
-        const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } }, { threshold: 0.3 });
-        obs.observe(el);
-        return () => obs.disconnect();
+        const card = cardRef.current;
+        if (!card) return;
+
+        const handlePointerMove = (e: PointerEvent) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--spot-x', `${x}px`);
+            card.style.setProperty('--spot-y', `${y}px`);
+        };
+
+        card.addEventListener('pointermove', handlePointerMove);
+        return () => card.removeEventListener('pointermove', handlePointerMove);
     }, []);
 
-    useEffect(() => {
-        if (!visible || !ref.current) return;
-        gsap.fromTo(ref.current,
-            { y: 30, opacity: 0, filter: 'blur(4px)' },
-            { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.6, delay, ease: 'back.out(1.5)' }
-        );
-    }, [visible, delay]);
-
-    return <span ref={ref} style={{ display: 'inline-block' }}>{value}</span>;
+    return (
+        <div ref={cardRef} className={`spotlight-card ${className}`} style={{
+            '--spot-color': color,
+        } as React.CSSProperties}>
+            {children}
+        </div>
+    );
 }
 
 function AnimatedNumber({ value, suffix, color, delay }: { value: number; suffix: string; color: string; delay: number }) {
@@ -63,7 +67,7 @@ function AnimatedNumber({ value, suffix, color, delay }: { value: number; suffix
     return (
         <span ref={ref} style={{
             fontFamily: 'var(--font-heading)',
-            fontSize: 'clamp(3rem, 7vw, 5rem)',
+            fontSize: 'clamp(3rem, 7vw, 4.5rem)',
             fontWeight: 900,
             letterSpacing: '-0.04em',
             lineHeight: 1,
@@ -88,7 +92,6 @@ const Stats: React.FC = () => {
             scrollTrigger: { trigger: '.stats-grid', start: 'top 88%' },
         });
 
-        // SVG chart line draws
         gsap.utils.toArray<SVGPathElement>('.stats-chart-line').forEach((path, i) => {
             const length = path.getTotalLength();
             gsap.fromTo(path,
@@ -105,7 +108,6 @@ const Stats: React.FC = () => {
             background: 'var(--bg-warm)',
             position: 'relative', overflow: 'hidden',
         }}>
-            {/* Subtle radial depth */}
             <div style={{
                 position: 'absolute', top: '20%', left: '50%', transform: 'translate(-50%, 0)',
                 width: 800, height: 800, borderRadius: '50%',
@@ -114,7 +116,6 @@ const Stats: React.FC = () => {
             }} />
 
             <div className="container">
-                {/* Heading */}
                 <div className="stats-heading" style={{ textAlign: 'center', marginBottom: 64 }}>
                     <h2 style={{
                         fontFamily: 'var(--font-heading)',
@@ -138,51 +139,29 @@ const Stats: React.FC = () => {
                     </h2>
                 </div>
 
-                {/* Stats cards — each unique, not a uniform grid */}
                 <div className="stats-grid" style={{
                     display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16,
                     maxWidth: 1000, margin: '0 auto',
                 }}>
                     {metrics.map((m, i) => (
-                        <div key={i} className="stats-card" style={{
-                            padding: '36px 24px', borderRadius: 'var(--radius-xl)',
-                            background: 'var(--bg-white)',
-                            border: '1px solid var(--border)',
-                            textAlign: 'center', position: 'relative', overflow: 'hidden',
-                            boxShadow: 'var(--shadow-sm)',
-                            transition: 'all 0.4s var(--ease-out)',
-                        }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-4px)';
-                                e.currentTarget.style.boxShadow = `0 12px 40px ${m.color}15`;
-                                e.currentTarget.style.borderColor = `${m.color}30`;
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
-                                e.currentTarget.style.borderColor = 'var(--border)';
-                            }}
-                        >
+                        <SpotlightCard key={i} color={m.color} className="stats-card">
                             {/* Top accent bar */}
                             <div style={{
-                                position: 'absolute', top: 0, left: 24, right: 24,
+                                position: 'absolute', top: 0, left: 20, right: 20,
                                 height: 3, borderRadius: '0 0 3px 3px',
-                                background: m.color, opacity: 0.4,
+                                background: m.color, opacity: 0.6,
                             }} />
 
-                            {/* Number */}
                             <div style={{ marginBottom: 8 }}>
                                 <AnimatedNumber value={m.value} suffix={m.suffix} color={m.color} delay={i * 0.15} />
                             </div>
 
-                            {/* Label */}
                             <div style={{
                                 fontFamily: 'var(--font-heading)',
                                 fontSize: 15, fontWeight: 700,
                                 color: 'var(--text-primary)', marginBottom: 12,
                             }}>{m.label}</div>
 
-                            {/* Mini SVG chart */}
                             <svg viewBox="0 0 120 32" style={{ width: '100%', height: 32, overflow: 'visible' }}>
                                 <path className="stats-chart-line" d={
                                     i === 0 ? 'M0 28 Q20 24 40 20 Q60 16 80 18 Q100 12 120 4' :
@@ -191,12 +170,60 @@ const Stats: React.FC = () => {
                                     'M0 26 Q15 28 30 22 Q50 18 70 20 Q90 14 120 6'
                                 } fill="none" stroke={m.color} strokeWidth="2.5" strokeLinecap="round" opacity="0.6" />
                             </svg>
-                        </div>
+                        </SpotlightCard>
                     ))}
                 </div>
             </div>
 
             <style>{`
+                .spotlight-card {
+                    padding: 36px 24px;
+                    border-radius: var(--radius-xl);
+                    background: var(--bg-white);
+                    text-align: center;
+                    position: relative;
+                    overflow: hidden;
+                    transition: all 0.4s var(--ease-out);
+                    border: 1.5px solid var(--border);
+                    box-shadow: var(--shadow-sm);
+                }
+
+                .spotlight-card::before {
+                    content: '';
+                    position: absolute;
+                    inset: -1px;
+                    border-radius: inherit;
+                    background: radial-gradient(
+                        250px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+                        var(--spot-color, #FF6B00) 0%,
+                        transparent 100%
+                    );
+                    opacity: 0;
+                    transition: opacity 0.4s ease;
+                    z-index: -1;
+                    pointer-events: none;
+                }
+
+                .spotlight-card::after {
+                    content: '';
+                    position: absolute;
+                    inset: 1.5px;
+                    border-radius: calc(var(--radius-xl) - 1.5px);
+                    background: var(--bg-white);
+                    z-index: -1;
+                    pointer-events: none;
+                }
+
+                .spotlight-card:hover::before {
+                    opacity: 1;
+                }
+
+                .spotlight-card:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 0 12px 40px color-mix(in srgb, var(--spot-color) 15%, transparent);
+                    border-color: transparent;
+                }
+
                 @media (max-width: 768px) {
                     .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
                 }
