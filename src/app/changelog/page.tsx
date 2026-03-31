@@ -104,7 +104,11 @@ export default function ChangelogPage() {
                 </div>
             </main>
 
-            <Footer />
+            <Footer
+                ctaWords={['We', 'ship', 'fast.', 'Always.']}
+                ctaHighlight="Always."
+                ctaSubtitle="New features every week. Your feedback drives our roadmap."
+            />
 
             <style>{`
                 @media (max-width: 600px) {

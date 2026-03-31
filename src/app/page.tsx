@@ -23,7 +23,6 @@ const HowItWorks = dynamic(() => import('@/components/HowItWorks'), { ssr: true 
 const Testimonials = dynamic(() => import('@/components/Testimonials'), { ssr: true });
 const PlatformAvailability = dynamic(() => import('@/components/PlatformAvailability'), { ssr: true });
 const ProductShowcase = dynamic(() => import('@/components/ProductShowcase'), { ssr: true });
-const CTASection = dynamic(() => import('@/components/CTASection'), { ssr: true });
 const LogoConstellation = dynamic(() => import('@/components/LogoConstellation'), { ssr: true });
 
 const MARQUEE_ITEMS = [
@@ -75,7 +74,6 @@ export default function Home() {
         <Testimonials />
         <ProductShowcase />
         <PlatformAvailability />
-        <CTASection />
       </main>
       <Footer />
     </div>

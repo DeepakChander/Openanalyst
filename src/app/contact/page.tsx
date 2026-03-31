@@ -333,7 +333,11 @@ export default function ContactPage() {
                 </div>
             </section>
 
-            <Footer />
+            <Footer
+                ctaWords={['Great', 'partnerships', 'start', 'here.']}
+                ctaHighlight="here."
+                ctaSubtitle="Whether you have questions or a vision — we're ready to make it happen."
+            />
 
             <style>{`
                 .floating-field input:focus + label,

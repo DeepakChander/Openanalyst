@@ -43,7 +43,11 @@ export default function IntegrationsPage() {
                     <IntegrationsSection />
                 </div>
             </main>
-            <Footer />
+            <Footer
+                ctaWords={['Connect', 'everything.', 'Automate', 'anything.']}
+                ctaHighlight="anything."
+                ctaSubtitle="27+ integrations that plug into your stack and start working in seconds."
+            />
         </div>
     );
 }

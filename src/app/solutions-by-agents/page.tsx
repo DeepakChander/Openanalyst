@@ -201,7 +201,11 @@ export default function SolutionsPage() {
                 </div>
             </section>
 
-            <Footer />
+            <Footer
+                ctaWords={['Deploy', 'agents.', 'Dominate', 'channels.']}
+                ctaHighlight="channels."
+                ctaSubtitle="Set your goals, activate agents, and watch your growth compound daily."
+            />
 
             <style>{`
                 @media (max-width: 1024px) {

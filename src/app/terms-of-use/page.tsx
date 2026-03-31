@@ -279,7 +279,11 @@ export default function TermsPage() {
                     </div>
                 </div>
             </main>
-            <Footer />
+            <Footer
+                ctaWords={['Built', 'on', 'trust.', 'Always.']}
+                ctaHighlight="Always."
+                ctaSubtitle="Fair terms, honest practices. The way business should be."
+            />
         </div>
     );
 }

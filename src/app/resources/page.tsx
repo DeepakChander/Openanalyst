@@ -183,7 +183,11 @@ export default function ResourcesPage() {
                 </div>
             </section>
 
-            <Footer />
+            <Footer
+                ctaWords={['Knowledge', 'fuels', 'unstoppable', 'growth.']}
+                ctaHighlight="growth."
+                ctaSubtitle="From playbooks to deep dives — everything you need to win with AI marketing."
+            />
 
             <style>{`
                 @media (max-width: 600px) {

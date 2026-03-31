@@ -210,7 +210,11 @@ export default function PrivacyPolicyPage() {
                     </div>
                 </div>
             </main>
-            <Footer />
+            <Footer
+                ctaWords={['Your', 'data,', 'your', 'control.']}
+                ctaHighlight="control."
+                ctaSubtitle="Enterprise-grade security meets transparent AI. Trust built in, not bolted on."
+            />
         </div>
     );
 }

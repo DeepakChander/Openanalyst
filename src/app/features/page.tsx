@@ -351,7 +351,11 @@ export default function FeaturesPage() {
                 </div>
             </section>
 
-            <Footer />
+            <Footer
+                ctaWords={['Unlock', 'every', 'marketing', 'superpower.']}
+                ctaHighlight="superpower."
+                ctaSubtitle="42 AI agents, one platform. Your competitors are already using it."
+            />
 
             <style>{`
                 /* ── Stats responsive ── */

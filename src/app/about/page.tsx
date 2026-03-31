@@ -898,7 +898,11 @@ export default function AboutPage() {
                 </section>
 
             </main>
-            <Footer />
+            <Footer
+                ctaWords={['Your', 'story', 'deserves', 'amplification.']}
+                ctaHighlight="amplification."
+                ctaSubtitle="We built OpenAnalyst so your brand can reach millions — without the grind."
+            />
 
             <style>{`
                 /* ── Values Bento Grid (Asymmetric) ── */

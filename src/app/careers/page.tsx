@@ -286,7 +286,11 @@ export default function CareersPage() {
                 </div>
             </section>
 
-            <Footer />
+            <Footer
+                ctaWords={['Shape', 'the', 'future', 'of marketing.']}
+                ctaHighlight="marketing."
+                ctaSubtitle="Join a team obsessed with building AI that marketers actually love."
+            />
 
             <style>{`
                 @media (max-width: 1024px) {

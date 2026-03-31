@@ -35,7 +35,17 @@ const LinkedInIcon = () => (
     </svg>
 );
 
-const Footer: React.FC = () => {
+interface FooterProps {
+    ctaWords?: string[];
+    ctaHighlight?: string;
+    ctaSubtitle?: string;
+}
+
+const Footer: React.FC<FooterProps> = ({
+    ctaWords = ["Let's", 'build', 'something', 'extraordinary.'],
+    ctaHighlight = 'extraordinary.',
+    ctaSubtitle = 'Join thousands of marketers using AI to scale campaigns 10x faster.',
+}) => {
     const footerRef = useRef<HTMLElement>(null);
     const marqueeRef = useRef<HTMLDivElement>(null);
     const row1Ref = useRef<HTMLDivElement>(null);
@@ -371,7 +381,7 @@ const Footer: React.FC = () => {
         },
     ];
 
-    const ctaWords = ["Let's", 'build', 'something', 'extraordinary.'];
+    const ctaWordsLocal = ctaWords;
 
     const socials = [
         { label: 'X (Twitter)', href: 'https://x.com/OpenAnalystInc', icon: <XIcon />, color: '#FFFFFF', hoverBg: 'rgba(255,255,255,0.1)' },
@@ -468,10 +478,10 @@ const Footer: React.FC = () => {
                         justifyContent: 'center',
                         gap: '0 0.25em',
                     }}>
-                        {ctaWords.map((word, i) => (
+                        {ctaWordsLocal.map((word, i) => (
                             <span key={i} className="cta-word" style={{
                                 display: 'inline-block',
-                                ...(word === 'extraordinary.' ? {
+                                ...(word === ctaHighlight ? {
                                     background: 'linear-gradient(135deg, #FF8533, #FF6B00, #FFB380)',
                                     backgroundSize: '200% 200%',
                                     WebkitBackgroundClip: 'text',
@@ -493,7 +503,7 @@ const Footer: React.FC = () => {
                         lineHeight: 1.6,
                         fontFamily: 'var(--font-body)',
                     }}>
-                        Join thousands of marketers using AI to scale campaigns 10x faster.
+                        {ctaSubtitle}
                     </p>
 
                     <div className="footer-cta-btn" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '16px' }}>
