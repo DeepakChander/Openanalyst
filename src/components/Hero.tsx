@@ -71,6 +71,23 @@ const Hero: React.FC = () => {
             WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 92%, transparent 100%)',
         }}>
 
+            {/* Grid background */}
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{
+                backgroundImage: 'linear-gradient(to right, rgba(15,23,42,0.07) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.07) 1px, transparent 1px)',
+                backgroundSize: '56px 56px',
+                maskImage: 'radial-gradient(ellipse 80% 85% at 50% 40%, black 0%, transparent 70%)',
+                WebkitMaskImage: 'radial-gradient(ellipse 80% 85% at 50% 40%, black 0%, transparent 70%)',
+            }} />
+
+            {/* Vertical accent lines */}
+            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0" style={{ left: '10%', width: 1, background: 'linear-gradient(to bottom, rgba(255,107,0,0.25) 0%, rgba(255,107,0,0.5) 50%, transparent 100%)' }} />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0" style={{ left: '25%', width: 1, background: 'linear-gradient(to bottom, rgba(255,107,0,0.15) 0%, rgba(255,107,0,0.25) 50%, transparent 100%)' }} />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0" style={{ right: '25%', width: 1, background: 'linear-gradient(to bottom, rgba(139,92,246,0.15) 0%, rgba(139,92,246,0.25) 50%, transparent 100%)' }} />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0" style={{ right: '10%', width: 1, background: 'linear-gradient(to bottom, rgba(139,92,246,0.25) 0%, rgba(139,92,246,0.5) 50%, transparent 100%)' }} />
+
+            {/* Horizontal accent line */}
+            <div aria-hidden="true" className="pointer-events-none absolute inset-x-0" style={{ top: '38%', height: 1, background: 'linear-gradient(to right, transparent 0%, rgba(255,107,0,0.3) 30%, rgba(139,92,246,0.3) 70%, transparent 100%)' }} />
+
             {/* Content */}
             <div className="relative z-10 max-w-[900px] mx-auto px-6 py-40 text-center">
                 {/* Trust badge */}
