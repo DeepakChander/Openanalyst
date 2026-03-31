@@ -50,51 +50,33 @@ const PlatformAvailability: React.FC = () => {
     useGSAP(() => {
         gsap.fromTo('.plat-label', { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, scrollTrigger: { trigger: containerRef.current, start: 'top 82%' } });
         gsap.fromTo('.plat-heading', { y: 30, opacity: 0, filter: 'blur(6px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, scrollTrigger: { trigger: containerRef.current, start: 'top 80%' } });
-        gsap.fromTo('.plat-card', { y: 50, opacity: 0, scale: 0.95 }, {
-            y: 0, opacity: 1, scale: 1, stagger: 0.1, duration: 0.7, ease: 'back.out(1.3)',
-            scrollTrigger: { trigger: '.plat-grid', start: 'top 85%' },
-        });
     }, { scope: containerRef });
+
+    // Re-animate cards when filter changes
+    useGSAP(() => {
+        gsap.fromTo('.plat-card', { y: 30, opacity: 0, scale: 0.96 }, {
+            y: 0, opacity: 1, scale: 1, stagger: 0.08, duration: 0.5, ease: 'back.out(1.4)',
+        });
+    }, { scope: containerRef, dependencies: [activeFilter] });
 
     return (
         <section id="platform" ref={containerRef} style={{
             padding: 'clamp(80px, 10vw, 120px) 24px',
-            background: '#212121',
+            background: 'var(--bg-primary)',
             position: 'relative', overflow: 'hidden',
         }}>
-            {/* Gradient blur orbs */}
-            <div style={{
-                position: 'absolute', bottom: '-10%', left: '10%',
-                width: 500, height: 500, borderRadius: '50%',
-                background: 'rgba(248,154,74,0.8)', filter: 'blur(250px)',
-                opacity: 0.7, pointerEvents: 'none',
-            }} />
-            <div style={{
-                position: 'absolute', top: '-5%', right: '5%',
-                width: 450, height: 450, borderRadius: '50%',
-                background: 'rgba(53,198,189,0.5)', filter: 'blur(250px)',
-                opacity: 0.7, pointerEvents: 'none',
-            }} />
 
-            {/* Noise texture overlay */}
-            <div style={{
-                position: 'absolute', inset: 0, opacity: 0.15, pointerEvents: 'none',
-                backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.85\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")',
-                backgroundSize: '128px 128px',
-            }} />
-
-            <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+            <div className="container" style={{ position: 'relative' }}>
                 {/* Heading */}
                 <div style={{ textAlign: 'center', marginBottom: 40 }}>
                     <p className="plat-label" style={{
                         fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 600,
                         letterSpacing: '0.12em', textTransform: 'uppercase',
-                        color: 'rgba(255,255,255,0.5)', marginBottom: 16,
+                        color: 'var(--orange)', marginBottom: 16,
                     }}>Platform</p>
                     <h2 className="plat-heading" style={{
                         fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.2rem, 5vw, 3.5rem)',
-                        fontWeight: 800, color: '#fff', letterSpacing: '-0.03em',
-                        textShadow: '0 0 10px rgba(0,0,0,0.1)',
+                        fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.03em',
                     }}>
                         Available <span style={{
                             fontStyle: 'italic', fontWeight: 400,
@@ -109,9 +91,9 @@ const PlatformAvailability: React.FC = () => {
                     {filters.map(f => (
                         <button key={f.value} onClick={() => setActiveFilter(f.value)} style={{
                             padding: '8px 20px', borderRadius: 999,
-                            background: activeFilter === f.value ? '#212121' : 'transparent',
-                            border: `1px solid ${activeFilter === f.value ? '#fff' : 'rgba(255,255,255,0.3)'}`,
-                            color: activeFilter === f.value ? '#fff' : 'rgba(255,255,255,0.6)',
+                            background: activeFilter === f.value ? 'var(--text-primary)' : 'transparent',
+                            border: `1px solid ${activeFilter === f.value ? 'var(--text-primary)' : 'var(--border)'}`,
+                            color: activeFilter === f.value ? '#fff' : 'var(--text-muted)',
                             fontSize: 13, fontWeight: 600, cursor: 'pointer',
                             transition: 'all 0.3s ease',
                             fontFamily: 'var(--font-body)',
@@ -128,13 +110,14 @@ const PlatformAvailability: React.FC = () => {
                     {filtered.map((p) => (
                         <div key={p.name} className="plat-card" style={{
                             padding: '28px 24px', borderRadius: 20,
-                            background: '#fff',
-                            boxShadow: '0 0 20px rgba(0,0,0,0.1)',
+                            background: 'var(--bg-white)',
+                            border: '1px solid var(--border)',
+                            boxShadow: 'var(--shadow-sm)',
                             display: 'flex', flexDirection: 'column',
                             transition: 'all 0.4s cubic-bezier(0.16,1,0.3,1)',
                         }}
-                            onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.2)'; }}
-                            onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 0 20px rgba(0,0,0,0.1)'; }}
+                            onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = 'var(--shadow-lg)'; e.currentTarget.style.borderColor = 'rgba(255,107,0,0.2)'; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; e.currentTarget.style.borderColor = 'var(--border)'; }}
                         >
                             {/* Header: icon + status */}
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
@@ -155,13 +138,13 @@ const PlatformAvailability: React.FC = () => {
                             </div>
 
                             {/* Name + desc */}
-                            <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 20, fontWeight: 800, color: '#212121', marginBottom: 6 }}>{p.name}</h3>
-                            <p style={{ fontSize: 13, color: '#777', lineHeight: 1.6, marginBottom: 20, flex: 1 }}>{p.desc}</p>
+                            <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 20, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 6 }}>{p.name}</h3>
+                            <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 20, flex: 1 }}>{p.desc}</p>
 
                             {/* Features */}
                             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
                                 {p.features.map((f, fi) => (
-                                    <li key={fi} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#555' }}>
+                                    <li key={fi} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--text-secondary)' }}>
                                         <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8L6.5 11.5L13 4.5" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                                         {f}
                                     </li>
