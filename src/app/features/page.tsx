@@ -147,23 +147,21 @@ export default function FeaturesPage() {
             <section className="section" style={{
                 minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center',
                 justifyContent: 'center', background: 'var(--bg-white)', position: 'relative',
-                paddingTop: 140, paddingBottom: 40,
+                paddingTop: 140, paddingBottom: 40, overflow: 'hidden',
             }}>
-                {/* Subtle grid bg */}
-                <div style={{
+                {/* Grid background */}
+                <div aria-hidden="true" style={{
                     position: 'absolute', inset: 0, pointerEvents: 'none',
-                    backgroundImage: 'linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px)',
-                    backgroundSize: '80px 80px',
-                    maskImage: 'radial-gradient(ellipse 70% 60% at 50% 40%, black 0%, transparent 70%)',
-                    WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 50% 40%, black 0%, transparent 70%)',
+                    backgroundImage: 'linear-gradient(to right, rgba(15,23,42,0.07) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.07) 1px, transparent 1px)',
+                    backgroundSize: '56px 56px',
+                    maskImage: 'radial-gradient(ellipse 80% 85% at 50% 40%, black 0%, transparent 70%)',
+                    WebkitMaskImage: 'radial-gradient(ellipse 80% 85% at 50% 40%, black 0%, transparent 70%)',
                 }} />
-                {/* Warm orange glow */}
-                <div style={{
-                    position: 'absolute', top: '15%', left: '50%', transform: 'translateX(-50%)',
-                    width: 700, height: 700, borderRadius: '50%',
-                    background: 'radial-gradient(circle, rgba(255,107,0,0.04) 0%, transparent 70%)',
-                    filter: 'blur(60px)', pointerEvents: 'none',
-                }} />
+                <div aria-hidden="true" style={{ position: 'absolute', top: 0, bottom: 0, left: '10%', width: 1, pointerEvents: 'none', background: 'linear-gradient(to bottom, rgba(255,107,0,0.25) 0%, rgba(255,107,0,0.5) 50%, transparent 100%)' }} />
+                <div aria-hidden="true" style={{ position: 'absolute', top: 0, bottom: 0, left: '25%', width: 1, pointerEvents: 'none', background: 'linear-gradient(to bottom, rgba(255,107,0,0.15) 0%, rgba(255,107,0,0.25) 50%, transparent 100%)' }} />
+                <div aria-hidden="true" style={{ position: 'absolute', top: 0, bottom: 0, right: '25%', width: 1, pointerEvents: 'none', background: 'linear-gradient(to bottom, rgba(139,92,246,0.15) 0%, rgba(139,92,246,0.25) 50%, transparent 100%)' }} />
+                <div aria-hidden="true" style={{ position: 'absolute', top: 0, bottom: 0, right: '10%', width: 1, pointerEvents: 'none', background: 'linear-gradient(to bottom, rgba(139,92,246,0.25) 0%, rgba(139,92,246,0.5) 50%, transparent 100%)' }} />
+                <div aria-hidden="true" style={{ position: 'absolute', left: 0, right: 0, top: '38%', height: 1, pointerEvents: 'none', background: 'linear-gradient(to right, transparent 0%, rgba(255,107,0,0.3) 30%, rgba(139,92,246,0.3) 70%, transparent 100%)' }} />
 
                 <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 2, padding: '0 24px' }}>
                     <div className="fp-hero-label" style={{

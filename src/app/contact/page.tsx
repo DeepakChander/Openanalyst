@@ -64,9 +64,19 @@ export default function ContactPage() {
 
             {/* ═══ HERO — Light (left-aligned with decorative circle) ═══ */}
             <section className="light-section" style={{ paddingTop: 160, paddingBottom: 60, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}>
-                <div style={{ position: 'absolute', top: -100, right: -100, width: 500, height: 500, borderRadius: '50%', border: '1px solid rgba(255,107,0,0.08)', pointerEvents: 'none' }} />
-                <div style={{ position: 'absolute', top: -50, right: -50, width: 400, height: 400, borderRadius: '50%', border: '1px solid rgba(255,107,0,0.05)', pointerEvents: 'none' }} />
-                <div style={{ position: 'absolute', top: '30%', left: '10%', width: 300, height: 300, borderRadius: '50%', background: 'rgba(255,107,0,0.03)', filter: 'blur(80px)', pointerEvents: 'none' }} />
+                {/* Grid background */}
+                <div aria-hidden="true" style={{
+                    position: 'absolute', inset: 0, pointerEvents: 'none',
+                    backgroundImage: 'linear-gradient(to right, rgba(15,23,42,0.07) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.07) 1px, transparent 1px)',
+                    backgroundSize: '56px 56px',
+                    maskImage: 'radial-gradient(ellipse 80% 85% at 50% 40%, black 0%, transparent 70%)',
+                    WebkitMaskImage: 'radial-gradient(ellipse 80% 85% at 50% 40%, black 0%, transparent 70%)',
+                }} />
+                <div aria-hidden="true" style={{ position: 'absolute', top: 0, bottom: 0, left: '10%', width: 1, pointerEvents: 'none', background: 'linear-gradient(to bottom, rgba(255,107,0,0.25) 0%, rgba(255,107,0,0.5) 50%, transparent 100%)' }} />
+                <div aria-hidden="true" style={{ position: 'absolute', top: 0, bottom: 0, left: '25%', width: 1, pointerEvents: 'none', background: 'linear-gradient(to bottom, rgba(255,107,0,0.15) 0%, rgba(255,107,0,0.25) 50%, transparent 100%)' }} />
+                <div aria-hidden="true" style={{ position: 'absolute', top: 0, bottom: 0, right: '25%', width: 1, pointerEvents: 'none', background: 'linear-gradient(to bottom, rgba(139,92,246,0.15) 0%, rgba(139,92,246,0.25) 50%, transparent 100%)' }} />
+                <div aria-hidden="true" style={{ position: 'absolute', top: 0, bottom: 0, right: '10%', width: 1, pointerEvents: 'none', background: 'linear-gradient(to bottom, rgba(139,92,246,0.25) 0%, rgba(139,92,246,0.5) 50%, transparent 100%)' }} />
+                <div aria-hidden="true" style={{ position: 'absolute', left: 0, right: 0, top: '38%', height: 1, pointerEvents: 'none', background: 'linear-gradient(to right, transparent 0%, rgba(255,107,0,0.3) 30%, rgba(139,92,246,0.3) 70%, transparent 100%)' }} />
 
                 <div style={{ maxWidth: 700, margin: '0 auto', padding: '0 24px', textAlign: 'center', position: 'relative', zIndex: 2 }}>
                     <div className="ct-hero-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 20px', borderRadius: 999, marginBottom: 28, background: 'var(--orange-light)', border: '1px solid rgba(255,107,0,0.15)' }}>
