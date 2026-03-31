@@ -30,6 +30,7 @@ const agents = [
 
 export default function SolutionsPage() {
     const pageRef = useRef<HTMLDivElement>(null);
+    const heroInnerRef = useRef<HTMLDivElement>(null);
 
     const handleCardHover = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         const card = e.currentTarget;
@@ -53,6 +54,23 @@ export default function SolutionsPage() {
         gsap.fromTo('.sol-agent-card', { y: 50, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, scale: 1, stagger: 0.08, duration: 0.6, ease: 'back.out(1.2)', scrollTrigger: { trigger: '.sol-agents-grid', start: 'top 85%' } });
 
         gsap.fromTo('.sol-cta-content', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, scrollTrigger: { trigger: '.sol-cta', start: 'top 85%' } });
+
+        /* ── Hero 3D perspective scroll ── */
+        if (heroInnerRef.current) {
+            gsap.to(heroInnerRef.current, {
+                y: 80,
+                scale: 0.92,
+                rotateX: -5,
+                opacity: 0.6,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: heroInnerRef.current.parentElement,
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true,
+                },
+            });
+        }
     }, { scope: pageRef });
 
     return (
@@ -60,7 +78,8 @@ export default function SolutionsPage() {
             <Header />
 
             {/* ═══ HERO — Light ═══ */}
-            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 80, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}>
+            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 80, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden', perspective: 1200 }}>
+                <div ref={heroInnerRef} style={{ transformOrigin: 'center top' }}>
                 {/* Grid background */}
                 <div aria-hidden="true" style={{
                     position: 'absolute', inset: 0, pointerEvents: 'none',
@@ -96,6 +115,7 @@ export default function SolutionsPage() {
                     <p className="sol-hero-sub" style={{ maxWidth: 520, margin: '28px auto 0', fontSize: 'clamp(1rem, 1.4vw, 1.1rem)', color: 'var(--text-secondary)', lineHeight: 1.8 }}>
                         Deploy specialized AI marketing agents tailored for your campaigns and growth goals. Each agent is a complete specialist.
                     </p>
+                </div>
                 </div>
             </section>
 

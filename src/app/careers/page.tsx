@@ -56,6 +56,7 @@ const hiringSteps = [
 
 export default function CareersPage() {
     const pageRef = useRef<HTMLDivElement>(null);
+    const heroInnerRef = useRef<HTMLDivElement>(null);
     const [openDept, setOpenDept] = useState<number | null>(0);
     const deptRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -88,6 +89,23 @@ export default function CareersPage() {
         gsap.fromTo('.car-value-card', { y: 60, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: '.car-values', start: 'top 85%' } });
         gsap.fromTo('.car-benefit', { y: 30, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.06, duration: 0.5, ease: 'power3.out', scrollTrigger: { trigger: '.car-benefits', start: 'top 90%', toggleActions: 'play none none none' } });
         gsap.fromTo('.car-step', { x: -30, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.1, duration: 0.6, ease: 'power3.out', scrollTrigger: { trigger: '.car-process', start: 'top 85%' } });
+
+        /* ── Hero 3D perspective scroll ── */
+        if (heroInnerRef.current) {
+            gsap.to(heroInnerRef.current, {
+                y: 80,
+                scale: 0.92,
+                rotateX: -5,
+                opacity: 0.6,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: heroInnerRef.current.parentElement,
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true,
+                },
+            });
+        }
     }, { scope: pageRef });
 
     return (
@@ -95,7 +113,8 @@ export default function CareersPage() {
             <Header />
 
             {/* HERO — Light (with stat bar below heading) */}
-            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 80, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}>
+            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 80, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden', perspective: 1200 }}>
+                <div ref={heroInnerRef} style={{ transformOrigin: 'center top' }}>
                 {/* Grid background */}
                 <div aria-hidden="true" style={{
                     position: 'absolute', inset: 0, pointerEvents: 'none',
@@ -131,6 +150,7 @@ export default function CareersPage() {
                             </div>
                         ))}
                     </div>
+                </div>
                 </div>
             </section>
 

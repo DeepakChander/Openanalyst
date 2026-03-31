@@ -29,6 +29,7 @@ const releases = [
 
 export default function ChangelogPage() {
     const pageRef = useRef<HTMLDivElement>(null);
+    const heroInnerRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
         gsap.fromTo('.cl-hero-version', { x: -20, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, delay: 0.2 });
@@ -36,6 +37,23 @@ export default function ChangelogPage() {
         gsap.fromTo('.cl-hero-sub', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, delay: 0.6 });
 
         gsap.fromTo('.cl-release', { y: 40, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.15, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: '.cl-timeline', start: 'top 85%' } });
+
+        /* ── Hero 3D perspective scroll ── */
+        if (heroInnerRef.current) {
+            gsap.to(heroInnerRef.current, {
+                y: 80,
+                scale: 0.92,
+                rotateX: -5,
+                opacity: 0.6,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: heroInnerRef.current.parentElement,
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true,
+                },
+            });
+        }
     }, { scope: pageRef });
 
     return (
@@ -43,7 +61,8 @@ export default function ChangelogPage() {
             <Header />
 
             {/* ═══ HERO — Light (left-aligned with version badge) ═══ */}
-            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 60, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}>
+            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 60, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden', perspective: 1200 }}>
+                <div ref={heroInnerRef} style={{ transformOrigin: 'center top' }}>
                 {/* Grid background */}
                 <div aria-hidden="true" style={{
                     position: 'absolute', inset: 0, pointerEvents: 'none',
@@ -71,6 +90,7 @@ export default function ChangelogPage() {
                     <p className="cl-hero-sub" style={{ fontSize: 16, color: 'var(--text-secondary)', maxWidth: 480, margin: '0 auto', lineHeight: 1.7 }}>
                         Product updates, new features, and improvements.
                     </p>
+                </div>
                 </div>
             </section>
 

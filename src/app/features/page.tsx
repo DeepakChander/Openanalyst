@@ -85,6 +85,7 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
 /* ═══════════ MAIN PAGE ═══════════ */
 export default function FeaturesPage() {
     const pageRef = useRef<HTMLDivElement>(null);
+    const heroInnerRef = useRef<HTMLDivElement>(null);
     const [activeFeature, setActiveFeature] = useState(0);
 
     useGSAP(() => {
@@ -137,6 +138,23 @@ export default function FeaturesPage() {
             y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
             scrollTrigger: { trigger: '.fp-cta-section', start: 'top 85%' },
         });
+
+        /* ── Hero 3D perspective scroll ── */
+        if (heroInnerRef.current) {
+            gsap.to(heroInnerRef.current, {
+                y: 80,
+                scale: 0.92,
+                rotateX: -5,
+                opacity: 0.6,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: heroInnerRef.current.parentElement,
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true,
+                },
+            });
+        }
     }, { scope: pageRef });
 
     return (
@@ -148,7 +166,9 @@ export default function FeaturesPage() {
                 minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center',
                 justifyContent: 'center', background: 'var(--bg-white)', position: 'relative',
                 paddingTop: 140, paddingBottom: 40, overflow: 'hidden',
+                perspective: 1200,
             }}>
+                <div ref={heroInnerRef} style={{ transformOrigin: 'center top', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 {/* Grid background */}
                 <div aria-hidden="true" style={{
                     position: 'absolute', inset: 0, pointerEvents: 'none',
@@ -223,6 +243,7 @@ export default function FeaturesPage() {
                             </div>
                         </div>
                     ))}
+                </div>
                 </div>
             </section>
 

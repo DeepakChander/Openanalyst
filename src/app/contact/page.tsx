@@ -16,6 +16,7 @@ export default function ContactPage() {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [error, setError] = useState('');
     const pageRef = useRef<HTMLDivElement>(null);
+    const heroInnerRef = useRef<HTMLDivElement>(null);
     const successRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
@@ -25,6 +26,23 @@ export default function ContactPage() {
         gsap.fromTo('.ct-left', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: '.ct-left', start: 'top 88%' } });
         gsap.fromTo('.ct-right', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: '.ct-right', start: 'top 88%' } });
         gsap.fromTo('.ct-map-section', { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: '.ct-map-section', start: 'top 88%' } });
+
+        /* ── Hero 3D perspective scroll ── */
+        if (heroInnerRef.current) {
+            gsap.to(heroInnerRef.current, {
+                y: 80,
+                scale: 0.92,
+                rotateX: -5,
+                opacity: 0.6,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: heroInnerRef.current.parentElement,
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true,
+                },
+            });
+        }
     }, { scope: pageRef });
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -63,7 +81,8 @@ export default function ContactPage() {
             <Header />
 
             {/* ═══ HERO — Light (left-aligned with decorative circle) ═══ */}
-            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 60, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}>
+            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 60, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden', perspective: 1200 }}>
+                <div ref={heroInnerRef} style={{ transformOrigin: 'center top' }}>
                 {/* Grid background */}
                 <div aria-hidden="true" style={{
                     position: 'absolute', inset: 0, pointerEvents: 'none',
@@ -91,6 +110,7 @@ export default function ContactPage() {
                     <p className="ct-hero-sub" style={{ maxWidth: 480, margin: '24px auto 0', fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.7 }}>
                         Have questions about our AI marketing agents? We&apos;d love to hear from you.
                     </p>
+                </div>
                 </div>
             </section>
 

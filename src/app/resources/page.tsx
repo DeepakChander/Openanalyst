@@ -33,6 +33,7 @@ const faqs = [
 
 export default function ResourcesPage() {
     const pageRef = useRef<HTMLDivElement>(null);
+    const heroInnerRef = useRef<HTMLDivElement>(null);
     const [activeTab, setActiveTab] = useState<Category>('All');
     const [openFaq, setOpenFaq] = useState<number | null>(null);
     const faqRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -48,6 +49,23 @@ export default function ResourcesPage() {
         gsap.utils.toArray<HTMLElement>('.res-reveal').forEach((el) => {
             gsap.fromTo(el, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%', once: true } });
         });
+
+        /* ── Hero 3D perspective scroll ── */
+        if (heroInnerRef.current) {
+            gsap.to(heroInnerRef.current, {
+                y: 80,
+                scale: 0.92,
+                rotateX: -5,
+                opacity: 0.6,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: heroInnerRef.current.parentElement,
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true,
+                },
+            });
+        }
     }, { scope: pageRef });
 
     const toggleFaq = useCallback((index: number) => {
@@ -73,7 +91,8 @@ export default function ResourcesPage() {
             <Header />
 
             {/* ═══ HERO — Light (asymmetric with large gradient circle) ═══ */}
-            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 60, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}>
+            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 60, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden', perspective: 1200 }}>
+                <div ref={heroInnerRef} style={{ transformOrigin: 'center top' }}>
                 {/* Grid background */}
                 <div aria-hidden="true" style={{
                     position: 'absolute', inset: 0, pointerEvents: 'none',
@@ -109,6 +128,7 @@ export default function ResourcesPage() {
                             }}>{cat}</button>
                         ))}
                     </div>
+                </div>
                 </div>
             </section>
 

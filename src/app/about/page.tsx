@@ -147,6 +147,7 @@ function StrokeIcon({ pathData, size = 24, className = '' }: { pathData: string;
 export default function AboutPage() {
     const mainRef = useRef<HTMLDivElement>(null);
     const heroRef = useRef<HTMLElement>(null);
+    const heroInnerRef = useRef<HTMLDivElement>(null);
     const missionRef = useRef<HTMLElement>(null);
     const valuesRef = useRef<HTMLElement>(null);
     const metricsRef = useRef<HTMLElement>(null);
@@ -289,6 +290,23 @@ export default function AboutPage() {
                 ease: 'power3.out',
             });
         }
+
+        /* ── Hero 3D perspective scroll ── */
+        if (heroInnerRef.current) {
+            gsap.to(heroInnerRef.current, {
+                y: 80,
+                scale: 0.92,
+                rotateX: -5,
+                opacity: 0.6,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: heroRef.current,
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true,
+                },
+            });
+        }
     }, { scope: mainRef });
 
     return (
@@ -308,8 +326,10 @@ export default function AboutPage() {
                         background: 'var(--bg-primary)',
                         position: 'relative',
                         overflow: 'hidden',
+                        perspective: 1200,
                     }}
                 >
+                    <div ref={heroInnerRef} style={{ transformOrigin: 'center top' }}>
                     {/* Grid background */}
                     <div aria-hidden="true" style={{
                         position: 'absolute', inset: 0, pointerEvents: 'none',
@@ -386,6 +406,7 @@ export default function AboutPage() {
                             We&apos;re on a mission to give every business access to the marketing
                             intelligence that was once reserved for the Fortune 500.
                         </p>
+                    </div>
                     </div>
                 </section>
 

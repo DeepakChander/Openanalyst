@@ -2,9 +2,10 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const WORDS = ['Campaigns', 'Analytics', 'Content', 'Ads', 'SEO'];
 const WORD_COLORS: Record<string, string> = {
@@ -50,26 +51,44 @@ function CyclingWord({ words }: { words: string[] }) {
 
 const Hero: React.FC = () => {
     const heroRef = useRef<HTMLElement>(null);
+    const innerRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        const tl = gsap.timeline();
 
-        /* No opacity animations — elements are always visible.
-           Only subtle y-translate for entrance feel. */
+        /* Entrance animations */
         gsap.from('.hero-word', { y: 30, duration: 0.8, stagger: 0.06, ease: 'power3.out', delay: 0.2 });
         gsap.from('.hero-cycling', { y: 20, duration: 0.6, ease: 'power3.out', delay: 0.7 });
         gsap.from('.hero-subtitle', { y: 15, duration: 0.5, delay: 0.9 });
         gsap.from('.hero-cta', { y: 10, duration: 0.4, stagger: 0.08, delay: 1.1 });
         gsap.from('.hero-proof', { y: 10, duration: 0.4, delay: 1.3 });
+
+        /* Scroll-driven 3D perspective transform */
+        if (innerRef.current) {
+            gsap.to(innerRef.current, {
+                y: 80,
+                scale: 0.92,
+                rotateX: -5,
+                opacity: 0.6,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: heroRef.current,
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true,
+                },
+            });
+        }
     }, { scope: heroRef });
 
     return (
         <section id="hero-section" ref={heroRef} className="relative overflow-hidden min-h-screen flex items-center" style={{
             background: 'var(--bg-primary)',
+            perspective: 1200,
             maskImage: 'linear-gradient(to bottom, black 0%, black 92%, transparent 100%)',
             WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 92%, transparent 100%)',
         }}>
+          <div ref={innerRef} className="absolute inset-0 flex items-center" style={{ willChange: 'transform', transformOrigin: 'center top' }}>
 
             {/* Grid background */}
             <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{
@@ -148,6 +167,7 @@ const Hero: React.FC = () => {
                     </span>
                 </div>
             </div>
+          </div>
         </section>
     );
 };
