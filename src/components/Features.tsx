@@ -1,14 +1,14 @@
 'use client';
 
 import React, { useRef, useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ═══ Pattern #4: Vertical tabs left + morphing preview right ═══ */
-
+/* ═══ Features data ═══ */
 const features = [
     {
         id: 0, tab: 'Campaign Agent', title: 'AI-Vibe-Marketer',
@@ -77,37 +77,129 @@ const features = [
     },
 ];
 
-const TAB_DURATION = 7000;
+const AUTO_PLAY_INTERVAL = 5000;
+const ITEM_HEIGHT = 64;
 
+const wrap = (min: number, max: number, v: number) => {
+    const rangeSize = max - min;
+    return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min;
+};
+
+/* ═══ Live Preview Card ═══ */
+function PreviewCard({ feature, isActive }: { feature: typeof features[0]; isActive: boolean }) {
+    return (
+        <div style={{
+            padding: 28, borderRadius: 24,
+            background: 'var(--bg-white)', border: '1px solid var(--border)',
+            boxShadow: isActive ? '0 20px 60px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04)' : 'none',
+            height: '100%', display: 'flex', flexDirection: 'column',
+        }}>
+            {/* Header */}
+            <div style={{ marginBottom: 24 }}>
+                <span style={{
+                    fontFamily: 'var(--font-mono)', fontSize: 11, color: feature.color,
+                    letterSpacing: '0.1em', textTransform: 'uppercase',
+                    display: 'block', marginBottom: 8,
+                }}>{feature.subtitle}</span>
+                <h3 style={{
+                    fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.4rem, 2.5vw, 1.75rem)',
+                    fontWeight: 800, color: 'var(--text-primary)', marginBottom: 10, letterSpacing: '-0.02em',
+                }}>{feature.title}</h3>
+                <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7, maxWidth: 480 }}>{feature.desc}</p>
+            </div>
+
+            {/* Capabilities */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 20 }}>
+                {feature.caps.map((cap, ci) => (
+                    <span key={ci} style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                        padding: '5px 10px', borderRadius: 'var(--radius-full)',
+                        background: 'var(--bg-surface)', border: '1px solid var(--border)',
+                        fontSize: 11, color: 'var(--text-secondary)', fontWeight: 500,
+                    }}>
+                        <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M3 8L6.5 11.5L13 4.5" stroke={feature.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                        {cap}
+                    </span>
+                ))}
+            </div>
+
+            {/* Live preview panel */}
+            <div style={{
+                padding: 20, borderRadius: 16,
+                background: 'var(--bg-surface)', border: '1px solid var(--border)',
+                flex: 1,
+            }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 6px rgba(16,185,129,0.5)' }} />
+                    <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-primary)' }}>Live Preview</span>
+                    <span style={{ marginLeft: 'auto', fontSize: 10, color: feature.color, fontFamily: 'var(--font-mono)', fontWeight: 600, padding: '2px 8px', borderRadius: 'var(--radius-sm)', background: `${feature.color}10` }}>{feature.tab}</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {feature.preview.map((row, ri) => (
+                        <div key={ri} style={{
+                            display: 'flex', alignItems: 'center', gap: 12,
+                            padding: '10px 14px', borderRadius: 12,
+                            background: 'var(--bg-white)', border: '1px solid var(--border-subtle)',
+                        }}>
+                            <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', flex: 1 }}>{row.ch}</span>
+                            <span style={{ fontSize: 12, fontWeight: 700, color: feature.color, fontFamily: 'var(--font-mono)' }}>{row.stat}</span>
+                            <div style={{ width: 72, height: 5, borderRadius: 3, background: 'var(--border-subtle)' }}>
+                                <motion.div
+                                    initial={{ width: 0 }}
+                                    animate={isActive ? { width: `${row.pct}%` } : { width: 0 }}
+                                    transition={{ duration: 0.8, delay: ri * 0.1, ease: [0.4, 0, 0.2, 1] }}
+                                    style={{ height: '100%', borderRadius: 3, background: `linear-gradient(90deg, ${feature.color}, ${feature.color}80)` }}
+                                />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+/* ═══ Main Component ═══ */
 const Features: React.FC = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
-    const [active, setActive] = useState(0);
-    const progressRef = useRef<HTMLDivElement>(null);
-    const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    const [step, setStep] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
 
-    // Auto-advance with progress
-    const startTimer = useCallback(() => {
-        if (timerRef.current) clearInterval(timerRef.current);
-        if (progressRef.current) {
-            gsap.killTweensOf(progressRef.current);
-            gsap.set(progressRef.current, { scaleY: 0 });
-            gsap.to(progressRef.current, { scaleY: 1, duration: TAB_DURATION / 1000, ease: 'none' });
-        }
-        timerRef.current = setInterval(() => {
-            setActive(p => (p + 1) % features.length);
-        }, TAB_DURATION);
+    const currentIndex = ((step % features.length) + features.length) % features.length;
+
+    const nextStep = useCallback(() => {
+        setStep(prev => prev + 1);
     }, []);
 
-    useEffect(() => { startTimer(); return () => { if (timerRef.current) clearInterval(timerRef.current); }; }, [startTimer]);
-    useEffect(() => { startTimer(); }, [active, startTimer]);
+    const handleTabClick = (index: number) => {
+        const diff = (index - currentIndex + features.length) % features.length;
+        if (diff > 0) setStep(s => s + diff);
+        else if (diff < 0) setStep(s => s + diff + features.length);
+    };
+
+    useEffect(() => {
+        if (isPaused) return;
+        const interval = setInterval(nextStep, AUTO_PLAY_INTERVAL);
+        return () => clearInterval(interval);
+    }, [nextStep, isPaused]);
 
     useGSAP(() => {
         gsap.fromTo('.feat-label', { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, scrollTrigger: { trigger: sectionRef.current, start: 'top 82%' } });
         gsap.fromTo('.feat-heading', { y: 30, opacity: 0, filter: 'blur(6px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' } });
-        gsap.fromTo('.feat-content-area', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, delay: 0.2, scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' } });
+        gsap.fromTo('.feat-carousel', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, delay: 0.2, scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' } });
     }, { scope: sectionRef });
 
-    const f = features[active];
+    const getCardStatus = (index: number) => {
+        const diff = index - currentIndex;
+        const len = features.length;
+        let normalizedDiff = diff;
+        if (diff > len / 2) normalizedDiff -= len;
+        if (diff < -len / 2) normalizedDiff += len;
+        if (normalizedDiff === 0) return 'active';
+        if (normalizedDiff === -1) return 'prev';
+        if (normalizedDiff === 1) return 'next';
+        return 'hidden';
+    };
 
     return (
         <section ref={sectionRef} id="features" style={{
@@ -127,125 +219,147 @@ const Features: React.FC = () => {
                     </h2>
                 </div>
 
-                {/* Vertical tabs (left) + Preview (right) */}
-                <div className="feat-content-area feat-layout" style={{
-                    display: 'grid', gridTemplateColumns: '280px 1fr', gap: 40, alignItems: 'start',
+                {/* Carousel */}
+                <div className="feat-carousel" style={{
+                    display: 'flex', flexDirection: 'column', gap: 0,
                 }}>
-                    {/* Left — Vertical tabs */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, position: 'relative' }}>
-                        {features.map((feat, i) => (
-                            <button key={feat.id} onClick={() => setActive(i)} style={{
-                                display: 'flex', alignItems: 'center', gap: 12,
-                                padding: '14px 16px', borderRadius: 'var(--radius-md)',
-                                background: active === i ? 'var(--bg-surface)' : 'transparent',
-                                border: `1px solid ${active === i ? 'var(--border)' : 'transparent'}`,
-                                cursor: 'pointer', textAlign: 'left',
-                                transition: 'all 0.3s var(--ease-out)',
-                                position: 'relative', overflow: 'hidden',
-                            }}>
-                                {/* Progress fill for active tab */}
-                                {active === i && (
-                                    <div ref={active === i ? progressRef : undefined} style={{
-                                        position: 'absolute', left: 0, top: 0, bottom: 0, width: 3,
-                                        background: feat.color, borderRadius: 2,
-                                        transformOrigin: 'top', transform: 'scaleY(0)',
-                                    }} />
-                                )}
-                                <span style={{
-                                    width: 32, height: 32, borderRadius: 'var(--radius-sm)',
-                                    background: active === i ? `${feat.color}15` : 'var(--bg-surface)',
-                                    border: `1px solid ${active === i ? `${feat.color}25` : 'var(--border-subtle)'}`,
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700,
-                                    color: active === i ? feat.color : 'var(--text-muted)',
-                                    flexShrink: 0, transition: 'all 0.3s ease',
-                                }}>0{feat.id + 1}</span>
-                                <span style={{
-                                    fontSize: 14, fontWeight: active === i ? 600 : 500,
-                                    color: active === i ? 'var(--text-primary)' : 'var(--text-muted)',
-                                    transition: 'all 0.3s ease',
-                                }}>{feat.tab}</span>
-                            </button>
-                        ))}
-                    </div>
+                    <div style={{
+                        position: 'relative', overflow: 'hidden', borderRadius: 40,
+                        display: 'flex', flexDirection: 'row',
+                        minHeight: 560, border: '1px solid var(--border)',
+                        background: 'var(--bg-surface)',
+                    }}>
+                        {/* Left — Scrolling tabs */}
+                        <div style={{
+                            width: 300, minWidth: 300,
+                            position: 'relative', zIndex: 30,
+                            display: 'flex', flexDirection: 'column',
+                            alignItems: 'flex-start', justifyContent: 'center',
+                            overflow: 'hidden',
+                            padding: '40px 0 40px 32px',
+                            background: features[currentIndex].color,
+                            transition: 'background 0.6s ease',
+                        }}>
+                            {/* Fade edges */}
+                            <div style={{ position: 'absolute', inset: '0 0 auto 0', height: 60, background: `linear-gradient(to bottom, ${features[currentIndex].color}, transparent)`, zIndex: 40, transition: 'background 0.6s ease' }} />
+                            <div style={{ position: 'absolute', inset: 'auto 0 0 0', height: 60, background: `linear-gradient(to top, ${features[currentIndex].color}, transparent)`, zIndex: 40, transition: 'background 0.6s ease' }} />
 
-                    {/* Right — Feature detail + preview */}
-                    <div key={active} style={{ animation: 'featSlide 0.5s var(--ease-out) forwards' }}>
-                        {/* Text content */}
-                        <div style={{ marginBottom: 28 }}>
-                            <span style={{
-                                fontFamily: 'var(--font-mono)', fontSize: 11, color: f.color,
-                                letterSpacing: '0.1em', textTransform: 'uppercase',
-                                display: 'block', marginBottom: 8,
-                            }}>{f.subtitle}</span>
-                            <h3 style={{
-                                fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.5rem, 3vw, 2rem)',
-                                fontWeight: 800, color: 'var(--text-primary)', marginBottom: 10, letterSpacing: '-0.02em',
-                            }}>{f.title}</h3>
-                            <p style={{ fontSize: 15, color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: 20, maxWidth: 500 }}>{f.desc}</p>
+                            <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', zIndex: 20 }}>
+                                {features.map((feature, index) => {
+                                    const isActive = index === currentIndex;
+                                    const distance = index - currentIndex;
+                                    const wrappedDistance = wrap(-(features.length / 2), features.length / 2, distance);
 
-                            {/* Capabilities */}
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                                {f.caps.map((cap, ci) => (
-                                    <span key={ci} style={{
-                                        display: 'inline-flex', alignItems: 'center', gap: 6,
-                                        padding: '6px 12px', borderRadius: 'var(--radius-full)',
-                                        background: 'var(--bg-surface)', border: '1px solid var(--border)',
-                                        fontSize: 12, color: 'var(--text-secondary)', fontWeight: 500,
-                                        transition: 'all 0.2s ease',
-                                    }}>
-                                        <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M3 8L6.5 11.5L13 4.5" stroke={f.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                                        {cap}
-                                    </span>
-                                ))}
+                                    return (
+                                        <motion.div
+                                            key={feature.id}
+                                            style={{ height: ITEM_HEIGHT, width: 'fit-content', position: 'absolute' }}
+                                            animate={{
+                                                y: wrappedDistance * ITEM_HEIGHT,
+                                                opacity: 1 - Math.abs(wrappedDistance) * 0.25,
+                                            }}
+                                            transition={{ type: 'spring', stiffness: 90, damping: 22, mass: 1 }}
+                                        >
+                                            <button
+                                                onClick={() => handleTabClick(index)}
+                                                onMouseEnter={() => setIsPaused(true)}
+                                                onMouseLeave={() => setIsPaused(false)}
+                                                style={{
+                                                    display: 'flex', alignItems: 'center', gap: 12,
+                                                    padding: '12px 20px', borderRadius: 999,
+                                                    background: isActive ? '#fff' : 'transparent',
+                                                    border: isActive ? '1px solid #fff' : '1px solid rgba(255,255,255,0.2)',
+                                                    cursor: 'pointer', textAlign: 'left',
+                                                    transition: 'all 0.4s ease',
+                                                    position: 'relative', zIndex: isActive ? 10 : 1,
+                                                }}
+                                            >
+                                                <span style={{
+                                                    width: 28, height: 28, borderRadius: 8,
+                                                    background: isActive ? `${feature.color}15` : 'rgba(255,255,255,0.15)',
+                                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                    fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700,
+                                                    color: isActive ? feature.color : 'rgba(255,255,255,0.7)',
+                                                    flexShrink: 0, transition: 'all 0.3s ease',
+                                                }}>0{feature.id + 1}</span>
+                                                <span style={{
+                                                    fontSize: 13, fontWeight: isActive ? 600 : 400,
+                                                    color: isActive ? feature.color : 'rgba(255,255,255,0.6)',
+                                                    whiteSpace: 'nowrap', textTransform: 'uppercase',
+                                                    letterSpacing: '0.04em',
+                                                    transition: 'all 0.3s ease',
+                                                }}>{feature.tab}</span>
+                                            </button>
+                                        </motion.div>
+                                    );
+                                })}
                             </div>
                         </div>
 
-                        {/* Live preview panel */}
+                        {/* Right — Stacked cards with content */}
                         <div style={{
-                            padding: 24, borderRadius: 'var(--radius-xl)',
-                            background: 'var(--bg-surface)', border: '1px solid var(--border)',
-                            boxShadow: 'var(--shadow-md)',
+                            flex: 1, position: 'relative',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            padding: '32px 40px',
+                            overflow: 'hidden',
+                            borderLeft: '1px solid var(--border)',
                         }}>
-                            {/* Preview header */}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-                                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 6px rgba(16,185,129,0.5)', animation: 'status-pulse 2s ease infinite' }} />
-                                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-primary)' }}>Live Preview</span>
-                                <span style={{ marginLeft: 'auto', fontSize: 10, color: f.color, fontFamily: 'var(--font-mono)', fontWeight: 600, padding: '2px 8px', borderRadius: 'var(--radius-sm)', background: `${f.color}10` }}>{f.tab}</span>
-                            </div>
+                            <div style={{ position: 'relative', width: '100%', maxWidth: 520, minHeight: 460 }}>
+                                {features.map((feature, index) => {
+                                    const status = getCardStatus(index);
+                                    const isActive = status === 'active';
+                                    const isPrev = status === 'prev';
+                                    const isNext = status === 'next';
 
-                            {/* Data rows */}
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                                {f.preview.map((row, ri) => (
-                                    <div key={ri} style={{
-                                        display: 'flex', alignItems: 'center', gap: 12,
-                                        padding: '10px 14px', borderRadius: 'var(--radius-md)',
-                                        background: 'var(--bg-white)', border: '1px solid var(--border-subtle)',
-                                        transition: 'all 0.3s var(--ease-out)',
-                                    }}
-                                        onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${f.color}30`; e.currentTarget.style.transform = 'translateX(3px)'; }}
-                                        onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-subtle)'; e.currentTarget.style.transform = 'translateX(0)'; }}
-                                    >
-                                        <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', flex: 1 }}>{row.ch}</span>
-                                        <span style={{ fontSize: 12, fontWeight: 700, color: f.color, fontFamily: 'var(--font-mono)' }}>{row.stat}</span>
-                                        <div style={{ width: 80, height: 5, borderRadius: 3, background: 'var(--border-subtle)' }}>
-                                            <div style={{ width: `${row.pct}%`, height: '100%', borderRadius: 3, background: `linear-gradient(90deg, ${f.color}, ${f.color}80)`, transition: 'width 0.8s var(--ease-out)' }} />
-                                        </div>
-                                    </div>
-                                ))}
+                                    return (
+                                        <motion.div
+                                            key={feature.id}
+                                            initial={false}
+                                            animate={{
+                                                x: isActive ? 0 : isPrev ? -60 : isNext ? 60 : 0,
+                                                scale: isActive ? 1 : isPrev || isNext ? 0.92 : 0.85,
+                                                opacity: isActive ? 1 : isPrev || isNext ? 0.3 : 0,
+                                                rotateY: isPrev ? -4 : isNext ? 4 : 0,
+                                                zIndex: isActive ? 20 : isPrev || isNext ? 10 : 0,
+                                            }}
+                                            transition={{ type: 'spring', stiffness: 260, damping: 25, mass: 0.8 }}
+                                            style={{
+                                                position: 'absolute', inset: 0,
+                                                borderRadius: 20, overflow: 'hidden',
+                                                transformOrigin: 'center center',
+                                                pointerEvents: isActive ? 'auto' : 'none',
+                                            }}
+                                        >
+                                            <PreviewCard feature={feature} isActive={isActive} />
+                                        </motion.div>
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            {/* Mobile responsive */}
             <style>{`
-                @keyframes featSlide {
-                    from { opacity: 0; transform: translateY(16px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                @media (max-width: 768px) {
-                    .feat-layout { grid-template-columns: 1fr !important; }
+                @media (max-width: 900px) {
+                    .feat-carousel > div:first-child {
+                        flex-direction: column !important;
+                        border-radius: 24px !important;
+                    }
+                    .feat-carousel > div:first-child > div:first-child {
+                        width: 100% !important;
+                        min-width: unset !important;
+                        min-height: 280px !important;
+                        padding: 32px 16px !important;
+                        border-radius: 24px 24px 0 0 !important;
+                    }
+                    .feat-carousel > div:first-child > div:last-child {
+                        padding: 24px 16px !important;
+                        min-height: 500px !important;
+                        border-left: none !important;
+                        border-top: 1px solid var(--border) !important;
+                    }
                 }
             `}</style>
         </section>

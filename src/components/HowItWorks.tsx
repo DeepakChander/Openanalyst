@@ -64,8 +64,8 @@ const HowItWorks: React.FC = () => {
 
                 {/* 4 horizontal cards with connector dots and lines */}
                 <div className="hiw-grid" style={{
-                    display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0,
-                    maxWidth: 960, margin: '0 auto', position: 'relative',
+                    display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16,
+                    maxWidth: 1060, margin: '0 auto', position: 'relative',
                 }}>
                     {steps.map((step, i) => (
                         <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
@@ -97,7 +97,7 @@ const HowItWorks: React.FC = () => {
                                 padding: '20px 16px', borderRadius: 'var(--radius-lg)',
                                 background: 'var(--bg-white)', border: '1px solid var(--border)',
                                 boxShadow: 'var(--shadow-sm)', textAlign: 'center',
-                                width: '100%', maxWidth: 210,
+                                width: '100%', height: '100%',
                                 transition: 'all 0.3s var(--ease-out)',
                                 transform: hovered === i ? 'translateY(-4px)' : 'translateY(0)',
                                 borderColor: hovered === i ? `${step.color}25` : 'var(--border)',
