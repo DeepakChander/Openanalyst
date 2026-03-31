@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { Header, Footer } from '@/components';
+import { Header, Footer, Integrations } from '@/components';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -131,12 +131,6 @@ export default function FeaturesPage() {
                 y: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
                 scrollTrigger: { trigger: block, start: 'top 85%' },
             });
-        });
-
-        /* ── CTA entrance ── */
-        gsap.fromTo('.fp-cta-inner', { y: 40, opacity: 0 }, {
-            y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
-            scrollTrigger: { trigger: '.fp-cta-section', start: 'top 85%' },
         });
 
         /* ── Hero 3D perspective scroll ── */
@@ -272,103 +266,212 @@ export default function FeaturesPage() {
                 </div>
             </section>
 
-            {/* ═══ FEATURE PANELS — Alternating full-width blocks ═══ */}
-            <section id="features" style={{ background: 'var(--bg-white)', paddingBottom: 'var(--space-section-sm)' }}>
-                <div style={{ padding: '0 24px' }}>
+            {/* ═══ FEATURE PANELS — Interactive split showcase ═══ */}
+            <section id="features" style={{
+                background: 'var(--bg-white)', padding: 'var(--space-section) 24px',
+                position: 'relative', overflow: 'hidden',
+            }}>
+                {/* Subtle background accent */}
+                <div aria-hidden="true" style={{
+                    position: 'absolute', top: '50%', right: '-10%', transform: 'translateY(-50%)',
+                    width: 600, height: 600, borderRadius: '50%',
+                    background: `radial-gradient(circle, ${features[activeFeature].accent}06 0%, transparent 60%)`,
+                    filter: 'blur(80px)', pointerEvents: 'none', transition: 'background 0.8s ease',
+                }} />
+
+                <div style={{ maxWidth: 1100, margin: '0 auto', position: 'relative' }}>
                     {/* Section heading */}
-                    <div style={{ textAlign: 'center', marginBottom: 48 }}>
+                    <div style={{ textAlign: 'center', marginBottom: 64 }}>
                         <p className="label-mono" style={{ marginBottom: 12 }}>Core Features</p>
                         <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text-primary)' }}>
                             Built for the future <span className="text-gradient">of marketing</span>
                         </h2>
                     </div>
 
-                    {/* 2x2 Feature grid */}
-                    <div className="fp-feature-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, maxWidth: 1000, margin: '0 auto' }}>
-                        {features.map((f, i) => (
-                            <div key={f.id} className="fp-feature-block" style={{
-                                padding: '32px 28px', borderRadius: 'var(--radius-xl)',
-                                background: i === 0 ? 'var(--bg-dark)' : 'var(--bg-surface)',
-                                border: `1px solid ${i === 0 ? 'rgba(255,107,0,0.15)' : 'var(--border)'}`,
-                                boxShadow: 'var(--shadow-md)',
-                                transition: 'all 0.3s var(--ease-out)',
-                                position: 'relative', overflow: 'hidden',
-                            }}
-                                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = `0 12px 40px ${f.accent}12`; }}
-                                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'var(--shadow-md)'; }}
-                            >
-                                {/* Faded number */}
-                                <span style={{ position: 'absolute', top: 16, right: 20, fontFamily: 'var(--font-heading)', fontSize: 56, fontWeight: 900, color: i === 0 ? 'rgba(255,107,0,0.08)' : `${f.accent}06`, lineHeight: 1, pointerEvents: 'none' }}>{f.id}</span>
+                    {/* Split panel: Left selector + Right showcase */}
+                    <div className="fp-split" style={{ display: 'flex', gap: 0, minHeight: 480, borderRadius: 20, overflow: 'hidden', border: '1px solid var(--border)', boxShadow: 'var(--shadow-lg)' }}>
 
-                                {/* Icon */}
-                                <div style={{ width: 44, height: 44, borderRadius: 'var(--radius-md)', background: i === 0 ? 'rgba(255,107,0,0.15)' : `${f.accent}10`, border: `1px solid ${i === 0 ? 'rgba(255,107,0,0.25)' : f.accent + '20'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16, color: i === 0 ? '#FF6B00' : f.accent }}>
-                                    {f.icon}
+                        {/* Left — Feature selector list */}
+                        <div style={{
+                            width: 340, flexShrink: 0, background: 'var(--bg-surface)',
+                            borderRight: '1px solid var(--border)',
+                            display: 'flex', flexDirection: 'column',
+                        }}>
+                            {features.map((f, i) => {
+                                const isActive = activeFeature === i;
+                                return (
+                                    <button key={f.id}
+                                        onClick={() => setActiveFeature(i)}
+                                        className="fp-selector-btn"
+                                        style={{
+                                            flex: 1, display: 'flex', alignItems: 'center', gap: 16,
+                                            padding: '24px 28px', border: 'none', cursor: 'pointer',
+                                            background: isActive ? 'var(--bg-white)' : 'transparent',
+                                            borderBottom: i < 3 ? '1px solid var(--border)' : 'none',
+                                            position: 'relative', textAlign: 'left',
+                                            transition: 'background 0.3s ease',
+                                        }}
+                                    >
+                                        {/* Animated accent bar */}
+                                        <div style={{
+                                            position: 'absolute', left: 0, top: 0, bottom: 0,
+                                            width: 3, borderRadius: '0 2px 2px 0',
+                                            background: isActive ? f.accent : 'transparent',
+                                            boxShadow: isActive ? `0 0 12px ${f.accent}40` : 'none',
+                                            transition: 'all 0.4s cubic-bezier(0.16,1,0.3,1)',
+                                        }} />
+
+                                        {/* Number */}
+                                        <span style={{
+                                            fontFamily: 'var(--font-heading)', fontSize: 28, fontWeight: 900,
+                                            color: isActive ? f.accent : 'var(--border)',
+                                            lineHeight: 1, minWidth: 36,
+                                            transition: 'color 0.4s ease',
+                                            filter: isActive ? `drop-shadow(0 0 8px ${f.accent}30)` : 'none',
+                                        }}>{f.id}</span>
+
+                                        {/* Text */}
+                                        <div>
+                                            <span style={{
+                                                fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 600,
+                                                letterSpacing: '0.1em', textTransform: 'uppercase',
+                                                color: isActive ? f.accent : 'var(--text-muted)',
+                                                display: 'block', marginBottom: 3,
+                                                transition: 'color 0.4s ease',
+                                            }}>{f.subtitle}</span>
+                                            <span style={{
+                                                fontFamily: 'var(--font-heading)', fontSize: 15, fontWeight: 700,
+                                                color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
+                                                letterSpacing: '-0.01em',
+                                                transition: 'color 0.4s ease',
+                                            }}>{f.title}</span>
+                                        </div>
+
+                                        {/* Arrow indicator */}
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                            stroke={isActive ? f.accent : 'var(--border)'}
+                                            strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                                            style={{ marginLeft: 'auto', flexShrink: 0, transition: 'all 0.3s ease', transform: isActive ? 'translateX(0)' : 'translateX(-4px)', opacity: isActive ? 1 : 0.3 }}>
+                                            <path d="M9 18l6-6-6-6" />
+                                        </svg>
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        {/* Right — Feature showcase */}
+                        <div style={{
+                            flex: 1, padding: '48px 44px', position: 'relative',
+                            background: 'var(--bg-white)', overflow: 'hidden',
+                        }}>
+                            {/* Large faded number watermark */}
+                            <span className="fp-watermark" style={{
+                                position: 'absolute', top: -10, right: -5,
+                                fontFamily: 'var(--font-heading)', fontSize: 200, fontWeight: 900,
+                                color: `${features[activeFeature].accent}06`,
+                                lineHeight: 1, pointerEvents: 'none', userSelect: 'none',
+                                transition: 'color 0.6s ease',
+                            }}>{features[activeFeature].id}</span>
+
+                            {/* Accent glow */}
+                            <div style={{
+                                position: 'absolute', top: 40, right: 40,
+                                width: 200, height: 200, borderRadius: '50%',
+                                background: `radial-gradient(circle, ${features[activeFeature].accent}08 0%, transparent 70%)`,
+                                filter: 'blur(40px)', pointerEvents: 'none',
+                                transition: 'background 0.6s ease',
+                            }} />
+
+                            {/* Content */}
+                            <div style={{ position: 'relative', zIndex: 2 }}>
+                                {/* Icon + subtitle row */}
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
+                                    <div className="fp-showcase-icon" style={{
+                                        width: 52, height: 52, borderRadius: 14,
+                                        background: `${features[activeFeature].accent}08`,
+                                        border: `1.5px solid ${features[activeFeature].accent}20`,
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        transition: 'all 0.4s ease',
+                                        boxShadow: `0 4px 16px ${features[activeFeature].accent}10`,
+                                    }}>
+                                        {features[activeFeature].icon}
+                                    </div>
+                                    <div>
+                                        <span style={{
+                                            fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 600,
+                                            letterSpacing: '0.1em', textTransform: 'uppercase',
+                                            color: features[activeFeature].accent,
+                                            display: 'block', marginBottom: 2,
+                                        }}>{features[activeFeature].subtitle}</span>
+                                        <span style={{
+                                            fontFamily: 'var(--font-mono)', fontSize: 9,
+                                            color: 'var(--text-muted)', letterSpacing: '0.05em',
+                                        }}>Feature {features[activeFeature].id} of 04</span>
+                                    </div>
                                 </div>
 
-                                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: i === 0 ? '#FF8533' : f.accent, letterSpacing: '0.08em', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>{f.subtitle}</span>
-                                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 20, fontWeight: 800, color: i === 0 ? '#FAFAFA' : 'var(--text-primary)', marginBottom: 8, letterSpacing: '-0.01em' }}>{f.title}</h3>
-                                <p style={{ fontSize: 14, color: i === 0 ? 'rgba(255,255,255,0.6)' : 'var(--text-secondary)', lineHeight: 1.7, marginBottom: 16 }}>{f.description}</p>
+                                {/* Title */}
+                                <h3 className="fp-showcase-title" style={{
+                                    fontFamily: 'var(--font-heading)',
+                                    fontSize: 'clamp(1.6rem, 3vw, 2.2rem)',
+                                    fontWeight: 800, color: 'var(--text-primary)',
+                                    letterSpacing: '-0.02em', lineHeight: 1.15,
+                                    marginBottom: 16,
+                                }}>{features[activeFeature].title}</h3>
 
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                                    {f.details.map((detail, j) => (
-                                        <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: i === 0 ? 'rgba(255,255,255,0.5)' : 'var(--text-muted)' }}>
-                                            <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M3 8L6.5 11.5L13 4.5" stroke={f.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                                            {detail}
+                                {/* Description */}
+                                <p className="fp-showcase-desc" style={{
+                                    fontSize: 15, color: 'var(--text-secondary)',
+                                    lineHeight: 1.8, marginBottom: 28, maxWidth: 500,
+                                }}>{features[activeFeature].description}</p>
+
+                                {/* Details grid */}
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px 20px' }}>
+                                    {features[activeFeature].details.map((detail, j) => (
+                                        <div key={j} className="fp-detail-item" style={{
+                                            display: 'flex', alignItems: 'flex-start', gap: 10,
+                                            padding: '10px 12px', borderRadius: 10,
+                                            background: 'var(--bg-surface)',
+                                            border: '1px solid var(--border)',
+                                            transition: 'all 0.3s ease',
+                                        }}>
+                                            <div style={{
+                                                width: 20, height: 20, borderRadius: 6, flexShrink: 0, marginTop: 1,
+                                                background: `${features[activeFeature].accent}10`,
+                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            }}>
+                                                <svg width="10" height="10" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M3 8L6.5 11.5L13 4.5" stroke={features[activeFeature].accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                </svg>
+                                            </div>
+                                            <span style={{
+                                                fontSize: 12, color: 'var(--text-secondary)',
+                                                lineHeight: 1.5, fontWeight: 500,
+                                            }}>{detail}</span>
                                         </div>
                                     ))}
                                 </div>
+
+                                {/* Bottom progress dots */}
+                                <div style={{ display: 'flex', gap: 6, marginTop: 32 }}>
+                                    {features.map((f, i) => (
+                                        <button key={i} onClick={() => setActiveFeature(i)} style={{
+                                            width: activeFeature === i ? 28 : 8, height: 8,
+                                            borderRadius: 4, border: 'none', cursor: 'pointer',
+                                            background: activeFeature === i ? f.accent : 'var(--border)',
+                                            transition: 'all 0.4s cubic-bezier(0.16,1,0.3,1)',
+                                            boxShadow: activeFeature === i ? `0 0 8px ${f.accent}40` : 'none',
+                                        }} />
+                                    ))}
+                                </div>
                             </div>
-                        ))}
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* ═══ CTA — Dark (single dark section) ═══ */}
-            <section className="fp-cta-section dark-section section" style={{
-                background: 'var(--bg-dark)', textAlign: 'center',
-            }}>
-                {/* Grid bg */}
-                <div style={{
-                    position: 'absolute', inset: 0, pointerEvents: 'none',
-                    backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)',
-                    backgroundSize: '80px 80px',
-                    maskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)',
-                    WebkitMaskImage: 'radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, transparent 70%)',
-                }} />
-                {/* Glow */}
-                <div style={{
-                    position: 'absolute', top: '30%', left: '50%', transform: 'translateX(-50%)',
-                    width: 600, height: 400, borderRadius: '50%',
-                    background: 'radial-gradient(circle, rgba(255,107,0,0.06) 0%, transparent 70%)',
-                    filter: 'blur(80px)', pointerEvents: 'none',
-                }} />
-
-                <div className="fp-cta-inner container" style={{ maxWidth: 700, position: 'relative', zIndex: 2 }}>
-                    <span className="label-mono" style={{ color: 'var(--orange)', display: 'block', marginBottom: 20, fontSize: 11 }}>Get Started</span>
-                    <h2 style={{
-                        fontFamily: 'var(--font-heading)', fontSize: 'clamp(2rem, 4.5vw, 3.2rem)',
-                        fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1,
-                        color: '#FAFAFA', marginBottom: 20,
-                    }}>
-                        Ready to transform your marketing?
-                    </h2>
-                    <p style={{
-                        fontSize: 'clamp(1rem, 1.3vw, 1.1rem)', color: 'var(--text-on-dark-secondary)',
-                        lineHeight: 1.8, maxWidth: 480, margin: '0 auto 36px',
-                    }}>
-                        Join teams using OpenAnalyst to automate campaigns, surface insights, and drive growth with AI.
-                    </p>
-                    <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-                        <a href="https://app.openanalyst.com" className="btn-primary" style={{ textDecoration: 'none' }}>
-                            Start Free Trial
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                        </a>
-                        <a href="/about" className="btn-outline" style={{ textDecoration: 'none' }}>
-                            Learn More
-                        </a>
-                    </div>
-                </div>
-            </section>
+            {/* ═══ INTEGRATIONS — Connected nodes visualization ═══ */}
+            <Integrations />
 
             <Footer
                 ctaWords={['Unlock', 'every', 'marketing', 'superpower.']}
@@ -377,6 +480,11 @@ export default function FeaturesPage() {
             />
 
             <style>{`
+                /* ── Selector button hover ── */
+                .fp-selector-btn:hover {
+                    background: var(--bg-white) !important;
+                }
+
                 /* ── Stats responsive ── */
                 @media (max-width: 1024px) {
                     .fp-stats-section .container { grid-template-columns: repeat(2, 1fr) !important; }
@@ -396,15 +504,44 @@ export default function FeaturesPage() {
                     .fp-card svg { width: 20px !important; height: 20px !important; }
                 }
 
-                /* ── Sticky walkthrough responsive ── */
+                /* ── Split feature panel responsive ── */
                 @media (max-width: 900px) {
-                    #features .container {
-                        grid-template-columns: 1fr !important;
-                        gap: 48px !important;
+                    .fp-split {
+                        flex-direction: column !important;
                     }
-                    .fp-sticky-visual {
-                        position: relative !important;
-                        top: 0 !important;
+                    .fp-split > div:first-child {
+                        width: 100% !important;
+                        flex-direction: row !important;
+                        overflow-x: auto !important;
+                        border-right: none !important;
+                        border-bottom: 1px solid var(--border) !important;
+                    }
+                    .fp-selector-btn {
+                        flex: none !important;
+                        width: auto !important;
+                        min-width: 160px !important;
+                        padding: 16px 20px !important;
+                        border-bottom: none !important;
+                        border-right: 1px solid var(--border) !important;
+                    }
+                    .fp-selector-btn > div:first-child {
+                        left: auto !important;
+                        bottom: 0 !important;
+                        top: auto !important;
+                        width: 100% !important;
+                        height: 3px !important;
+                        border-radius: 2px 2px 0 0 !important;
+                    }
+                    .fp-watermark {
+                        font-size: 120px !important;
+                    }
+                }
+                @media (max-width: 600px) {
+                    .fp-split > div:last-child {
+                        padding: 28px 20px !important;
+                    }
+                    .fp-detail-item {
+                        grid-column: span 2 !important;
                     }
                 }
             `}</style>
