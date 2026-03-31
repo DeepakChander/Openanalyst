@@ -173,7 +173,7 @@ function ShaderBackground() {
     return (
         <canvas ref={canvasRef} style={{
             position: 'absolute', inset: 0, width: '100%', height: '100%',
-            background: '#000', touchAction: 'none',
+            touchAction: 'none',
         }} />
     );
 }
@@ -226,27 +226,30 @@ const Hero: React.FC = () => {
 
         const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-        tl.from('.hero-word', {
-            y: 80, opacity: 0, filter: 'blur(8px)', rotateX: 40,
-            stagger: { each: 0.08, from: 'start' },
-            duration: 1, ease: 'power4.out',
-        }, 0.5);
+        tl.fromTo('.hero-word',
+            { y: 80, opacity: 0, filter: 'blur(8px)', rotateX: 40 },
+            { y: 0, opacity: 1, filter: 'blur(0px)', rotateX: 0, stagger: { each: 0.08, from: 'start' }, duration: 1, ease: 'power4.out' },
+        0.5);
 
-        tl.from('.hero-cycling', {
-            y: 40, opacity: 0, scale: 0.9, duration: 0.8, ease: 'back.out(1.4)',
-        }, 1.1);
+        tl.fromTo('.hero-cycling',
+            { y: 40, opacity: 0, scale: 0.9 },
+            { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.4)' },
+        1.1);
 
-        tl.from('.hero-subtitle', {
-            y: 20, opacity: 0, filter: 'blur(4px)', duration: 0.7,
-        }, 1.4);
+        tl.fromTo('.hero-subtitle',
+            { y: 20, opacity: 0, filter: 'blur(4px)' },
+            { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.7 },
+        1.4);
 
-        tl.from('.hero-cta', {
-            y: 16, opacity: 0, stagger: 0.1, duration: 0.5,
-        }, 1.7);
+        tl.fromTo('.hero-cta',
+            { y: 16, opacity: 0 },
+            { y: 0, opacity: 1, stagger: 0.1, duration: 0.5 },
+        1.7);
 
-        tl.from('.hero-proof', {
-            y: 12, opacity: 0, duration: 0.5,
-        }, 2.0);
+        tl.fromTo('.hero-proof',
+            { y: 12, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.5 },
+        2.0);
 
     }, { scope: heroRef });
 
@@ -254,8 +257,9 @@ const Hero: React.FC = () => {
         <section id="hero-section" ref={heroRef} style={{
             position: 'relative', overflow: 'hidden',
             minHeight: '100vh', display: 'flex', alignItems: 'center',
+            background: 'radial-gradient(ellipse at 50% 40%, #2a1a0a 0%, #0f0800 40%, #000000 100%)',
         }}>
-            {/* WebGL Shader Background */}
+            {/* WebGL Shader Background (renders on top of CSS fallback) */}
             <ShaderBackground />
 
             {/* Content overlay */}
