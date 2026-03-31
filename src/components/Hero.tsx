@@ -53,24 +53,28 @@ void main() {
   float n2 = fbm(p + vec2(n1 * 1.5 + t * 0.5, n1 * 1.2));
   float n3 = fbm(p + vec2(n2 * 1.3, n2 * 0.9 + t * 0.3));
 
-  // Brighter warm orange/amber palette
-  vec3 c1 = vec3(0.15, 0.06, 0.01);  // deep warm
-  vec3 c2 = vec3(0.5, 0.2, 0.04);    // warm brown
-  vec3 c3 = vec3(0.9, 0.4, 0.08);    // bright orange
-  vec3 c4 = vec3(1.0, 0.7, 0.2);     // golden amber
+  // Vivid warm orange/amber palette
+  vec3 c1 = vec3(0.08, 0.03, 0.0);   // near black warm
+  vec3 c2 = vec3(0.6, 0.22, 0.03);   // warm orange
+  vec3 c3 = vec3(1.0, 0.45, 0.08);   // vivid orange
+  vec3 c4 = vec3(1.0, 0.75, 0.25);   // bright golden
 
-  vec3 col = mix(c1, c2, n1);
-  col = mix(col, c3, n2 * 0.7);
-  col = mix(col, c4, n3 * 0.4);
+  vec3 col = mix(c1, c2, n1 * 1.2);
+  col = mix(col, c3, n2 * 0.8);
+  col = mix(col, c4, pow(n3, 1.5) * 0.6);
 
-  // Brighter light streaks
-  float streak = pow(n3, 2.5) * 2.0;
-  col += vec3(streak * 1.0, streak * 0.5, streak * 0.15);
+  // Bright horizontal light streaks
+  float streak = pow(n3 * n2, 1.8) * 3.0;
+  col += vec3(streak * 1.2, streak * 0.6, streak * 0.15);
 
-  // Softer vignette (less darkening)
-  float vig = 1.0 - length((uv - 0.5) * 1.2);
-  col *= smoothstep(0.0, 0.8, vig);
-  col *= 1.3;
+  // Hot spots — bright orange glows
+  float hot = pow(max(n2 - 0.4, 0.0) * 2.0, 2.0);
+  col += vec3(hot * 0.8, hot * 0.3, hot * 0.05);
+
+  // Light vignette keeping center bright
+  float vig = 1.0 - length((uv - vec2(0.5, 0.45)) * vec2(1.0, 1.3));
+  col *= smoothstep(-0.1, 0.7, vig);
+  col *= 1.8;
 
   fragColor = vec4(col, 1.0);
 }`;
