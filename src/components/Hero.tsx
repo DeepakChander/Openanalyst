@@ -11,96 +11,6 @@ const WORD_COLORS: Record<string, string> = {
     Campaigns: '#FF6B00', Analytics: '#8B5CF6', Content: '#10B981', Ads: '#3B82F6', SEO: '#F59E0B',
 };
 
-/* WebGL shader code removed — CSS animation used instead for compatibility */
-
-/* ═══ CSS Animated Background — works everywhere, no WebGL needed ═══ */
-function AnimatedBackground() {
-    return (
-        <div className="hero-bg-wrap" style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
-            {/* Base dark gradient */}
-            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 120% 80% at 50% 40%, #1a0e00 0%, #0a0500 50%, #000000 100%)' }} />
-
-            {/* Animated orange orbs */}
-            <div className="hero-orb hero-orb-1" />
-            <div className="hero-orb hero-orb-2" />
-            <div className="hero-orb hero-orb-3" />
-            <div className="hero-orb hero-orb-4" />
-
-            {/* Light streak overlay */}
-            <div className="hero-streak" />
-
-            {/* Grain texture */}
-            <div style={{ position: 'absolute', inset: 0, opacity: 0.04, mixBlendMode: 'overlay', backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '128px 128px' }} />
-
-            <style>{`
-                .hero-orb {
-                    position: absolute;
-                    border-radius: 50%;
-                    filter: blur(80px);
-                    will-change: transform;
-                }
-                .hero-orb-1 {
-                    width: 600px; height: 600px;
-                    background: radial-gradient(circle, rgba(255,107,0,0.25) 0%, rgba(255,80,0,0.1) 40%, transparent 70%);
-                    top: 10%; left: 20%;
-                    animation: heroFloat1 12s ease-in-out infinite;
-                }
-                .hero-orb-2 {
-                    width: 500px; height: 500px;
-                    background: radial-gradient(circle, rgba(255,140,30,0.2) 0%, rgba(200,80,0,0.08) 40%, transparent 70%);
-                    top: 30%; right: 10%;
-                    animation: heroFloat2 15s ease-in-out infinite;
-                }
-                .hero-orb-3 {
-                    width: 400px; height: 400px;
-                    background: radial-gradient(circle, rgba(255,180,50,0.15) 0%, transparent 60%);
-                    bottom: 10%; left: 35%;
-                    animation: heroFloat3 18s ease-in-out infinite;
-                }
-                .hero-orb-4 {
-                    width: 300px; height: 300px;
-                    background: radial-gradient(circle, rgba(255,100,0,0.18) 0%, transparent 60%);
-                    top: 50%; left: 10%;
-                    animation: heroFloat1 20s ease-in-out infinite reverse;
-                }
-                .hero-streak {
-                    position: absolute;
-                    inset: 0;
-                    background: linear-gradient(
-                        105deg,
-                        transparent 20%,
-                        rgba(255,120,20,0.04) 35%,
-                        rgba(255,160,40,0.08) 42%,
-                        rgba(255,120,20,0.04) 50%,
-                        transparent 65%
-                    );
-                    animation: heroStreak 8s ease-in-out infinite;
-                }
-                @keyframes heroFloat1 {
-                    0%, 100% { transform: translate(0, 0) scale(1); }
-                    33% { transform: translate(40px, -30px) scale(1.1); }
-                    66% { transform: translate(-20px, 20px) scale(0.95); }
-                }
-                @keyframes heroFloat2 {
-                    0%, 100% { transform: translate(0, 0) scale(1); }
-                    33% { transform: translate(-30px, 20px) scale(1.05); }
-                    66% { transform: translate(25px, -25px) scale(0.97); }
-                }
-                @keyframes heroFloat3 {
-                    0%, 100% { transform: translate(0, 0) scale(1); }
-                    50% { transform: translate(30px, -20px) scale(1.08); }
-                }
-                @keyframes heroStreak {
-                    0%, 100% { opacity: 0.6; transform: translateX(-5%); }
-                    50% { opacity: 1; transform: translateX(5%); }
-                }
-                @media (prefers-reduced-motion: reduce) {
-                    .hero-orb, .hero-streak { animation: none !important; }
-                }
-            `}</style>
-        </div>
-    );
-}
 
 /* ── Cycling word ── */
 function CyclingWord({ words }: { words: string[] }) {
@@ -154,7 +64,28 @@ const Hero: React.FC = () => {
     }, { scope: heroRef });
 
     return (
-        <section id="hero-section" ref={heroRef} className="relative overflow-hidden min-h-screen flex items-center" style={{ background: 'var(--bg-primary)' }}>
+        <section id="hero-section" ref={heroRef} className="relative overflow-hidden min-h-screen flex items-center" style={{
+            background: 'var(--bg-primary)',
+            maskImage: 'linear-gradient(to bottom, black 0%, black 92%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 92%, transparent 100%)',
+        }}>
+
+            {/* Grid background */}
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{
+                backgroundImage: 'linear-gradient(to right, rgba(15,23,42,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.06) 1px, transparent 1px)',
+                backgroundSize: '56px 56px',
+                maskImage: 'radial-gradient(ellipse 80% 85% at 50% 40%, black 0%, transparent 70%)',
+                WebkitMaskImage: 'radial-gradient(ellipse 80% 85% at 50% 40%, black 0%, transparent 70%)',
+            }} />
+
+            {/* Vertical accent lines */}
+            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0" style={{ left: '10%', width: 1, background: 'linear-gradient(to bottom, rgba(255,107,0,0.2) 0%, rgba(255,107,0,0.4) 50%, transparent 100%)' }} />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0" style={{ left: '25%', width: 1, background: 'linear-gradient(to bottom, rgba(255,107,0,0.1) 0%, rgba(255,107,0,0.2) 50%, transparent 100%)' }} />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0" style={{ right: '25%', width: 1, background: 'linear-gradient(to bottom, rgba(139,92,246,0.1) 0%, rgba(139,92,246,0.2) 50%, transparent 100%)' }} />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0" style={{ right: '10%', width: 1, background: 'linear-gradient(to bottom, rgba(139,92,246,0.2) 0%, rgba(139,92,246,0.4) 50%, transparent 100%)' }} />
+
+            {/* Horizontal accent line */}
+            <div aria-hidden="true" className="pointer-events-none absolute inset-x-0" style={{ top: '38%', height: 1, background: 'linear-gradient(to right, transparent 0%, rgba(255,107,0,0.25) 30%, rgba(139,92,246,0.25) 70%, transparent 100%)' }} />
 
             {/* Content */}
             <div className="relative z-10 max-w-[900px] mx-auto px-6 py-40 text-center">
