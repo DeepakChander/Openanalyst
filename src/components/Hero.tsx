@@ -12,6 +12,135 @@ const WORD_COLORS: Record<string, string> = {
 };
 
 
+/* ═══ Wireframe Mesh Background ═══ */
+function WireframeMesh() {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        let animId: number;
+        let time = 0;
+
+        const resize = () => {
+            const dpr = Math.min(window.devicePixelRatio, 2);
+            canvas.width = canvas.offsetWidth * dpr;
+            canvas.height = canvas.offsetHeight * dpr;
+            ctx.scale(dpr, dpr);
+        };
+        resize();
+        window.addEventListener('resize', resize);
+
+        // Generate points on an organic blob shape
+        const POINTS = 180;
+        const CONNECTIONS_DIST = 90;
+        const basePoints: { bx: number; by: number; bz: number }[] = [];
+
+        for (let i = 0; i < POINTS; i++) {
+            // Distribute on a sphere-like blob
+            const phi = Math.acos(1 - 2 * (i + 0.5) / POINTS);
+            const theta = Math.PI * (1 + Math.sqrt(5)) * i;
+            const r = 200 + Math.random() * 40;
+            basePoints.push({
+                bx: r * Math.sin(phi) * Math.cos(theta),
+                by: r * Math.sin(phi) * Math.sin(theta) * 0.65, // flatten Y
+                bz: r * Math.cos(phi),
+            });
+        }
+
+        const draw = () => {
+            time += 0.003;
+            const w = canvas.offsetWidth;
+            const h = canvas.offsetHeight;
+            ctx.clearRect(0, 0, w, h);
+
+            const cx = w / 2;
+            const cy = h / 2 - 20;
+
+            // Project 3D to 2D with slow rotation
+            const cosA = Math.cos(time);
+            const sinA = Math.sin(time);
+            const cosB = Math.cos(time * 0.7);
+            const sinB = Math.sin(time * 0.7);
+
+            const projected = basePoints.map(p => {
+                // Rotate Y-axis
+                let x = p.bx * cosA - p.bz * sinA;
+                let z = p.bx * sinA + p.bz * cosA;
+                let y = p.by;
+                // Rotate X-axis slightly
+                const y2 = y * cosB - z * sinB;
+                const z2 = y * sinB + z * cosB;
+                // Add organic wobble
+                const wobble = Math.sin(time * 2 + p.bx * 0.01) * 8;
+                // Perspective
+                const perspective = 600 / (600 + z2);
+                return {
+                    x: cx + (x + wobble) * perspective,
+                    y: cy + (y2 + wobble * 0.5) * perspective,
+                    z: z2,
+                    perspective,
+                };
+            });
+
+            // Draw connections
+            for (let i = 0; i < projected.length; i++) {
+                for (let j = i + 1; j < projected.length; j++) {
+                    const dx = projected[i].x - projected[j].x;
+                    const dy = projected[i].y - projected[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < CONNECTIONS_DIST) {
+                        const alpha = (1 - dist / CONNECTIONS_DIST) * 0.15 * Math.min(projected[i].perspective, projected[j].perspective);
+                        // Every 7th connection is orange accent
+                        if ((i + j) % 7 === 0) {
+                            ctx.strokeStyle = `rgba(255,107,0,${alpha * 2.5})`;
+                            ctx.lineWidth = 0.8;
+                        } else {
+                            ctx.strokeStyle = `rgba(120,120,130,${alpha})`;
+                            ctx.lineWidth = 0.5;
+                        }
+                        ctx.beginPath();
+                        ctx.moveTo(projected[i].x, projected[i].y);
+                        ctx.lineTo(projected[j].x, projected[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // Draw points
+            projected.forEach((p, i) => {
+                const size = 1.2 * p.perspective;
+                const isAccent = i % 11 === 0;
+                ctx.fillStyle = isAccent ? `rgba(255,107,0,${0.6 * p.perspective})` : `rgba(140,140,150,${0.3 * p.perspective})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            animId = requestAnimationFrame(draw);
+        };
+
+        draw();
+
+        return () => {
+            cancelAnimationFrame(animId);
+            window.removeEventListener('resize', resize);
+        };
+    }, []);
+
+    return (
+        <canvas
+            ref={canvasRef}
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 w-full h-full"
+            style={{ opacity: 0.55 }}
+        />
+    );
+}
+
 /* ── Cycling word ── */
 function CyclingWord({ words }: { words: string[] }) {
     const [index, setIndex] = useState(0);
@@ -70,22 +199,8 @@ const Hero: React.FC = () => {
             WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 92%, transparent 100%)',
         }}>
 
-            {/* Grid background */}
-            <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{
-                backgroundImage: 'linear-gradient(to right, rgba(15,23,42,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.06) 1px, transparent 1px)',
-                backgroundSize: '56px 56px',
-                maskImage: 'radial-gradient(ellipse 80% 85% at 50% 40%, black 0%, transparent 70%)',
-                WebkitMaskImage: 'radial-gradient(ellipse 80% 85% at 50% 40%, black 0%, transparent 70%)',
-            }} />
-
-            {/* Vertical accent lines */}
-            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0" style={{ left: '10%', width: 1, background: 'linear-gradient(to bottom, rgba(255,107,0,0.2) 0%, rgba(255,107,0,0.4) 50%, transparent 100%)' }} />
-            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0" style={{ left: '25%', width: 1, background: 'linear-gradient(to bottom, rgba(255,107,0,0.1) 0%, rgba(255,107,0,0.2) 50%, transparent 100%)' }} />
-            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0" style={{ right: '25%', width: 1, background: 'linear-gradient(to bottom, rgba(139,92,246,0.1) 0%, rgba(139,92,246,0.2) 50%, transparent 100%)' }} />
-            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0" style={{ right: '10%', width: 1, background: 'linear-gradient(to bottom, rgba(139,92,246,0.2) 0%, rgba(139,92,246,0.4) 50%, transparent 100%)' }} />
-
-            {/* Horizontal accent line */}
-            <div aria-hidden="true" className="pointer-events-none absolute inset-x-0" style={{ top: '38%', height: 1, background: 'linear-gradient(to right, transparent 0%, rgba(255,107,0,0.25) 30%, rgba(139,92,246,0.25) 70%, transparent 100%)' }} />
+            {/* Wireframe mesh background */}
+            <WireframeMesh />
 
             {/* Content */}
             <div className="relative z-10 max-w-[900px] mx-auto px-6 py-40 text-center">
