@@ -5,6 +5,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Header, Footer } from '@/components';
+import Globe from '@/components/Globe';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -245,97 +246,146 @@ export default function ContactPage() {
                 </div>
             </section>
 
-            {/* ═══ GLOBAL PRESENCE — City Cards ═══ */}
-            <section className="ct-map-section dark-section" style={{ padding: '80px 24px 80px', background: 'var(--bg-dark)', position: 'relative', overflow: 'hidden' }}>
-                {/* Subtle background grid */}
-                <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '32px 32px', pointerEvents: 'none' }} />
+            {/* ═══ GLOBAL PRESENCE — Interactive 3D Globe ═══ */}
+            <section className="ct-globe-section dark-section" style={{ padding: '100px 24px 80px', background: 'var(--bg-dark)', position: 'relative', overflow: 'hidden' }}>
+                {/* Subtle radial background */}
+                <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 40%, rgba(255,107,0,0.04) 0%, transparent 60%)', pointerEvents: 'none' }} />
 
-                <div style={{ maxWidth: 1000, margin: '0 auto', position: 'relative' }}>
-                    <div style={{ textAlign: 'center', marginBottom: 56 }}>
+                <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative' }}>
+                    {/* Top heading */}
+                    <div style={{ textAlign: 'center', marginBottom: 12 }}>
                         <p className="label-mono" style={{ color: '#FF8533', marginBottom: 12 }}>Global Presence</p>
-                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 800, color: '#FAFAFA', marginBottom: 16, letterSpacing: '-0.02em' }}>
+                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 800, color: '#FAFAFA', marginBottom: 12, letterSpacing: '-0.03em' }}>
                             Serving teams in <span className="text-gradient">150+ countries</span>
                         </h2>
-                        <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.45)', maxWidth: 480, margin: '0 auto', lineHeight: 1.6 }}>
-                            Infrastructure deployed across 8 regions for low-latency access worldwide.
+                        <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.4)', maxWidth: 420, margin: '0 auto', lineHeight: 1.6 }}>
+                            Drag the globe to explore our worldwide infrastructure.
                         </p>
                     </div>
 
-                    {/* Stats row */}
-                    <div className="presence-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 1, background: 'rgba(255,255,255,0.06)', borderRadius: 16, overflow: 'hidden', marginBottom: 48 }}>
+                    {/* Globe + side panels layout */}
+                    <div className="globe-layout" style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', gap: 0 }}>
+
+                        {/* Left cities */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, justifySelf: 'end', paddingRight: 32 }}>
+                            {[
+                                { city: 'San Francisco', region: 'US-WEST-1', flag: '🇺🇸', color: '#FF6B00', ms: '12ms' },
+                                { city: 'Sao Paulo', region: 'SA-EAST-1', flag: '🇧🇷', color: '#F97316', ms: '38ms' },
+                                { city: 'London', region: 'EU-WEST-2', flag: '🇬🇧', color: '#3B82F6', ms: '18ms' },
+                                { city: 'Dubai', region: 'ME-SOUTH-1', flag: '🇦🇪', color: '#14B8A6', ms: '32ms' },
+                            ].map((loc, i) => (
+                                <div key={i} className="globe-city-card" style={{
+                                    display: 'flex', alignItems: 'center', gap: 12,
+                                    padding: '14px 18px', borderRadius: 12,
+                                    background: 'rgba(255,255,255,0.025)',
+                                    border: '1px solid rgba(255,255,255,0.05)',
+                                    transition: 'all 0.3s ease',
+                                    cursor: 'default', minWidth: 220,
+                                }}
+                                    onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${loc.color}50`; e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+                                    onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.background = 'rgba(255,255,255,0.025)'; }}
+                                >
+                                    <span style={{ fontSize: 22 }}>{loc.flag}</span>
+                                    <div style={{ flex: 1 }}>
+                                        <div style={{ fontFamily: 'var(--font-heading)', fontSize: 14, fontWeight: 700, color: '#FAFAFA' }}>{loc.city}</div>
+                                        <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-mono)', fontWeight: 500 }}>{loc.region}</div>
+                                    </div>
+                                    <div style={{ textAlign: 'right' }}>
+                                        <div style={{ fontSize: 13, fontWeight: 700, color: loc.color, fontFamily: 'var(--font-mono)' }}>{loc.ms}</div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 3, justifyContent: 'flex-end' }}>
+                                            <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 6px #10B98180' }} />
+                                            <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Live</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Center: Animated Globe */}
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+                            <Globe size={460} />
+                        </div>
+
+                        {/* Right cities */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, justifySelf: 'start', paddingLeft: 32 }}>
+                            {[
+                                { city: 'Mumbai', region: 'AP-SOUTH-1', flag: '🇮🇳', color: '#10B981', ms: '28ms' },
+                                { city: 'Singapore', region: 'AP-SE-1', flag: '🇸🇬', color: '#8B5CF6', ms: '22ms' },
+                                { city: 'Tokyo', region: 'AP-NE-1', flag: '🇯🇵', color: '#F59E0B', ms: '15ms' },
+                                { city: 'Sydney', region: 'AP-SE-2', flag: '🇦🇺', color: '#EC4899', ms: '35ms' },
+                            ].map((loc, i) => (
+                                <div key={i} className="globe-city-card" style={{
+                                    display: 'flex', alignItems: 'center', gap: 12,
+                                    padding: '14px 18px', borderRadius: 12,
+                                    background: 'rgba(255,255,255,0.025)',
+                                    border: '1px solid rgba(255,255,255,0.05)',
+                                    transition: 'all 0.3s ease',
+                                    cursor: 'default', minWidth: 220,
+                                }}
+                                    onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${loc.color}50`; e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+                                    onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.background = 'rgba(255,255,255,0.025)'; }}
+                                >
+                                    <span style={{ fontSize: 22 }}>{loc.flag}</span>
+                                    <div style={{ flex: 1 }}>
+                                        <div style={{ fontFamily: 'var(--font-heading)', fontSize: 14, fontWeight: 700, color: '#FAFAFA' }}>{loc.city}</div>
+                                        <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-mono)', fontWeight: 500 }}>{loc.region}</div>
+                                    </div>
+                                    <div style={{ textAlign: 'right' }}>
+                                        <div style={{ fontSize: 13, fontWeight: 700, color: loc.color, fontFamily: 'var(--font-mono)' }}>{loc.ms}</div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 3, justifyContent: 'flex-end' }}>
+                                            <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 6px #10B98180' }} />
+                                            <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Live</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Stats bar below */}
+                    <div className="globe-stats" style={{
+                        display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 1,
+                        background: 'rgba(255,255,255,0.04)', borderRadius: 16, overflow: 'hidden',
+                        marginTop: 48, maxWidth: 800, marginLeft: 'auto', marginRight: 'auto',
+                    }}>
                         {[
                             { value: '150+', label: 'Countries' },
                             { value: '8', label: 'Regions' },
-                            { value: '99.99%', label: 'Uptime' },
+                            { value: '99.99%', label: 'Uptime SLA' },
                             { value: '<50ms', label: 'Avg Latency' },
                         ].map((s, i) => (
-                            <div key={i} style={{ background: 'rgba(255,255,255,0.02)', padding: '28px 16px', textAlign: 'center' }}>
-                                <div style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800, color: '#FF6B00', marginBottom: 4 }}>{s.value}</div>
-                                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: 'var(--font-mono)' }}>{s.label}</div>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* City cards grid */}
-                    <div className="presence-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
-                        {[
-                            { city: 'San Francisco', region: 'US West', flag: '🇺🇸', color: '#FF6B00', status: 'Primary' },
-                            { city: 'London', region: 'EU West', flag: '🇬🇧', color: '#3B82F6', status: 'Active' },
-                            { city: 'Mumbai', region: 'AP South', flag: '🇮🇳', color: '#10B981', status: 'Active' },
-                            { city: 'Singapore', region: 'AP Southeast', flag: '🇸🇬', color: '#8B5CF6', status: 'Active' },
-                            { city: 'Tokyo', region: 'AP Northeast', flag: '🇯🇵', color: '#F59E0B', status: 'Active' },
-                            { city: 'São Paulo', region: 'SA East', flag: '🇧🇷', color: '#F97316', status: 'Active' },
-                            { city: 'Dubai', region: 'ME Central', flag: '🇦🇪', color: '#14B8A6', status: 'Active' },
-                            { city: 'Sydney', region: 'AP Southeast', flag: '🇦🇺', color: '#EC4899', status: 'Active' },
-                        ].map((loc, i) => (
-                            <div key={i} className="presence-card" style={{
-                                padding: '20px 16px',
-                                borderRadius: 14,
-                                background: 'rgba(255,255,255,0.03)',
-                                border: '1px solid rgba(255,255,255,0.06)',
-                                transition: 'all 0.3s ease',
-                                cursor: 'default',
-                            }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
-                                    e.currentTarget.style.borderColor = `${loc.color}40`;
-                                    e.currentTarget.style.transform = 'translateY(-2px)';
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
-                                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)';
-                                    e.currentTarget.style.transform = 'translateY(0)';
-                                }}
-                            >
-                                {/* Status indicator */}
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                                    <span style={{ fontSize: 24 }}>{loc.flag}</span>
-                                    <span style={{
-                                        display: 'flex', alignItems: 'center', gap: 4,
-                                        fontSize: 9, fontWeight: 700, textTransform: 'uppercase',
-                                        letterSpacing: '0.08em', color: loc.color,
-                                        fontFamily: 'var(--font-mono)',
-                                    }}>
-                                        <span style={{ width: 5, height: 5, borderRadius: '50%', background: loc.color, boxShadow: `0 0 6px ${loc.color}80` }} />
-                                        {loc.status}
-                                    </span>
-                                </div>
-                                {/* City name */}
-                                <div style={{ fontFamily: 'var(--font-heading)', fontSize: 15, fontWeight: 700, color: '#FAFAFA', marginBottom: 2 }}>{loc.city}</div>
-                                {/* Region */}
-                                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-mono)', fontWeight: 500 }}>{loc.region}</div>
+                            <div key={i} style={{ background: 'rgba(255,255,255,0.015)', padding: '24px 16px', textAlign: 'center' }}>
+                                <div style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.3rem, 2.5vw, 1.8rem)', fontWeight: 800, color: '#FF6B00', marginBottom: 4 }}>{s.value}</div>
+                                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: 'var(--font-mono)' }}>{s.label}</div>
                             </div>
                         ))}
                     </div>
                 </div>
 
                 <style>{`
-                    @media (max-width: 768px) {
-                        .presence-stats { grid-template-columns: repeat(2, 1fr) !important; }
-                        .presence-grid { grid-template-columns: repeat(2, 1fr) !important; }
+                    @media (max-width: 1024px) {
+                        .globe-layout {
+                            grid-template-columns: 1fr !important;
+                            gap: 32px !important;
+                        }
+                        .globe-layout > div:first-child { order: 2; justify-self: center !important; padding-right: 0 !important; }
+                        .globe-layout > div:nth-child(2) { order: 1; }
+                        .globe-layout > div:last-child { order: 3; justify-self: center !important; padding-left: 0 !important; }
+                        .globe-layout > div:first-child,
+                        .globe-layout > div:last-child {
+                            display: grid !important;
+                            grid-template-columns: repeat(2, 1fr) !important;
+                            gap: 10px !important;
+                            width: 100%;
+                            max-width: 520px;
+                        }
                     }
-                    @media (max-width: 480px) {
-                        .presence-grid { grid-template-columns: 1fr !important; }
+                    @media (max-width: 580px) {
+                        .globe-layout > div:first-child,
+                        .globe-layout > div:last-child {
+                            grid-template-columns: 1fr !important;
+                        }
+                        .globe-stats { grid-template-columns: repeat(2, 1fr) !important; }
                     }
                 `}</style>
             </section>
