@@ -45,7 +45,7 @@ const platforms: Record<Platform, {
     windows: {
         label: 'Windows',
         icon: <WindowsLogo />,
-        fileName: 'OpenAnalyst-Setup.exe',
+        fileName: 'OpenAnalyst-setup.exe',
         size: '84.2 MB',
         requirement: 'Windows 10 or later (64-bit)',
         available: true,
@@ -55,7 +55,7 @@ const platforms: Record<Platform, {
     mac: {
         label: 'macOS',
         icon: <AppleLogo />,
-        fileName: 'OpenAnalyst.zip',
+        fileName: 'OpenAnalyst.dmg',
         size: '91.7 MB',
         requirement: 'macOS 12 Monterey or later',
         available: true,

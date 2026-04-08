@@ -2,12 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const DOWNLOAD_URLS: Record<string, { url: string; filename: string }> = {
     mac: {
-        url: 'https://api.openanalyst.com/OpenAnalyst.zip',
-        filename: 'OpenAnalyst.zip',
+        url: 'https://api.openanalyst.com/OpenAnalyst.dmg',
+        filename: 'OpenAnalyst.dmg',
     },
     windows: {
-        url: 'REPLACE_WITH_WINDOWS_DOWNLOAD_URL',
-        filename: 'OpenAnalyst-Setup.exe',
+        url: 'https://api.openanalyst.com/OpenAnalyst-setup.exe',
+        filename: 'OpenAnalyst-setup.exe',
     },
 };
 
