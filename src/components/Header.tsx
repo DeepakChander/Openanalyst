@@ -70,7 +70,7 @@ const Header: React.FC = () => {
             }}>
                 {/* ── LIGHT GLASS PILL ── */}
                 <div style={{
-                    position: 'relative', maxWidth: 840, width: '100%', pointerEvents: 'auto',
+                    position: 'relative', maxWidth: 960, width: '100%', pointerEvents: 'auto',
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                     padding: '8px 8px 8px 20px',
                     borderRadius: 'var(--radius-full)',
