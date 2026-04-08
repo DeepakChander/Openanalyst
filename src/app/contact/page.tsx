@@ -245,101 +245,112 @@ export default function ContactPage() {
                 </div>
             </section>
 
-            {/* ═══ GLOBAL PRESENCE — CSS 3D Rotating Globe ═══ */}
-            <section className="ct-map-section dark-section" style={{ padding: '80px 24px', background: 'var(--bg-dark)', position: 'relative', overflow: 'hidden' }}>
-                {/* Ambient glow */}
-                <div style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%, -50%)', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,107,0,0.06) 0%, transparent 60%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
-
-                <div style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center' }}>
+            {/* ═══ GLOBAL PRESENCE — Flat World Map ═══ */}
+            <section className="ct-map-section dark-section" style={{ padding: '80px 24px 60px', background: 'var(--bg-dark)', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ maxWidth: 1100, margin: '0 auto', textAlign: 'center' }}>
                     <p className="label-mono" style={{ color: '#FF8533', marginBottom: 12 }}>Global Presence</p>
                     <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 800, color: '#FAFAFA', marginBottom: 48, letterSpacing: '-0.02em' }}>
                         Serving teams in <span className="text-gradient">150+ countries</span>
                     </h2>
 
-                    {/* 3D Globe — Pure CSS */}
-                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 48 }}>
-                        <div style={{ position: 'relative', width: 320, height: 320 }}>
-                            {/* Globe sphere */}
-                            <div style={{
-                                position: 'absolute', inset: 0, borderRadius: '50%',
-                                background: 'radial-gradient(circle at 35% 35%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 40%, rgba(0,0,0,0.3) 100%)',
-                                border: '1px solid rgba(255,255,255,0.08)',
-                                boxShadow: 'inset 0 0 60px rgba(0,0,0,0.4), 0 0 40px rgba(255,107,0,0.05)',
-                            }} />
+                    {/* World Map with city markers */}
+                    <div style={{ position: 'relative', width: '100%', maxWidth: 960, margin: '0 auto 48px', aspectRatio: '2 / 1' }}>
+                        {/* Dot grid world map using SVG */}
+                        <svg viewBox="0 0 960 480" style={{ width: '100%', height: '100%' }}>
+                            <defs>
+                                <radialGradient id="mapGlow" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stopColor="rgba(255,107,0,0.08)" />
+                                    <stop offset="100%" stopColor="transparent" />
+                                </radialGradient>
+                            </defs>
+                            <rect fill="url(#mapGlow)" width="960" height="480" />
 
-                            {/* Latitude lines rotating */}
-                            {[0.3, 0.45, 0.55, 0.7].map((pos, i) => (
-                                <div key={`lat-${i}`} style={{
-                                    position: 'absolute', left: '10%', right: '10%',
-                                    top: `${pos * 100}%`, height: 1,
-                                    background: 'rgba(255,255,255,0.06)',
-                                    borderRadius: '50%',
-                                    transform: `scaleX(${1 - Math.abs(pos - 0.5) * 1.5})`,
-                                }} />
-                            ))}
+                            {/* Simplified world map continents as filled paths */}
+                            <g opacity="0.12" fill="#ffffff" stroke="none">
+                                {/* North America */}
+                                <path d="M120,80 L160,65 L200,60 L230,70 L250,90 L260,120 L270,140 L250,160 L260,180 L240,200 L220,210 L200,200 L180,210 L160,230 L150,250 L140,240 L130,220 L120,200 L100,180 L90,150 L95,120 L100,100 Z" />
+                                {/* Greenland */}
+                                <path d="M270,40 L310,35 L330,50 L320,70 L290,75 L270,65 Z" />
+                                {/* South America */}
+                                <path d="M200,260 L220,250 L240,260 L260,270 L270,300 L275,330 L270,360 L260,380 L240,400 L220,410 L200,400 L190,370 L185,340 L190,310 L195,280 Z" />
+                                {/* Europe */}
+                                <path d="M410,70 L430,60 L460,65 L480,75 L490,90 L500,80 L510,90 L500,110 L480,120 L460,130 L440,125 L420,120 L410,105 L405,90 Z" />
+                                {/* Africa */}
+                                <path d="M430,170 L460,160 L490,165 L510,180 L520,210 L530,240 L525,280 L510,310 L490,340 L470,350 L450,340 L440,310 L435,280 L430,240 L425,210 L420,190 Z" />
+                                {/* Asia */}
+                                <path d="M510,60 L560,50 L620,55 L680,50 L720,60 L750,55 L770,70 L780,90 L790,110 L780,130 L760,140 L730,130 L700,140 L680,135 L650,140 L620,145 L590,155 L560,160 L540,155 L520,140 L510,120 L505,100 L508,80 Z" />
+                                {/* India */}
+                                <path d="M620,160 L650,155 L660,175 L665,200 L655,230 L640,245 L625,235 L615,210 L610,185 Z" />
+                                {/* Southeast Asia / Indonesia */}
+                                <path d="M700,180 L720,170 L740,175 L755,185 L750,200 L730,195 L710,200 L700,195 Z" />
+                                <path d="M720,210 L740,205 L760,210 L770,220 L760,230 L740,225 L720,220 Z" />
+                                {/* Australia */}
+                                <path d="M740,300 L780,285 L820,290 L840,305 L845,330 L830,350 L800,360 L770,355 L750,340 L740,320 Z" />
+                                {/* Japan */}
+                                <path d="M790,100 L800,90 L810,100 L805,115 L795,120 L788,112 Z" />
+                                {/* UK */}
+                                <path d="M415,75 L425,70 L430,80 L425,90 L415,88 Z" />
+                                {/* Middle East */}
+                                <path d="M530,150 L560,140 L575,150 L570,170 L555,180 L535,175 L525,165 Z" />
+                            </g>
 
-                            {/* Longitude arcs rotating */}
-                            <div style={{
-                                position: 'absolute', inset: 20, borderRadius: '50%',
-                                border: '1px solid rgba(255,255,255,0.04)',
-                                transform: 'rotateY(30deg)',
-                                animation: 'spin 20s linear infinite',
-                            }} />
-                            <div style={{
-                                position: 'absolute', inset: 30, borderRadius: '50%',
-                                border: '1px solid rgba(255,255,255,0.05)',
-                                transform: 'rotateY(60deg)',
-                                animation: 'spin 25s linear infinite reverse',
-                            }} />
-                            <div style={{
-                                position: 'absolute', inset: 15, borderRadius: '50%',
-                                border: '1px solid rgba(255,255,255,0.03)',
-                                transform: 'rotateY(90deg)',
-                                animation: 'spin 30s linear infinite',
-                            }} />
+                            {/* Grid dots over map for texture */}
+                            <g opacity="0.06" fill="#ffffff">
+                                {Array.from({ length: 40 }).map((_, row) =>
+                                    Array.from({ length: 80 }).map((_, col) => (
+                                        <circle key={`${row}-${col}`} cx={col * 12 + 6} cy={row * 12 + 6} r="0.8" />
+                                    ))
+                                )}
+                            </g>
 
-                            {/* City dots orbiting on the globe surface */}
+                            {/* Connection arcs between cities */}
+                            <g fill="none" strokeWidth="1" strokeLinecap="round">
+                                <path d="M175,175 Q 350,100 425,95" stroke="url(#arc1)" opacity="0.5" />
+                                <path d="M425,95 Q 530,80 640,190" stroke="url(#arc2)" opacity="0.4" />
+                                <path d="M640,190 Q 700,140 795,110" stroke="url(#arc3)" opacity="0.4" />
+                                <path d="M425,95 Q 500,140 555,165" stroke="url(#arc4)" opacity="0.35" />
+                                <path d="M175,175 Q 250,300 220,340" stroke="url(#arc5)" opacity="0.3" />
+                                <path d="M555,165 Q 680,130 720,185" stroke="url(#arc6)" opacity="0.35" />
+                                <path d="M795,110 Q 820,200 800,320" stroke="url(#arc7)" opacity="0.3" />
+                            </g>
+                            <defs>
+                                <linearGradient id="arc1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stopColor="#FF6B00" /><stop offset="100%" stopColor="#3B82F6" /></linearGradient>
+                                <linearGradient id="arc2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stopColor="#3B82F6" /><stop offset="100%" stopColor="#10B981" /></linearGradient>
+                                <linearGradient id="arc3" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stopColor="#10B981" /><stop offset="100%" stopColor="#F59E0B" /></linearGradient>
+                                <linearGradient id="arc4" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stopColor="#3B82F6" /><stop offset="100%" stopColor="#14B8A6" /></linearGradient>
+                                <linearGradient id="arc5" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stopColor="#FF6B00" /><stop offset="100%" stopColor="#F97316" /></linearGradient>
+                                <linearGradient id="arc6" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stopColor="#14B8A6" /><stop offset="100%" stopColor="#8B5CF6" /></linearGradient>
+                                <linearGradient id="arc7" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stopColor="#F59E0B" /><stop offset="100%" stopColor="#EC4899" /></linearGradient>
+                            </defs>
+
+                            {/* City markers with glow */}
                             {[
-                                { name: 'SF', x: 18, y: 38, color: '#FF6B00', size: 10 },
-                                { name: 'NYC', x: 28, y: 36, color: '#FF6B00', size: 7 },
-                                { name: 'London', x: 47, y: 30, color: '#3B82F6', size: 9 },
-                                { name: 'Mumbai', x: 65, y: 48, color: '#10B981', size: 8 },
-                                { name: 'Singapore', x: 72, y: 58, color: '#8B5CF6', size: 7 },
-                                { name: 'Tokyo', x: 82, y: 35, color: '#F59E0B', size: 8 },
-                                { name: 'Sydney', x: 84, y: 72, color: '#EC4899', size: 7 },
-                                { name: 'Dubai', x: 58, y: 42, color: '#14B8A6', size: 6 },
-                                { name: 'Berlin', x: 50, y: 28, color: '#6366F1', size: 6 },
-                                { name: 'São Paulo', x: 30, y: 68, color: '#F97316', size: 7 },
+                                { name: 'San Francisco', x: 175, y: 175, color: '#FF6B00' },
+                                { name: 'São Paulo', x: 220, y: 340, color: '#F97316' },
+                                { name: 'London', x: 425, y: 95, color: '#3B82F6' },
+                                { name: 'Dubai', x: 555, y: 165, color: '#14B8A6' },
+                                { name: 'Mumbai', x: 640, y: 190, color: '#10B981' },
+                                { name: 'Singapore', x: 720, y: 225, color: '#8B5CF6' },
+                                { name: 'Tokyo', x: 795, y: 110, color: '#F59E0B' },
+                                { name: 'Sydney', x: 800, y: 320, color: '#EC4899' },
                             ].map((city, i) => (
-                                <div key={i} style={{
-                                    position: 'absolute',
-                                    left: `${city.x}%`, top: `${city.y}%`,
-                                    transform: 'translate(-50%, -50%)',
-                                }}>
+                                <g key={i}>
+                                    {/* Outer glow */}
+                                    <circle cx={city.x} cy={city.y} r="16" fill={city.color} opacity="0.08" />
+                                    <circle cx={city.x} cy={city.y} r="10" fill={city.color} opacity="0.15" />
                                     {/* Pulse ring */}
-                                    <div style={{
-                                        position: 'absolute', inset: -6, borderRadius: '50%',
-                                        border: `1px solid ${city.color}40`,
-                                        animation: `status-pulse 3s ease-in-out infinite ${i * 0.3}s`,
-                                    }} />
-                                    {/* Dot */}
-                                    <div style={{
-                                        width: city.size, height: city.size, borderRadius: '50%',
-                                        background: city.color,
-                                        boxShadow: `0 0 ${city.size}px ${city.color}60`,
-                                    }} />
-                                </div>
+                                    <circle cx={city.x} cy={city.y} r="8" fill="none" stroke={city.color} strokeWidth="1" opacity="0.4">
+                                        <animate attributeName="r" from="8" to="20" dur="3s" begin={`${i * 0.4}s`} repeatCount="indefinite" />
+                                        <animate attributeName="opacity" from="0.4" to="0" dur="3s" begin={`${i * 0.4}s`} repeatCount="indefinite" />
+                                    </circle>
+                                    {/* Core dot */}
+                                    <circle cx={city.x} cy={city.y} r="5" fill={city.color} />
+                                    <circle cx={city.x} cy={city.y} r="2.5" fill="#fff" opacity="0.8" />
+                                    {/* Label */}
+                                    <text x={city.x} y={city.y - 20} textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="11" fontWeight="600" fontFamily="var(--font-body)">{city.name}</text>
+                                </g>
                             ))}
-
-                            {/* Connection arcs */}
-                            <svg viewBox="0 0 320 320" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-                                <path d="M 58 122 Q 120 80 150 96" fill="none" stroke="#FF6B00" strokeWidth="0.8" opacity="0.3" />
-                                <path d="M 150 96 Q 180 100 208 153" fill="none" stroke="#10B981" strokeWidth="0.8" opacity="0.25" />
-                                <path d="M 208 153 Q 240 140 262 112" fill="none" stroke="#F59E0B" strokeWidth="0.8" opacity="0.25" />
-                                <path d="M 58 122 Q 160 200 208 153" fill="none" stroke="#8B5CF6" strokeWidth="0.6" opacity="0.2" />
-                                <path d="M 150 96 Q 190 120 230 186" fill="none" stroke="#3B82F6" strokeWidth="0.6" opacity="0.2" />
-                            </svg>
-                        </div>
+                        </svg>
                     </div>
 
                     {/* City legend */}
