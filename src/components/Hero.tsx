@@ -138,7 +138,7 @@ const Hero: React.FC = () => {
                 </p>
 
                 {/* CTAs */}
-                <div className="flex flex-wrap justify-center gap-4 mb-12">
+                <div className="flex flex-wrap justify-center gap-3 mb-6">
                     <a href="https://app.openanalyst.com" className="hero-cta btn-primary no-underline inline-flex items-center gap-2" style={{ fontSize: 16, padding: '15px 32px' }}>
                         Start free trial
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
@@ -146,6 +146,26 @@ const Hero: React.FC = () => {
                     <a href="#how-it-works" className="hero-cta btn-outline no-underline inline-flex items-center gap-2" style={{ fontSize: 16, padding: '15px 32px' }}>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polygon points="10 8 16 12 10 16" fill="currentColor" stroke="none" /></svg>
                         See how it works
+                    </a>
+                </div>
+                {/* Desktop download hint */}
+                <div className="hero-cta flex justify-center mb-12">
+                    <a href="/download" className="hero-download-link no-underline inline-flex items-center gap-2" style={{
+                        fontSize: 13,
+                        color: 'var(--text-muted)',
+                        fontFamily: 'var(--font-body)',
+                        fontWeight: 500,
+                        textDecoration: 'none',
+                        transition: 'color 0.2s ease',
+                        padding: '6px 14px',
+                        borderRadius: 8,
+                    }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5 }}>
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Also available as a desktop app for Windows & macOS
                     </a>
                 </div>
 
@@ -168,6 +188,16 @@ const Hero: React.FC = () => {
                 </div>
             </div>
           </div>
+            <style>{`
+                .hero-download-link:hover {
+                    color: var(--orange) !important;
+                    background: rgba(255,107,0,0.04);
+                }
+                .hero-download-link:hover svg {
+                    opacity: 1 !important;
+                    stroke: var(--orange);
+                }
+            `}</style>
         </section>
     );
 };

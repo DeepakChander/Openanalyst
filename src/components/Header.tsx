@@ -127,6 +127,26 @@ const Header: React.FC = () => {
 
                     {/* Right side */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                        {/* Download CTA */}
+                        <Link href="/download" className="hidden md:inline-flex nav-download-btn" style={{
+                            display: 'inline-flex', alignItems: 'center', gap: 5,
+                            padding: '8px 16px', fontSize: 13,
+                            fontFamily: 'var(--font-body)', fontWeight: 600,
+                            color: 'var(--text-primary)',
+                            background: 'var(--bg-surface)',
+                            border: '1px solid var(--border)',
+                            borderRadius: 'var(--radius-full)', textDecoration: 'none',
+                            transition: 'all 0.3s var(--ease-out)',
+                            whiteSpace: 'nowrap',
+                        }}>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.6 }}>
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            Download
+                        </Link>
+
                         {/* Desktop CTA */}
                         <a href="https://app.openanalyst.com" className="hidden md:inline-flex" style={{
                             display: 'inline-flex', alignItems: 'center', gap: 6,
@@ -205,7 +225,23 @@ const Header: React.FC = () => {
                     ))}
                 </nav>
 
-                <div className="menu-cta" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
+                <div className="menu-cta" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+                    <Link href="/download" onClick={() => setIsMenuOpen(false)} style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 8,
+                        fontSize: 15, padding: '16px 44px',
+                        fontFamily: 'var(--font-body)', fontWeight: 600,
+                        color: 'var(--text-primary)',
+                        background: 'var(--bg-surface)',
+                        border: '1px solid var(--border)',
+                        borderRadius: 'var(--radius-full)', textDecoration: 'none',
+                    }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Download Desktop
+                    </Link>
                     <a href="https://app.openanalyst.com" className="btn-primary" onClick={() => setIsMenuOpen(false)} style={{ fontSize: 15, padding: '16px 44px' }}>
                         Get Started
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
@@ -224,6 +260,13 @@ const Header: React.FC = () => {
             <style>{`
                 .nav-link-v2:hover { color: var(--text-primary) !important; }
                 .nav-link-v2:hover span { transform: scaleX(1) !important; }
+                .nav-download-btn:hover {
+                    border-color: var(--orange) !important;
+                    color: var(--orange) !important;
+                    background: var(--orange-50) !important;
+                    transform: translateY(-1px);
+                }
+                .nav-download-btn:hover svg { opacity: 1 !important; stroke: var(--orange); }
             `}</style>
         </>
     );
