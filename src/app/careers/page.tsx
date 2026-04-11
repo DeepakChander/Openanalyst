@@ -182,10 +182,10 @@ export default function CareersPage() {
                     </div>
                     <div className="car-photo-grid" style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr 1fr', gridTemplateRows: '200px 200px', gap: 12 }}>
                         {[
-                            { src: '/images/culture/office.png', span: '1 / 2', row: '1 / 3' },
-                            { src: '/images/culture/workshop.png', span: '2 / 3', row: '1 / 2' },
-                            { src: '/images/culture/remote.png', span: '3 / 4', row: '1 / 2' },
-                            { src: '/images/culture/event.png', span: '2 / 3', row: '2 / 3' },
+                            { src: '/images/culture/office.jpg', span: '1 / 2', row: '1 / 3' },
+                            { src: '/images/culture/workshop.jpg', span: '2 / 3', row: '1 / 2' },
+                            { src: '/images/culture/remote.jpg', span: '3 / 4', row: '1 / 2' },
+                            { src: '/images/culture/event.jpg', span: '2 / 3', row: '2 / 3' },
                             { src: '/images/culture/workshop2.png', span: '3 / 4', row: '2 / 3' },
                         ].map((photo, i) => (
                             <div key={i} className="car-reveal ai-img-container" style={{
