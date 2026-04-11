@@ -153,6 +153,7 @@ export default function AboutPage() {
     const metricsRef = useRef<HTMLElement>(null);
     const milestonesRef = useRef<HTMLElement>(null);
     const galleryRef = useRef<HTMLElement>(null);
+    const leadersRef = useRef<HTMLElement>(null);
     const cultureRef = useRef<HTMLElement>(null);
     const ctaRef = useRef<HTMLElement>(null);
     const { ref: scrambleRef, scramble } = useTextScramble();
@@ -262,6 +263,34 @@ export default function AboutPage() {
                 duration: 0.7,
                 stagger: 0.1,
                 ease: 'power3.out',
+            });
+        }
+
+        /* ── Leaders: stagger reveal ── */
+        const leaderCards = leadersRef.current?.querySelectorAll('.about-leader-card');
+        if (leaderCards) {
+            leaderCards.forEach((card, i) => {
+                gsap.from(card, {
+                    scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none none' },
+                    opacity: 0,
+                    y: 60,
+                    scale: 0.95,
+                    duration: 1,
+                    delay: i * 0.2,
+                    ease: 'power3.out',
+                });
+            });
+        }
+        const leaderImages = leadersRef.current?.querySelectorAll('.about-leader-img');
+        if (leaderImages) {
+            leaderImages.forEach((img, i) => {
+                gsap.from(img, {
+                    scrollTrigger: { trigger: img, start: 'top 85%', toggleActions: 'play none none none' },
+                    clipPath: 'inset(100% 0 0 0)',
+                    duration: 1.2,
+                    delay: i * 0.25,
+                    ease: 'power4.out',
+                });
             });
         }
 
@@ -823,7 +852,140 @@ export default function AboutPage() {
                     </div>
                 </section>
 
-                {/* ══════════ SECTION 7: CULTURE — Pattern #16 Hexagonal Honeycomb ══════════ */}
+                {/* ══════════ SECTION 7: LEADERSHIP ══════════ */}
+                <section
+                    ref={leadersRef}
+                    className="section"
+                    style={{ background: 'var(--bg-primary)' }}
+                >
+                    <div className="container">
+                        <div className="label-mono" style={{ marginBottom: '16px', textAlign: 'center' }}>
+                            Leadership
+                        </div>
+                        <h2 className="heading-2" style={{ textAlign: 'center', marginBottom: '20px' }}>
+                            Meet the <span className="text-gradient">founders</span>
+                        </h2>
+                        <p className="body-lg" style={{ textAlign: 'center', maxWidth: '560px', margin: '0 auto 64px' }}>
+                            The visionaries building the future of AI-powered marketing intelligence.
+                        </p>
+
+                        <div className="about-leaders-grid">
+                            {/* Arjun — Founder */}
+                            <div className="about-leader-card">
+                                <div className="about-leader-img-wrap">
+                                    <div className="about-leader-img" style={{ clipPath: 'inset(0 0 0 0)' }}>
+                                        <img
+                                            src="/images/team/Arjun-Maheshwari.webp"
+                                            alt="Arjun Maheshwari"
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'cover',
+                                                display: 'block',
+                                            }}
+                                            loading="lazy"
+                                        />
+                                    </div>
+                                    <div className="about-leader-glow" />
+                                </div>
+                                <div className="about-leader-info">
+                                    <h3 style={{
+                                        fontFamily: 'var(--font-heading)',
+                                        fontSize: 'var(--text-2xl)',
+                                        fontWeight: 800,
+                                        color: 'var(--text-primary)',
+                                        marginBottom: '4px',
+                                    }}>
+                                        Arjun Maheshwari
+                                    </h3>
+                                    <div style={{
+                                        fontFamily: 'var(--font-mono)',
+                                        fontSize: 'var(--text-xs)',
+                                        fontWeight: 600,
+                                        textTransform: 'uppercase' as const,
+                                        letterSpacing: '0.12em',
+                                        color: 'var(--orange)',
+                                        marginBottom: '16px',
+                                    }}>
+                                        Founder
+                                    </div>
+                                    <a
+                                        href="https://www.linkedin.com/in/arjunoa/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="about-leader-linkedin"
+                                    >
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                        </svg>
+                                        <span>Connect on LinkedIn</span>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M7 17L17 7M7 7h10v10"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+
+                            {/* Ankit — Co-Founder */}
+                            <div className="about-leader-card">
+                                <div className="about-leader-img-wrap">
+                                    <div className="about-leader-img" style={{ clipPath: 'inset(0 0 0 0)' }}>
+                                        <img
+                                            src="/images/team/Ankit-Asthana.webp"
+                                            alt="Ankit Asthana"
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'cover',
+                                                display: 'block',
+                                            }}
+                                            loading="lazy"
+                                        />
+                                    </div>
+                                    <div className="about-leader-glow" />
+                                </div>
+                                <div className="about-leader-info">
+                                    <h3 style={{
+                                        fontFamily: 'var(--font-heading)',
+                                        fontSize: 'var(--text-2xl)',
+                                        fontWeight: 800,
+                                        color: 'var(--text-primary)',
+                                        marginBottom: '4px',
+                                    }}>
+                                        Ankit Asthana
+                                    </h3>
+                                    <div style={{
+                                        fontFamily: 'var(--font-mono)',
+                                        fontSize: 'var(--text-xs)',
+                                        fontWeight: 600,
+                                        textTransform: 'uppercase' as const,
+                                        letterSpacing: '0.12em',
+                                        color: 'var(--orange)',
+                                        marginBottom: '16px',
+                                    }}>
+                                        Co-Founder
+                                    </div>
+                                    <a
+                                        href="https://www.linkedin.com/in/ankit-asthana/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="about-leader-linkedin"
+                                    >
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                        </svg>
+                                        <span>Connect on LinkedIn</span>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M7 17L17 7M7 7h10v10"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* ══════════ SECTION 8: CULTURE — Pattern #16 Hexagonal Honeycomb ══════════ */}
                 <section
                     ref={cultureRef}
                     className="section"
@@ -959,6 +1121,93 @@ export default function AboutPage() {
                     transform: translateY(-4px);
                 }
 
+                /* ── Leaders Grid ── */
+                .about-leaders-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 48px;
+                    max-width: 900px;
+                    margin: 0 auto;
+                }
+                .about-leader-card {
+                    text-align: center;
+                    position: relative;
+                }
+                .about-leader-img-wrap {
+                    position: relative;
+                    width: 280px;
+                    height: 340px;
+                    margin: 0 auto 32px;
+                    border-radius: var(--radius-2xl);
+                    overflow: hidden;
+                }
+                .about-leader-img {
+                    width: 100%;
+                    height: 100%;
+                    position: relative;
+                    z-index: 1;
+                }
+                .about-leader-glow {
+                    position: absolute;
+                    inset: -2px;
+                    border-radius: inherit;
+                    background: conic-gradient(from 0deg, var(--orange), rgba(245,158,11,0.4), var(--orange));
+                    z-index: 0;
+                    opacity: 0;
+                    transition: opacity 0.6s var(--ease-out);
+                    animation: glow-spin 4s linear infinite;
+                }
+                .about-leader-card:hover .about-leader-glow {
+                    opacity: 1;
+                }
+                .about-leader-card:hover .about-leader-img-wrap {
+                    transform: translateY(-6px);
+                    box-shadow: var(--shadow-xl);
+                }
+                .about-leader-img-wrap {
+                    transition: transform 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out);
+                }
+                .about-leader-info {
+                    position: relative;
+                }
+                .about-leader-linkedin {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 10px 24px;
+                    border-radius: var(--radius-full);
+                    border: 1px solid var(--border);
+                    background: var(--bg-white);
+                    color: var(--text-secondary);
+                    font-family: var(--font-body);
+                    font-size: var(--text-sm);
+                    font-weight: 500;
+                    text-decoration: none;
+                    transition: all 0.3s var(--ease-out);
+                    box-shadow: var(--shadow-sm);
+                }
+                .about-leader-linkedin:hover {
+                    border-color: #0A66C2;
+                    color: #0A66C2;
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 20px rgba(10,102,194,0.15);
+                }
+                .about-leader-linkedin svg:first-child {
+                    transition: transform 0.3s var(--ease-out);
+                }
+                .about-leader-linkedin:hover svg:first-child {
+                    transform: scale(1.1);
+                }
+                .about-leader-linkedin svg:last-child {
+                    opacity: 0;
+                    transform: translate(-4px, 4px);
+                    transition: all 0.3s var(--ease-out);
+                }
+                .about-leader-linkedin:hover svg:last-child {
+                    opacity: 1;
+                    transform: translate(0, 0);
+                }
+
                 /* ── Hex Grid ── */
                 .about-hex-grid {
                     display: grid;
@@ -1022,6 +1271,14 @@ export default function AboutPage() {
                     .about-hex-shape {
                         width: 160px;
                         height: 180px;
+                    }
+                    .about-leaders-grid {
+                        grid-template-columns: 1fr !important;
+                        gap: 40px !important;
+                    }
+                    .about-leader-img-wrap {
+                        width: 240px !important;
+                        height: 300px !important;
                     }
                 }
                 @media (max-width: 480px) {
