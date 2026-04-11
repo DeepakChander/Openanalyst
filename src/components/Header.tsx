@@ -129,7 +129,7 @@ const Header: React.FC = () => {
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
                         {/* Download CTA */}
                         <Link href="/download" className="hidden md:inline-flex nav-download-btn" style={{
-                            display: 'inline-flex', alignItems: 'center', gap: 5,
+                            alignItems: 'center', gap: 5,
                             padding: '8px 16px', fontSize: 13,
                             fontFamily: 'var(--font-body)', fontWeight: 600,
                             color: 'var(--text-primary)',
@@ -149,7 +149,7 @@ const Header: React.FC = () => {
 
                         {/* Desktop CTA */}
                         <a href="https://app.openanalyst.com" className="hidden md:inline-flex" style={{
-                            display: 'inline-flex', alignItems: 'center', gap: 6,
+                            alignItems: 'center', gap: 6,
                             padding: '8px 20px', fontSize: 13,
                             fontFamily: 'var(--font-body)', fontWeight: 600,
                             color: '#FFFFFF', background: 'var(--orange)',
