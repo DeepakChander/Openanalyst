@@ -10,7 +10,7 @@ export default function Globe({ size = 480 }: { size?: number }) {
     const cols = 64;
 
     return (
-        <div className="css-globe-wrap" style={{ position: 'relative', width: size, height: size, margin: '0 auto' }}>
+        <div className="css-globe-wrap" style={{ position: 'relative', width: '100%', maxWidth: size, aspectRatio: '1 / 1', margin: '0 auto' }}>
 
             {/* Outer atmospheric glow */}
             <div style={{

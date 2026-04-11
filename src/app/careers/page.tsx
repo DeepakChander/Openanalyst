@@ -113,7 +113,7 @@ export default function CareersPage() {
             <Header />
 
             {/* HERO — Light (with stat bar below heading) */}
-            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 80, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden', perspective: 1200 }}>
+            <section className="light-section" style={{ paddingTop: 'clamp(100px, 15vw, 160px)', paddingBottom: 80, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden', perspective: 1200 }}>
                 <div ref={heroInnerRef} style={{ transformOrigin: 'center top' }}>
                 {/* Grid background */}
                 <div aria-hidden="true" style={{
@@ -155,7 +155,7 @@ export default function CareersPage() {
             </section>
 
             {/* CULTURE VALUES — Light (first card dark accent) */}
-            <section className="car-values light-section" style={{ padding: '120px 24px', background: 'var(--bg-surface)' }}>
+            <section className="car-values light-section" style={{ padding: 'clamp(60px, 10vw, 120px) 24px', background: 'var(--bg-surface)' }}>
                 <div style={{ maxWidth: 1100, margin: '0 auto' }}>
                     <div className="car-reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
                         <p className="label-mono" style={{ color: 'var(--orange)', marginBottom: 12 }}>Culture</p>
@@ -206,7 +206,7 @@ export default function CareersPage() {
             </section>
 
             {/* OPEN POSITIONS — Light */}
-            <section className="light-section" style={{ padding: '120px 24px', background: 'var(--bg-surface)' }}>
+            <section className="light-section" style={{ padding: 'clamp(60px, 10vw, 120px) 24px', background: 'var(--bg-surface)' }}>
                 <div style={{ maxWidth: 800, margin: '0 auto' }}>
                     <div className="car-reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
                         <p className="label-mono" style={{ color: 'var(--orange)', marginBottom: 12 }}>Open Roles</p>
@@ -254,7 +254,7 @@ export default function CareersPage() {
             </section>
 
             {/* BENEFITS — Light */}
-            <section className="car-benefits light-section" style={{ padding: '120px 24px', background: 'var(--bg-white)' }}>
+            <section className="car-benefits light-section" style={{ padding: 'clamp(60px, 10vw, 120px) 24px', background: 'var(--bg-white)' }}>
                 <div style={{ maxWidth: 1000, margin: '0 auto' }}>
                     <div className="car-reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
                         <p className="label-mono" style={{ color: 'var(--orange)', marginBottom: 12 }}>Benefits</p>
@@ -276,7 +276,7 @@ export default function CareersPage() {
             </section>
 
             {/* HIRING PROCESS — Light */}
-            <section className="car-process light-section" style={{ padding: '120px 24px', background: 'var(--bg-surface)' }}>
+            <section className="car-process light-section" style={{ padding: 'clamp(60px, 10vw, 120px) 24px', background: 'var(--bg-surface)' }}>
                 <div style={{ maxWidth: 700, margin: '0 auto' }}>
                     <div className="car-reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
                         <p className="label-mono" style={{ color: 'var(--orange)', marginBottom: 12 }}>Process</p>

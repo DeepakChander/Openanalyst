@@ -91,7 +91,7 @@ export default function ResourcesPage() {
             <Header />
 
             {/* ═══ HERO — Light (asymmetric with large gradient circle) ═══ */}
-            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 60, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden', perspective: 1200 }}>
+            <section className="light-section" style={{ paddingTop: 'clamp(100px, 15vw, 160px)', paddingBottom: 60, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden', perspective: 1200 }}>
                 <div ref={heroInnerRef} style={{ transformOrigin: 'center top' }}>
                 {/* Grid background */}
                 <div aria-hidden="true" style={{
@@ -220,8 +220,13 @@ export default function ResourcesPage() {
             />
 
             <style>{`
+                @media (max-width: 768px) {
+                    .res-hero-tabs { flex-wrap: wrap !important; gap: 8px !important; }
+                    .res-cards-grid { grid-template-columns: 1fr !important; }
+                }
                 @media (max-width: 600px) {
                     .res-hero-tabs { flex-wrap: wrap !important; }
+                    .res-hero-tabs > button { flex: 1 0 calc(50% - 4px) !important; font-size: 12px !important; }
                 }
             `}</style>
         </div>

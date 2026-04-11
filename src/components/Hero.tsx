@@ -197,6 +197,29 @@ const Hero: React.FC = () => {
                     opacity: 1 !important;
                     stroke: var(--orange);
                 }
+                @media (max-width: 600px) {
+                    #hero-section .hero-proof {
+                        flex-direction: column !important;
+                        gap: 8px !important;
+                    }
+                    #hero-section .hero-proof > span:nth-child(3) {
+                        display: none !important;
+                    }
+                    #hero-section h1 {
+                        font-size: clamp(2.2rem, 9vw, 3rem) !important;
+                    }
+                    .hero-download-link {
+                        font-size: 12px !important;
+                    }
+                }
+                @media (max-width: 380px) {
+                    #hero-section h1 {
+                        font-size: 2rem !important;
+                    }
+                    #hero-section .hero-subtitle {
+                        font-size: 14px !important;
+                    }
+                }
             `}</style>
         </section>
     );

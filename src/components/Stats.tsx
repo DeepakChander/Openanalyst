@@ -204,10 +204,24 @@ const Stats: React.FC = () => {
 
             <style>{`
                 @media (max-width: 768px) {
-                    .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+                    .stats-grid {
+                        grid-template-columns: repeat(2, 1fr) !important;
+                        gap: 10px !important;
+                    }
                 }
                 @media (max-width: 480px) {
-                    .stats-grid { grid-template-columns: 1fr !important; }
+                    .stats-grid {
+                        grid-template-columns: repeat(2, 1fr) !important;
+                        gap: 8px !important;
+                    }
+                    .stats-card {
+                        padding: 18px 12px 16px !important;
+                    }
+                }
+                @media (max-width: 360px) {
+                    .stats-grid {
+                        grid-template-columns: 1fr !important;
+                    }
                 }
             `}</style>
         </section>

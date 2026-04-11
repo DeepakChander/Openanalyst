@@ -1286,7 +1286,7 @@ export default function AboutPage() {
                         grid-template-columns: 1fr !important;
                     }
                     .about-metrics-grid {
-                        grid-template-columns: 1fr !important;
+                        grid-template-columns: repeat(2, 1fr) !important;
                     }
                     .about-gallery-grid {
                         grid-template-columns: 1fr !important;
@@ -1295,8 +1295,21 @@ export default function AboutPage() {
                         grid-template-columns: 1fr !important;
                     }
                     .about-hex-shape {
-                        width: 180px;
+                        width: 100%;
+                        max-width: 200px;
                         height: 200px;
+                    }
+                    .about-leader-img-wrap {
+                        width: 200px !important;
+                        height: 260px !important;
+                    }
+                    .about-hex-content {
+                        padding: 24px 16px !important;
+                    }
+                }
+                @media (max-width: 360px) {
+                    .about-metrics-grid {
+                        grid-template-columns: 1fr !important;
                     }
                 }
             `}</style>

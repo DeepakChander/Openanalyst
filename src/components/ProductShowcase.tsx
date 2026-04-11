@@ -468,10 +468,19 @@ const ProductShowcase: React.FC = () => {
                     0%, 100% { opacity: 1; }
                     50% { opacity: 0; }
                 }
-                @media (max-width: 768px) {
+                @media (max-width: 900px) {
                     .hide-mobile { display: none !important; }
                     .ps-agent-panel { display: none !important; }
                     .ps-sidebar { width: 40px !important; }
+                    .ps-laptop {
+                        border-radius: 12px !important;
+                    }
+                }
+                @media (max-width: 600px) {
+                    .ps-sidebar { display: none !important; }
+                    .ps-laptop-wrap {
+                        margin: 0 -12px !important;
+                    }
                 }
             `}</style>
         </section>

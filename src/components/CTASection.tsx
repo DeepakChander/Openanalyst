@@ -105,18 +105,42 @@ const CTASection: React.FC = () => {
                 </p>
 
                 <div className="cta-buttons" style={{ display: 'flex', flexWrap: 'wrap', gap: 14, justifyContent: 'center' }}>
-                    <a href="https://app.openanalyst.com" className="btn-primary" style={{ fontSize: 15, padding: '15px 36px', textDecoration: 'none' }}>
+                    <a href="https://app.openanalyst.com" className="btn-primary cta-btn-main" style={{ fontSize: 15, padding: '15px 36px', textDecoration: 'none' }}>
                         Start Free Trial
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                     </a>
-                    <a href="/contact" className="btn-outline" style={{
+                    <a href="/contact" className="btn-outline cta-btn-secondary" style={{
                         fontSize: 15, padding: '15px 36px', textDecoration: 'none',
                         color: 'rgba(255,255,255,0.8)', borderColor: 'rgba(255,255,255,0.15)',
                     }}>Talk to Sales</a>
                 </div>
             </div>
+
+            <style>{`
+                @media (max-width: 768px) {
+                    .cta-text-block {
+                        padding-left: 16px !important;
+                        padding-right: 16px !important;
+                    }
+                }
+                @media (max-width: 480px) {
+                    .cta-buttons {
+                        flex-direction: column !important;
+                        align-items: center !important;
+                        width: 100% !important;
+                        padding: 0 16px;
+                    }
+                    .cta-btn-main, .cta-btn-secondary {
+                        width: 100% !important;
+                        justify-content: center !important;
+                        padding: 14px 24px !important;
+                    }
+                }
+            `}</style>
         </section>
     );
 };
 
 export default CTASection;
+
+/* Mobile responsive styles injected via the component's <style> tag above */

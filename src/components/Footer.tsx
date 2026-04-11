@@ -685,7 +685,7 @@ const Footer: React.FC<FooterProps> = ({
 
                 <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
                     {/* Links Grid */}
-                    <div style={{
+                    <div className="footer-links-grid" style={{
                         display: 'grid',
                         gridTemplateColumns: '1.4fr repeat(4, 1fr)',
                         gap: '48px',

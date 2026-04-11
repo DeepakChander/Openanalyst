@@ -704,6 +704,9 @@ export default function DownloadPage() {
                     .dl-feature-card {
                         min-width: unset !important;
                     }
+                    .dl-features-grid {
+                        grid-template-columns: 1fr !important;
+                    }
                 }
             `}</style>
         </div>

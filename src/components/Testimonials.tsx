@@ -135,6 +135,18 @@ const Testimonials: React.FC = () => {
                     transform: translateY(-4px) !important;
                     border-color: rgba(255,107,0,0.3) !important;
                 }
+                @media (max-width: 480px) {
+                    .test-card {
+                        width: 300px !important;
+                        min-height: 200px !important;
+                        padding: 22px 18px !important;
+                    }
+                }
+                @media (max-width: 360px) {
+                    .test-card {
+                        width: 260px !important;
+                    }
+                }
             `}</style>
         </section>
     );

@@ -29,7 +29,7 @@ export default function IntegrationsPage() {
     return (
         <div style={{ minHeight: '100vh', backgroundColor: 'var(--background)', color: 'var(--foreground)', display: 'flex', flexDirection: 'column' }}>
             <Header />
-            <main style={{ flex: 1, paddingTop: '128px', paddingBottom: '80px', background: 'var(--bg-primary)' }}>
+            <main style={{ flex: 1, paddingTop: 'clamp(88px, 12vw, 128px)', paddingBottom: '80px', background: 'var(--bg-primary)' }}>
                 <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 16px' }}>
                     <div style={{ textAlign: 'center', marginBottom: 64 }}>
                         <p className="label-mono" style={{ marginBottom: 16 }}>Ecosystem</p>

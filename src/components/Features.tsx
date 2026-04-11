@@ -389,17 +389,36 @@ const Features: React.FC = () => {
                     .feat-carousel > div:first-child {
                         flex-direction: column !important;
                         border-radius: 20px !important;
+                        min-height: auto !important;
                     }
                     .feat-carousel > div:first-child > div:first-child {
                         width: 100% !important;
                         min-width: unset !important;
-                        min-height: 260px !important;
-                        padding: 28px 16px !important;
+                        min-height: 220px !important;
+                        padding: 24px 16px !important;
                         border-radius: 20px 20px 0 0 !important;
                     }
                     .feat-carousel > div:first-child > div:last-child {
                         padding: 20px 16px !important;
-                        min-height: 480px !important;
+                        min-height: 440px !important;
+                    }
+                }
+                @media (max-width: 600px) {
+                    .feat-carousel > div:first-child > div:first-child {
+                        min-height: 200px !important;
+                        padding: 20px 12px !important;
+                    }
+                    .feat-carousel > div:first-child > div:last-child {
+                        padding: 16px 12px !important;
+                        min-height: 400px !important;
+                    }
+                    .feat-carousel > div:first-child {
+                        border-radius: 16px !important;
+                    }
+                }
+                @media (max-width: 480px) {
+                    .feat-carousel > div:first-child > div:last-child {
+                        min-height: 360px !important;
                     }
                 }
             `}</style>

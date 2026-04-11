@@ -209,6 +209,22 @@ const LLMModels: React.FC = () => {
                     </Link>
                 </div>
             </div>
+            <style>{`
+                @media (max-width: 600px) {
+                    .terminal-card {
+                        margin: 0 -8px !important;
+                    }
+                    .terminal-card div[style*="padding: '24px'"],
+                    .terminal-card > div:last-child {
+                        padding: 16px !important;
+                        font-size: 12px !important;
+                        overflow-x: auto !important;
+                    }
+                    .llm-terminal {
+                        overflow-x: auto;
+                    }
+                }
+            `}</style>
         </section>
     );
 };

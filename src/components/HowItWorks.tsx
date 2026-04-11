@@ -358,6 +358,16 @@ const HowItWorks: React.FC = () => {
                     .hiw-card { padding-left: 48px !important; }
                     .hiw-card > div:first-child { left: 0 !important; }
                 }
+                @media (max-width: 480px) {
+                    .hiw-timeline-track { left: 8px !important; }
+                    .hiw-card { padding-left: 36px !important; }
+                    .hiw-card > div:first-child {
+                        left: -4px !important;
+                        width: 22px !important;
+                        height: 22px !important;
+                        top: 24px !important;
+                    }
+                }
             `}</style>
         </section>
     );

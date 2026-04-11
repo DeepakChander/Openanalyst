@@ -159,7 +159,7 @@ export default function FeaturesPage() {
             <section className="section" style={{
                 minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center',
                 justifyContent: 'center', background: 'var(--bg-white)', position: 'relative',
-                paddingTop: 140, paddingBottom: 40, overflow: 'hidden',
+                paddingTop: 'clamp(100px, 15vw, 140px)', paddingBottom: 40, overflow: 'hidden',
                 perspective: 1200,
             }}>
                 <div ref={heroInnerRef} style={{ transformOrigin: 'center top', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -490,7 +490,10 @@ export default function FeaturesPage() {
                     .fp-stats-section .container { grid-template-columns: repeat(2, 1fr) !important; }
                 }
                 @media (max-width: 600px) {
-                    .fp-stats-section .container { grid-template-columns: repeat(2, 1fr) !important; gap: 24px !important; }
+                    .fp-stats-section .container { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
+                }
+                @media (max-width: 360px) {
+                    .fp-stats-section .container { grid-template-columns: 1fr !important; }
                 }
 
                 /* ── Card deck responsive ── */

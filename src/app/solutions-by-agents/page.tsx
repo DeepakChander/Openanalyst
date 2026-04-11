@@ -78,7 +78,7 @@ export default function SolutionsPage() {
             <Header />
 
             {/* ═══ HERO — Light ═══ */}
-            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 80, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden', perspective: 1200 }}>
+            <section className="light-section" style={{ paddingTop: 'clamp(100px, 15vw, 160px)', paddingBottom: 80, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden', perspective: 1200 }}>
                 <div ref={heroInnerRef} style={{ transformOrigin: 'center top' }}>
                 {/* Grid background */}
                 <div aria-hidden="true" style={{

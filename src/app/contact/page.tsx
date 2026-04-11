@@ -82,7 +82,7 @@ export default function ContactPage() {
             <Header />
 
             {/* ═══ HERO — Light (left-aligned with decorative circle) ═══ */}
-            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 60, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden', perspective: 1200 }}>
+            <section className="light-section" style={{ paddingTop: 'clamp(100px, 15vw, 160px)', paddingBottom: 60, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden', perspective: 1200 }}>
                 <div ref={heroInnerRef} style={{ transformOrigin: 'center top' }}>
                 {/* Grid background */}
                 <div aria-hidden="true" style={{
@@ -406,6 +406,10 @@ export default function ContactPage() {
                 }
                 @media (max-width: 768px) {
                     .contact-split-grid { grid-template-columns: 1fr !important; }
+                    .globe-stats { grid-template-columns: repeat(2, 1fr) !important; }
+                }
+                @media (max-width: 480px) {
+                    .globe-stats { grid-template-columns: repeat(2, 1fr) !important; gap: 1px !important; }
                 }
             `}</style>
         </div>

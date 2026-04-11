@@ -61,7 +61,7 @@ export default function ChangelogPage() {
             <Header />
 
             {/* ═══ HERO — Light (left-aligned with version badge) ═══ */}
-            <section className="light-section" style={{ paddingTop: 160, paddingBottom: 60, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden', perspective: 1200 }}>
+            <section className="light-section" style={{ paddingTop: 'clamp(100px, 15vw, 160px)', paddingBottom: 60, background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden', perspective: 1200 }}>
                 <div ref={heroInnerRef} style={{ transformOrigin: 'center top' }}>
                 {/* Grid background */}
                 <div aria-hidden="true" style={{
@@ -137,8 +137,13 @@ export default function ChangelogPage() {
             />
 
             <style>{`
-                @media (max-width: 600px) {
-                    .cl-release { paddingLeft: 20px !important; }
+                @media (max-width: 768px) {
+                    .cl-release { padding-left: 24px !important; }
+                    .cl-timeline-line { left: 8px !important; }
+                    .cl-timeline-dot { left: 2px !important; }
+                }
+                @media (max-width: 480px) {
+                    .cl-release { padding-left: 20px !important; }
                 }
             `}</style>
         </div>
