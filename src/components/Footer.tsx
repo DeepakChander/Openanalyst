@@ -933,7 +933,7 @@ const Footer: React.FC<FooterProps> = ({
                         fontFamily: 'var(--font-mono)',
                     }}>
                         <p style={{ margin: 0 }}>
-                            &copy; {new Date().getFullYear()} OpenAnalyst Inc. All rights reserved.
+                            &copy; {new Date().getFullYear()} OpenAnalyst AI Private Limited. All rights reserved.
                         </p>
 
                         <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>

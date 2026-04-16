@@ -16,11 +16,11 @@ export default function PrivacyPolicyPage() {
             <Header />
             <main style={{ flex: 1, paddingTop: '128px', paddingBottom: '80px', maxWidth: '800px', margin: '0 auto', padding: '128px 20px 80px', width: '100%', boxSizing: 'border-box', background: 'var(--bg-white)' }}>
                 <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, marginBottom: '16px', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>PRIVACY POLICY</h1>
-                <p style={{ color: 'var(--orange)', fontSize: '1.125rem', fontWeight: 600, marginBottom: '8px' }}>OpenAnalyst Inc.</p>
+                <p style={{ color: 'var(--orange)', fontSize: '1.125rem', fontWeight: 600, marginBottom: '8px' }}>OpenAnalyst AI Private Limited</p>
                 <p style={{ color: 'var(--text-muted)', marginBottom: '32px', fontSize: '14px' }}>Last Updated: December 19, 2025</p>
 
                 <div style={{ color: '#4A4A4A', lineHeight: 1.8, fontSize: 'clamp(14px, 2vw, 16px)' }}>
-                    <p>OpenAnalyst Inc. (&ldquo;OpenAnalyst&rdquo;, &ldquo;we&rdquo;, &ldquo;our&rdquo; or &ldquo;us&rdquo;) values your privacy and is committed to protecting your personal information. This Privacy Policy (&ldquo;Policy&rdquo;) explains how we collect, use, disclose, and safeguard your information when you access or use our website, mobile application, platform, and all related services (collectively, the &ldquo;Services&rdquo;).</p>
+                    <p>OpenAnalyst AI Private Limited (&ldquo;OpenAnalyst&rdquo;, &ldquo;we&rdquo;, &ldquo;our&rdquo; or &ldquo;us&rdquo;) values your privacy and is committed to protecting your personal information. This Privacy Policy (&ldquo;Policy&rdquo;) explains how we collect, use, disclose, and safeguard your information when you access or use our website, mobile application, platform, and all related services (collectively, the &ldquo;Services&rdquo;).</p>
 
                     <p>This Privacy Policy is incorporated by reference into our Terms of Service. By using the Services, you acknowledge that you have read, understood, and agree to be bound by this Privacy Policy and the Terms.</p>
 
@@ -179,7 +179,7 @@ export default function PrivacyPolicyPage() {
 
                     <h2 style={{ color: '#1A1A1A', fontSize: 'clamp(1.25rem, 3vw, 1.5rem)', fontWeight: 700, marginTop: '48px', marginBottom: '16px' }}>10. Contact Information</h2>
                     <div style={{ backgroundColor: '#FAFAFA', borderRadius: '12px', padding: '24px', margin: '24px 0', border: '1px solid #E5E5E5' }}>
-                        <p style={{ color: '#1A1A1A', fontWeight: 700, marginBottom: '8px' }}>OpenAnalyst Inc.</p>
+                        <p style={{ color: '#1A1A1A', fontWeight: 700, marginBottom: '8px' }}>OpenAnalyst AI Private Limited</p>
                         <p style={{ color: '#8A8A8A' }}>Email: <a href="mailto:info@openanalyst.com" style={{ color: '#FF6B00' }}>info@openanalyst.com</a></p>
                     </div>
 

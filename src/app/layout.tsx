@@ -64,9 +64,9 @@ export const metadata: Metadata = {
     "AI marketing tools",
     "marketing intelligence platform",
   ],
-  authors: [{ name: "OpenAnalyst Inc." }],
-  creator: "OpenAnalyst Inc.",
-  publisher: "OpenAnalyst Inc.",
+  authors: [{ name: "OpenAnalyst AI Private Limited" }],
+  creator: "OpenAnalyst AI Private Limited",
+  publisher: "OpenAnalyst AI Private Limited",
   formatDetection: {
     email: false,
     address: false,
